@@ -10,18 +10,18 @@
     <item
         android:id="@+id/navigation_wellness"
         android:icon="@drawable/wellness"
-        android:title="@string/btn_benessere"
+        android:title="@string/btn_wellness"
         />
 
     <item
         android:id="@+id/navigation_measure"
         android:icon="@drawable/add"
-        android:title="@string/btn_aggiungi" />
+        android:title="@string/btn_add" />
 
     <item
         android:id="@+id/navigation_my_patients"
         android:icon="@drawable/my_patients"
-        android:title="@string/btn_i_miei_pazienti" />
+        android:title="@string/btn_my_patients" />
 
     <item
         android:id="@+id/navigation_my_account"

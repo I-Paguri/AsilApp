@@ -2,9 +2,9 @@
     <string name="app_name">AsilApp</string>
 
     <!-- Buttons strings -->
-    <string name="btn_add">Measure</string>
-    <string name="btn_wellness">Wellness</string>
-    <string name="btn_my_patients">Patients</string>
+    <string name="btn_add">Misura</string>
+    <string name="btn_wellness">Benessere</string>
+    <string name="btn_my_patients">Pazienti</string>
     <string name="btn_home">Home</string>
     <string name="btn_my_account">Account</string>
 
