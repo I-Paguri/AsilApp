@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">AsilApp</string>
     <string name="prova">Prova</string>
+
+    <!-- Buttons strings -->
+    <string name="btn_aggiungi">Aggiungi misurazione</string>
+    <string name="btn_benessere">Benessere</string>
+    <string name="btn_i_miei_pazienti">I miei pazienti</string>
 </resources>

@@ -1,0 +1,23 @@
+
+<resources>
+    <attr name="colorNavy" format="color" />
+    <attr name="colorOnNavy" format="color" />
+    <attr name="colorNavyContainer" format="color" />
+    <attr name="colorOnNavyContainer" format="color" />
+    <attr name="harmonizeNavy" format="boolean" />
+    <attr name="colorBeige" format="color" />
+    <attr name="colorOnBeige" format="color" />
+    <attr name="colorBeigeContainer" format="color" />
+    <attr name="colorOnBeigeContainer" format="color" />
+    <attr name="harmonizeBeige" format="boolean" />
+    <attr name="colorPastel_red" format="color" />
+    <attr name="colorOnPastel_red" format="color" />
+    <attr name="colorPastel_redContainer" format="color" />
+    <attr name="colorOnPastel_redContainer" format="color" />
+    <attr name="harmonizePastel_red" format="boolean" />
+    <attr name="colorPastel_brown" format="color" />
+    <attr name="colorOnPastel_brown" format="color" />
+    <attr name="colorPastel_brownContainer" format="color" />
+    <attr name="colorOnPastel_brownContainer" format="color" />
+    <attr name="harmonizePastel_brown" format="boolean" />
+</resources>
