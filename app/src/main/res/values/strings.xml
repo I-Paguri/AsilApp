@@ -101,4 +101,10 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="name" translatable="false">Name</string>
+    <string name="surname" translatable="false">Surname</string>
+    <string name="sign_in" translatable="false">SIGN IN</string>
+    <string name="forgett_pass" translatable="false">Did you forget the password? Click Here</string>
+    <string name="create_account" translatable="false">You don\'t have an account? Create Now!</string>
+    <string name="login" translatable="false">Did you have an account? Sign in</string>
 </resources>
