@@ -3,19 +3,29 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/wellness"
-        android:title="@string/btn_benessere"
-
+        android:icon="@drawable/home"
+        android:title="@string/btn_home"
         />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_wellness"
+        android:icon="@drawable/wellness"
+        android:title="@string/btn_benessere"
+        />
+
+    <item
+        android:id="@+id/navigation_measure"
         android:icon="@drawable/add"
         android:title="@string/btn_aggiungi" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_my_patients"
         android:icon="@drawable/my_patients"
         android:title="@string/btn_i_miei_pazienti" />
+
+    <item
+        android:id="@+id/navigation_my_account"
+        android:icon="@drawable/my_account"
+        android:title="@string/btn_my_account" />
 
 </menu>
