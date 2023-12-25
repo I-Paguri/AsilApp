@@ -9,8 +9,8 @@
 
     <item
         android:id="@+id/navigation_wellness"
-        android:icon="@drawable/wellness"
-        android:title="@string/btn_wellness"
+        android:icon="@drawable/healthcare"
+        android:title="@string/btn_healthcare"
         />
 
     <item

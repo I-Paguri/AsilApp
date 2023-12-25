@@ -3,15 +3,15 @@
 
     <!-- Buttons strings -->
     <string name="btn_add">Misura</string>
-    <string name="btn_wellness">Benessere</string>
+    <string name="btn_healthcare">Assistenza sanitaria</string>
     <string name="btn_my_patients">Pazienti</string>
     <string name="btn_home">Home</string>
     <string name="btn_my_account">Account</string>
 
     <string name="home"> Home </string>
-    <string name="wellness"> Wellness </string>
-    <string name="my_patients"> My Patients </string>
-    <string name="my_account"> My Account </string>
+    <string name="healthcare"> Assistenza sanitaria </string>
+    <string name="my_patients"> I miei pazienti </string>
+    <string name="my_account"> Il mio account </string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

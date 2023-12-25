@@ -10,22 +10,118 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <TextView
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buongiorno" />
+            android:text="Good morning"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <TextView
             style="@style/SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marco" />
+            android:text="Marco"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"/>
 
+        <!--
         <TextView
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/large_text" />
+            -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewMyPatients"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp">
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/my_patients_illustration"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/my_patients" />
+
+
+                <TextView
+                    style="@style/CardViewTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/my_patients" />
+
+                <TextView
+                    style="@style/RegularText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Patients are the best"
+                    android:layout_margin="@dimen/text_margin"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewHealthcare"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/healthcare_illustration"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="Healthcare" />
+
+
+                <TextView
+                    style="@style/CardViewTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/my_patients" />
+
+                <TextView
+                    style="@style/RegularText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My videos"
+                    android:layout_margin="@dimen/text_margin"/>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

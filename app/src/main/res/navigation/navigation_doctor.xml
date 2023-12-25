@@ -13,9 +13,9 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/wellnessFragment"
-        android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.WellnessFragment"
+        android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment"
         android:label="fragment_wellness"
-        tools:layout="@layout/fragment_wellness" />
+        tools:layout="@layout/fragment_healthcare" />
     <fragment
         android:id="@+id/myPatients"
         android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment"

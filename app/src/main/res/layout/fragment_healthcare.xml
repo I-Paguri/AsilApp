@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".doctor.fragments.WellnessFragment">
+    tools:context=".doctor.fragments.HealthcareFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="@string/wellness"
+        android:text="@string/healthcare"
         android:textColor="@color/seed"/>
 </androidx.core.widget.NestedScrollView>

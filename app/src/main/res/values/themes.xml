@@ -52,9 +52,8 @@
     <!-- Style for title text -->
     <style name="TitleText">
         <item name="android:fontFamily">@font/ember_display_light</item>
-        <item name="android:textSize">42sp</item>
+        <item name="android:textSize">46sp</item>
         <item name="android:textColor">@color/seed</item>
-        <item name="android:layout_margin"> @dimen/text_margin </item>
     </style>
 
     <!-- Style for subtitle text -->
@@ -62,7 +61,12 @@
         <item name="android:fontFamily">@font/ember_bold</item>
         <item name="android:textSize">28sp</item>
         <item name="android:textColor">@color/seed</item>
-        <item name="android:layout_margin"> @dimen/text_margin </item>
+    </style>
+
+    <style name="CardViewTitleText">
+        <item name="android:fontFamily">@font/ember_bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/seed</item>
     </style>
 
     <!-- Style for regular text -->
@@ -70,6 +74,5 @@
         <item name="android:fontFamily">@font/ember_regular</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/seed</item>
-        <item name="android:layout_margin"> @dimen/text_margin </item>
     </style>
 </resources>

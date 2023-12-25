@@ -3,13 +3,13 @@
 
     <!-- Buttons strings -->
     <string name="btn_add">Measure</string>
-    <string name="btn_wellness">Wellness</string>
+    <string name="btn_healthcare">Healthcare</string>
     <string name="btn_my_patients">Patients</string>
     <string name="btn_home">Home</string>
     <string name="btn_my_account">Account</string>
 
     <string name="home"> Home </string>
-    <string name="wellness"> Wellness </string>
+    <string name="healthcare"> Healthcare </string>
     <string name="my_patients"> My Patients </string>
     <string name="my_account"> My Account </string>
     <string name="large_text">

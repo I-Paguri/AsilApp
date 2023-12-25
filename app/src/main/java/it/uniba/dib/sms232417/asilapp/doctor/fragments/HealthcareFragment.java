@@ -11,13 +11,13 @@ import androidx.annotation.Nullable;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
-public class WellnessFragment extends Fragment {
+public class HealthcareFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_wellness, container, false);
+        return inflater.inflate(R.layout.fragment_healthcare, container, false);
     }
 }

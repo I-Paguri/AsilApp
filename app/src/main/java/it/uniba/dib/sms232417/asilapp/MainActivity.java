@@ -9,7 +9,7 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.WellnessFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new HomeFragment();
             } else {
                 if (itemId == R.id.navigation_wellness) { // replace with your actual menu item id
-                    selectedFragment = new WellnessFragment();
+                    selectedFragment = new HealthcareFragment();
                 } else {
                     if (itemId == R.id.navigation_my_patients) { // replace with your actual menu item id
                         selectedFragment = new MyPatientsFragment();
