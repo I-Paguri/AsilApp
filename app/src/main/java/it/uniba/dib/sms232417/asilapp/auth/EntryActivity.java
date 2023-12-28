@@ -1,8 +1,9 @@
 package it.uniba.dib.sms232417.asilapp.auth;
 
-import android.animation.ObjectAnimator;
-import android.graphics.drawable.AnimationDrawable;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -14,10 +15,16 @@ import it.uniba.dib.sms232417.asilapp.R;
 
 public class EntryActivity extends AppCompatActivity {
 
+
+    public static Context getContext() {
+      return getContext();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.enty_activity_layout);
+        setContentView(R.layout.entry_activity_layout);
+
         Fragment loginFragment = new LoginFragment();
         Fragment registerFragment = new RegisterFragment();
 
@@ -40,5 +47,14 @@ public class EntryActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void newActivityRunning(@SuppressWarnings("rawtypes") Class newActivityClass, Bundle additionalData){
+        Intent intent = new Intent(this, newActivityClass);
+
+        if (additionalData != null){
+            intent.putExtras(additionalData);
+        }
+
+        startActivity(intent); //start a new activity
+    }
 
 }

@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -16,10 +19,15 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static Context getContext() {
+        return getContext();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Dati utente loggato
+        Bundle loggedUser = getIntent().getExtras();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
@@ -36,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
                     if (itemId == R.id.navigation_my_patients) { // replace with your actual menu item id
                         selectedFragment = new MyPatientsFragment();
                     } else {
-                        if (itemId == R.id.navigation_my_account) { // replace with your actual menu item id
+                        if (itemId == R.id.navigation_my_account) {
+                           // replace with your actual menu item id
                             selectedFragment = new MyAccountFragment();
+                            selectedFragment.setArguments(loggedUser);
                         }
                     }
 

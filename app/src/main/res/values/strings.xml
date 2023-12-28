@@ -104,7 +104,15 @@
     <string name="name" translatable="false">Name</string>
     <string name="surname" translatable="false">Surname</string>
     <string name="sign_in" translatable="false">SIGN IN</string>
-    <string name="forgett_pass" translatable="false">Did you forget the password? Click Here</string>
+    <string name="forgett_pass" translatable="false">Did you forget the password? Click Here!</string>
     <string name="create_account" translatable="false">You don\'t have an account? Create Now!</string>
-    <string name="login" translatable="false">Did you have an account? Sign in</string>
+    <string name="login" translatable="false">Did you have an account? Sign in!</string>
+    <string name="incorrect_login" translatable="false">Incorrect email or password!</string>
+    <string name="registration_failed" translatable="false">Registration error!</string>
+    <string name="registration_success" translatable="false">Registration success!</string>
+    <string name="user_already_exists" translatable="false">Users Already Exists!</string>
+    <string name="user_not_exists" translatable="false">Users Not Exists!</string>
+    <string name="error" translatable="false">Error!</string>
+    <string name="something_wrong" translatable="false">Something went wrong!</string>
+    <string name="empty_fields" translatable="false">Please complete the field</string>
 </resources>

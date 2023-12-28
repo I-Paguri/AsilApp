@@ -107,4 +107,12 @@
     <string name="forgett_pass" translatable="false">Hai dimenticato la password? Clicca qui</string>
     <string name="create_account" translatable="false">Non hai un account? Crealo adesso</string>
     <string name="login" translatable="false">Hai un account? Accedi</string>
+    <string name="incorrect_login" translatable="false">Email o password non corretti!</string>
+    <string name="registration_failed" translatable="false">Errore durante la registrazione!</string>
+    <string name="registration_success" translatable="false">Registrazione effettuata con successo!</string>
+    <string name="user_already_exists" translatable="false">Utente già registrato!</string>
+    <string name="user_not_exists" translatable="false">L\'utente non è gia registrato!</string>
+    <string name="error" translatable="false">Errore!</string>
+    <string name="something_wrong" translatable="false">Qualcosa è andato storto!</string>
+    <string name="empty_fields" translatable="false">Inserisci tutti i campi!</string>
 </resources>

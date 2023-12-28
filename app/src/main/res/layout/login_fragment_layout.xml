@@ -21,7 +21,7 @@
 
     <EditText
         android:id="@+id/txtEmail"
-        style="@style/SubtitleText"
+        style="@style/CardViewTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/lblText"
@@ -31,13 +31,14 @@
 
     <EditText
         android:id="@+id/txtPassword"
-        style="@style/SubtitleText"
+        style="@style/CardViewTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtEmail"
         android:hint="Password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/btnLogin"
@@ -46,8 +47,7 @@
         android:layout_below="@id/txtPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="LOGIN"
-        />
+        android:text="LOGIN" />
 
     <TextView
         android:id="@+id/txtForgetPass"
@@ -60,8 +60,7 @@
         android:layout_marginTop="@dimen/text_margin"
         android:layout_marginEnd="@dimen/text_margin"
         android:layout_marginBottom="@dimen/text_margin"
-        android:text="@string/forgett_pass"
-        />
+        android:text="@string/forgett_pass" />
 
     <TextView
         android:id="@+id/txtRegister"
@@ -74,8 +73,14 @@
         android:layout_marginTop="@dimen/text_margin"
         android:layout_marginEnd="@dimen/text_margin"
         android:layout_marginBottom="@dimen/text_margin"
-        android:text="@string/create_account"
-        />
+        android:text="@string/create_account" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRegister"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
 
 </RelativeLayout>
