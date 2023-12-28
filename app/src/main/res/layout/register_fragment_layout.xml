@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
-    android:background="@color/md_theme_light_onPrimary"
+    android:background="@drawable/rounded_relative_layout"
     app:circularflow_radiusInDP="20dp">
 
     <TextView

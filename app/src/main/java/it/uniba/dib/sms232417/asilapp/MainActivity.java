@@ -6,13 +6,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 
@@ -45,9 +44,12 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new MyPatientsFragment();
                     } else {
                         if (itemId == R.id.navigation_my_account) {
-                           // replace with your actual menu item id
+                            // replace with your actual menu item id
                             selectedFragment = new MyAccountFragment();
                             selectedFragment.setArguments(loggedUser);
+                        } else {
+                            if (itemId == R.id.navigation_measure)
+                                selectedFragment = new MeasureFragment();
                         }
                     }
 
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Set default selection
+            // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
     }
 }
