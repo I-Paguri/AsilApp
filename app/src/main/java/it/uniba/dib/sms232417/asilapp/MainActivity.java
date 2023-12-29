@@ -78,49 +78,49 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-            // Set default selection
+        // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
     }
 
     public void checkPermission(){
-            try{
-                if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED){
-                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(R.string.attention);
-                        builder.setMessage(R.string.explain_permission_camera);
-                        builder.setPositiveButton("OK", null);
+        try{
+            if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED){
+                if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.explain_permission_camera);
+                    builder.setPositiveButton("OK", null);
 
-                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
-                            }
-                        });
-                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                        builder.show();
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
 
-                    }else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle(R.string.attention);
-                        builder.setMessage(R.string.explain_permission_camera);
-                        builder.setPositiveButton("OK", null);
-                        builder.show();
-
-                    }
                 }else {
-                        selectedFragment = new MeasureFragment();
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
-                        transaction.commit();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.explain_permission_camera);
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
 
                 }
-            }catch (Exception e) {
-                e.printStackTrace();
+            }else {
+                selectedFragment = new MeasureFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.commit();
+
             }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
     @SuppressLint("MissingSuperCall")
@@ -128,10 +128,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 101 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
-               selectedFragment = new MeasureFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
-                transaction.commit();
+            selectedFragment = new MeasureFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+            transaction.commit();
 
         }
     }
