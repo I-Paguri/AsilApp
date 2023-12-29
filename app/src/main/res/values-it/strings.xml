@@ -115,4 +115,11 @@
     <string name="error" translatable="false">Errore!</string>
     <string name="something_wrong" translatable="false">Qualcosa è andato storto!</string>
     <string name="empty_fields" translatable="false">Inserisci tutti i campi!</string>
+    <string name="measure" translatable="false">Misurazioni</string>
+    <string name="explain_measure" translatable="false">Qui ti puoi collegare al tuo contenitore di apparecchi biomedicali</string>
+    <string name="last_measure" translatable="false">Ultima misurazione</string>
+    <string name="last_measure_explain" translatable="false">Qui verrano visualizzati i risultati delle ultime misurazioni</string>
+    <string name="attention" translatable="false">Attenzione!</string>
+    <string name="explain_permission_camera" translatable="false">Devi accettare i permessi per poter accedere a tali funzioni</string>
+    <string name="cancel" translatable="false">Annulla</string>
 </resources>

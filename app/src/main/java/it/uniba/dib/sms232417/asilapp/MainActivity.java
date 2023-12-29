@@ -1,11 +1,20 @@
 package it.uniba.dib.sms232417.asilapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -18,6 +27,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    Fragment selectedFragment = null;
     public static Context getContext() {
         return getContext();
     }
@@ -48,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new MyAccountFragment();
                             selectedFragment.setArguments(loggedUser);
                         } else {
-                            if (itemId == R.id.navigation_measure)
-                                selectedFragment = new MeasureFragment();
+                            if (itemId == R.id.navigation_measure){
+                                checkPermission();
+                            }
+
                         }
                     }
 
@@ -69,4 +81,60 @@ public class MainActivity extends AppCompatActivity {
             // Set default selection
         bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
     }
+
+    public void checkPermission(){
+            try{
+                if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED){
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle(R.string.attention);
+                        builder.setMessage(R.string.explain_permission_camera);
+                        builder.setPositiveButton("OK", null);
+
+                        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builder.show();
+
+                    }else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle(R.string.attention);
+                        builder.setMessage(R.string.explain_permission_camera);
+                        builder.setPositiveButton("OK", null);
+                        builder.show();
+
+                    }
+                }else {
+                        selectedFragment = new MeasureFragment();
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                        transaction.commit();
+
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+    }
+    @SuppressLint("MissingSuperCall")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 101 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
+               selectedFragment = new MeasureFragment();
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.commit();
+
+        }
+    }
+
+
 }

@@ -115,4 +115,11 @@
     <string name="error" translatable="false">Error!</string>
     <string name="something_wrong" translatable="false">Something went wrong!</string>
     <string name="empty_fields" translatable="false">Please complete the field</string>
+    <string name="measure" translatable="false">Measure</string>
+    <string name="explain_measure" translatable="false">Here you can connect to the biomedical equipment container </string>
+    <string name="last_measure" translatable="false">Last Measure</string>
+    <string name="last_measure_explain" translatable="false">Here you can see the result of your last Measure</string>
+    <string name="attention" translatable="false">Attention!</string>
+    <string name="explain_permission_camera" translatable="false">You must allow the use of the camera to use this function</string>
+    <string name="cancel" translatable="false">Cancel</string>
 </resources>
