@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -79,7 +78,7 @@ public class HomeFragment extends Fragment {
             transaction.addToBackStack(null);
             transaction.commit();
             // Quando viene aperto il fragment dei pazienti viene aggiornata l'icona selezionata nella bottom navigation bar
-            bottomNavigationView.setSelectedItemId(R.id.navigation_wellness);
+            bottomNavigationView.setSelectedItemId(R.id.navigation_healthcare);
         });
     }
 

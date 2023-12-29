@@ -1,7 +1,6 @@
 package it.uniba.dib.sms232417.asilapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -11,10 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -47,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.navigation_home) { // replace with your actual menu item id
                 selectedFragment = new HomeFragment();
             } else {
-                if (itemId == R.id.navigation_wellness) { // replace with your actual menu item id
+                if (itemId == R.id.navigation_healthcare) { // replace with your actual menu item id
                     selectedFragment = new HealthcareFragment();
                 } else {
                     if (itemId == R.id.navigation_my_patients) { // replace with your actual menu item id
@@ -124,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
     @SuppressLint("MissingSuperCall")
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 101 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
@@ -132,9 +127,6 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
             transaction.commit();
-
         }
     }
-
-
 }
