@@ -2,6 +2,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +19,16 @@ public class HealthcareFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_healthcare, container, false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            requireActivity().getSupportFragmentManager().popBackStack();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

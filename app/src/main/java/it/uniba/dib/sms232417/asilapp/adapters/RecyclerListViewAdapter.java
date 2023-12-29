@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +17,29 @@ import it.uniba.dib.sms232417.asilapp.utilities.listItem;
 public class RecyclerListViewAdapter extends RecyclerView.Adapter<RecyclerListViewAdapter.ViewHolder> {
 
     private List<listItem> data;
+    private OnItemClickListener listener;
 
-    public RecyclerListViewAdapter(List<listItem> data) {
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public RecyclerListViewAdapter(List<listItem> data, OnItemClickListener listener) {
         this.data = data;
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_card, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         listItem item = data.get(position);
-        holder.titolo.setText(item.getTitle());
-        holder.descrizione.setText(item.getDescription());
+        holder.title.setText(item.getTitle());
+        holder.description.setText(item.getDescription());
     }
 
     @Override
@@ -41,13 +48,20 @@ public class RecyclerListViewAdapter extends RecyclerView.Adapter<RecyclerListVi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView titolo;
-        public TextView descrizione;
+        public TextView title;
+        public TextView description;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
-            titolo = itemView.findViewById(R.id.title);
-            descrizione = itemView.findViewById(R.id.description);
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position);
+                }
+            });
         }
     }
 }

@@ -1,7 +1,8 @@
 
 <resources>
     <color name="item_selected">#FF4081</color>
-    <color name="item_pressed">#3F51B5</color>
+    <!--<color name="item_pressed">#3F51B5</color>-->
+    <color name="item_pressed">#FDFBFF</color>
     <color name="item_normal">#FFFFFF</color>
     <color name="seed">#011f4b</color>
     <color name="md_theme_light_primary">#325DA8</color>
