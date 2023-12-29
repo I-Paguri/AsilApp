@@ -10,27 +10,50 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
             style="@style/TitleText"
+            android:id="@+id/txtName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mario Rossi"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="17dp"
             android:layout_marginRight="16dp"/>
 
         <TextView
             style="@style/SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marco"
+            android:text="68 anni"
             android:layout_marginLeft="17dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/my_account"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewMyPatients"
+            android:id="@+id/cardViewMeasurements"
             android:clickable="true"
             android:focusable="true"
             android:checkable="true"
@@ -38,9 +61,13 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +79,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="@string/my_patients" />
+                    android:layout_marginTop="8dp"
+                    android:text="@string/measurements" />
 
                 <TextView
                     style="@style/RegularText"
@@ -65,8 +93,77 @@
                     android:layout_marginBottom="@dimen/text_margin"/>
             </LinearLayout>
 
+            <ImageButton
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/history"
+                android:scaleType="fitXY"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/history" />
+
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewTerapy"
+            android:clickable="true"
+            android:focusable="true"
+            android:checkable="true"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/CardViewTitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/treatment" />
+
+                    <TextView
+                        style="@style/RegularText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My terapy"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="@dimen/text_margin"
+                        android:layout_marginRight="@dimen/text_margin"
+                        android:layout_marginBottom="@dimen/text_margin"/>
+                </LinearLayout>
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/history"
+                    android:scaleType="fitXY"
+                    android:layout_margin="8dp"
+                    android:contentDescription="@string/history" />
+
+            </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 
 
+
     </LinearLayout>
+
 </androidx.core.widget.NestedScrollView>

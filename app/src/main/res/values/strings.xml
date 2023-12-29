@@ -13,28 +13,35 @@
     <string name="my_patients"> My Patients </string>
     <string name="my_account"> My Account </string>
 
-    <string name="press_back_again" translatable="false"> Press back again to exit </string>
+    <string name="press_back_again"> Press back again to exit </string>
 
-    <string name="name" translatable="false">Name</string>
-    <string name="surname" translatable="false">Surname</string>
-    <string name="sign_in" translatable="false">SIGN IN</string>
-    <string name="forgett_pass" translatable="false">Did you forget the password? Click Here!</string>
-    <string name="create_account" translatable="false">You don\'t have an account? Create Now!</string>
-    <string name="login" translatable="false">Did you have an account? Sign in!</string>
-    <string name="incorrect_login" translatable="false">Incorrect email or password!</string>
-    <string name="registration_failed" translatable="false">Registration error!</string>
-    <string name="registration_success" translatable="false">Registration success!</string>
-    <string name="user_already_exists" translatable="false">Users Already Exists!</string>
-    <string name="user_not_exists" translatable="false">Users Not Exists!</string>
-    <string name="error" translatable="false">Error!</string>
-    <string name="something_wrong" translatable="false">Something went wrong!</string>
-    <string name="empty_fields" translatable="false">Please complete the field</string>
-    <string name="measure" translatable="false">Measure</string>
-    <string name="explain_measure" translatable="false">Here you can connect to the biomedical equipment container </string>
-    <string name="last_measure" translatable="false">Last Measure</string>
-    <string name="last_measure_explain" translatable="false">Here you can see the result of your last Measure</string>
-    <string name="attention" translatable="false">Attention!</string>
-    <string name="explain_permission_camera" translatable="false">You must allow the use of the camera to use this function</string>
-    <string name="cancel" translatable="false">Cancel</string>
+    <string name="measurements">Measurements</string>
+    <string name="last_measurement">Last measurement</string>
+
+    <string name="history">History</string>
+    <string name="treatment">Treatment</string>
+
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="forgett_pass">Did you forget the password? Click Here!</string>
+    <string name="create_account">You don\'t have an account? Create Now!</string>
+    <string name="login">Did you have an account? Sign in!</string>
+    <string name="incorrect_login">Incorrect email or password!</string>
+    <string name="registration_failed">Registration error!</string>
+    <string name="registration_success">Registration success!</string>
+    <string name="user_already_exists">Users Already Exists!</string>
+    <string name="user_not_exists">Users Not Exists!</string>
+    <string name="error">Error!</string>
+    <string name="something_wrong">Something went wrong!</string>
+    <string name="empty_fields">Please complete the field</string>
+    <string name="measure">Measure</string>
+    <string name="explain_measure">Here you can connect to the biomedical equipment container </string>
+    <string name="last_measure">Last Measure</string>
+    <string name="last_measure_explain">Here you can see the result of your last Measure</string>
+    <string name="attention">Attention!</string>
+    <string name="explain_permission_camera">You must allow the use of the camera to use this function</string>
+    <string name="cancel">Cancel</string>
+
 
 </resources>
