@@ -10,12 +10,17 @@
         android:id="@+id/homeFragment"
         android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/wellnessFragment"
-        android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment"
-        android:label="fragment_wellness"
-        tools:layout="@layout/fragment_healthcare" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_healthcareFragment"
+            app:destination="@id/healthcareFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_myPatients"
+            app:destination="@id/myPatients" />
+        <action
+            android:id="@+id/action_homeFragment_to_myAccountFragment"
+            app:destination="@id/myAccountFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myPatients"
         android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment"
@@ -26,4 +31,9 @@
         android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment"
         android:label="fragment_my_account"
         tools:layout="@layout/fragment_my_account" />
+    <fragment
+        android:id="@+id/healthcareFragment"
+        android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment"
+        android:label="fragment_healthcare"
+        tools:layout="@layout/fragment_healthcare" />
 </navigation>

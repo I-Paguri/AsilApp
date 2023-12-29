@@ -31,8 +31,13 @@ public class MyAccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle loggedUsers = getArguments();
+        TextView name = getView().findViewById(R.id.txt_my_account);
 
-        TextView name = (TextView) getView().findViewById(R.id.txt_my_account);
-        name.setText("Bentornato " + (String) loggedUsers.get("nome") + "\nQuesta è la tua area personale");
+        if (loggedUsers != null) {
+            name.setText("Bentornato " + (String) loggedUsers.get("nome") + "\nQuesta è la tua area personale");
+        } else {
+             name.setText("Utente non autenticato");
+        }
+
     }
 }

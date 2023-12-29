@@ -79,12 +79,4 @@ public class MyPatientsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            requireActivity().getSupportFragmentManager().popBackStack();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

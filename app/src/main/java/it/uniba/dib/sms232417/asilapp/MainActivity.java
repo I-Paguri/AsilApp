@@ -5,12 +5,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,9 +27,12 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 public class MainActivity extends AppCompatActivity {
 
     Fragment selectedFragment = null;
+    private boolean doubleBackToExitPressedOnce = false;
+
     public static Context getContext() {
         return getContext();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
 
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) { // replace with your actual menu item id
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                             selectedFragment = new MyAccountFragment();
                             selectedFragment.setArguments(loggedUser);
                         } else {
-                            if (itemId == R.id.navigation_measure){
+                            if (itemId == R.id.navigation_measure) {
                                 checkPermission();
                             }
 
@@ -66,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
             // add more else-if here for other menu items
 
             if (selectedFragment != null) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
 
@@ -78,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
     }
 
-    public void checkPermission(){
-        try{
-            if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED){
-                if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
+    public void checkPermission() {
+        try {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.attention);
                     builder.setMessage(R.string.explain_permission_camera);
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     builder.show();
 
-                }else {
+                } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.attention);
                     builder.setMessage(R.string.explain_permission_camera);
@@ -107,26 +114,74 @@ public class MainActivity extends AppCompatActivity {
                     builder.show();
 
                 }
-            }else {
+            } else {
                 selectedFragment = new MeasureFragment();
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
 
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
+
     @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 101 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
             selectedFragment = new MeasureFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+            transaction.addToBackStack(null);
             transaction.commit();
+        }
+    }
+
+
+    /**
+     * This method is called when the back button is pressed.
+     * If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment.
+     * If the current fragment is HomeFragment, exit the app.
+     */
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+
+        if (currentFragment instanceof HealthcareFragment || currentFragment instanceof MyPatientsFragment
+                || currentFragment instanceof MyAccountFragment || currentFragment instanceof MeasureFragment) {
+            // If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        } else if (currentFragment instanceof HomeFragment) {
+            if (doubleBackToExitPressedOnce) {
+                finish();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, getResources().getString(R.string.press_back_again), Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 }
