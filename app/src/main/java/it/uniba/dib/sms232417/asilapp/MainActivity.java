@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
         if (currentFragment instanceof HealthcareFragment || currentFragment instanceof MyPatientsFragment
                 || currentFragment instanceof MyAccountFragment || currentFragment instanceof MeasureFragment) {
             // If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
             transaction.addToBackStack(null);
             transaction.commit();

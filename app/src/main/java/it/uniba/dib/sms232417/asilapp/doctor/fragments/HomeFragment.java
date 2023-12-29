@@ -1,6 +1,8 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,6 +25,8 @@ import it.uniba.dib.sms232417.asilapp.R;
 
 public class HomeFragment extends Fragment {
 
+    private Toolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -45,13 +49,24 @@ public class HomeFragment extends Fragment {
         // This is called immediately after onCreateView() has returned, and fragment's view hierarchy has been instantiated.
         // You can use this method to do final initialization once these pieces are in place, such as retrieving views or restoring state.
         // Ottengo un riferimento alla cardView dei pazienti
-        MaterialCardView cardViewMyPatients = view.findViewById(R.id.cardViewMyPatients);
-        // Ottengo un riferimento alla bottom navigation bar
-        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
-        Toolbar toolbar = requireActivity().findViewById(R.id.toolbar);
+
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-        // Show back button
+        // Show home button
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+
+
+        // Set toolbar title
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.home));
+        // Change toolbar title text color
+        toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
+
+        MaterialCardView cardViewMyPatients = view.findViewById(R.id.cardViewMyPatients);
+
 
         // Imposto il listener per la cardView dei pazienti
         cardViewMyPatients.setOnClickListener(v -> {
