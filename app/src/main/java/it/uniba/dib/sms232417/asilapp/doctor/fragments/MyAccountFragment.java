@@ -2,6 +2,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ public class MyAccountFragment extends Fragment {
         Bundle loggedUsers = getArguments();
 
         TextView name = (TextView) getView().findViewById(R.id.txt_my_account);
-        name.setText("Bentornato "+ (String)loggedUsers.get("nome") + "\nQuesta è la tua area personale");
-
+        name.setText("Bentornato " + (String) loggedUsers.get("nome") + "\nQuesta è la tua area personale");
     }
 }

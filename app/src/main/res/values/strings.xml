@@ -122,4 +122,5 @@
     <string name="attention" translatable="false">Attention!</string>
     <string name="explain_permission_camera" translatable="false">You must allow the use of the camera to use this function</string>
     <string name="cancel" translatable="false">Cancel</string>
+
 </resources>

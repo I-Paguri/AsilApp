@@ -6,10 +6,11 @@
     tools:context=".doctor.fragments.HealthcareFragment">
 
     <TextView
-
+        android:id="@+id/text_healthcare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:text="@string/healthcare"
         android:textColor="@color/seed"/>
+
 </androidx.core.widget.NestedScrollView>
