@@ -27,7 +27,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class PatientFragment extends Fragment {
-    private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
 
     @Override

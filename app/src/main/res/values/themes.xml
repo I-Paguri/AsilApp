@@ -76,6 +76,21 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/seed</item>
     </style>
+
+    <style name="CardViewSubtitleText">
+        <item name="android:fontFamily">@font/ember_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/seed</item>
+    </style>
+
+    <style name="CardViewDates">
+        <item name="android:fontFamily">@font/ember_light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/md_theme_light_onSurfaceVariant</item>
+    </style>
+
+
+
     <style name="Base.Theme.AsilApp.AppWidgetContainerParent"
         parent="@android:style/Theme.DeviceDefault">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->
