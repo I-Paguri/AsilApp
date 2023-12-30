@@ -1,24 +1,30 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import static androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.ViewPagerAdapter;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class PatientFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
@@ -54,7 +60,6 @@ public class PatientFragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 
 
-
         // Set navigation click listener
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +69,34 @@ public class PatientFragment extends Fragment {
                 fragmentManager.popBackStack();
             }
         });
+
+
+        // Find the ViewPager2 in your layout
+        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
+
+        // Create an adapter that knows which fragment should be shown on each page
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+
+        // Set the adapter onto the ViewPager2
+        viewPager.setAdapter(adapter);
+
+        // Find the TabLayout in your layout
+        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+
+        // Connect the TabLayout with the ViewPager2
+        // This will update the TabLayout when the ViewPager2 is swiped
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> {
+                    switch (position) {
+                        case 0:
+                            tab.setText(R.string.measurements);
+                            break;
+                        case 1:
+                            tab.setText(R.string.treatment);
+                            break;
+                    }
+                }
+        ).attach();
     }
 
 
