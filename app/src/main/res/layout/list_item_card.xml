@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
 
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginBottom="8dp"
-    android:background="@color/md_theme_light_surface">
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/list_selector"
-        android:orientation="horizontal"
-        android:padding="5dip" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/list_selector"
+    android:orientation="horizontal"
+    android:padding="5dip">
 
         <!--  immagine sinistra -->
         <LinearLayout android:id="@+id/thumbnail"
@@ -67,7 +60,13 @@
             />
             -->
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="56dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/description"/>
 
-    </RelativeLayout>
+</RelativeLayout>
 
-</com.google.android.material.card.MaterialCardView>
