@@ -18,6 +18,7 @@
     <string name="last_measurement">Ultima misurazione</string>
     <string name="history">Storico</string>
     <string name="treatment">Terapia</string>
+    <string name="new_treatment">Nuova terapia</string>
 
     <string name="name" translatable="false">Nome</string>
     <string name="surname" translatable="false">Cognome</string>

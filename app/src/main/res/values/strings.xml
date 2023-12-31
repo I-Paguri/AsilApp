@@ -21,6 +21,8 @@
     <string name="history">History</string>
     <string name="treatment">Treatment</string>
 
+    <string name="new_treatment">New treatment</string>
+
     <string name="name">Name</string>
     <string name="surname">Surname</string>
     <string name="sign_in">SIGN IN</string>
@@ -43,7 +45,6 @@
     <string name="explain_permission_camera">You must allow the use of the camera to use this function</string>
     <string name="cancel">Cancel</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
