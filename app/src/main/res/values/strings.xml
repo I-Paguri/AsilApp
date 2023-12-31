@@ -18,6 +18,8 @@
     <string name="measurements">Measurements</string>
     <string name="last_measurement">Last measurement</string>
 
+    <string name="expenses">Expenses</string>
+
     <string name="history">History</string>
     <string name="treatment">Treatment</string>
 
