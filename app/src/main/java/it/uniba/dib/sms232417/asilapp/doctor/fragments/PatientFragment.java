@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,7 +71,16 @@ public class PatientFragment extends Fragment {
             }
         });
 
+        TextView textName = view.findViewById(R.id.txtName);
+        textName.setText("Nome Cognome");
 
+        TextView textAge = view.findViewById(R.id.txtAge);
+        textAge.setText("?? anni");
+
+        ImageView imagePatient = view.findViewById(R.id.imgProfile);
+        imagePatient.setImageResource(R.drawable.my_account);
+
+        
         // Find the ViewPager2 in your layout
         ViewPager2 viewPager = view.findViewById(R.id.viewPager);
 
