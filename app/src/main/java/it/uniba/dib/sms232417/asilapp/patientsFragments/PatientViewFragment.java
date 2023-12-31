@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.patinentsFragments;
+package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;

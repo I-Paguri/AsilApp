@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasurementsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
-import it.uniba.dib.sms232417.asilapp.patinentsFragments.ExpensesFragment;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
 
 public class ViewPagerAdapter2 extends FragmentStateAdapter {
     public ViewPagerAdapter2(@NonNull Fragment fragment) {
