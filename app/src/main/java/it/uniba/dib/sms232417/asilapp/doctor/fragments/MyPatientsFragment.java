@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -83,9 +84,9 @@ public class MyPatientsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
 
         List<listItem> list = new LinkedList<>();
-        list.add(new listItem("Police", "Don't stand so close to me"));
-        list.add(new listItem("Rihanna", "Love the way you lie"));
-        list.add(new listItem("Marco Mengoni", "L'essenziale"));
+        list.add(new listItem("Police", "Don't stand so close to me", R.drawable.my_account));
+        list.add(new listItem("Rihanna", "Love the way you lie", R.drawable.my_account));
+        list.add(new listItem("Marco Mengoni", "L'essenziale", R.drawable.my_account));
 
         // Set up the RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
