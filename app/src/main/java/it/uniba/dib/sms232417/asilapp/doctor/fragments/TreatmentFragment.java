@@ -3,7 +3,11 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -28,6 +34,7 @@ public class TreatmentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         // Get the parent layout
         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
@@ -133,7 +140,49 @@ public class TreatmentFragment extends Fragment {
 
             // Add the MaterialCardView to the parent layout
             parentLayout.addView(cardView);
+
+
+            final ExtendedFloatingActionButton fab = view.findViewById(R.id.fab);
+
+            // register the nestedScrollView from the main layout
+            NestedScrollView nestedScrollView = view.findViewById(R.id.nestedScrollView);
+
+            // handle the nestedScrollView behaviour with OnScrollChangeListener
+            // to extend or shrink the Extended Floating Action Button
+            nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    // the delay of the extension of the FAB is set for 12 items
+                    if (scrollY > oldScrollY + 12 && fab.isExtended()) {
+                        fab.shrink();
+                    }
+
+                    // the delay of the extension of the FAB is set for 12 items
+                    if (scrollY < oldScrollY - 12 && !fab.isExtended()) {
+                        fab.extend();
+                    }
+
+                    // if the nestedScrollView is at the first item of the list then the
+                    // extended floating action should be in extended state
+                    if (scrollY == 0) {
+                        fab.extend();
+                    }
+                }
+            });
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TreatmentFormFragment treatmentFormFragment = new TreatmentFormFragment();
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
         }
+
 
 
     }

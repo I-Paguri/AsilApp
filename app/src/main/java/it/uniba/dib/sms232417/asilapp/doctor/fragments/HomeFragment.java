@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 
@@ -27,6 +31,7 @@ public class HomeFragment extends Fragment {
 
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -43,6 +48,7 @@ public class HomeFragment extends Fragment {
     }
 
 
+    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -58,6 +64,9 @@ public class HomeFragment extends Fragment {
         // Show home button
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+
+        BadgeDrawable badgeDrawable = BadgeDrawable.create(requireContext());
+        badgeDrawable.setNumber(10);
 
 
         // Set toolbar title
@@ -95,6 +104,21 @@ public class HomeFragment extends Fragment {
             // Quando viene aperto il fragment dei pazienti viene aggiornata l'icona selezionata nella bottom navigation bar
             bottomNavigationView.setSelectedItemId(R.id.navigation_healthcare);
         });
+
+        /*
+        // Create the badge
+        badgeDrawable.setNumber(10);
+
+        badgeDrawable.setVerticalOffset(90);
+        badgeDrawable.setHorizontalOffset(90);
+
+        // Get the menu item view
+        MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.navigation_my_patients);
+        View anchor = bottomNavigationView.findViewById(menuItem.getItemId());
+
+        // Attach the badge
+        BadgeUtils.attachBadgeDrawable(badgeDrawable, anchor);
+        */
     }
 
 
