@@ -63,6 +63,21 @@
         <item name="android:textColor">@color/seed</item>
     </style>
 
+    <!-- Style for subtitle text -->
+    <style name="SubtitleText2">
+        <item name="android:fontFamily">@font/ember_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/seed</item>
+    </style>
+
+    <!-- Style for subtitle text -->
+    <style name="SubtitleText3">
+        <item name="android:fontFamily">@font/ember_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/seed</item>
+    </style>
+
+
     <!-- Style for regular text -->
     <style name="RegularText">
         <item name="android:fontFamily">@font/ember_light</item>
@@ -90,9 +105,7 @@
     </style>
 
 
-
-    <style name="Base.Theme.AsilApp.AppWidgetContainerParent"
-        parent="@android:style/Theme.DeviceDefault">
+    <style name="Base.Theme.AsilApp.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         <!-- Radius of the outer bound of widgets to make the rounded corners -->
         <item name="appWidgetRadius">16dp</item>
         <!--
@@ -102,9 +115,37 @@
         <item name="appWidgetInnerRadius">8dp</item>
     </style>
 
-    <style name="Base.Theme.AsilApp.AppWidgetContainer"
-        parent="Base.Theme.AsilApp.AppWidgetContainerParent">
+    <style name="Base.Theme.AsilApp.AppWidgetContainer" parent="Base.Theme.AsilApp.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
         <item name="appWidgetPadding">16dp</item>
     </style>
+
+    <style name="CustomMaterialButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">@color/transparent</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="CustomMaterialDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
+        <!-- Other attributes -->
+    </style>
+
+    <style name="CustomMaterialDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="android:background">@color/md_theme_light_surface</item>
+    </style>
+
+
 </resources>

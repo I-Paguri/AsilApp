@@ -173,10 +173,10 @@ public class TreatmentFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TreatmentFormFragment treatmentFormFragment = new TreatmentFormFragment();
+                    TreatmentFormGeneralFragment treatmentFormGeneralFragment = new TreatmentFormGeneralFragment();
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-                    transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormFragment);
+                    transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormGeneralFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }

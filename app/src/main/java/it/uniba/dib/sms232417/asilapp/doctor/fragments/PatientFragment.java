@@ -107,6 +107,15 @@ public class PatientFragment extends Fragment {
                     }
                 }
         ).attach();
+
+        // Check if there are arguments and if "selectedTab" is present
+        if (getArguments() != null && getArguments().containsKey("selectedTab")) {
+            int selectedTab = getArguments().getInt("selectedTab");
+            TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
+            if (tab != null) {
+                tab.select();
+            }
+        }
     }
 
 
