@@ -16,7 +16,7 @@
 
     <RelativeLayout
         android:id="@+id/users_information"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_my_account">
 
@@ -67,9 +67,17 @@
             android:layout_toRightOf="@+id/img_my_account"
             android:text="Ciao"
             android:textColor="@color/seed" />
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_my_account"
+            android:layout_centerInParent="true"
+            android:text="Log out"/>
 
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/not_logged_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/users_information"

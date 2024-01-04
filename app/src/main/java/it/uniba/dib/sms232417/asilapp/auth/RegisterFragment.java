@@ -3,8 +3,10 @@ package it.uniba.dib.sms232417.asilapp.auth;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,7 @@ public class RegisterFragment extends Fragment {
     FirebaseAuth mAuth;
     String dataNascita;
     String regione;
-
+    final String NAME_FILE = "automaticLogin";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -160,10 +162,25 @@ public class RegisterFragment extends Fragment {
                                                             .document(mAuth.getCurrentUser().getUid())
                                                             .set(user)
                                                             .addOnSuccessListener(task1 ->{
-                                                                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                                                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                                builder.setTitle("Do you want to save your password?").setMessage("If you save your password, you will not have to enter it again when you log in.");
+                                                                builder.setPositiveButton("Yes", (dialog, which) -> {
+                                                                    SharedPreferences sharedPref = requireActivity().getSharedPreferences(NAME_FILE,Context.MODE_PRIVATE);
+                                                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                                                    editor.putString("email", email);
+                                                                    editor.putString("password", password);
+                                                                    editor.apply();
 
-                                                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                                                startActivity(intent);
+                                                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                                                    startActivity(intent);
+                                                                    progressBar.setVisibility(ProgressBar.INVISIBLE);
+                                                                });
+
+                                                                builder.setNegativeButton("No", (dialog, which) -> {
+                                                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                                                    startActivity(intent);
+                                                                });
+                                                                builder.show();
 
                                                             })
                                                             .addOnFailureListener(task2 ->{

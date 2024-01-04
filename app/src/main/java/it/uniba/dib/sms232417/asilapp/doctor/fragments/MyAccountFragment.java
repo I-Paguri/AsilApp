@@ -1,12 +1,16 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SharedMemory;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,9 +32,11 @@ import java.util.Date;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 
 public class MyAccountFragment extends Fragment {
     Toolbar toolbar;
+    final String NAME_FILE = "automaticLogin";
     FirebaseAuth mAuth;
     FirebaseFirestore db;
     BottomNavigationView bottomNavigationView;
@@ -49,6 +55,13 @@ public class MyAccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        Button btnLogout = getView().findViewById(R.id.btn_logout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLogout(v);
+            }
+        });
 
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
@@ -108,9 +121,22 @@ public class MyAccountFragment extends Fragment {
                 }
             });
         }else {
-             RelativeLayout relativeLayout = getView().findViewById(R.id.txt_notLoggedUser);
+             RelativeLayout relativeLayout = getView().findViewById(R.id.not_logged_user);
              relativeLayout.setVisibility(View.VISIBLE);
         }
 
     }
+    public void onLogout(View v) {
+            mAuth.signOut();
+            Toast.makeText(getContext(),
+                    "Logout effettuato",
+                    Toast.LENGTH_SHORT).show();
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            Intent esci = new Intent(getContext(), EntryActivity.class);
+            startActivity(esci);
+        }
+
 }

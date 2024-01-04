@@ -3,8 +3,10 @@ package it.uniba.dib.sms232417.asilapp.auth;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import it.uniba.dib.sms232417.asilapp.R;
 public class LoginFragment extends Fragment {
 
     FirebaseAuth mAuth;
+    final String NAME_FILE = "automaticLogin";
     FirebaseFirestore db;
     @Nullable
     @Override
@@ -102,8 +105,28 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             FirebaseUser utente = mAuth.getCurrentUser();
                             db = FirebaseFirestore.getInstance();
-                            Intent intent = new Intent(getContext(), MainActivity.class);
-                            startActivity(intent);
+                            //Da modificare
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Do you want to save your password?")
+                                    .setMessage("If you save your password, you will not have to enter it again when you log in.");
+                            builder.setPositiveButton("Yes", (dialog, which) -> {
+                                SharedPreferences sharedPref = requireActivity().getSharedPreferences(NAME_FILE,Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("email", emailIns);
+                                editor.putString("password", password);
+                                Log.d("LoginFragment", "Salvataggio effettuato");
+                                editor.apply();
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                            });
+                            builder.show();
+                            builder.setNegativeButton("No", (dialog, which) -> {
+                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                startActivity(intent);
+                            });
+
+
+
 
                         }else {
                             progressBar.setVisibility(ProgressBar.GONE);
