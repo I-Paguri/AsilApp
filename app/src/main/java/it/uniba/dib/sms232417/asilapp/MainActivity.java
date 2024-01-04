@@ -16,12 +16,14 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -162,6 +164,27 @@ public class MainActivity extends AppCompatActivity {
             transaction.addToBackStack(null);
             transaction.commit();
             bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        } else if (currentFragment instanceof TreatmentFormGeneralFragment) {
+            // If the current fragment is TreatmentFormGeneralFragment, show a dialog
+            new MaterialAlertDialogBuilder(this, R.style.CustomMaterialDialog)
+                    .setTitle(getResources().getString(R.string.going_back))
+                    .setMessage(getResources().getString(R.string.unsaved_changes))
+                    .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Respond to negative button press
+                        }
+                    })
+                    .setPositiveButton(getResources().getString(R.string.go_back), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Respond to positive button press
+                            // Navigate back
+                            getSupportFragmentManager().popBackStack();
+                        }
+                    })
+                    .create()
+                    .show();
         } else if (currentFragment instanceof HomeFragment) {
             if (doubleBackToExitPressedOnce) {
                 finish();

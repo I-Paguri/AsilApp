@@ -61,4 +61,5 @@
     <string name="no_end_date">Nessuna data di fine</string>
     <string name="medicines">Farmaci</string>
     <string name="notes">Note</string>
+    <string name="treatment_goal_empty">Treatment goal cannot be empty</string>
 </resources>

@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +21,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.support.v4.media.MediaDescriptionCompat;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -62,6 +66,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
@@ -143,6 +148,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         builderStartDate = MaterialDatePicker.Builder.datePicker();
         builderEndDate = MaterialDatePicker.Builder.datePicker();
 
@@ -158,7 +164,9 @@ public class TreatmentFormGeneralFragment extends Fragment {
 
         // Get today date
         Date today = new Date();
-        dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        dateFormat = new
+
+                SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 
         btnStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,6 +313,9 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         transaction.addToBackStack(null);
                         transaction.commit();
                     } else {
+                        if (treatmentTarget.getText().toString().isEmpty()) {
+                            treatmentTarget.setError("Treatment target cannot be empty");
+                        }
                         Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -316,11 +327,16 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         transaction.addToBackStack(null);
                         transaction.commit();
                     } else {
+                        if (treatmentTarget.getText().toString().isEmpty()) {
+                            treatmentTarget.setError(getResources().getString(R.string.treatment_goal_empty));
+                        }
                         Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
+
     }
+
 
 }
