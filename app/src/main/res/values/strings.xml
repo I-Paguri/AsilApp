@@ -12,6 +12,7 @@
     <string name="healthcare"> Healthcare </string>
     <string name="my_patients"> My Patients </string>
     <string name="my_account"> My Account </string>
+    <string name="my_data"> My Date </string>
 
     <string name="press_back_again"> Press back again to exit </string>
 

@@ -62,4 +62,5 @@
     <string name="medicines">Farmaci</string>
     <string name="notes">Note</string>
     <string name="treatment_goal_empty">Treatment goal cannot be empty</string>
+    <string name="my_data">I miei dati</string>
 </resources>
