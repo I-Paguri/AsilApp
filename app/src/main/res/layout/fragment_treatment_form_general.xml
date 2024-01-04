@@ -27,7 +27,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:text="Piano terapeutico" />
+                android:text="@string/treatment_plan" />
 
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Qual è l'obiettivo della terapia?" />
+                android:text="@string/treatment_goal" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,7 +46,8 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -56,8 +57,8 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:hint="Inserisci un obiettivo"
-                    app:startIconContentDescription="obiettivo"
+                    android:hint="@string/insert_goal"
+                    app:startIconContentDescription="Goal"
                     app:startIconDrawable="@drawable/target">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -77,7 +78,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Durata della terapia" />
+                android:text="@string/treatment_duration" />
 
             <TextView
                 style="@style/SubtitleText3"
@@ -86,7 +87,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Data di inizio" />
+                android:text="@string/start_date" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,7 +106,7 @@
                     android:layout_height="64dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Inserisci la data di inizio"
+                    android:text="@string/insert_start_date"
                     android:textAllCaps="false"
                     app:icon="@drawable/event"
                     app:iconGravity="end" />
@@ -119,7 +120,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="Data di fine" />
+                android:text="@string/end_date" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -136,7 +137,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
                     android:layout_weight="1"
-                    android:text="Nessuna data di fine" />
+                    android:text="@string/no_end_date" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/noEndDateSwitch"
@@ -164,7 +165,7 @@
                     android:layout_height="64dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Inserisci la data di fine"
+                    android:text="@string/insert_end_date"
                     android:textAllCaps="false"
                     app:icon="@drawable/event"
                     app:iconGravity="end" />
@@ -191,7 +192,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="Torna indietro" />
+            android:text="@string/go_back" />
 
         <Button
             android:id="@+id/goNext"
@@ -199,7 +200,9 @@
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="PROSEGUI" />
+            android:text="@string/btn_continue"
+            android:textAllCaps="true"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 

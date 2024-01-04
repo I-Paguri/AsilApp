@@ -45,4 +45,18 @@
     <string name="accept">Accetta</string>
     <string name="decline">Rifiuta</string>
     <string name="expenses">Spese</string>
+    <string name="go_back">Torna indietro</string>
+    <string name="going_back">Tornare indietro?</string>
+    <string name="unsaved_changes">Ogni modifica non salvata sarà persa</string>
+    <string name="fill_inputs">Riempi tutti i campi per continuare</string>
+    <string name="insert_start_date">Inserisci la data di inizio</string>
+    <string name="insert_end_date">Inserisci la data di fine</string>
+    <string name="treatment_plan">Piano terapeutico</string>
+    <string name="treatment_goal">Qual è l\'obiettivo della terapia?</string>
+    <string name="insert_goal">Inserisci un obiettivo</string>
+    <string name="treatment_duration">Durata della terapia</string>
+    <string name="start_date">Data di inizio</string>
+    <string name="end_date">Data di fine</string>
+    <string name="btn_continue">Continua</string>
+    <string name="no_end_date">Nessuna data di fine</string>
 </resources>

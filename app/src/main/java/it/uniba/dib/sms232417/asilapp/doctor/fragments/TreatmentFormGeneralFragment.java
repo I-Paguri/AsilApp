@@ -133,8 +133,8 @@ public class TreatmentFormGeneralFragment extends Fragment {
                     public void onClick(View v) {
                         startDate = null;
                         endDate = null;
-                        btnStartDate.setText("Inserisci la data di inizio");
-                        btnEndDate.setText("Inserisci la data di fine");
+                        btnStartDate.setText(getResources().getString(R.string.insert_start_date));
+                        btnEndDate.setText(getResources().getString(R.string.insert_end_date));
                     }
                 });
 
@@ -187,7 +187,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         endDate = null;
-                        btnEndDate.setText("Inserisci la data di fine");
+                        btnEndDate.setText(getResources().getString(R.string.insert_end_date));
                     }
                 });
 
@@ -216,14 +216,15 @@ public class TreatmentFormGeneralFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
-                        .setMessage("Sei sicuro di voler tornare indietro?")
+                        .setTitle(getResources().getString(R.string.going_back))
+                        .setMessage(getResources().getString(R.string.unsaved_changes))
                         .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // Respond to negative button press
                             }
                         })
-                        .setPositiveButton(getResources().getString(R.string.accept), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getResources().getString(R.string.go_back), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // Respond to positive button press
@@ -242,18 +243,6 @@ public class TreatmentFormGeneralFragment extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (startDate != null) {
-                    Log.d("Start date", startDate.toString());
-                }
-
-                if (endDate != null) {
-                    Log.d("End date", endDate.toString());
-                }
-
-                if (!treatmentTarget.getText().toString().isEmpty()) {
-                    Log.d("Input: ", treatmentTarget.getText().toString());
-                }
-
                 // Check if any of the inputs are empty
                 if (endDateSwitch.isChecked()) {
                     if (startDate != null && !treatmentTarget.getText().toString().isEmpty()) {
@@ -264,7 +253,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         transaction.addToBackStack(null);
                         transaction.commit();
                     } else {
-                        Toast.makeText(getContext(), "Please fill all inputs", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (startDate != null && !treatmentTarget.getText().toString().isEmpty() && endDate != null) {
@@ -275,7 +264,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         transaction.addToBackStack(null);
                         transaction.commit();
                     } else {
-                        Toast.makeText(getContext(), "Please fill all inputs", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
