@@ -69,5 +69,32 @@
     <string name="medicine_name">Come si chiama il farmaco?</string>
     <string name="how_to_take_medicine">Qual è la modalità di assunzione?</string>
     <string name="good_morning">Buongiorno</string>
->>>>>>> Stashed changes
+
+    <string-array name="medicines_list">
+        <item>Paracetamolo</item>
+        <item>Aspirina</item>
+        <item>Ibuprofene</item>
+
+        <!-- Medicines with different dosages -->
+        <item>Oki 500mg</item>
+        <item>Oki 1000mg</item>
+
+        <!-- More medicines with dosages -->
+        <item>Amoxicillina 250mg</item>
+        <item>Amoxicillina 500mg</item>
+
+        <!-- Another example -->
+        <item>Codeina 10mg</item>
+        <item>Codeina 20mg</item>
+    </string-array>
+
+    <string-array name="how_to_take_medicine_list">
+        <item> Compressa/e </item>
+        <item> Goccia/e </item>
+        <item> Bustina/e </item>
+        <item> Supposta/e </item>
+        <item> Millilitri </item>
+        <item> Siringa/he </item>
+        <item> Inalazione </item>
+    </string-array>
 </resources>

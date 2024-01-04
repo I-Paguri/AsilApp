@@ -95,4 +95,14 @@
         <item>Codeine 10mg</item>
         <item>Codeine 20mg</item>
     </string-array>
+
+    <string-array name="how_to_take_medicine_list">
+        <item> Tablet/s </item>
+        <item> Drop/s </item>
+        <item> Sachet/s </item>
+        <item> Suppository/ies </item>
+        <item> Milliliters </item>
+        <item> Syringe/s </item>
+        <item> Inhalation </item>
+    </string-array>
 </resources>

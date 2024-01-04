@@ -29,15 +29,21 @@ public class TreatmentFormMedicinesFragment extends Fragment {
 
         // Find the AutoCompleteTextView in the layout
         AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
+        AutoCompleteTextView howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
 
         // Get the string array from the resources
         String[] medicines = getResources().getStringArray(R.array.medicines_list);
+        String[] howToTake = getResources().getStringArray(R.array.how_to_take_medicine_list);
 
         // Create an ArrayAdapter using the string array and a default layout
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, medicines);
+        ArrayAdapter<String> adapterMedicines = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
+        ArrayAdapter<String> adapterHowToTake = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
 
         // Set the ArrayAdapter to the AutoCompleteTextView
-        medicinesList.setAdapter(adapter);
+        medicinesList.setAdapter(adapterMedicines);
+        howToTakeMedicine.setAdapter(adapterHowToTake);
+
+
 
 
 
