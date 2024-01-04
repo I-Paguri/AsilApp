@@ -71,6 +71,8 @@
     <string name="insert_medicine">Insert medicine</string>
     <string name="how_to_take_medicine">How to take this medicine?</string>
     <string name="medicine_name">What is the medicine name?</string>
+    <string name="how_regularly">How regularly?</string>
+    <string name="select">Select</string>
 
     <string name="good_morning">Good morning</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -104,5 +106,11 @@
         <item> Milliliters </item>
         <item> Syringe/s </item>
         <item> Inhalation </item>
+    </string-array>
+
+    <string-array name="how_regularly_list">
+        <item>Daily</item>
+        <item>Interval</item>
+        <item>Weekdays</item>
     </string-array>
 </resources>

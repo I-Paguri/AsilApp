@@ -30,18 +30,22 @@ public class TreatmentFormMedicinesFragment extends Fragment {
         // Find the AutoCompleteTextView in the layout
         AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
         AutoCompleteTextView howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
+        AutoCompleteTextView howRegularly = view.findViewById(R.id.how_regularly);
 
         // Get the string array from the resources
         String[] medicines = getResources().getStringArray(R.array.medicines_list);
         String[] howToTake = getResources().getStringArray(R.array.how_to_take_medicine_list);
+        String[] howRegularlyList = getResources().getStringArray(R.array.how_regularly_list);
 
         // Create an ArrayAdapter using the string array and a default layout
         ArrayAdapter<String> adapterMedicines = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
         ArrayAdapter<String> adapterHowToTake = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
+        ArrayAdapter<String> adapterHowRegularly = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howRegularlyList);
 
         // Set the ArrayAdapter to the AutoCompleteTextView
         medicinesList.setAdapter(adapterMedicines);
         howToTakeMedicine.setAdapter(adapterHowToTake);
+        howRegularly.setAdapter(adapterHowRegularly);
 
 
 

@@ -70,6 +70,9 @@
     <string name="how_to_take_medicine">Qual è la modalità di assunzione?</string>
     <string name="good_morning">Buongiorno</string>
 
+    <string name="how_regularly">Con quale regolarità?</string>
+    <string name="select"> Seleziona </string>
+
     <string-array name="medicines_list">
         <item>Paracetamolo</item>
         <item>Aspirina</item>
@@ -96,5 +99,11 @@
         <item> Millilitri </item>
         <item> Siringa/he </item>
         <item> Inalazione </item>
+    </string-array>
+
+    <string-array name="how_regularly_list">
+        <item>Ogni giorno</item>
+        <item>Intervallo</item>
+        <item>Giorni della settimana</item>
     </string-array>
 </resources>
