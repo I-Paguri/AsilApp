@@ -32,14 +32,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.Firebase;
 import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,6 +53,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 
 public class QRCodeAuth extends Fragment{
 
+    FirebaseFirestore db;
     private ListenableFuture cameraProviderFuture;
     private ExecutorService cameraExecutor;
     private PreviewView previewView;
@@ -157,8 +162,16 @@ public class QRCodeAuth extends Fragment{
             // See API reference for complete list of supported types
             switch (valueType) {
                 case Barcode.TYPE_TEXT:
-                    String text = barcode.getDisplayValue();
-                    //Stringa UUID del QR che servirà per il confronto con il DB
+                    String uuid = barcode.getDisplayValue();
+
+                    /*
+                    Map<String,Object> UUID = new HashMap<>();
+                    UUID.put("UUID",uuid);
+                    email =
+
+                    db.collection("qr_code_auth")
+                            .document("userSign_"+uuid)
+                            .set()
 
                     Bundle bundle = new Bundle();
                     bundle.putString("RisultatoQR", text);
@@ -167,6 +180,8 @@ public class QRCodeAuth extends Fragment{
                     MeasureFragment newMeasureFragment = new MeasureFragment();
                     newMeasureFragment.setArguments(bundle);
                     fragmentManager.beginTransaction().replace(R.id.nav_host_fragment_activity_main,newMeasureFragment).commit();
+
+                    */
             }
         }
 

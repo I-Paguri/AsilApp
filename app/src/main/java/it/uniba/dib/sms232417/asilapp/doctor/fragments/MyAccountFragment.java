@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +20,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 
 public class MyAccountFragment extends Fragment {
     Toolbar toolbar;
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
     BottomNavigationView bottomNavigationView;
 
     @Nullable
@@ -74,14 +79,18 @@ public class MyAccountFragment extends Fragment {
             }
         });
 
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
-        Bundle loggedUsers = getArguments();
-        TextView name = getView().findViewById(R.id.txt_my_account);
-
-        if (loggedUsers != null) {
-            name.setText("Bentornato " + (String) loggedUsers.get("nome") + "\nQuesta è la tua area personale");
+        if (mAuth.getCurrentUser()!=null) {
+            TextView name = getView().findViewById(R.id.txt_my_account);
+            db.collection("users")
+                    .document(mAuth.getCurrentUser().getUid())
+                            .get();
+            name.setText(mAuth.getCurrentUser().getEmail());
         } else {
-             name.setText("Utente non autenticato");
+             RelativeLayout relativeLayout = getView().findViewById(R.id.txt_notLoggedUser);
+             relativeLayout.setVisibility(View.VISIBLE);
         }
 
     }

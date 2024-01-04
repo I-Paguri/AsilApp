@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -47,6 +48,8 @@ public class RegisterFragment extends Fragment {
 
         TextView login = (TextView) getView().findViewById(R.id.txtLogin);
         Button register = (Button) getView().findViewById(R.id.btnRegister);
+        
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +70,7 @@ public class RegisterFragment extends Fragment {
                 String password = ((TextView) getView().findViewById(R.id.txtPassword)).getText().toString();
                 String nome = ((TextView) getView().findViewById(R.id.txtName)).getText().toString();
                 String cognome = ((TextView) getView().findViewById(R.id.txtSurname)).getText().toString();
+                MaterialButton dataNascita = (MaterialButton) getView().findViewById(R.id.birdDate);
 
                 if(email.isEmpty() || password.isEmpty() || nome.isEmpty() || cognome.isEmpty()){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -112,7 +116,7 @@ public class RegisterFragment extends Fragment {
                                                     user.put("password", utente.getPassword());
 
                                                     db.collection("users")
-                                                            .document(utente.getEmail())
+                                                            .document(mAuth.getCurrentUser().getUid())
                                                             .set(user)
                                                             .addOnSuccessListener(task1 ->{
                                                                 Bundle bundle = new Bundle();

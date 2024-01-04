@@ -18,74 +18,91 @@
         android:text="@string/sign_in"
         android:textAlignment="center" />
 
-
-    <EditText
-        android:id="@+id/txtName"
-        style="@style/CardViewTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblText"
-        android:hint="Name"
-
-        />
-
-    <EditText
-        android:id="@+id/txtSurname"
-        style="@style/CardViewTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtName"
-        android:hint="Surname"
-         />
-
-    <EditText
-        android:id="@+id/txtEmail"
-        style="@style/CardViewTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtSurname"
-        android:hint="E-mail"
-
-        />
-    <EditText
-        android:id="@+id/txtPassword"
-        style="@style/CardViewTitleText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtEmail"
-        android:hint="Password"
-        android:inputType="textPassword"
-        />
-
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/sign_in"
-        />
-
-    <TextView
-        android:id="@+id/txtLogin"
-        style="@style/RegularText"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnRegister"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="@dimen/text_margin"
-        android:layout_marginTop="@dimen/text_margin"
-        android:layout_marginEnd="@dimen/text_margin"
-        android:layout_marginBottom="@dimen/text_margin"
-        android:text="@string/login"
-        />
+        android:layout_below="@+id/lblText">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txtName"
+                style="@style/CardViewTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"/>
+
+            <EditText
+                android:id="@+id/txtSurname"
+                style="@style/CardViewTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtName"
+                android:hint="Surname"/>
+
+            <EditText
+                android:id="@+id/txtEmail"
+                style="@style/CardViewTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtSurname"
+                android:hint="E-mail" />
+            <EditText
+                android:id="@+id/txtPassword"
+                style="@style/CardViewTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtEmail"
+                android:hint="Password"
+                android:inputType="textPassword"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/birdDate"
+                style="@style/CustomMaterialButton"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/bird_date"
+                android:textAllCaps="false"
+                android:layout_below="@+id/txtPassword"
+                app:icon="@drawable/event"
+                app:iconGravity="end" />
+
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/birdDate"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="@string/sign_in" />
+
+            <TextView
+                android:id="@+id/txtLogin"
+                style="@style/RegularText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnRegister"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                android:layout_marginEnd="@dimen/text_margin"
+                android:layout_marginBottom="@dimen/text_margin"
+                android:text="@string/login" />
+
+        </RelativeLayout>
+
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtLogin"
+        android:layout_below="@id/scrollView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp" />
 

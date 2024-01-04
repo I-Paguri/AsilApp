@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Dati utente loggato
-        Bundle loggedUser = getIntent().getExtras();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
@@ -59,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                         if (itemId == R.id.navigation_my_account) {
                             // replace with your actual menu item id
                             selectedFragment = new MyAccountFragment();
-                            selectedFragment.setArguments(loggedUser);
                         } else {
                             if (itemId == R.id.navigation_measure) {
                                 checkPermission();

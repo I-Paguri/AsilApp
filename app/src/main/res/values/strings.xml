@@ -74,6 +74,9 @@
     <string name="how_regularly">How regularly?</string>
     <string name="select">Select</string>
 
+    <string name="bird_date" translatable="false">Enter your date of birth</string>
+
+
     <string name="good_morning">Good morning</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

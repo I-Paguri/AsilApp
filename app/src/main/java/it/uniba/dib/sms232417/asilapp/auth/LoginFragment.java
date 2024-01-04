@@ -106,20 +106,11 @@ public class LoginFragment extends Fragment {
                             FirebaseUser utente = mAuth.getCurrentUser();
                             db = FirebaseFirestore.getInstance();
                             db.collection("users")
-                                    .document(utente.getEmail())
+                                    .document(utente.getUid())
                                     .get()
                                     .addOnSuccessListener(task2 -> {
                                         if (task2.exists()) {
-                                            String nome =  task2.get("nome").toString();
-                                            String email = task2.get("email").toString();
-
-                                            Bundle bundle = new Bundle();
-                                            bundle.putSerializable("email", email);bundle.putSerializable("nome", nome);
-
-                                            progressBar.setVisibility(ProgressBar.INVISIBLE);
-
                                             Intent intent = new Intent(getContext(), MainActivity.class);
-                                            intent.putExtras(bundle);
                                             startActivity(intent);
 
                                         }
