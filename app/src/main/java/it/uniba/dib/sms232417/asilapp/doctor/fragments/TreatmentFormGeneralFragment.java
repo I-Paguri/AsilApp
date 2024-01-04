@@ -3,10 +3,14 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -54,10 +58,58 @@ public class TreatmentFormGeneralFragment extends Fragment {
     private TextInputEditText treatmentTarget;
     private MaterialDatePicker.Builder<Long> builderStartDate, builderEndDate;
     private MaterialSwitch endDateSwitch;
-
+    private Toolbar toolbar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+
+
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        // Show home button
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Set home icon as back button
+        Drawable homeIcon = getResources().getDrawable(R.drawable.arrow_back, null);
+        // Set color filter
+        homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
+
+        // Set toolbar title
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.new_treatment));
+        // Change toolbar title text color
+        toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
+
+        // Set navigation click listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Go back to previous fragment
+                new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                        .setTitle(getResources().getString(R.string.going_back))
+                        .setMessage(getResources().getString(R.string.unsaved_changes))
+                        .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Respond to negative button press
+                            }
+                        })
+                        .setPositiveButton(getResources().getString(R.string.go_back), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Respond to positive button press
+                                // Navigate back
+                                FragmentManager fragmentManager = getFragmentManager();
+                                if (fragmentManager != null) {
+                                    fragmentManager.popBackStack();
+                                }
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        });
 
         constraintLayout = (ConstraintLayout) inflater.inflate(R.layout.fragment_treatment_form_general, container, false);
 
