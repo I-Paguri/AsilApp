@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -57,10 +56,18 @@ public class TreatmentFragment extends Fragment {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
+
+            // Set the margins for the MaterialCardView
             if (i == numberOfCards - 1) {
+                // last card has bigger bottom margin
                 cardViewParams.setMargins(dp16, dp8, dp16, dp85);
             } else {
-                cardViewParams.setMargins(dp16, dp8, dp16, dp8);
+                if (i == 0) {
+                    // first card has bigger top margin
+                    cardViewParams.setMargins(dp16, dp16, dp16, dp8);
+                } else {
+                    cardViewParams.setMargins(dp16, dp8, dp16, dp8);
+                }
             }
             cardView.setLayoutParams(cardViewParams);
 
@@ -70,7 +77,7 @@ public class TreatmentFragment extends Fragment {
 
             // Create TextViews and apply the same styles as in the XML file
             TextView titleText = new TextView(getContext());
-            titleText.setText("Obiettivo della terapia");
+            titleText.setText(getResources().getString(R.string.treatment_goal));
             titleText.setTextAppearance(getContext(), R.style.CardViewTitleText);
 
 
@@ -79,7 +86,7 @@ public class TreatmentFragment extends Fragment {
             dateText.setTextAppearance(getContext(), R.style.CardViewDates);
 
             TextView subtitleText = new TextView(getContext());
-            subtitleText.setText("Farmaci");
+            subtitleText.setText(getResources().getString(R.string.medicines));
             subtitleText.setTextAppearance(getContext(), R.style.CardViewSubtitleText);
 
             TextView regularText = new TextView(getContext());
@@ -87,7 +94,7 @@ public class TreatmentFragment extends Fragment {
             regularText.setTextAppearance(getContext(), R.style.RegularText);
 
             TextView noteText = new TextView(getContext());
-            noteText.setText("Note");
+            noteText.setText(getResources().getString(R.string.notes));
             noteText.setTextAppearance(getContext(), R.style.CardViewSubtitleText);
 
             TextView noteContentText = new TextView(getContext());
