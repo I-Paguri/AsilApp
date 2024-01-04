@@ -43,9 +43,6 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
-
         TextView forgetPass = (TextView) getView().findViewById(R.id.txtForgetPass);
         TextView register = (TextView) getView().findViewById(R.id.txtRegister);
         Button login = (Button) getView().findViewById(R.id.btnLogin);
@@ -105,19 +102,11 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             FirebaseUser utente = mAuth.getCurrentUser();
                             db = FirebaseFirestore.getInstance();
-                            db.collection("users")
-                                    .document(utente.getUid())
-                                    .get()
-                                    .addOnSuccessListener(task2 -> {
-                                        if (task2.exists()) {
-                                            Intent intent = new Intent(getContext(), MainActivity.class);
-                                            startActivity(intent);
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            startActivity(intent);
 
-                                        }
-
-                                    });
                         }else {
-                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                            progressBar.setVisibility(ProgressBar.GONE);
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setTitle("Error")
                                     .setMessage(R.string.something_wrong)
@@ -126,7 +115,7 @@ public class LoginFragment extends Fragment {
                             }
                     })
                 .addOnFailureListener(task -> {
-                    progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    progressBar.setVisibility(ProgressBar.GONE);
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.user_not_exists)

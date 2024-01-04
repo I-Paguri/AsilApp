@@ -3,13 +3,17 @@ package it.uniba.dib.sms232417.asilapp.auth;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,21 +21,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.entity.Utente;
+
 
 public class RegisterFragment extends Fragment {
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-
+    String dataNascita;
+    String regione;
 
     @Nullable
     @Override
@@ -43,12 +53,42 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.INVISIBLE);
 
         TextView login = (TextView) getView().findViewById(R.id.txtLogin);
         Button register = (Button) getView().findViewById(R.id.btnRegister);
-        
+        MaterialButton btnDataNascita = (MaterialButton) getView().findViewById(R.id.date_of_birth);
+        AutoCompleteTextView region = (AutoCompleteTextView) getView().findViewById(R.id.autoComplete_country);
+
+        String[] countries = getResources().getStringArray(R.array.countries_array);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item_region, countries);
+        region.setAdapter(adapter);
+        btnDataNascita.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        builder.setTitleText("Select a Date");
+                        MaterialDatePicker materialDatePicker = builder.build();
+                        materialDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+                            @Override
+                            public void onPositiveButtonClick(Object selection) {
+                                btnDataNascita.setText(materialDatePicker.getHeaderText());
+                                dataNascita = materialDatePicker.getHeaderText();
+                            }
+                        });
+                        materialDatePicker.addOnNegativeButtonClickListener(
+                                dialog -> {
+                                    btnDataNascita.setText(R.string.bird_date);
+                                    dataNascita = "";
+                                }
+                        );
+                    }
+                }
+        );
+        region.setOnItemClickListener((parent, view1, position, id) -> {
+            String selected = (String) parent.getItemAtPosition(position);
+            regione = selected;
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,18 +110,18 @@ public class RegisterFragment extends Fragment {
                 String password = ((TextView) getView().findViewById(R.id.txtPassword)).getText().toString();
                 String nome = ((TextView) getView().findViewById(R.id.txtName)).getText().toString();
                 String cognome = ((TextView) getView().findViewById(R.id.txtSurname)).getText().toString();
-                MaterialButton dataNascita = (MaterialButton) getView().findViewById(R.id.birdDate);
 
-                if(email.isEmpty() || password.isEmpty() || nome.isEmpty() || cognome.isEmpty()){
+                if(email.isEmpty() || password.isEmpty() || nome.isEmpty() || cognome.isEmpty()||dataNascita.isEmpty()){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields)
                             .create();
                     builder.show();
                 }else
-                    onRegisterUsers(v,email,password,nome,cognome);
+                    onRegisterUsers(v,email,password,nome,cognome, dataNascita, regione);
             }
         });
+
 
 
     }
@@ -90,43 +130,39 @@ public class RegisterFragment extends Fragment {
         ((EntryActivity) getActivity()).replaceFragment(new LoginFragment());
     }
 
-    public void onRegisterUsers(View v, String email, String password, String nome, String cognome) {
+    public void onRegisterUsers(View v, String email, String password, String nome, String cognome,String dataNascita, String regione) {
 
 
             ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
             progressBar.setVisibility(ProgressBar.VISIBLE);
 
-            Utente utente = new Utente(nome,cognome,email,password);
 
             db = FirebaseFirestore.getInstance();
             mAuth = FirebaseAuth.getInstance();
 
             db.collection("users")
-                    .whereEqualTo("email", utente.getEmail())
+                    .whereEqualTo("email", email)
                     .get()
                     .addOnCompleteListener(taskCheckUser -> {
                                 if (taskCheckUser.isSuccessful() && taskCheckUser.getResult().isEmpty()) {
-                                    mAuth.createUserWithEmailAndPassword(utente.getEmail(), utente.getPassword())
+                                    mAuth.createUserWithEmailAndPassword(email, password)
                                             .addOnCompleteListener(task ->{
                                                 if(task.isSuccessful()){
                                                     Map<String, Object> user = new HashMap<>();
-                                                    user.put("nome", utente.getNome());
-                                                    user.put("cognome", utente.getCognome());
-                                                    user.put("email", utente.getEmail());
-                                                    user.put("password", utente.getPassword());
+                                                    user.put("nome", nome);
+                                                    user.put("cognome", cognome);
+                                                    user.put("email", email);
+                                                    user.put("password", password);
+                                                    user.put("dataNascita", dataNascita);
+                                                    user.put("regione", regione);
 
                                                     db.collection("users")
                                                             .document(mAuth.getCurrentUser().getUid())
                                                             .set(user)
                                                             .addOnSuccessListener(task1 ->{
-                                                                Bundle bundle = new Bundle();
-                                                                bundle.putSerializable("email", utente.getEmail());
-                                                                bundle.putSerializable("nome", utente.getNome());
-
                                                                 progressBar.setVisibility(ProgressBar.INVISIBLE);
 
                                                                 Intent intent = new Intent(getContext(), MainActivity.class);
-                                                                intent.putExtras(bundle);
                                                                 startActivity(intent);
 
                                                             })

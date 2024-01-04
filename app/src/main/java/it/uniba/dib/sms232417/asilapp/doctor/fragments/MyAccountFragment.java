@@ -23,6 +23,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -82,13 +85,29 @@ public class MyAccountFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        if (mAuth.getCurrentUser()!=null) {
-            TextView name = getView().findViewById(R.id.txt_my_account);
-            db.collection("users")
-                    .document(mAuth.getCurrentUser().getUid())
-                            .get();
-            name.setText(mAuth.getCurrentUser().getEmail());
-        } else {
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null) {
+            db = FirebaseFirestore.getInstance();
+            db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                   TextView txtName = getView().findViewById(R.id.txt_name);
+                   TextView txtSurname = getView().findViewById(R.id.txt_surname);
+                   TextView txtRegion = getView().findViewById(R.id.txt_region);
+                   TextView txtage = getView().findViewById(R.id.txt_age);
+
+                   txtName.setText("Nome: "+task.getResult().getString("nome"));
+                   txtSurname.setText("Cognome: "+task.getResult().getString("cognome"));
+                   txtRegion.setText("Paese di provenienza: "+ task.getResult().getString("regione"));
+                   /*
+                   Calendar today = Calendar.getInstance();
+                   Calendar dataNascita = Calendar.getInstance();
+
+                   dataNascita.setTime(task.getResult().getDate("dataNascita"));
+                   txtage.setText("Età: "+(today.get(Calendar.YEAR)-dataNascita.get(Calendar.YEAR))+" anni");
+                     */
+                }
+            });
+        }else {
              RelativeLayout relativeLayout = getView().findViewById(R.id.txt_notLoggedUser);
              relativeLayout.setVisibility(View.VISIBLE);
         }

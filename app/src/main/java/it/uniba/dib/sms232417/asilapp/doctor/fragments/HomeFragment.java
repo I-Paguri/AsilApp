@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,8 @@ import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -30,6 +33,8 @@ import it.uniba.dib.sms232417.asilapp.R;
 public class HomeFragment extends Fragment {
 
     private Toolbar toolbar;
+    FirebaseAuth mAuth;
+    FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
 
     @Override
@@ -119,6 +124,18 @@ public class HomeFragment extends Fragment {
         // Attach the badge
         BadgeUtils.attachBadgeDrawable(badgeDrawable, anchor);
         */
+        TextView txtusername = view.findViewById(R.id.txtUser_Name);
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null) {
+            db = FirebaseFirestore.getInstance();
+            db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    txtusername.setText((String) task.getResult().get("nome"));
+                }
+            });
+        }else {
+            txtusername.setText("Utente non loggato");
+        }
     }
 
 

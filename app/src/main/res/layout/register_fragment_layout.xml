@@ -60,25 +60,44 @@
                 android:inputType="textPassword"/>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/birdDate"
+                android:id="@+id/date_of_birth"
                 style="@style/CustomMaterialButton"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_height="wrap_content"
                 android:text="@string/bird_date"
                 android:textAllCaps="false"
                 android:layout_below="@+id/txtPassword"
                 app:icon="@drawable/event"
                 app:iconGravity="end" />
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:id="@+id/coutry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_of_birth"
+                >
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoComplete_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none"
+                    android:text="Select your Country"
+                    android:textColor="@color/seed"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/btnRegister"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/birdDate"
+                android:layout_below="@+id/coutry"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
+                android:layout_centerInParent="true"
                 android:text="@string/sign_in" />
 
             <TextView
@@ -104,7 +123,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/scrollView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="40dp"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>

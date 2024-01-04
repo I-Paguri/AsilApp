@@ -21,10 +21,11 @@
             android:layout_marginRight="16dp"/>
 
         <TextView
+            android:id="@+id/txtUser_Name"
             style="@style/SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Marco"
+            android:text=""
             android:layout_marginLeft="17dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"/>
