@@ -65,11 +65,34 @@
     <string name="btn_continue">Continue</string>
     <string name="no_end_date">No end date</string>
     <string name="medicines">Medicines</string>
+    <string name="medicine">Medicine</string>
     <string name="notes">Notes</string>
-    <string name="treatment_goal_empty">L\'obiettivo della terapia non può essere vuoto</string>
+    <string name="treatment_goal_empty">Treatment goal cannot be empty</string>
+    <string name="insert_medicine">Insert medicine</string>
+    <string name="how_to_take_medicine">How to take this medicine?</string>
+    <string name="medicine_name">What is the medicine name?</string>
+
+    <string name="good_morning">Good morning</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
 
 
+    <string-array name="medicines_list">
+        <item>Paracetamol</item>
+        <item>Aspirin</item>
+        <item>Ibuprofen</item>
+
+        <!-- Medicines with different dosages -->
+        <item>Oki 500mg</item>
+        <item>Oki 1000mg</item>
+
+        <!-- More medicines with dosages -->
+        <item>Amoxicillin 250mg</item>
+        <item>Amoxicillin 500mg</item>
+
+        <!-- Another example -->
+        <item>Codeine 10mg</item>
+        <item>Codeine 20mg</item>
+    </string-array>
 </resources>

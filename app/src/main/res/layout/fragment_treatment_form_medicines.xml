@@ -27,7 +27,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
-                android:text="Piano terapeutico" />
+                android:text="@string/treatment_plan" />
 
 
             <TextView
@@ -37,9 +37,41 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="Qual è l'obiettivo della terapia?" />
+                android:text="@string/medicine_name" />
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/treatmentTargetInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:hint="@string/medicine"
+                    app:startIconContentDescription="Goal"
+                    app:startIconDrawable="@drawable/pill">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/medicines_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:labelFor="@id/medicines_list"
+                        android:imeOptions="actionNext">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

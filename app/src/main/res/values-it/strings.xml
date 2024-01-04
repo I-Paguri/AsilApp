@@ -3,13 +3,13 @@
 
     <!-- Buttons strings -->
     <string name="btn_add">Misura</string>
-    <string name="btn_healthcare">Assistenza sanitaria</string>
+    <string name="btn_healthcare">Healthcare</string>
     <string name="btn_my_patients">Pazienti</string>
     <string name="btn_home">Home</string>
     <string name="btn_my_account">Account</string>
 
     <string name="home"> Home </string>
-    <string name="healthcare"> Assistenza sanitaria </string>
+    <string name="healthcare"> Healthcare </string>
     <string name="my_patients"> I miei pazienti </string>
     <string name="my_account"> Il mio account </string>
     <string name="press_back_again"> Premi di nuovo indietro per uscire </string>
@@ -60,7 +60,14 @@
     <string name="btn_continue">Continua</string>
     <string name="no_end_date">Nessuna data di fine</string>
     <string name="medicines">Farmaci</string>
+    <string name="medicine">Farmaco</string>
     <string name="notes">Note</string>
-    <string name="treatment_goal_empty">Treatment goal cannot be empty</string>
     <string name="my_data">I miei dati</string>
+
+    <string name="treatment_goal_empty">L\'obiettivo della terapia non può essere vuoto</string>
+    <string name="insert_medicine">Inserisci un farmaco</string>
+    <string name="medicine_name">Come si chiama il farmaco?</string>
+    <string name="how_to_take_medicine">Qual è la modalità di assunzione?</string>
+    <string name="good_morning">Buongiorno</string>
+>>>>>>> Stashed changes
 </resources>
