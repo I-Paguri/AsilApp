@@ -1,6 +1,7 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,12 +61,11 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
 
 
         WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) getActivity(), R.id.weekdays_stub)
-                .start((WeekdaysDataSource.Callback) this)
                 .setFirstDayOfWeek(Calendar.MONDAY)
-                .setDrawableType(WeekdaysDrawableProvider.MW_ROUND_RECT)
-                .setFontBaseSize(14)
-                .setNumberOfLetters(3)
-                .start(this);;
+                .setUnselectedColorRes(R.color.bottom_nav_bar_background)
+                .setTextColorUnselectedRes(R.color.md_theme_light_primary)
+                .setFontTypeFace(Typeface.defaultFromStyle(Typeface.BOLD))
+                .start(this);
 
         new WeekdaysDataSource.Callback() {
             @Override

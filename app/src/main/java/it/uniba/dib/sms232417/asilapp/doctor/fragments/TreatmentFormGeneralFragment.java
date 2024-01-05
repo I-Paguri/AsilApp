@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -171,6 +172,11 @@ public class TreatmentFormGeneralFragment extends Fragment {
         btnStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
                 builderStartDate = MaterialDatePicker.Builder.datePicker();
                 builderStartDate.setTheme(R.style.CustomMaterialDatePicker);
                 MaterialDatePicker<Long> datePicker = builderStartDate.build();
@@ -207,6 +213,12 @@ public class TreatmentFormGeneralFragment extends Fragment {
         btnEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+
                 if (startDate != null) {
                     builderEndDate = MaterialDatePicker.Builder.datePicker().setSelection(builderStartDate.build().getSelection());
                 } else {
@@ -250,6 +262,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         btnEndDate.setText(getResources().getString(R.string.insert_end_date));
                     }
                 });
+
 
 
                 datePicker.show(getChildFragmentManager(), "date_picker");
