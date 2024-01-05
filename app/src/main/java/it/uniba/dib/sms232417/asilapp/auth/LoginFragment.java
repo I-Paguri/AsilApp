@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -65,21 +66,28 @@ public class LoginFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText email = (EditText) getView().findViewById(R.id.txtEmail);
-                EditText password = (EditText) getView().findViewById(R.id.txtPassword);
+                String email = ((TextInputEditText) getView().findViewById(R.id.txtEmail)).getText().toString();
+                String password = ((TextInputEditText) getView().findViewById(R.id.txtPassword)).getText().toString();
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 View focusedView = requireActivity().getCurrentFocus();
                 if (focusedView != null) {
                     imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
                 }
-                if(email.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
+                if (email.toString().isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
-                            .setMessage(R.string.empty_fields)
+                            .setMessage(R.string.empty_fields_email)
                             .create();
                     builder.show();
-                }else
-                    onLogin(v, email.getText().toString(), password.getText().toString());
+                } else if (password.toString().isEmpty()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.empty_fields_password)
+                            .create();
+                    builder.show();
+                } else {
+                    onLogin(v, email.toString(), password.toString());
+                }
             }
         });
     }
@@ -101,49 +109,38 @@ public class LoginFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         mAuth.signInWithEmailAndPassword(emailIns, password)
-                .addOnCompleteListener(task ->  {
-                        if (task.isSuccessful()) {
-                            FirebaseUser utente = mAuth.getCurrentUser();
-                            db = FirebaseFirestore.getInstance();
-                            //Da modificare
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Do you want to save your password?")
-                                    .setMessage("If you save your password, you will not have to enter it again when you log in.");
-                            builder.setPositiveButton("Yes", (dialog, which) -> {
-                                SharedPreferences sharedPref = requireActivity().getSharedPreferences(NAME_FILE,Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString("email", emailIns);
-                                editor.putString("password", password);
-                                Log.d("LoginFragment", "Salvataggio effettuato");
-                                editor.apply();
-                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                startActivity(intent);
-                            });
-                            builder.show();
-                            builder.setNegativeButton("No", (dialog, which) -> {
-                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                startActivity(intent);
-                            });
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser utente = mAuth.getCurrentUser();
+                        db = FirebaseFirestore.getInstance();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
+                        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                            SharedPreferences sharedPref = requireActivity().getSharedPreferences(NAME_FILE, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            editor.putString("email", emailIns);
+                            editor.putString("password", password);
+                            editor.apply();
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            startActivity(intent);
+                        });
 
-
-
-
-                        }else {
-                            progressBar.setVisibility(ProgressBar.GONE);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Error")
-                                    .setMessage(R.string.something_wrong)
-                                    .create();
-                            builder.show();
-                            }
-                    })
+                        builder.setNegativeButton("No", (dialog, which) -> {
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            startActivity(intent);
+                        });
+                        builder.show();
+                    }
+                })
                 .addOnFailureListener(task -> {
                     progressBar.setVisibility(ProgressBar.GONE);
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.user_not_exists)
                             .create();
+                    builder.setPositiveButton("Ok", null);
                     builder.show();;
+
                 });
                 };
         }

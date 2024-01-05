@@ -28,18 +28,23 @@
 
     <string name="name">Name</string>
     <string name="surname">Surname</string>
-    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
     <string name="forgett_pass">Did you forget the password? Click Here!</string>
     <string name="create_account">You don\'t have an account? Create Now!</string>
-    <string name="login">Did you have an account? Sign in!</string>
+    <string name="login">Did you have an account? Log in!</string>
     <string name="incorrect_login">Incorrect email or password!</string>
     <string name="registration_failed">Registration error!</string>
     <string name="registration_success">Registration success!</string>
     <string name="user_already_exists">Users Already Exists!</string>
-    <string name="user_not_exists">Users Not Exists!</string>
+    <string name="user_not_exists">Check Email or Password!</string>
     <string name="error">Error!</string>
     <string name="something_wrong">Something went wrong!</string>
-    <string name="empty_fields">Please complete the field</string>
+    <string name="empty_fields_email" translatable="false">Please complete the email field</string>
+    <string name="empty_fields_password" translatable="false">Please complete the password field</string>
+    <string name="empty_fields_nome" translatable="false">Please complete the name field</string>
+    <string name="empty_fields_cognome" translatable="false">Please complete the surname field</string>
+    <string name="empty_fields_data" translatable="false">Please complete the date of birth field</string>
+    <string name="empty_fields_region" translatable="false">Please complete the region field</string>
     <string name="measure">Measure</string>
     <string name="explain_measure">Here you can connect to the biomedical equipment container </string>
     <string name="last_measure">Last Measure</string>
@@ -73,10 +78,13 @@
     <string name="medicine_name">What is the medicine name?</string>
     <string name="how_regularly">How regularly?</string>
     <string name="select">Select</string>
-
-    <string name="bird_date" translatable="false">Enter your date of birth</string>
-
-
+    <string name="save_password" translatable="false">Save password</string>
+    <string name="save_password_explain" translatable="false">Save password to login automatically?</string>
+    <string name="yes" translatable="false">Yes</string>
+    <string name="no" translatable="false">No</string>
+    <string name="birth_date">Enter your Birth Date</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password_not_match">Passwords do not match</string>
     <string name="good_morning">Good morning</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

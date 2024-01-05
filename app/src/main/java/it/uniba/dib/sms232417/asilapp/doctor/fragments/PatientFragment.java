@@ -66,7 +66,7 @@ public class PatientFragment extends Fragment {
             }
         });
 
-        TextView textName = view.findViewById(R.id.txtName);
+        TextView textName = view.findViewById(R.id.txtName_inputlayout);
         textName.setText("Nome Cognome");
 
         TextView textAge = view.findViewById(R.id.txtAge);

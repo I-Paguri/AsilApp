@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/text_margin"
         android:layout_marginEnd="@dimen/text_margin"
         android:layout_marginBottom="@dimen/text_margin"
-        android:text="@string/sign_in"
+        android:text="@string/sign_up"
         android:textAlignment="center" />
 
     <ScrollView
@@ -28,45 +28,90 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/txtName"
-                style="@style/CardViewTitleText"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtName_inputlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"/>
+                android:hint="@string/name">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/RegularText"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtSurname_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/surname"
+                android:layout_below="@id/txtName_inputlayout">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtSurname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/RegularText">
 
-            <EditText
-                android:id="@+id/txtSurname"
-                style="@style/CardViewTitleText"
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtEmail_inputlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtName"
-                android:hint="Surname"/>
+                android:hint="E-mail"
+                android:layout_below="@id/txtSurname_inputlayout">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/RegularText">
 
-            <EditText
-                android:id="@+id/txtEmail"
-                style="@style/CardViewTitleText"
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtPassword_inputlayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtSurname"
-                android:hint="E-mail" />
-            <EditText
-                android:id="@+id/txtPassword"
-                style="@style/CardViewTitleText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/txtEmail"
                 android:hint="Password"
-                android:inputType="textPassword"/>
+                android:layout_below="@id/txtEmail_inputlayout"
+                app:passwordToggleEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    style="@style/RegularText">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtPasswordConf_inputlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirm_password"
+                android:layout_below="@id/txtPassword_inputlayout"
+                app:passwordToggleEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtPasswordConf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    style="@style/RegularText">
+
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/date_of_birth"
                 style="@style/CustomMaterialButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/bird_date"
+                android:text="@string/birth_date"
                 android:textAllCaps="false"
-                android:layout_below="@+id/txtPassword"
+                android:layout_below="@+id/txtPasswordConf_inputlayout"
                 app:icon="@drawable/event"
                 app:iconGravity="end" />
 
@@ -76,8 +121,7 @@
                 android:id="@+id/coutry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/date_of_birth"
-                >
+                android:layout_below="@id/date_of_birth">
 
 
                 <AutoCompleteTextView

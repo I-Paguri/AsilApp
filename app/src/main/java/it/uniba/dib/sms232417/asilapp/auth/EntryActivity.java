@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -21,7 +24,7 @@ import it.uniba.dib.sms232417.asilapp.R;
 public class EntryActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
-
+    final String NAME_FILE = "automaticLogin";
     public static Context getContext() {
       return getContext();
     }
@@ -32,28 +35,35 @@ public class EntryActivity extends AppCompatActivity {
         setContentView(R.layout.entry_activity_layout);
 
 
-        Log.d("EntryActivity", "onCreate: ");
-        final String NAME_FILE = "automaticLogin";
+
+
         SharedPreferences sharedPreferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
         if(sharedPreferences.getString("email",null) != null){
-            Log.d("EntryActivity", "Accesso automatico");
+            RelativeLayout relativeLayout = findViewById(R.id.loading);
+            relativeLayout.setVisibility(RelativeLayout.VISIBLE);
             mAuth = FirebaseAuth.getInstance();
             mAuth.signInWithEmailAndPassword(sharedPreferences.getString("email",null),sharedPreferences.getString("password",null)).addOnSuccessListener(
                     authResult -> {
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
+                            relativeLayout.setVisibility(RelativeLayout.GONE);
+                            Intent intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
+
+                            finish();
                     }
 
             );
         }else {
-            Log.d("EntryActivity", "Accesso Fallito");
+            RelativeLayout relativeLayout = findViewById(R.id.loading);
+            relativeLayout.setVisibility(RelativeLayout.GONE);
+            FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
+            fragmentContainer.setVisibility(FrameLayout.VISIBLE);
         }
 
-        Fragment loginFragment = new LoginFragment();
-        Fragment registerFragment = new RegisterFragment();
 
+
+        Fragment loginFragment = new LoginFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.anim.slide_out_left, R.anim.slide_in_right);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
         fragmentTransaction.replace(R.id.fragment_container, loginFragment);
         fragmentTransaction.commit();

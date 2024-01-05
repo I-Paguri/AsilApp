@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -34,15 +31,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mindrot.jbcrypt.BCrypt;
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Utente;
 
 
 public class RegisterFragment extends Fragment {
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    String dataNascita;
+    String strDataNascita;
     String regione;
     final String NAME_FILE = "automaticLogin";
     @Nullable
@@ -75,13 +74,14 @@ public class RegisterFragment extends Fragment {
                             @Override
                             public void onPositiveButtonClick(Object selection) {
                                 btnDataNascita.setText(materialDatePicker.getHeaderText());
-                                dataNascita = materialDatePicker.getHeaderText();
+                                strDataNascita = materialDatePicker.getHeaderText();
+
                             }
                         });
                         materialDatePicker.addOnNegativeButtonClickListener(
                                 dialog -> {
-                                    btnDataNascita.setText(R.string.bird_date);
-                                    dataNascita = "";
+                                    btnDataNascita.setText(R.string.birth_date);
+                                    strDataNascita = "";
                                 }
                         );
                     }
@@ -108,19 +108,58 @@ public class RegisterFragment extends Fragment {
                 if (focusedView != null) {
                     imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
                 }
-                String email = ((TextView) getView().findViewById(R.id.txtEmail)).getText().toString();
-                String password = ((TextView) getView().findViewById(R.id.txtPassword)).getText().toString();
-                String nome = ((TextView) getView().findViewById(R.id.txtName)).getText().toString();
-                String cognome = ((TextView) getView().findViewById(R.id.txtSurname)).getText().toString();
 
-                if(email.isEmpty() || password.isEmpty() || nome.isEmpty() || cognome.isEmpty()||dataNascita.isEmpty()){
+                String email = ((TextInputEditText) getView().findViewById(R.id.txtEmail)).getText().toString();
+                String password = ((TextInputEditText) getView().findViewById(R.id.txtPassword)).getText().toString();
+                String confermaPassword = ((TextInputEditText) getView().findViewById(R.id.txtPasswordConf)).getText().toString();
+                String nome = ((TextInputEditText) getView().findViewById(R.id.txtName)).getText().toString();
+                String cognome = ((TextInputEditText) getView().findViewById(R.id.txtSurname)).getText().toString();
+
+
+                if(email.isEmpty()){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
-                            .setMessage(R.string.empty_fields)
+                            .setMessage(R.string.empty_fields_email)
+                            .create();
+                    builder.show();
+                }else if(password.isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.empty_fields_password)
+                            .create();
+                    builder.show();
+                }else if(nome.isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.empty_fields_nome)
+                            .create();
+                    builder.show();
+                }else if(cognome.isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.empty_fields_cognome)
+                            .create();
+                    builder.show();
+                }else if(strDataNascita.toString().isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.empty_fields_data)
+                            .create();
+                    builder.show();
+                }else if(regione.isEmpty()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.empty_fields_region)
+                            .create();
+                    builder.show();
+                }else if(!password.equals(confermaPassword)){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Error")
+                            .setMessage(R.string.password_not_match)
                             .create();
                     builder.show();
                 }else
-                    onRegisterUsers(v,email,password,nome,cognome, dataNascita, regione);
+                    onRegisterUsers(v,email,password,nome,cognome, strDataNascita, regione);
             }
         });
 
@@ -138,6 +177,7 @@ public class RegisterFragment extends Fragment {
             ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
             progressBar.setVisibility(ProgressBar.VISIBLE);
 
+            Utente utente = new Utente(nome, cognome, email, dataNascita, regione);
 
             db = FirebaseFirestore.getInstance();
             mAuth = FirebaseAuth.getInstance();
@@ -154,7 +194,10 @@ public class RegisterFragment extends Fragment {
                                                     user.put("nome", nome);
                                                     user.put("cognome", cognome);
                                                     user.put("email", email);
-                                                    user.put("password", password);
+                                                    //Hashing password
+                                                    String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+                                                    user.put("password", encryptedPassword);
                                                     user.put("dataNascita", dataNascita);
                                                     user.put("regione", regione);
 
@@ -163,8 +206,8 @@ public class RegisterFragment extends Fragment {
                                                             .set(user)
                                                             .addOnSuccessListener(task1 ->{
                                                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                                                builder.setTitle("Do you want to save your password?").setMessage("If you save your password, you will not have to enter it again when you log in.");
-                                                                builder.setPositiveButton("Yes", (dialog, which) -> {
+                                                                builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
+                                                                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
                                                                     SharedPreferences sharedPref = requireActivity().getSharedPreferences(NAME_FILE,Context.MODE_PRIVATE);
                                                                     SharedPreferences.Editor editor = sharedPref.edit();
                                                                     editor.putString("email", email);
@@ -176,7 +219,7 @@ public class RegisterFragment extends Fragment {
                                                                     progressBar.setVisibility(ProgressBar.INVISIBLE);
                                                                 });
 
-                                                                builder.setNegativeButton("No", (dialog, which) -> {
+                                                                builder.setNegativeButton(R.string.no, (dialog, which) -> {
                                                                     Intent intent = new Intent(getContext(), MainActivity.class);
                                                                     startActivity(intent);
                                                                 });
@@ -190,6 +233,7 @@ public class RegisterFragment extends Fragment {
                                                                         .setMessage(R.string.registration_failed)
                                                                         .create();
                                                                 builder.show();
+                                                                builder.setPositiveButton("Ok", null);
 
                                                             });
 
@@ -200,7 +244,9 @@ public class RegisterFragment extends Fragment {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                     builder.setTitle("Error")
                                             .setMessage(R.string.user_already_exists)
+                                            .setPositiveButton("Ok", null)
                                             .create();
+
                                     builder.show();
                                 }
 
