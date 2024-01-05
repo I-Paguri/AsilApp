@@ -61,6 +61,7 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
 
         WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) getActivity(), R.id.weekdays_stub)
                 .start((WeekdaysDataSource.Callback) this)
+                .setFirstDayOfWeek(Calendar.MONDAY)
                 .setDrawableType(WeekdaysDrawableProvider.MW_ROUND_RECT)
                 .setFontBaseSize(14)
                 .setNumberOfLetters(3)

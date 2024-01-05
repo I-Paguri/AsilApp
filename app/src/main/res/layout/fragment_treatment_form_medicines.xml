@@ -9,7 +9,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".doctor.fragments.TreatmentFormMedicinesFragment">
+        tools:context=".doctor.fragments.TreatmentFormGeneralFragment">
 
 
         <!--This the interface sitting behind the backdrop and shown when it is collapsed-->
@@ -215,7 +215,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="Torna indietro" />
+            android:text="@string/go_back" />
 
         <Button
             android:id="@+id/goNext"
@@ -223,7 +223,9 @@
             android:layout_height="match_parent"
             android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="CONFERMA" />
+            android:text="@string/btn_continue"
+            android:textAllCaps="true"
+            tools:ignore="ButtonStyle" />
 
     </LinearLayout>
 
