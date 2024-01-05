@@ -96,7 +96,7 @@ public class ExpensesFragment extends Fragment {
         cardViewOperations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LastOperationFragment lastOperationFragment = new LastOperationFragment();
+                LastOperationItemFragment lastOperationFragment = new LastOperationItemFragment();
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, lastOperationFragment);
                 transaction.addToBackStack(null);
