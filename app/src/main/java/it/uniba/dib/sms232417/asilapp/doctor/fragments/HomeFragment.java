@@ -33,9 +33,10 @@ import it.uniba.dib.sms232417.asilapp.R;
 public class HomeFragment extends Fragment {
 
     private Toolbar toolbar;
-    FirebaseAuth mAuth;
-    FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
+    private TextView txtusername;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -124,7 +125,8 @@ public class HomeFragment extends Fragment {
         // Attach the badge
         BadgeUtils.attachBadgeDrawable(badgeDrawable, anchor);
         */
-        TextView txtusername = view.findViewById(R.id.txtUser_Name);
+
+        txtusername = view.findViewById(R.id.txtUser_Name);
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser() != null) {
             db = FirebaseFirestore.getInstance();

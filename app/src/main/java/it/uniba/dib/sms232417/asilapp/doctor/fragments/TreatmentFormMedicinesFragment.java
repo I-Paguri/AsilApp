@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
+import com.touchboarder.weekdaysbuttons.WeekdaysDrawableProvider;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,8 +58,13 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
         howToTakeMedicine.setAdapter(adapterHowToTake);
         howRegularly.setAdapter(adapterHowRegularly);
 
+
         WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) getActivity(), R.id.weekdays_stub)
-                .start((WeekdaysDataSource.Callback) this);
+                .start((WeekdaysDataSource.Callback) this)
+                .setDrawableType(WeekdaysDrawableProvider.MW_ROUND_RECT)
+                .setFontBaseSize(14)
+                .setNumberOfLetters(3)
+                .start(this);;
 
         new WeekdaysDataSource.Callback() {
             @Override
