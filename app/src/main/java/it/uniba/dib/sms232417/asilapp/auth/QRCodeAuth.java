@@ -51,7 +51,7 @@ import java.util.concurrent.Executors;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 
-public class QRCodeAuth extends Fragment{
+public class QRCodeAuth extends Fragment {
 
     FirebaseFirestore db;
     private ListenableFuture cameraProviderFuture;
@@ -151,6 +151,7 @@ public class QRCodeAuth extends Fragment{
         }
 
     }
+
     private void readBarcodeData(List<Barcode> barcodes) {
         for (Barcode barcode: barcodes) {
             Rect bounds = barcode.getBoundingBox();

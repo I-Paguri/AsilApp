@@ -160,15 +160,15 @@
             </LinearLayout>
 
             <TextView
-                style="@style/SubtitleText2"
                 android:id="@+id/subtitleWeekdays"
+                style="@style/SubtitleText2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/what_days_of_week"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutWeekdays"
@@ -194,6 +194,54 @@
                     android:layout_height="match_parent"
                     android:scrollbars="vertical" />
 
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/subtitleInterval"
+                style="@style/SubtitleText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/what_interval"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutInterval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:hint="@string/select"
+                    app:startIconContentDescription="Goal"
+                    app:startIconDrawable="@drawable/event_repeat">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/intervalSelection"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:editable="false"
+                        android:imeOptions="actionNext"
+                        android:spinnerMode="dialog"
+                        android:labelFor="@id/medicines_list">
+
+                    </AutoCompleteTextView>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 

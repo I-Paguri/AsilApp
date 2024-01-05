@@ -362,5 +362,9 @@
     </string-array>
 
     <string name="what_days_of_week">What days of the week?</string>
-
+    <string name="what_interval">How often this medicine should be taken?</string>
+    <string name="what_interval_message">Select how much time there should be between each intake</string>
+    <string name="day">day/s</string>
+    <string name="week">week/s</string>
+    <string name="month">month/s</string>
 </resources>

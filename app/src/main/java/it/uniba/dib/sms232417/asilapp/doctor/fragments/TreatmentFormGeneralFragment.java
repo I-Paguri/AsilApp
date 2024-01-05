@@ -165,9 +165,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
 
         // Get today date
         Date today = new Date();
-        dateFormat = new
-
-                SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 
         btnStartDate.setOnClickListener(new View.OnClickListener() {
             @Override

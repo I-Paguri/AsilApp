@@ -108,4 +108,10 @@
     </string-array>
 
     <string name="what_days_of_week">In quali giorni della settimana?</string>
+    <string name="what_interval">Con quale intervallo si deve assumere il farmaco?</string>
+    <string name="what_interval_message">Seleziona quanto tempo deve passare tra un\'assunzione e l\'altra</string>
+
+    <string name="day">giorno/i</string>
+    <string name="week">settimana/e</string>
+    <string name="month">mese/i</string>
 </resources>
