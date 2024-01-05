@@ -106,4 +106,6 @@
         <item>Intervallo</item>
         <item>Giorni della settimana</item>
     </string-array>
+
+    <string name="what_days_of_week">In quali giorni della settimana?</string>
 </resources>

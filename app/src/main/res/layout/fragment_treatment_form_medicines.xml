@@ -46,9 +46,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
+                android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:orientation="horizontal">
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -66,8 +66,8 @@
                         android:id="@+id/medicines_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:labelFor="@id/medicines_list"
-                        android:imeOptions="actionNext">
+                        android:imeOptions="actionNext"
+                        android:labelFor="@id/medicines_list">
 
                     </AutoCompleteTextView>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -88,9 +88,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
+                android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:orientation="horizontal">
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -108,9 +108,9 @@
                         android:id="@+id/how_to_take_medicine"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:labelFor="@id/medicines_list"
+                        android:editable="false"
                         android:imeOptions="actionNext"
-                        android:editable="false">
+                        android:labelFor="@id/medicines_list">
 
                     </AutoCompleteTextView>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -131,9 +131,9 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
+                android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:orientation="horizontal">
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -151,14 +151,47 @@
                         android:id="@+id/how_regularly"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:labelFor="@id/medicines_list"
+                        android:editable="false"
                         android:imeOptions="actionNext"
-                        android:editable="false">
+                        android:labelFor="@id/medicines_list">
 
                     </AutoCompleteTextView>
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
+            <TextView
+                style="@style/SubtitleText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/what_days_of_week" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--This ViewStub will be replaced by a RecyclerView displaying the weekdays -->
+                <ViewStub
+                    android:id="@+id/weekdays_stub"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical" />
+
+
+            </LinearLayout>
 
 
         </LinearLayout>

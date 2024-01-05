@@ -360,4 +360,7 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
+
+    <string name="what_days_of_week">What days of the week?</string>
+
 </resources>
