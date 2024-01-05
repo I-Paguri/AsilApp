@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -27,6 +29,8 @@ import it.uniba.dib.sms232417.asilapp.R;
 
 public class TreatmentFormMedicinesFragment extends Fragment implements WeekdaysDataSource.Callback {
 
+    private View linearLayoutWeekdays;
+    private TextView subtitleWeekdays;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +63,23 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
         howToTakeMedicine.setAdapter(adapterHowToTake);
         howRegularly.setAdapter(adapterHowRegularly);
 
+        // Find the linearLayoutWeekdays in the layout
+        linearLayoutWeekdays = view.findViewById(R.id.linearLayoutWeekdays);
+        subtitleWeekdays = view.findViewById(R.id.subtitleWeekdays);
+
+        howRegularly.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if (selectedItem.equals("Weekdays")) {
+                    linearLayoutWeekdays.setVisibility(View.VISIBLE);
+                    subtitleWeekdays.setVisibility(View.VISIBLE);
+                } else {
+                    linearLayoutWeekdays.setVisibility(View.GONE);
+                    subtitleWeekdays.setVisibility(View.GONE);
+                }
+            }
+        });
 
         WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) getActivity(), R.id.weekdays_stub)
                 .setFirstDayOfWeek(Calendar.MONDAY)
@@ -69,18 +90,18 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
 
         new WeekdaysDataSource.Callback() {
             @Override
-            public void onWeekdaysItemClicked(int attachId,WeekdaysDataItem item) {
+            public void onWeekdaysItemClicked(int attachId, WeekdaysDataItem item) {
                 // Do something if today is selected?
                 Calendar calendar = Calendar.getInstance();
-                if(item.getCalendarDayId()==calendar.get(Calendar.DAY_OF_WEEK)&&item.isSelected()) {
+                if (item.getCalendarDayId() == calendar.get(Calendar.DAY_OF_WEEK) && item.isSelected()) {
 
                 }
             }
 
             @Override
-            public void onWeekdaysSelected(int attachId,ArrayList<WeekdaysDataItem> items) {
+            public void onWeekdaysSelected(int attachId, ArrayList<WeekdaysDataItem> items) {
                 //Filter on the attached id if there is multiple weekdays data sources
-                if(attachId==R.id.weekdays_stub){
+                if (attachId == R.id.weekdays_stub) {
                     // Do something on week 4?
                 }
             }

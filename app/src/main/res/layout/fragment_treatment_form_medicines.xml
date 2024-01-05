@@ -161,14 +161,17 @@
 
             <TextView
                 style="@style/SubtitleText2"
+                android:id="@+id/subtitleWeekdays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@string/what_days_of_week" />
+                android:text="@string/what_days_of_week"
+                android:visibility="gone"/>
 
             <LinearLayout
+                android:id="@+id/linearLayoutWeekdays"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -176,7 +179,8 @@
                 android:layout_marginRight="8dp"
                 android:baselineAligned="false"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <!--This ViewStub will be replaced by a RecyclerView displaying the weekdays -->
                 <ViewStub
