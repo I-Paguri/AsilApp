@@ -85,6 +85,8 @@
     <string name="birth_date">Enter your Birth Date</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="password_not_match">Passwords do not match</string>
+    <string name="sign_in" translatable="false">Sign in</string>
+    <string name="empty_fields" translatable="false">Fill all inputs!</string>
     <string name="good_morning">Good morning</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
