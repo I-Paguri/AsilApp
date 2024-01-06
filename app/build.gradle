@@ -79,6 +79,7 @@ dependencies {
     // Libreria per il calendario con la funzionalità di selezionare range di valori
     implementation 'com.github.psinetron:slycalendarview:0.0.9'
     implementation 'com.github.TouchBoarder:weekdays-buttons-bar:v1.0.2'
+
     //Libreria per criptare le password
     implementation 'org.mindrot:jbcrypt:0.4'
 }

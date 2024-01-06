@@ -21,7 +21,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
@@ -172,8 +171,13 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
 
         };
 
+
+
         super.onViewCreated(view, savedInstanceState);
     }
+
+    /** Setup data for horizontal chart */
+
 
     @Override
     public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {

@@ -206,7 +206,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/what_interval"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/linearLayoutInterval"
@@ -237,13 +237,14 @@
                         android:layout_height="match_parent"
                         android:editable="false"
                         android:imeOptions="actionNext"
-                        android:spinnerMode="dialog"
-                        android:labelFor="@id/medicines_list">
+                        android:labelFor="@id/medicines_list"
+                        android:spinnerMode="dialog">
 
                     </AutoCompleteTextView>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
 
 
         </LinearLayout>
