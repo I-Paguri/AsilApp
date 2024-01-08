@@ -48,7 +48,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
-                android:text="@string/treatment_plan" />
+                android:text="@string/medications" />
 
             <TextView
                 style="@style/SubtitleText2"

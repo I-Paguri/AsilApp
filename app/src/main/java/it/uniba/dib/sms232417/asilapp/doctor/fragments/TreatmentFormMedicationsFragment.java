@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -49,6 +51,8 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private MaterialDatePicker.Builder<Long> builderIntakeTime;
     private Button btnIntakeTime;
     private int intakeCount;
+    private Button btnContinue;
+    private AutoCompleteTextView intervalSelection, howRegularly, howToTakeMedicine, medicinesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,10 +74,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Find the AutoCompleteTextView in the layout
-        AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
-        AutoCompleteTextView howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
-        AutoCompleteTextView howRegularly = view.findViewById(R.id.how_regularly);
-        AutoCompleteTextView intervalSelection = view.findViewById(R.id.intervalSelection);
+        medicinesList = view.findViewById(R.id.medicines_list);
+        howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
+        howRegularly = view.findViewById(R.id.how_regularly);
+        intervalSelection = view.findViewById(R.id.intervalSelection);
 
         // Get the string array from the resources
         String[] medicines = getResources().getStringArray(R.array.medicines_list);
@@ -148,15 +152,16 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         intervalSelection.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // Hide the keyboard
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+
+                    // Create the dialog
+                    showDialog();
                 }
-
-                // Create the dialog
-                showDialog();
-
                 return false;
             }
         });
@@ -218,7 +223,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                         .setTimeFormat(TimeFormat.CLOCK_24H)
                         .setHour(12)
                         .setMinute(0)
-                        .setTitleText("Select Appointment time")
+                        .setTitleText(getResources().getString(R.string.select_time))
                         .build();
 
                 // Show the MaterialTimePicker
@@ -227,12 +232,26 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Get the selected time and do something with it
                         int hour = materialTimePicker.getHour();
                         int minute = materialTimePicker.getMinute();
-                        // ...
+                        String formattedTime = String.format("%02d:%02d", hour, minute);
+                        btnIntakeTime.setText(formattedTime);
                     }
                 });
+            }
+        });
+
+        btnContinue = getView().findViewById(R.id.goNext);
+
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TreatmentFormNotesFragment treatmentFormNotesFragment = new TreatmentFormNotesFragment();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormNotesFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -286,7 +305,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                         .setTimeFormat(TimeFormat.CLOCK_24H)
                         .setHour(12)
                         .setMinute(0)
-                        .setTitleText("Select Appointment time")
+                        .setTitleText(getResources().getString(R.string.select_time))
                         .build();
 
                 // Show the MaterialTimePicker
@@ -295,41 +314,40 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Get the selected time and do something with it
                         int hour = materialTimePicker.getHour();
                         int minute = materialTimePicker.getMinute();
-                        // ...
+                        String formattedTime = String.format("%02d:%02d", hour, minute);
+                        btnIntakeTime.setText(formattedTime);
                     }
                 });
             }
         });
-
     }
 
     private void updateIntakeLabels() {
-    // Get the parent layout
-    LinearLayout parentLayout = getView().findViewById(R.id.parentLinearLayout);
+        // Get the parent layout
+        LinearLayout parentLayout = getView().findViewById(R.id.parentLinearLayout);
 
-    // Initialize intakeCount to 1
-    intakeCount = 1;
+        // Initialize intakeCount to 1
+        intakeCount = 1;
 
-    // Iterate over all the child views of the parent layout
-    for (int i = 0; i < parentLayout.getChildCount(); i++) {
-        View childView = parentLayout.getChildAt(i);
+        // Iterate over all the child views of the parent layout
+        for (int i = 0; i < parentLayout.getChildCount(); i++) {
+            View childView = parentLayout.getChildAt(i);
 
-        // Check if the child view is an intake layout
-        if (childView.getId() == R.id.linearLayoutIntake) {
-            // Find the intakeLabel in the child view
-            TextView intakeLabel = childView.findViewById(R.id.intakeLabel);
+            // Check if the child view is an intake layout
+            if (childView.getId() == R.id.linearLayoutIntake) {
+                // Find the intakeLabel in the child view
+                TextView intakeLabel = childView.findViewById(R.id.intakeLabel);
 
-            // Update the text of the intakeLabel
-            intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
+                // Update the text of the intakeLabel
+                intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
 
-            // Increment intakeCount
-            intakeCount++;
+                // Increment intakeCount
+                intakeCount++;
+            }
         }
     }
-}
 
     @Override
     public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {
@@ -381,10 +399,39 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         // Set the dialog title and buttons
         builder.setTitle(getResources().getString(R.string.what_interval)).setMessage(getResources().getString(R.string.what_interval_message))
                 .setPositiveButton("OK", (dialog, id) -> {
-                    // User clicked OK, do something
-                    int num1 = numberPicker1.getValue();
-                    String str2 = displayedValues[numberPicker2.getValue()];
-                    // ...
+                    // User clicked OK, retrieve the selected values
+                    int selectedNumber = numberPicker1.getValue();
+                    String selectedInterval = displayedValues[numberPicker2.getValue()];
+
+                    String formattedSelectedInterval = selectedInterval;
+
+                    if (selectedInterval.equals(getResources().getString(R.string.day))) {
+                        // days
+                        formattedSelectedInterval = getResources().getQuantityString(R.plurals.days, selectedNumber, selectedNumber);
+                    } else {
+                        if (selectedInterval.equals(getResources().getString(R.string.week))) {
+                            // weeks
+                            formattedSelectedInterval = getResources().getQuantityString(R.plurals.weeks, selectedNumber, selectedNumber);
+                        } else {
+                            // months
+                            formattedSelectedInterval = getResources().getQuantityString(R.plurals.months, selectedNumber, selectedNumber);
+                        }
+                    }
+
+
+                    if (selectedNumber == 1) {
+                        if (selectedInterval.equals(getResources().getString(R.string.day))) {
+                            subtitleInterval.setVisibility(View.GONE);
+                            linearLayoutInterval.setVisibility(View.GONE);
+
+                            howRegularly.setText(getResources().getStringArray(R.array.how_regularly_list)[0]);
+
+                        } else {
+                            intervalSelection.setText(getResources().getString(R.string.every) + " " + formattedSelectedInterval);
+                        }
+                    } else {
+                        intervalSelection.setText(getResources().getString(R.string.every) + " " + selectedNumber + " " + formattedSelectedInterval);
+                    }
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                     // User cancelled the dialog, do something if necessary
