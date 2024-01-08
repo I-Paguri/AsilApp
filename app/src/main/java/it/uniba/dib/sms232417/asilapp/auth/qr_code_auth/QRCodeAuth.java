@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.auth;
+package it.uniba.dib.sms232417.asilapp.auth.qr_code_auth;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;

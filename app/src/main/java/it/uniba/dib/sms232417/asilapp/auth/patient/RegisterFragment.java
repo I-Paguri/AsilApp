@@ -1,10 +1,12 @@
-package it.uniba.dib.sms232417.asilapp.auth;
+package it.uniba.dib.sms232417.asilapp.auth.patient;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,17 +28,21 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+//import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mindrot.jbcrypt.BCrypt;
+import javax.crypto.SecretKey;
+
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.entity.Utente;
+import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
+import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
 
 
+
+@SuppressWarnings("unchecked")
 public class RegisterFragment extends Fragment {
 
     FirebaseFirestore db;
@@ -174,86 +180,99 @@ public class RegisterFragment extends Fragment {
     public void onRegisterUsers(View v, String email, String password, String nome, String cognome,String dataNascita, String regione) {
 
 
-            ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-            progressBar.setVisibility(ProgressBar.VISIBLE);
+        ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
 
-            Utente utente = new Utente(nome, cognome, email, dataNascita, regione);
 
-            db = FirebaseFirestore.getInstance();
-            mAuth = FirebaseAuth.getInstance();
+        Patient patient = new Patient(nome, cognome, email, dataNascita, regione);
 
-            db.collection("users")
-                    .whereEqualTo("email", email)
-                    .get()
-                    .addOnCompleteListener(taskCheckUser -> {
-                                if (taskCheckUser.isSuccessful() && taskCheckUser.getResult().isEmpty()) {
-                                    mAuth.createUserWithEmailAndPassword(email, password)
-                                            .addOnCompleteListener(task ->{
-                                                if(task.isSuccessful()){
-                                                    Map<String, Object> user = new HashMap<>();
-                                                    user.put("nome", nome);
-                                                    user.put("cognome", cognome);
-                                                    user.put("email", email);
-                                                    //Hashing password
-                                                    String encryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-                                                    user.put("password", encryptedPassword);
-                                                    user.put("dataNascita", dataNascita);
-                                                    user.put("regione", regione);
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(taskCheckUser -> {
+                            if (taskCheckUser.isSuccessful() && taskCheckUser.getResult().isEmpty()) {
+                                //Firebase implementa già hashing password
+                                mAuth.createUserWithEmailAndPassword(email, password)
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                Map<String, Object> user = new HashMap<>();
+                                                user.put("nome", patient.getNome());
+                                                user.put("cognome", patient.getCognome());
+                                                user.put("email", patient.getEmail());
+                                                user.put("dataNascita", patient.getDataNascita());
+                                                user.put("regione", patient.getRegione());
 
-                                                    db.collection("users")
-                                                            .document(mAuth.getCurrentUser().getUid())
-                                                            .set(user)
-                                                            .addOnSuccessListener(task1 ->{
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                                                builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
-                                                                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                                                                    SharedPreferences sharedPref = requireActivity().getSharedPreferences(NAME_FILE,Context.MODE_PRIVATE);
-                                                                    SharedPreferences.Editor editor = sharedPref.edit();
-                                                                    editor.putString("email", email);
-                                                                    editor.putString("password", password);
-                                                                    editor.apply();
+                                                db.collection("users")
+                                                        .document(mAuth.getCurrentUser().getUid())
+                                                        .set(user)
+                                                        .addOnSuccessListener(task1 -> {
+                                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                            builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
+                                                            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
 
-                                                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                                                    startActivity(intent);
-                                                                    progressBar.setVisibility(ProgressBar.INVISIBLE);
-                                                                });
+                                                                SharedPreferences.Editor editor = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE).edit();
+                                                                editor.putString("email", patient.getEmail());
 
-                                                                builder.setNegativeButton(R.string.no, (dialog, which) -> {
-                                                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                                                    startActivity(intent);
-                                                                });
-                                                                builder.show();
+                                                                //Encrypt password con chiave simmetrica e salva su file
+                                                                byte[] encryptedPassword = new byte[0];
+                                                                byte[] iv = new byte[0];
+                                                                try {
+                                                                    CryptoUtil.generateandSaveSecretKey(patient.getEmail());
+                                                                    SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
+                                                                    Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
+                                                                    encryptedPassword = encryptionResult.first;
+                                                                    iv = encryptionResult.second;
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
 
-                                                            })
-                                                            .addOnFailureListener(task2 ->{
-                                                                progressBar.setVisibility(ProgressBar.INVISIBLE);
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                                                builder.setTitle("Error")
-                                                                        .setMessage(R.string.registration_failed)
-                                                                        .create();
-                                                                builder.show();
-                                                                builder.setPositiveButton("Ok", null);
+                                                                editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
+                                                                editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
+                                                                editor.commit();
 
+                                                            Intent intent = new Intent(getContext(), MainActivity.class);
+                                                            startActivity(intent);
+                                                            progressBar.setVisibility(ProgressBar.INVISIBLE);
                                                             });
 
-                                                }
-                                            });
-                                }else {
-                                    progressBar.setVisibility(ProgressBar.INVISIBLE);
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setTitle("Error")
-                                            .setMessage(R.string.user_already_exists)
-                                            .setPositiveButton("Ok", null)
-                                            .create();
+                                                            builder.setNegativeButton(R.string.no, (dialog, which) -> {
+                                                                Intent intent = new Intent(getContext(), MainActivity.class);
+                                                                startActivity(intent);
+                                                            });
+                                                            builder.show();
 
-                                    builder.show();
-                                }
+                                                        })
+                                                        .addOnFailureListener(task2 -> {
+                                                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                            builder.setTitle("Error")
+                                                                    .setMessage(R.string.registration_failed)
+                                                                    .create();
+                                                            builder.show();
+                                                            builder.setPositiveButton("Ok", null);
 
+                                                        });
+
+                                            }
+                                        });
+                            } else {
+                                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Error")
+                                        .setMessage(R.string.user_already_exists)
+                                        .setPositiveButton("Ok", null)
+                                        .create();
+
+                                builder.show();
                             }
-                    );
 
-        }
+                        }
+                );
+
+    }
 
 
 }

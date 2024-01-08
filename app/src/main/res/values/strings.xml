@@ -32,6 +32,7 @@
     <string name="forgett_pass">Did you forget the password? Click Here!</string>
     <string name="create_account">You don\'t have an account? Create Now!</string>
     <string name="login">Did you have an account? Log in!</string>
+    <string name="login_doctor" translatable="false">Are you a doctor? Log in!</string>
     <string name="incorrect_login">Incorrect email or password!</string>
     <string name="registration_failed">Registration error!</string>
     <string name="registration_success">Registration success!</string>

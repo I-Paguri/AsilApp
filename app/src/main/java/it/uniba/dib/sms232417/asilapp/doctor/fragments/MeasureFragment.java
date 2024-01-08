@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.auth.QRCodeAuth;
+import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 
 public class MeasureFragment extends Fragment {
 
