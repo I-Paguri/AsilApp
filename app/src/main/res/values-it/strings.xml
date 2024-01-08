@@ -120,6 +120,14 @@
     <string name="week">settimana/e</string>
     <string name="month">mese/i</string>
 
+    <string name="add_intake">Aggiungi un\'altra assunzione</string>
+    <string name="intake">Assunzione</string>
+    <string name="intake_time">Quando assumi questo farmaco?</string>
+    <string name="quantity">Quantità</string>
+    <string name="insert_time">Inserisci l\'ora</string>
+
+    <string name="planning">Pianificazione</string>
+    <string name="medications">Farmaci</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,5 +1,7 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -18,16 +20,23 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
+import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -38,12 +47,25 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
     private TextView subtitleInterval;
     private View linearLayoutWeekdays;
     private TextView subtitleWeekdays;
+    private String[] descriptionData;
+    private MaterialDatePicker.Builder<Long> builderIntakeTime;
+    private Button btnIntakeTime;
+    private int intakeCount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_treatment_form_medicines, container, false);
+        View view = inflater.inflate(R.layout.fragment_treatment_form_medicines, container, false);
+
+        descriptionData = new String[]{getResources().getString(R.string.planning), getResources().getString(R.string.medications), getResources().getString(R.string.notes)};
+
+        intakeCount = 1;
+
+        StateProgressBar stateProgressBar = view.findViewById(R.id.state_progress_bar);
+        stateProgressBar.setStateDescriptionData(descriptionData);
+
+        return view;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -76,7 +98,6 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
 
         linearLayoutWeekdays = view.findViewById(R.id.linearLayoutWeekdays);
         subtitleWeekdays = view.findViewById(R.id.subtitleWeekdays);
-
 
 
         howToTakeMedicine.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +164,6 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
         });
 
 
-
         WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) getActivity(), R.id.weekdays_stub)
                 .setFirstDayOfWeek(Calendar.MONDAY)
                 .setUnselectedColorRes(R.color.bottom_nav_bar_background)
@@ -171,13 +191,147 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
 
         };
 
+        TextView intakeLabel = view.findViewById(R.id.intakeLabel);
+        intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
 
+        Button btnAddIntake = view.findViewById(R.id.btnAddIntake);
+        btnAddIntake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addNewIntakeLayout();
+                updateIntakeLabels();
+            }
+        });
+
+        btnIntakeTime = view.findViewById(R.id.intakeTime);
+
+        btnIntakeTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+
+                // Create a MaterialTimePicker
+                MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
+                        .setInputMode(INPUT_MODE_CLOCK)
+                        .setTimeFormat(TimeFormat.CLOCK_24H)
+                        .setHour(12)
+                        .setMinute(0)
+                        .setTitleText("Select Appointment time")
+                        .build();
+
+                // Show the MaterialTimePicker
+                materialTimePicker.show(getChildFragmentManager(), "time_picker");
+
+                materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Get the selected time and do something with it
+                        int hour = materialTimePicker.getHour();
+                        int minute = materialTimePicker.getMinute();
+                        // ...
+                    }
+                });
+            }
+        });
 
         super.onViewCreated(view, savedInstanceState);
     }
 
-    /** Setup data for horizontal chart */
+    private void addNewIntakeLayout() {
+        // Inflate the layout from XML file
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View intakeLayout = inflater.inflate(R.layout.add_intake_layout, null);
 
+        // Get the parent layout
+        LinearLayout parentLayout = getView().findViewById(R.id.parentLinearLayout);
+
+        // Get the index of the second last view in parentLayout
+        int index = parentLayout.getChildCount() - 1;
+
+        // Add the new layout to the parent layout at the index of the second last view
+        parentLayout.addView(intakeLayout, index);
+
+        TextView intakeLabel = intakeLayout.findViewById(R.id.intakeLabel);
+        intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
+        // Find the close button in the layout
+        Button closeButton = intakeLayout.findViewById(R.id.closeButton);
+
+        // Set a click listener on the close button
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Remove the intakeLayout from the parent layout
+                parentLayout.removeView(intakeLayout);
+                updateIntakeLabels();
+            }
+        });
+
+        // Find the intakeTime button in the layout
+        Button btnIntakeTime = intakeLayout.findViewById(R.id.intakeTime);
+
+        btnIntakeTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+
+                // Create a MaterialTimePicker
+                MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
+                        .setInputMode(INPUT_MODE_CLOCK)
+                        .setTimeFormat(TimeFormat.CLOCK_24H)
+                        .setHour(12)
+                        .setMinute(0)
+                        .setTitleText("Select Appointment time")
+                        .build();
+
+                // Show the MaterialTimePicker
+                materialTimePicker.show(getChildFragmentManager(), "time_picker");
+
+                materialTimePicker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Get the selected time and do something with it
+                        int hour = materialTimePicker.getHour();
+                        int minute = materialTimePicker.getMinute();
+                        // ...
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void updateIntakeLabels() {
+    // Get the parent layout
+    LinearLayout parentLayout = getView().findViewById(R.id.parentLinearLayout);
+
+    // Initialize intakeCount to 1
+    intakeCount = 1;
+
+    // Iterate over all the child views of the parent layout
+    for (int i = 0; i < parentLayout.getChildCount(); i++) {
+        View childView = parentLayout.getChildAt(i);
+
+        // Check if the child view is an intake layout
+        if (childView.getId() == R.id.linearLayoutIntake) {
+            // Find the intakeLabel in the child view
+            TextView intakeLabel = childView.findViewById(R.id.intakeLabel);
+
+            // Update the text of the intakeLabel
+            intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
+
+            // Increment intakeCount
+            intakeCount++;
+        }
+    }
+}
 
     @Override
     public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {

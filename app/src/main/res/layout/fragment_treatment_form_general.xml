@@ -20,12 +20,30 @@
             android:orientation="vertical"
             android:padding="4dp">
 
+            <com.kofigyan.stateprogressbar.StateProgressBar
+                android:id="@+id/state_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:spb_animateToCurrentProgressState="true"
+                app:spb_checkStateCompleted="true"
+                app:spb_currentStateDescriptionColor="@color/md_theme_light_primary"
+                app:spb_currentStateNumber="one"
+                app:spb_maxStateNumber="three"
+                app:spb_stateBackgroundColor="#BDBDBD"
+                app:spb_stateDescriptionColor="#808080"
+                app:spb_stateForegroundColor="@color/md_theme_light_primary"
+                app:spb_stateNumberBackgroundColor="#808080"
+                app:spb_stateNumberForegroundColor="#eeeeee"
+                app:spb_descriptionTopSpaceIncrementer="8dp"
+                app:spb_animationDuration="1000"/>
+
             <TextView
                 style="@style/TitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="16dp"
                 android:text="@string/treatment_plan" />
 
@@ -177,10 +195,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="40dp"
+        android:layout_height="85dp"
+        android:background="@drawable/ic_list_header_background"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -189,7 +205,8 @@
             android:id="@+id/goBack"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:text="@string/go_back" />
@@ -197,8 +214,9 @@
         <Button
             android:id="@+id/goNext"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:layout_marginStart="4dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:text="@string/btn_continue"
             android:textAllCaps="true"

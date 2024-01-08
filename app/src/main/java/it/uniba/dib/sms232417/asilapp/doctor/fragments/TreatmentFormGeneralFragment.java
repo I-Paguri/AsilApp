@@ -43,6 +43,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,6 +65,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
     private MaterialDatePicker.Builder<Long> builderStartDate, builderEndDate;
     private MaterialSwitch endDateSwitch;
     private Toolbar toolbar;
+    private String[] descriptionData;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -141,6 +143,12 @@ public class TreatmentFormGeneralFragment extends Fragment {
         btnStartDate.setStrokeWidth(textInputLayout.getBoxStrokeWidth());
         btnEndDate.setStrokeColor(ColorStateList.valueOf(textInputLayout.getBoxStrokeColor()));
         btnEndDate.setStrokeWidth(textInputLayout.getBoxStrokeWidth());
+
+        descriptionData = new String[]{getResources().getString(R.string.planning), getResources().getString(R.string.medications), getResources().getString(R.string.notes)};
+
+        StateProgressBar stateProgressBar = (StateProgressBar) constraintLayout.findViewById(R.id.state_progress_bar);
+        stateProgressBar.setStateDescriptionData(descriptionData);
+
 
         return constraintLayout;
     }
