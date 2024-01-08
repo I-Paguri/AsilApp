@@ -7,35 +7,25 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.support.v4.media.MediaDescriptionCompat;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -45,14 +35,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import it.uniba.dib.sms232417.asilapp.R;
-import ru.slybeaver.slycalendarview.SlyCalendarDialog;
 
 public class TreatmentFormGeneralFragment extends Fragment {
 
@@ -325,10 +312,10 @@ public class TreatmentFormGeneralFragment extends Fragment {
                 // Check if any of the inputs are empty
                 if (endDateSwitch.isChecked()) {
                     if (startDate != null && !treatmentTarget.getText().toString().isEmpty()) {
-                        TreatmentFormMedicinesFragment treatmentFormMedicinesFragment = new TreatmentFormMedicinesFragment();
+                        TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicinesFragment);
+                        transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
                     } else {
@@ -339,10 +326,10 @@ public class TreatmentFormGeneralFragment extends Fragment {
                     }
                 } else {
                     if (startDate != null && !treatmentTarget.getText().toString().isEmpty() && endDate != null) {
-                        TreatmentFormMedicinesFragment treatmentFormMedicinesFragment = new TreatmentFormMedicinesFragment();
+                        TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicinesFragment);
+                        transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
                     } else {

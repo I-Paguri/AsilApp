@@ -26,7 +26,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -36,12 +35,11 @@ import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
 
-public class TreatmentFormMedicinesFragment extends Fragment implements WeekdaysDataSource.Callback {
+public class TreatmentFormMedicationsFragment extends Fragment implements WeekdaysDataSource.Callback {
 
     private View linearLayoutInterval;
     private TextView subtitleInterval;
@@ -56,7 +54,7 @@ public class TreatmentFormMedicinesFragment extends Fragment implements Weekdays
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_treatment_form_medicines, container, false);
+        View view = inflater.inflate(R.layout.fragment_treatment_form_medications, container, false);
 
         descriptionData = new String[]{getResources().getString(R.string.planning), getResources().getString(R.string.medications), getResources().getString(R.string.notes)};
 

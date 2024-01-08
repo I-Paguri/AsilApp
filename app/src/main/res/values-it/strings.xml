@@ -64,15 +64,15 @@
     <string name="end_date">Data di fine</string>
     <string name="btn_continue">Continua</string>
     <string name="no_end_date">Nessuna data di fine</string>
-    <string name="medicines">Farmaci</string>
-    <string name="medicine">Farmaco</string>
+    <string name="medications">Farmaci</string>
+    <string name="medication">Farmaco</string>
     <string name="notes">Note</string>
     <string name="my_data">I miei dati</string>
 
     <string name="treatment_goal_empty">L\'obiettivo della terapia non può essere vuoto</string>
-    <string name="insert_medicine">Inserisci un farmaco</string>
-    <string name="medicine_name">Come si chiama il farmaco?</string>
-    <string name="how_to_take_medicine">Qual è la modalità di assunzione?</string>
+    <string name="insert_medication">Inserisci un farmaco</string>
+    <string name="medication_name">Come si chiama il farmaco?</string>
+    <string name="how_to_take_medication">Qual è la modalità di assunzione?</string>
     <string name="good_morning">Buongiorno</string>
 
     <string name="how_regularly">Con quale regolarità?</string>
@@ -127,7 +127,6 @@
     <string name="insert_time">Inserisci l\'ora</string>
 
     <string name="planning">Pianificazione</string>
-    <string name="medications">Farmaci</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

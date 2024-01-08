@@ -86,7 +86,7 @@ public class TreatmentFragment extends Fragment {
             dateText.setTextAppearance(getContext(), R.style.CardViewDates);
 
             TextView subtitleText = new TextView(getContext());
-            subtitleText.setText(getResources().getString(R.string.medicines));
+            subtitleText.setText(getResources().getString(R.string.medications));
             subtitleText.setTextAppearance(getContext(), R.style.CardViewSubtitleText);
 
             TextView regularText = new TextView(getContext());

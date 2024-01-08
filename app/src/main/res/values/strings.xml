@@ -69,13 +69,13 @@
     <string name="end_date">End date</string>
     <string name="btn_continue">Continue</string>
     <string name="no_end_date">No end date</string>
-    <string name="medicines">Medicines</string>
-    <string name="medicine">Medicine</string>
+    <string name="medications">Medications</string>
+    <string name="medication">Medication</string>
     <string name="notes">Notes</string>
     <string name="treatment_goal_empty">Treatment goal cannot be empty</string>
-    <string name="insert_medicine">Insert medicine</string>
-    <string name="how_to_take_medicine">How to take this medicine?</string>
-    <string name="medicine_name">What is the medicine name?</string>
+    <string name="insert_medication">Insert medication</string>
+    <string name="how_to_take_medication">How to take this medication?</string>
+    <string name="medication_name">What is the medication name?</string>
     <string name="how_regularly">How regularly?</string>
     <string name="select">Select</string>
     <string name="save_password" translatable="false">Save password</string>
@@ -372,7 +372,7 @@
     </string-array>
 
     <string name="what_days_of_week">What days of the week?</string>
-    <string name="what_interval">How often this medicine should be taken?</string>
+    <string name="what_interval">How often this medication should be taken?</string>
     <string name="what_interval_message">Select how much time there should be between each intake</string>
     <string name="day">day/s</string>
     <string name="week">week/s</string>
@@ -385,5 +385,4 @@
     <string name="insert_time">Insert time</string>
 
     <string name="planning">Planning</string>
-    <string name="medications">Medications</string>
 </resources>
