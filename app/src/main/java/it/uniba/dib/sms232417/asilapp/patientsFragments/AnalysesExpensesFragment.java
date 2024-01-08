@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.Entry;
@@ -83,24 +86,36 @@ public class AnalysesExpensesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_analyses_expenses, container, false);
 
 
+        // Prendo i riferimenti alle textview e al grafico a torta
+            PieChart pieChart = view.findViewById(R.id.pieChart);
+            TextView paragraph1 = view.findViewById(R.id.resocontoSpesaFarmaci);
+            TextView paragraph2 = view.findViewById(R.id.resocontoSpesaTerapie);
+            TextView paragraph3 = view.findViewById(R.id.resocontoSpesaTrattamenti);
+            TextView paragraph4 = view.findViewById(R.id.resocontoSpesaEsami);
+
+
 
         // Creazione grafico a torta
-
-        PieChart pieChart = view.findViewById(R.id.pieChart);
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(50, "Spese Farmaci"));
         entries.add(new PieEntry(20, "Spese Terapie"));
         entries.add(new PieEntry(30, "Spese Trattamenti"));
-        entries.add(new PieEntry(10, "Spese Esami"));
+        entries.add(new PieEntry(29, "Spese Esami"));
 
+        final float[] totalSum = new float[1];
+        for (PieEntry entry : entries) {
+            totalSum[0] += entry.getValue();
+        }
+
+      //definisco il dataset del grafico a torta
         PieDataSet set = new PieDataSet(entries, "");
-        // Definisci i colori
+        // Definisci i colori del grafico a torta
         int color1 = Color.parseColor("#D8E2FF");
         int color2 = Color.parseColor("#9CCAFF");
         int color3 = Color.parseColor("#003256");
-        int color4 = Color.parseColor("#00497A");
+        int color4 = Color.parseColor("#0062A1");
 
-// Imposta i colori delle fette del grafico a torta
+        //Imposta i colori delle fette del grafico a torta
         set.setColors(new int[] {color1, color2, color3, color4});
 
 
@@ -108,6 +123,25 @@ public class AnalysesExpensesFragment extends Fragment {
         data.setDrawValues(false);
         pieChart.setData(data);
         pieChart.setDrawEntryLabels(false);
+
+        pieChart.setCenterText("Totale: " + Float.toString(totalSum[0]));
+
+
+        // Get the data from the PieChart
+        PieData pieData = pieChart.getData();
+        if (pieData != null) {
+            PieDataSet pieDataSet = (PieDataSet) pieData.getDataSet();
+            if (pieDataSet != null) {
+                 entries = pieDataSet.getEntriesForXValue(0f);
+                // Set the text of each TextView based on the data of the PieChart
+                if (entries.size() >= 0) {
+                    paragraph1.setText(formatEntry(entries.get(0)));
+                    paragraph2.setText(formatEntry(entries.get(1)));
+                    paragraph3.setText(formatEntry(entries.get(2)));
+                    paragraph4.setText(formatEntry(entries.get(3)));
+                }
+            }
+        }
 
         // Aggiungi un listener per i valori selezionati
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
@@ -120,20 +154,17 @@ public class AnalysesExpensesFragment extends Fragment {
                 pieChart.setCenterText(label);
             }
 
+
             @Override
             public void onNothingSelected() {
-                // Rimuovi il testo dal centro del grafico a torta quando nessun elemento è selezionato
-                pieChart.setCenterText("");
+                pieChart.setCenterText("Totale: " + totalSum[0]);
             }
+
         });
         // Imposta il grafico a torta come un "Ring Chart"
-            // ...
-            // Imposta il grafico a torta come un "Ring Chart"
-            pieChart.setHoleRadius(70f); // 70% del raggio
-            pieChart.setTransparentCircleRadius(80f); // 80% del raggio
-            // ...
-      //  pieChart.setTransparentCircleColor(android.R.color.white);
-
+        pieChart.setHoleRadius(70f); // 70% del raggio
+        pieChart.setTransparentCircleRadius(80f); // 80% del raggio
+        pieChart.animateY(1400, Easing.EaseInOutQuad); // Animazione di rotazione
 
         // Modifica la legenda
         Legend legend = pieChart.getLegend();
@@ -150,6 +181,9 @@ public class AnalysesExpensesFragment extends Fragment {
     }
 
 
+    private String formatEntry(PieEntry entry) {
+        return "Le tue " + entry.getLabel() + " sono state: " + entry.getValue() +" €";
+    }
 
 
 }

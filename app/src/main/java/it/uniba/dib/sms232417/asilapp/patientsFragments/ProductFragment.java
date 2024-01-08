@@ -1,12 +1,20 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.GridLayout;
+import android.widget.TextView;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -57,10 +65,34 @@ public class ProductFragment extends Fragment {
         }
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_product, container, false);
+
+        GridLayout gridLayout = view.findViewById(R.id.gridLayout);
+
+        for (int i = 0; i < 9; i++) { // sostituisci 9 con il numero di CardView che desideri
+            CardView cardView = new CardView(getContext());
+            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+            layoutParams.width = 0;
+            layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            layoutParams.setMargins(8, 8, 8, 8);
+            layoutParams.columnSpec = GridLayout.spec(i % 3, 1f); // sostituisci 3 con il numero di colonne
+            cardView.setLayoutParams(layoutParams);
+            cardView.setCardBackgroundColor(Color.parseColor("#D3D3D3"));
+            cardView.setRadius(8);
+
+            TextView textView = new TextView(getContext());
+            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setText("Testo " + (i + 1));
+            textView.setGravity(Gravity.CENTER);
+            textView.setPadding(16, 16, 16, 16);
+
+            cardView.addView(textView);
+            gridLayout.addView(cardView);
+        }
+
+        return view;
     }
 }

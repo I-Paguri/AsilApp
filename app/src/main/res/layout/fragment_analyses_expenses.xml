@@ -1,33 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".patientsFragments.AnalysesExpensesFragment">
 
-    <TextView
-        style="@style/CardViewTitleText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="Analisi spese" />
+        android:orientation="vertical">
+
+
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/CardViewTitleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center"
+            android:text="Analisi spese"
+            android:layout_marginBottom="10dp"
+            android:textSize="30sp"
+            android:padding="10dp" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"
         styleText="@style/CardViewTitleText"
-        android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_width="340dp"
+        android:layout_height="340dp"
         android:layout_gravity="center_horizontal"/>
 
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:background="@color/md_theme_light_surfaceTint"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"/>
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/farmaci"
+        style="@style/CardViewTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="16dp"
-        android:text="Inserisci qui il tuo testo"/>
+        android:text="Farmaci"/>
+
+    <TextView
+        android:id="@+id/resocontoSpesaFarmaci"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        />
+
+
+
+    <TextView
+        android:id="@+id/terapie"
+        style="@style/CardViewTitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        android:text="Terapie"/>
+
+    <TextView
+        android:id="@+id/resocontoSpesaTerapie"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        />
+
+    <TextView
+        android:id="@+id/trattamenti"
+        style="@style/CardViewTitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        android:text="Trattamenti"/>
+
+    <TextView
+        android:id="@+id/resocontoSpesaTrattamenti"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        />
+
+
+    <TextView
+        android:id="@+id/esami"
+        style="@style/CardViewTitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        android:text="Esami"/>
+
+    <TextView
+        android:id="@+id/resocontoSpesaEsami"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
+        />
+
+
 
 
 </LinearLayout>
+
+    </ScrollView>
