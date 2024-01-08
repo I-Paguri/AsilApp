@@ -13,10 +13,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
@@ -24,6 +30,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 
 
 public class MainActivity extends AppCompatActivity {

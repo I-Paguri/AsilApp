@@ -1,14 +1,31 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.data.PieDataSet;
 
 import com.google.android.material.card.MaterialCardView;
+import com.mancj.slimchart.SlimChart;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -63,9 +80,77 @@ public class AnalysesExpensesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_analyses_expenses, container, false);
+        View view = inflater.inflate(R.layout.fragment_analyses_expenses, container, false);
+
+
+
+        // Creazione grafico a torta
+
+        PieChart pieChart = view.findViewById(R.id.pieChart);
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(50, "Spese Farmaci"));
+        entries.add(new PieEntry(20, "Spese Terapie"));
+        entries.add(new PieEntry(30, "Spese Trattamenti"));
+        entries.add(new PieEntry(10, "Spese Esami"));
+
+        PieDataSet set = new PieDataSet(entries, "");
+        // Definisci i colori
+        int color1 = Color.parseColor("#D8E2FF");
+        int color2 = Color.parseColor("#9CCAFF");
+        int color3 = Color.parseColor("#003256");
+        int color4 = Color.parseColor("#00497A");
+
+// Imposta i colori delle fette del grafico a torta
+        set.setColors(new int[] {color1, color2, color3, color4});
+
+
+        PieData data = new PieData(set);
+        data.setDrawValues(false);
+        pieChart.setData(data);
+        pieChart.setDrawEntryLabels(false);
+
+        // Aggiungi un listener per i valori selezionati
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                // Ottieni l'etichetta dell'elemento selezionato
+                String label = ((PieEntry) e).getLabel();
+
+                // Visualizza l'etichetta al centro del grafico a torta
+                pieChart.setCenterText(label);
+            }
+
+            @Override
+            public void onNothingSelected() {
+                // Rimuovi il testo dal centro del grafico a torta quando nessun elemento è selezionato
+                pieChart.setCenterText("");
+            }
+        });
+        // Imposta il grafico a torta come un "Ring Chart"
+            // ...
+            // Imposta il grafico a torta come un "Ring Chart"
+            pieChart.setHoleRadius(70f); // 70% del raggio
+            pieChart.setTransparentCircleRadius(80f); // 80% del raggio
+            // ...
+      //  pieChart.setTransparentCircleColor(android.R.color.white);
+
+
+        // Modifica la legenda
+        Legend legend = pieChart.getLegend();
+        legend.setForm(Legend.LegendForm.CIRCLE); // Imposta la forma degli indicatori di colore come cerchi
+        legend.setFormSize(10f); // Imposta la dimensione degli indicatori di colore
+        legend.setTextSize(14f); // Imposta la dimensione del testo
+        legend.setWordWrapEnabled(true); // Abilita l'inviluppo di parole
+        legend.setMaxSizePercent(0.5f); // Imposta la dimensione massima della legenda come il 50% della dimensione del grafico
+
+        pieChart.getDescription().setEnabled(false);
+        pieChart.invalidate(); // refresh
+
+        return view;
     }
 
 
 
+
 }
+
