@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -52,7 +53,13 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private Button btnIntakeTime;
     private int intakeCount;
     private Button btnContinue;
-    private AutoCompleteTextView intervalSelection, howRegularly, howToTakeMedicine, medicinesList;
+    private AutoCompleteTextView intervalSelection, howRegularly, howToTakeMedicine, medicinesList, quantity;
+    private int intervalSelectedNumber;
+    private String intervalSelected;
+    private ArrayAdapter<String> adapterHowRegularly, adapterHowToTake, adapterMedicines;
+    // Declare an ArrayList to hold the selected weekdays
+    private ArrayList<WeekdaysDataItem> selectedWeekdays = new ArrayList<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +85,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
         howRegularly = view.findViewById(R.id.how_regularly);
         intervalSelection = view.findViewById(R.id.intervalSelection);
+        quantity = view.findViewById(R.id.quantity);
 
         // Get the string array from the resources
         String[] medicines = getResources().getStringArray(R.array.medicines_list);
@@ -85,9 +93,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         String[] howRegularlyList = getResources().getStringArray(R.array.how_regularly_list);
 
         // Create an ArrayAdapter using the string array and a default layout
-        ArrayAdapter<String> adapterMedicines = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
-        ArrayAdapter<String> adapterHowToTake = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
-        ArrayAdapter<String> adapterHowRegularly = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howRegularlyList);
+        adapterMedicines = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
+        adapterHowToTake = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
+        adapterHowRegularly = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howRegularlyList);
 
         // Set the ArrayAdapter to the AutoCompleteTextView
         medicinesList.setAdapter(adapterMedicines);
@@ -129,7 +137,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                if (selectedItem.equals("Weekdays")) {
+                if (selectedItem.equals(getResources().getStringArray(R.array.how_regularly_list)[2])) {
                     linearLayoutWeekdays.setVisibility(View.VISIBLE);
                     subtitleWeekdays.setVisibility(View.VISIBLE);
                     linearLayoutInterval.setVisibility(View.GONE);
@@ -138,7 +146,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     linearLayoutWeekdays.setVisibility(View.GONE);
                     subtitleWeekdays.setVisibility(View.GONE);
 
-                    if (selectedItem.equals("Interval")) {
+                    if (selectedItem.equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
                         linearLayoutInterval.setVisibility(View.VISIBLE);
                         subtitleInterval.setVisibility(View.VISIBLE);
                     } else {
@@ -174,25 +182,6 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 .setFontTypeFace(Typeface.defaultFromStyle(Typeface.BOLD))
                 .start(this);
 
-        new WeekdaysDataSource.Callback() {
-            @Override
-            public void onWeekdaysItemClicked(int attachId, WeekdaysDataItem item) {
-                // Do something if today is selected?
-                Calendar calendar = Calendar.getInstance();
-                if (item.getCalendarDayId() == calendar.get(Calendar.DAY_OF_WEEK) && item.isSelected()) {
-
-                }
-            }
-
-            @Override
-            public void onWeekdaysSelected(int attachId, ArrayList<WeekdaysDataItem> items) {
-                //Filter on the attached id if there is multiple weekdays data sources
-                if (attachId == R.id.weekdays_stub) {
-                    // Do something on week 4?
-                }
-            }
-
-        };
 
         TextView intakeLabel = view.findViewById(R.id.intakeLabel);
         intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
@@ -240,6 +229,26 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 });
             }
         });
+
+        quantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        });
+
+        quantity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+            }
+        });
+
 
         btnContinue = getView().findViewById(R.id.goNext);
 
@@ -322,6 +331,28 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 });
             }
         });
+
+        AutoCompleteTextView quantity = intakeLayout.findViewById(R.id.quantity);
+
+        quantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        });
+
+        quantity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+            }
+        });
+
     }
 
     private void updateIntakeLabels() {
@@ -349,13 +380,21 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         }
     }
 
-    @Override
-    public void onWeekdaysItemClicked(int i, WeekdaysDataItem weekdaysDataItem) {
 
+    @Override
+    public void onWeekdaysItemClicked(int attachId, WeekdaysDataItem item) {
+        if (item.isSelected()) {
+            // Add the selected item to the ArrayList
+            selectedWeekdays.add(item);
+            Toast.makeText(getActivity(), item.getLabel() + " selected", Toast.LENGTH_SHORT).show();
+        } else {
+            // Remove the deselected item from the ArrayList
+            selectedWeekdays.remove(item);
+        }
     }
 
     @Override
-    public void onWeekdaysSelected(int i, ArrayList<WeekdaysDataItem> arrayList) {
+    public void onWeekdaysSelected(int attachId, ArrayList<WeekdaysDataItem> items) {
 
     }
 
@@ -400,37 +439,37 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         builder.setTitle(getResources().getString(R.string.what_interval)).setMessage(getResources().getString(R.string.what_interval_message))
                 .setPositiveButton("OK", (dialog, id) -> {
                     // User clicked OK, retrieve the selected values
-                    int selectedNumber = numberPicker1.getValue();
-                    String selectedInterval = displayedValues[numberPicker2.getValue()];
+                    intervalSelectedNumber = numberPicker1.getValue();
+                    intervalSelected = displayedValues[numberPicker2.getValue()];
 
-                    String formattedSelectedInterval = selectedInterval;
+                    String formattedSelectedInterval = intervalSelected;
 
-                    if (selectedInterval.equals(getResources().getString(R.string.day))) {
+                    if (intervalSelected.equals(getResources().getString(R.string.day))) {
                         // days
-                        formattedSelectedInterval = getResources().getQuantityString(R.plurals.days, selectedNumber, selectedNumber);
+                        formattedSelectedInterval = getResources().getQuantityString(R.plurals.days, intervalSelectedNumber, intervalSelectedNumber);
                     } else {
-                        if (selectedInterval.equals(getResources().getString(R.string.week))) {
+                        if (intervalSelected.equals(getResources().getString(R.string.week))) {
                             // weeks
-                            formattedSelectedInterval = getResources().getQuantityString(R.plurals.weeks, selectedNumber, selectedNumber);
+                            formattedSelectedInterval = getResources().getQuantityString(R.plurals.weeks, intervalSelectedNumber, intervalSelectedNumber);
                         } else {
                             // months
-                            formattedSelectedInterval = getResources().getQuantityString(R.plurals.months, selectedNumber, selectedNumber);
+                            formattedSelectedInterval = getResources().getQuantityString(R.plurals.months, intervalSelectedNumber, intervalSelectedNumber);
                         }
                     }
 
 
-                    if (selectedNumber == 1) {
-                        if (selectedInterval.equals(getResources().getString(R.string.day))) {
+                    if (intervalSelectedNumber == 1) {
+                        if (intervalSelected.equals(getResources().getString(R.string.day))) {
                             subtitleInterval.setVisibility(View.GONE);
                             linearLayoutInterval.setVisibility(View.GONE);
 
-                            howRegularly.setText(getResources().getStringArray(R.array.how_regularly_list)[0]);
+                            howRegularly.setText(getResources().getStringArray(R.array.how_regularly_list)[0], false);
 
                         } else {
                             intervalSelection.setText(getResources().getString(R.string.every) + " " + formattedSelectedInterval);
                         }
                     } else {
-                        intervalSelection.setText(getResources().getString(R.string.every) + " " + selectedNumber + " " + formattedSelectedInterval);
+                        intervalSelection.setText(getResources().getString(R.string.every) + " " + intervalSelectedNumber + " " + formattedSelectedInterval);
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {

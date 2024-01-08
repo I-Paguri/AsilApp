@@ -134,17 +134,17 @@
 
     <plurals name="days">
         <item quantity="one">giorno</item>
-        <item quantity="many">giorni</item>
+        <item quantity="other">giorni</item>
     </plurals>
 
     <plurals name="weeks">
         <item quantity="one">settimana</item>
-        <item quantity="many">settimane</item>
+        <item quantity="other">settimane</item>
     </plurals>
 
     <plurals name="months">
         <item quantity="one">mese</item>
-        <item quantity="many">mesi</item>
+        <item quantity="other">mesi</item>
     </plurals>
 
     <!-- TODO: Remove or change this placeholder text -->
