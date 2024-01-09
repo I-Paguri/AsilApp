@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 
 public class TreatmentFormGeneralFragment extends Fragment {
 
@@ -55,6 +56,8 @@ public class TreatmentFormGeneralFragment extends Fragment {
     private MaterialSwitch endDateSwitch;
     private Toolbar toolbar;
     private String[] descriptionData;
+
+    private Treatment treatment;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -191,7 +194,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
@@ -390,26 +393,11 @@ public class TreatmentFormGeneralFragment extends Fragment {
     private Bundle setBundle() {
         Bundle bundle = new Bundle();
 
-        // Check if treatmentTarget is empty
-        if (!treatmentTarget.getText().toString().isEmpty()) {
-            bundle.putString("treatmentTarget", treatmentTarget.getText().toString());
-        }
+        String treatmentTargetString = treatmentTarget.getText().toString();
 
-        // Check if startDate is null
-        if (startDate != null) {
-            bundle.putLong("startDate", startDate.getTime());
-        }
+        treatment = new Treatment(treatmentTargetString, startDate, endDate);
 
-        bundle.putBoolean("endDateSwitch", endDateSwitch.isChecked());
-        // Check if endDateSwitch is checked
-        if (!endDateSwitch.isChecked()) {
-            // Check if endDate is null
-            if (endDate != null) {
-                bundle.putLong("endDate", endDate.getTime());
-            }
-        } else {
-            bundle.putLong("endDate", 0);
-        }
+        bundle.putParcelable("treatment", treatment);
 
         return bundle;
     }
