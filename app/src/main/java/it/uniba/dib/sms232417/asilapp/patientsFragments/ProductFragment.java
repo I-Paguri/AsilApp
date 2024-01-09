@@ -5,18 +5,22 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.view.Gravity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.GridLayout;
-import android.widget.TextView;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
+
+import it.uniba.dib.sms232417.asilapp.adapters.ProductAdapter;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.placeholder.ProductItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,29 +74,24 @@ public class ProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
-        GridLayout gridLayout = view.findViewById(R.id.gridLayout);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
-        for (int i = 0; i < 9; i++) { // sostituisci 9 con il numero di CardView che desideri
-            CardView cardView = new CardView(getContext());
-            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-            layoutParams.width = 0;
-            layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
-            layoutParams.setMargins(8, 8, 8, 8);
-            layoutParams.columnSpec = GridLayout.spec(i % 3, 1f); // sostituisci 3 con il numero di colonne
-            cardView.setLayoutParams(layoutParams);
-            cardView.setCardBackgroundColor(Color.parseColor("#D3D3D3"));
-            cardView.setRadius(8);
+        List<ProductItem> productItems = new ArrayList<>();
+        productItems.add(new ProductItem("Oki Task", "10"));
+        productItems.add(new ProductItem("Minoxidil", "10"));
+        productItems.add(new ProductItem("Aspirina", "20"));
+        productItems.add(new ProductItem("Sinifodil", "2"));
+        productItems.add(new ProductItem("Ibupofene", "10"));
+        productItems.add(new ProductItem("Viagra", "1"));
+        productItems.add(new ProductItem("Coca", "30"));
+        productItems.add(new ProductItem("Marijana", "10"));
 
-            TextView textView = new TextView(getContext());
-            textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            textView.setText("Testo " + (i + 1));
-            textView.setGravity(Gravity.CENTER);
-            textView.setPadding(16, 16, 16, 16);
 
-            cardView.addView(textView);
-            gridLayout.addView(cardView);
-        }
+        // Set up the RecyclerView
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(new ProductAdapter(productItems));
 
         return view;
+
     }
 }
