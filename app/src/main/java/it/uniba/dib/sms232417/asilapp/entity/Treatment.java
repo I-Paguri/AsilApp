@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,15 +14,8 @@ public class Treatment implements Parcelable {
     private String treatmentTarget;
     private Date startDate, endDate;
     private SimpleDateFormat dateFormat;
-    private String medication;
-    private String howToTake;
-    private String howRegularly;
-    private String intervalSelection;
-    private ArrayList<WeekdaysDataItem> selectedWeekdays;
-    private ArrayList<String> intakesTime;
-    private ArrayList<String> quantities;
+    private ArrayList<Medication> medications;
     private String notes;
-
 
     public Treatment(String treatmentTarget, Date startDate, Date endDate) {
         this.treatmentTarget = treatmentTarget;
@@ -35,13 +26,7 @@ public class Treatment implements Parcelable {
         this.dateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
 
         // Default values
-        this.medication = "";
-        this.howToTake = "";
-        this.howRegularly = "";
-        this.intervalSelection = "";
-        this.selectedWeekdays = new ArrayList<>();
-        this.intakesTime = new ArrayList<>();
-        this.quantities = new ArrayList<>();
+        this.medications = new ArrayList<>();
         this.notes = "";
     }
 
@@ -60,6 +45,18 @@ public class Treatment implements Parcelable {
             return new Treatment[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(treatmentTarget);
+        dest.writeString(getStartDateString());
+        dest.writeString(getEndDateString());
+    }
 
     public String getTreatmentTarget() {
         return treatmentTarget;
@@ -101,84 +98,16 @@ public class Treatment implements Parcelable {
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public ArrayList<Medication> getMedications() {
+        return medications;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(treatmentTarget);
-        dest.writeString(getStartDateString());
-        dest.writeString(getEndDateString());
+    public void setMedications(ArrayList<Medication> medications) {
+        this.medications = medications;
     }
 
-    public String getMedication() {
-        return medication;
-    }
-
-    public void setMedication(String medication) {
-        this.medication = medication;
-    }
-
-    public String getHowToTake() {
-        return howToTake;
-    }
-
-    public void setHowToTake(String howToTake) {
-        this.howToTake = howToTake;
-    }
-
-    public String getHowRegularly() {
-        return howRegularly;
-    }
-
-    public void setHowRegularly(String howRegularly) {
-        this.howRegularly = howRegularly;
-    }
-
-    public String getIntervalSelection() {
-        return intervalSelection;
-    }
-
-    public void setIntervalSelection(String intervalSelection) {
-        this.intervalSelection = intervalSelection;
-    }
-
-    public ArrayList<WeekdaysDataItem> getSelectedWeekdays() {
-        return selectedWeekdays;
-    }
-
-    public void setSelectedWeekdays(ArrayList<WeekdaysDataItem> selectedWeekdays) {
-        this.selectedWeekdays = selectedWeekdays;
-    }
-
-    public void addSelectedWeekday(WeekdaysDataItem selectedWeekday) {
-        this.selectedWeekdays.add(selectedWeekday);
-    }
-
-    public ArrayList<String> getIntakesTime() {
-        return intakesTime;
-    }
-
-    public void setIntakesTime(ArrayList<String> intakesTime) {
-        this.intakesTime = intakesTime;
-    }
-
-    public void addIntakeTime(String intakeTime) {
-        this.intakesTime.add(intakeTime);
-    }
-
-    public ArrayList<String> getQuantities() {
-        return quantities;
-    }
-
-    public void setQuantities(ArrayList<String> quantities) {
-        this.quantities = quantities;
-    }
-
-    public void addQuantity(String quantity) {
-        this.quantities.add(quantity);
+    public void addMedication(Medication medication) {
+        this.medications.add(medication);
     }
 
     public String getNotes() {
@@ -198,6 +127,11 @@ public class Treatment implements Parcelable {
         if (!getEndDateString().isEmpty()) {
             treatmentString = treatmentString + "End date: " + getEndDateString() + "\n";
         }
+
+
+        treatmentString = treatmentString + "Medications: " + medications.toString() + "\n";
+
+        /*
         treatmentString = treatmentString + "Medication: " + getMedication() + "\n";
         treatmentString = treatmentString + "How to take: " + getHowToTake() + "\n";
         treatmentString = treatmentString + "How regularly: " + getHowRegularly() + "\n";
@@ -211,7 +145,7 @@ public class Treatment implements Parcelable {
 
         treatmentString = treatmentString + "Intakes time: " + getIntakesTime() + "\n";
         treatmentString = treatmentString + "Quantities: " + getQuantities() + "\n";
-
+        */
         if (!getNotes().isEmpty()) {
             treatmentString = treatmentString + "Notes: " + getNotes() + "\n";
         }

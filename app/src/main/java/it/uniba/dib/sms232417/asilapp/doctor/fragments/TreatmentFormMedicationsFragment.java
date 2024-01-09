@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -43,6 +44,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 
 
@@ -72,7 +74,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private boolean endDateSwitch;
     private Treatment treatment;
 
+    private ArrayList<Medication> medications;
 
+    private boolean validInput;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,13 +95,16 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     }
 
 
+
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Get the bundle
         Bundle bundle = this.getArguments();
 
+        validInput = false;
         treatment = null;
+        medications = new ArrayList<>();
         if (bundle != null) {
             treatment = bundle.getParcelable("treatment");
         }
@@ -613,7 +620,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         AutoCompleteTextView howRegularly = getView().findViewById(R.id.how_regularly);
         AutoCompleteTextView intervalSelection = getView().findViewById(R.id.intervalSelection);
 
-        boolean validInput = true;
+        validInput = true;
 
         if (medicinesList.getText().toString().isEmpty()) {
             TextInputLayout medicationsListLayout = getView().findViewById(R.id.medicationNameInputLayout);
@@ -750,34 +757,42 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private Bundle setBundle() {
         Bundle bundle = new Bundle();
 
+        String medicationNameString, howToTakeString, howRegularlyString, intervalSelectedString;
+        medicationNameString = "";
+        howToTakeString = "";
+        howRegularlyString = "";
+        intervalSelectedString = "";
+
         AutoCompleteTextView medicinesList = requireView().findViewById(R.id.medicines_list);
         AutoCompleteTextView howToTakeMedicine = requireView().findViewById(R.id.how_to_take_medicine);
         AutoCompleteTextView howRegularly = requireView().findViewById(R.id.how_regularly);
         AutoCompleteTextView intervalSelection = requireView().findViewById(R.id.intervalSelection);
 
         if (!medicinesList.getText().toString().isEmpty()) {
-            treatment.setMedication(medicinesList.getText().toString());
+            medicationNameString = medicinesList.getText().toString();
+            //treatment.setMedication(medicinesList.getText().toString());
         }
 
         if (!howToTakeMedicine.getText().toString().isEmpty()) {
-            treatment.setHowToTake(howToTakeMedicine.getText().toString());
+            howToTakeString = howToTakeMedicine.getText().toString();
+            //treatment.setHowToTake(howToTakeMedicine.getText().toString());
         }
 
         if (!howRegularly.getText().toString().isEmpty()) {
-            treatment.setHowRegularly(howRegularly.getText().toString());
-        } else {
+            howRegularlyString = howRegularly.getText().toString();
+
             if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
                 if (!intervalSelection.getText().toString().isEmpty()) {
-                    treatment.setIntervalSelection(intervalSelection.getText().toString());
-                }
-            } else {
-                if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[2])) {
-                    if (!selectedWeekdays.isEmpty()) {
-                        treatment.setSelectedWeekdays(selectedWeekdays);
-                    }
+                    intervalSelectedString = intervalSelection.getText().toString();
+                    //treatment.setIntervalSelection(intervalSelection.getText().toString());
                 }
             }
+            //treatment.setHowRegularly(howRegularly.getText().toString());
         }
+
+        Medication medication = new Medication(medicationNameString, howToTakeString, howRegularlyString, selectedWeekdays);
+
+        medication.setIntervalSelected(intervalSelectedString);
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
@@ -795,21 +810,28 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
                 // Check if intakeTime and quantity are filled
                 if (!intakeTime.getText().toString().isEmpty()) {
-                    treatment.addIntakeTime(intakeTime.getText().toString());
+                    //treatment.addIntakeTime(intakeTime.getText().toString());
+                    medication.addIntakeTime(intakeTime.getText().toString());
                 }
 
                 if (isMilliliters) {
                     if (!quantityNumber.getText().toString().isEmpty()) {
-                        treatment.addQuantity(quantityNumber.getText().toString());
+                        // treatment.addQuantity(quantityNumber.getText().toString());
+                        medication.addQuantity(quantityNumber.getText().toString());
                     }
                 } else {
                     if (!quantityString.getText().toString().isEmpty()) {
-                        treatment.addQuantity(quantityString.getText().toString());
+                        // treatment.addQuantity(quantityString.getText().toString());
+                        medication.addQuantity(quantityString.getText().toString());
                     }
                 }
+
             }
         }
 
+        treatment.addMedication(medication);
+
+        Log.d("Medication", medication.toString());
         bundle.putParcelable("treatment", treatment);
 
         return bundle;
