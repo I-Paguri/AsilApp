@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -40,9 +41,12 @@ import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -67,6 +71,11 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private List<String> quantityValuesList;
     private boolean isMilliliters;
 
+    // Received data from TreatmentFormGeneralFragment
+    private String treatmentTarget;
+    private long startDate, endDate;
+    private boolean endDateSwitch;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,9 +94,30 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         return view;
     }
 
+
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Get the bundle
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            treatmentTarget = bundle.getString("treatmentTarget");
+            startDate = bundle.getLong("startDate");
+            endDate = bundle.getLong("endDate");
+            endDateSwitch = bundle.getBoolean("endDateSwitch");
+
+            /*
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            String startDateStr = formatter.format(new Date(startDate));
+            String endDateStr = formatter.format(new Date(endDate));
+            if (endDateSwitch) {
+                Toast.makeText(requireActivity(), treatmentTarget + " " + startDateStr + " " + endDateSwitch, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireActivity(), treatmentTarget + " " + startDateStr + " " + endDateStr + " " + endDateSwitch, Toast.LENGTH_SHORT).show();
+            }
+             */
+        }
+
         // Find the AutoCompleteTextView in the layout
         AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
         howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
@@ -100,12 +130,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         String[] howToTake = getResources().getStringArray(R.array.how_to_take_medicine_list);
         String[] howRegularlyList = getResources().getStringArray(R.array.how_regularly_list);
 
-
         // Create an ArrayAdapter using the string array and a default layout
         ArrayAdapter<String> adapterMedicines = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
         ArrayAdapter<String> adapterHowToTake = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
         ArrayAdapter<String> adapterHowRegularly = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, howRegularlyList);
-
 
         // Set the ArrayAdapter to the AutoCompleteTextView
         medicinesList.setAdapter(adapterMedicines);
@@ -310,7 +338,11 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             @Override
             public void onClick(View v) {
                 if (validateInput()) {
+                    // Get the bundle
+                    Bundle bundle = setBundle();
+
                     TreatmentFormNotesFragment treatmentFormNotesFragment = new TreatmentFormNotesFragment();
+                    treatmentFormNotesFragment.setArguments(bundle);
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormNotesFragment);
@@ -318,6 +350,18 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     transaction.commit();
                 } else {
                     Toast.makeText(requireActivity(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        Button btnBack = requireView().findViewById(R.id.goBack);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                if (fragmentManager != null) {
+                    fragmentManager.popBackStack();
                 }
             }
         });
@@ -717,6 +761,71 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             }
         }
 
+    }
+
+    private Bundle setBundle() {
+        Bundle bundle = new Bundle();
+
+        AutoCompleteTextView medicinesList = getView().findViewById(R.id.medicines_list);
+        AutoCompleteTextView howToTakeMedicine = getView().findViewById(R.id.how_to_take_medicine);
+        AutoCompleteTextView howRegularly = getView().findViewById(R.id.how_regularly);
+        AutoCompleteTextView intervalSelection = getView().findViewById(R.id.intervalSelection);
+
+        if (!medicinesList.getText().toString().isEmpty()) {
+            bundle.putString("medicinesList", medicinesList.getText().toString());
+        }
+
+        if (!howToTakeMedicine.getText().toString().isEmpty()) {
+            bundle.putString("howToTakeMedicine", howToTakeMedicine.getText().toString());
+        }
+        if (!howRegularly.getText().toString().isEmpty()) {
+            bundle.putString("howRegularly", howRegularly.getText().toString());
+        } else {
+            if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
+                if (!intervalSelection.getText().toString().isEmpty()) {
+                    bundle.putString("intervalSelection", intervalSelection.getText().toString());
+                }
+            } else {
+                if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[2])) {
+                    if (!selectedWeekdays.isEmpty()) {
+                        bundle.putParcelableArrayList("selectedWeekdays", selectedWeekdays);
+                    }
+                }
+            }
+        }
+
+        // Get the parent layout
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
+
+        // Iterate over all the child views of the parent layout
+        for (int i = 0; i < parentLayout.getChildCount(); i++) {
+            View childView = parentLayout.getChildAt(i);
+
+            // Check if the child view is an intake layout
+            if (childView.getId() == R.id.linearLayoutIntake) {
+                // Find the intakeTime and quantity views in the child view
+                Button intakeTime = childView.findViewById(R.id.intakeTime);
+                AutoCompleteTextView quantityString = childView.findViewById(R.id.quantityString);
+                AutoCompleteTextView quantityNumber = childView.findViewById(R.id.quantityNumber);
+
+                // Check if intakeTime and quantity are filled
+                if (!intakeTime.getText().toString().isEmpty()) {
+                    bundle.putString("intakeTime", intakeTime.getText().toString());
+                }
+
+                if (isMilliliters) {
+                    if (!quantityNumber.getText().toString().isEmpty()) {
+                      bundle.putString("quantityNumber", quantityNumber.getText().toString());
+                    }
+                } else {
+                    if (!quantityString.getText().toString().isEmpty()) {
+                        bundle.putString("quantityString", quantityString.getText().toString());
+                    }
+                }
+            }
+        }
+
+        return bundle;
     }
 
 

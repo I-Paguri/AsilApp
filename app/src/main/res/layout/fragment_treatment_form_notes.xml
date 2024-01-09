@@ -81,7 +81,7 @@
                     app:counterMaxLength="200">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/treatmentTargetEditText"
+                        android:id="@+id/notesEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine"

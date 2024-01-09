@@ -262,9 +262,10 @@ public class TreatmentFormGeneralFragment extends Fragment {
                             btnEndDate.setText(formattedDate);
                         }
 
+
                         // Check if the selected date is before the start date
                         if (startDate != null && selectedDate.compareTo(startDate) < 0) {
-                            Toast.makeText(getContext(), "End date cannot be before start date", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.end_date_before_start_date), Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -280,7 +281,6 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         btnEndDate.setText(getResources().getString(R.string.insert_end_date));
                     }
                 });
-
 
 
                 datePicker.show(getChildFragmentManager(), "date_picker");
@@ -339,41 +339,79 @@ public class TreatmentFormGeneralFragment extends Fragment {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check if any of the inputs are empty
-                if (endDateSwitch.isChecked()) {
-                    if (startDate != null && !treatmentTarget.getText().toString().isEmpty()) {
-                        TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
-                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    } else {
-                        if (treatmentTarget.getText().toString().isEmpty()) {
-                            TextInputLayout treatmentTargetInputLayout = constraintLayout.findViewById(R.id.treatmentTargetInputLayout);
-                            treatmentTargetInputLayout.setError(getResources().getString(R.string.required_field));
-                        }
-                        Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    if (startDate != null && !treatmentTarget.getText().toString().isEmpty() && endDate != null) {
-                        TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
-                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    } else {
-                        if (treatmentTarget.getText().toString().isEmpty()) {
-                            TextInputLayout treatmentTargetInputLayout = constraintLayout.findViewById(R.id.treatmentTargetInputLayout);
-                            treatmentTargetInputLayout.setError(getResources().getString(R.string.required_field));
-                        }
-                        Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
-                    }
+                // Check if the input is valid
+                if (validateInput()) {
+                    // Create a Bundle to hold the data
+                    Bundle bundle = setBundle();
+                    // Navigate to the next fragment
+                    TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
+                    treatmentFormMedicationsFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             }
         });
 
+    }
+
+    private boolean validateInput() {
+        // Check if treatmentTarget is empty
+        if (treatmentTarget.getText().toString().isEmpty()) {
+            // Display error message and return false
+            TextInputLayout treatmentTargetInputLayout = constraintLayout.findViewById(R.id.treatmentTargetInputLayout);
+            treatmentTargetInputLayout.setError(getResources().getString(R.string.required_field));
+            return false;
+        }
+
+        // Check if startDate is null
+        if (startDate == null) {
+            // Display error message and return false
+            Toast.makeText(getContext(), getResources().getString(R.string.required_field), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        // Check if endDateSwitch is checked
+        if (!endDateSwitch.isChecked()) {
+            // Check if endDate is null
+            if (endDate == null) {
+                // Display error message and return false
+                Toast.makeText(getContext(), getResources().getString(R.string.required_field), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        // If all checks pass, return true
+        return true;
+    }
+
+    private Bundle setBundle() {
+        Bundle bundle = new Bundle();
+
+        // Check if treatmentTarget is empty
+        if (!treatmentTarget.getText().toString().isEmpty()) {
+            bundle.putString("treatmentTarget", treatmentTarget.getText().toString());
+        }
+
+        // Check if startDate is null
+        if (startDate != null) {
+            bundle.putLong("startDate", startDate.getTime());
+        }
+
+        bundle.putBoolean("endDateSwitch", endDateSwitch.isChecked());
+        // Check if endDateSwitch is checked
+        if (!endDateSwitch.isChecked()) {
+            // Check if endDate is null
+            if (endDate != null) {
+                bundle.putLong("endDate", endDate.getTime());
+            }
+        } else {
+            bundle.putLong("endDate", 0);
+        }
+
+        return bundle;
     }
 
 

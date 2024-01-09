@@ -152,6 +152,7 @@
     <!-- ERRORS -->
     <string name="required_field"> Questo campo non può essere vuoto </string>
     <string name="select_weekdays"> Seleziona almeno un giorno della settimana </string>
+    <string name="end_date_before_start_date"> La data di fine non può essere dopo quella di inizio </string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
