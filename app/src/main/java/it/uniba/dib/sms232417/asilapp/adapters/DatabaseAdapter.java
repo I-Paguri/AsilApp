@@ -15,7 +15,6 @@ public class DatabaseAdapter {
     FirebaseFirestore db;
     Patient patient;
     Patient resultPatient;
-    String nome, cognome, email, dataNascita, regione, encryptPassword;
 
     public DatabaseAdapter(){
         mAuth = FirebaseAuth.getInstance();

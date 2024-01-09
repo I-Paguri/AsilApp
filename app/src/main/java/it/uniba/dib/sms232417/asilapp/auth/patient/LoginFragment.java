@@ -156,7 +156,7 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-
+        //LoginUtente
         loginDoctor.setOnClickListener(
                 new View.OnClickListener() {
                     @Override

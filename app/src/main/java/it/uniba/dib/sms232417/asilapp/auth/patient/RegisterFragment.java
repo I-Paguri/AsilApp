@@ -36,10 +36,11 @@ import javax.crypto.SecretKey;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
-
+import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
 
 
 @SuppressWarnings("unchecked")
@@ -47,6 +48,8 @@ public class RegisterFragment extends Fragment {
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
+    DatabaseAdapter dbAdapter;
+
     String strDataNascita;
     String regione;
     final String NAME_FILE = "automaticLogin";
@@ -183,98 +186,62 @@ public class RegisterFragment extends Fragment {
         ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
+        dbAdapter = new DatabaseAdapter();
+        dbAdapter.onRegister(nome, cognome, email, dataNascita, regione, password, new OnPatientDataCallback() {
+            @Override
+            public void onCallback(Patient patient) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
+                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
 
-        Patient patient = new Patient(nome, cognome, email, dataNascita, regione);
+                    SharedPreferences.Editor editor = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE).edit();
+                    editor.putString("email", patient.getEmail());
 
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
+                    //Encrypt password con chiave simmetrica e salva su file
+                    byte[] encryptedPassword = new byte[0];
+                    byte[] iv = new byte[0];
+                    try {
+                        CryptoUtil.generateandSaveSecretKey(patient.getEmail());
+                        SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
+                        Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
+                        encryptedPassword = encryptionResult.first;
+                        iv = encryptionResult.second;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-        db.collection("users")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(taskCheckUser -> {
-                            if (taskCheckUser.isSuccessful() && taskCheckUser.getResult().isEmpty()) {
-                                //Firebase implementa già hashing password
-                                mAuth.createUserWithEmailAndPassword(email, password)
-                                        .addOnCompleteListener(task -> {
-                                            if (task.isSuccessful()) {
-                                                Map<String, Object> user = new HashMap<>();
-                                                user.put("nome", patient.getNome());
-                                                user.put("cognome", patient.getCognome());
-                                                user.put("email", patient.getEmail());
-                                                user.put("dataNascita", patient.getDataNascita());
-                                                user.put("regione", patient.getRegione());
+                    editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
+                    editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
+                    editor.commit();
 
-                                                db.collection("users")
-                                                        .document(mAuth.getCurrentUser().getUid())
-                                                        .set(user)
-                                                        .addOnSuccessListener(task1 -> {
-                                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                                            builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
-                                                            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("loggedPatient", patient);
+                    startActivity(intent);
+                    progressBar.setVisibility(ProgressBar.INVISIBLE);
+                });
 
-                                                                SharedPreferences.Editor editor = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE).edit();
-                                                                editor.putString("email", patient.getEmail());
+                builder.setNegativeButton(R.string.no, (dialog, which) -> {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("loggedPatient", patient);
+                    startActivity(intent);
+                });
+                builder.show();
+            }
 
-                                                                //Encrypt password con chiave simmetrica e salva su file
-                                                                byte[] encryptedPassword = new byte[0];
-                                                                byte[] iv = new byte[0];
-                                                                try {
-                                                                    CryptoUtil.generateandSaveSecretKey(patient.getEmail());
-                                                                    SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
-                                                                    Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
-                                                                    encryptedPassword = encryptionResult.first;
-                                                                    iv = encryptionResult.second;
-                                                                } catch (Exception e) {
-                                                                    e.printStackTrace();
-                                                                }
 
-                                                                editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
-                                                                editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
-                                                                editor.commit();
+            @Override
+            public void onCallbackError(Exception e) {
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Error")
+                        .setMessage(R.string.registration_failed)
+                        .setPositiveButton("Ok", null)
+                        .create();
 
-                                                            Intent intent = new Intent(getContext(), MainActivity.class);
-                                                            startActivity(intent);
-                                                            progressBar.setVisibility(ProgressBar.INVISIBLE);
-                                                            });
-
-                                                            builder.setNegativeButton(R.string.no, (dialog, which) -> {
-                                                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                                                startActivity(intent);
-                                                            });
-                                                            builder.show();
-
-                                                        })
-                                                        .addOnFailureListener(task2 -> {
-                                                            progressBar.setVisibility(ProgressBar.INVISIBLE);
-                                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                                            builder.setTitle("Error")
-                                                                    .setMessage(R.string.registration_failed)
-                                                                    .create();
-                                                            builder.show();
-                                                            builder.setPositiveButton("Ok", null);
-
-                                                        });
-
-                                            }
-                                        });
-                            } else {
-                                progressBar.setVisibility(ProgressBar.INVISIBLE);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Error")
-                                        .setMessage(R.string.user_already_exists)
-                                        .setPositiveButton("Ok", null)
-                                        .create();
-
-                                builder.show();
-                            }
-
-                        }
-                );
-
+                builder.show();
+            }
+        });
     }
-
-
 }
 
 
