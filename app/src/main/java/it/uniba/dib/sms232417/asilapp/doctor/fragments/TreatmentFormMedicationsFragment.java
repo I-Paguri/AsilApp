@@ -162,25 +162,21 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             }
         });
 
-        quantity.setOnTouchListener(new View.OnTouchListener() {
+        quantity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    // Hide the keyboard
-                    InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    }
-
-                    // Check if howToTakeMedicine has been selected
-                    if (howToTakeMedicine.getText().toString().isEmpty()) {
-                        // Set error message
-                        howToTakeMedicine.setError(getResources().getString(R.string.select_how_to_take_first));
-                        howToTakeMedicine.requestFocus();
-                    }
-
+            public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
-                return false;
+
+                // Check if howToTakeMedicine has been selected
+                if (howToTakeMedicine.getText().toString().isEmpty()) {
+                    // Set error message
+                    howToTakeMedicine.setError(getResources().getString(R.string.select_how_to_take_first));
+                    howToTakeMedicine.requestFocus();
+                }
             }
         });
 
@@ -376,6 +372,8 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         });
 
         AutoCompleteTextView quantity = intakeLayout.findViewById(R.id.quantityString);
+        quantity.setFocusable(true);
+        quantity.setFocusableInTouchMode(true);
 
         changeQuantityInputType();
         quantity.setAdapter(adapterQuantity);
@@ -423,6 +421,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
                 AutoCompleteTextView quantity = childLinearLayoutQuantityString.findViewById(R.id.quantityString);
                 quantity.setAdapter(adapterQuantity);
+
             }
         }
     }
@@ -458,7 +457,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         if (item.isSelected()) {
             // Add the selected item to the ArrayList
             selectedWeekdays.add(item);
-            Toast.makeText(getActivity(), item.getLabel() + " selected", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), item.getLabel() + " selected", Toast.LENGTH_SHORT).show();
         } else {
             // Remove the deselected item from the ArrayList
             selectedWeekdays.remove(item);
