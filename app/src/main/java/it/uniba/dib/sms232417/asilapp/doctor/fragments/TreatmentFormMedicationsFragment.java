@@ -28,7 +28,6 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -38,6 +37,7 @@ import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -48,17 +48,19 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private TextView subtitleInterval;
     private View linearLayoutWeekdays;
     private TextView subtitleWeekdays;
-    private String[] descriptionData;
-    private MaterialDatePicker.Builder<Long> builderIntakeTime;
     private Button btnIntakeTime;
     private int intakeCount;
-    private Button btnContinue;
-    private AutoCompleteTextView intervalSelection, howRegularly, howToTakeMedicine, medicinesList, quantity;
+    private AutoCompleteTextView intervalSelection;
+    private AutoCompleteTextView howRegularly;
+    private AutoCompleteTextView howToTakeMedicine;
     private int intervalSelectedNumber;
     private String intervalSelected;
-    private ArrayAdapter<String> adapterHowRegularly, adapterHowToTake, adapterMedicines;
+    private ArrayAdapter<String> adapterQuantity;
     // Declare an ArrayList to hold the selected weekdays
     private ArrayList<WeekdaysDataItem> selectedWeekdays = new ArrayList<>();
+    private String[] quantityValues;
+    private List<String> quantityValuesList;
+    private boolean isMilliliters;
 
 
     @Override
@@ -67,9 +69,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_treatment_form_medications, container, false);
 
-        descriptionData = new String[]{getResources().getString(R.string.planning), getResources().getString(R.string.medications), getResources().getString(R.string.notes)};
+        String[] descriptionData = new String[]{getResources().getString(R.string.planning), getResources().getString(R.string.medications), getResources().getString(R.string.notes)};
 
         intakeCount = 1;
+        isMilliliters = false;
 
         StateProgressBar stateProgressBar = view.findViewById(R.id.state_progress_bar);
         stateProgressBar.setStateDescriptionData(descriptionData);
@@ -77,30 +80,34 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         return view;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Find the AutoCompleteTextView in the layout
-        medicinesList = view.findViewById(R.id.medicines_list);
+        AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
         howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
         howRegularly = view.findViewById(R.id.how_regularly);
         intervalSelection = view.findViewById(R.id.intervalSelection);
-        quantity = view.findViewById(R.id.quantity);
+        AutoCompleteTextView quantity = view.findViewById(R.id.quantityString);
 
         // Get the string array from the resources
         String[] medicines = getResources().getStringArray(R.array.medicines_list);
         String[] howToTake = getResources().getStringArray(R.array.how_to_take_medicine_list);
         String[] howRegularlyList = getResources().getStringArray(R.array.how_regularly_list);
 
+
         // Create an ArrayAdapter using the string array and a default layout
-        adapterMedicines = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
-        adapterHowToTake = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
-        adapterHowRegularly = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, howRegularlyList);
+        ArrayAdapter<String> adapterMedicines = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, medicines);
+        ArrayAdapter<String> adapterHowToTake = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, howToTake);
+        ArrayAdapter<String> adapterHowRegularly = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, howRegularlyList);
+
 
         // Set the ArrayAdapter to the AutoCompleteTextView
         medicinesList.setAdapter(adapterMedicines);
         howToTakeMedicine.setAdapter(adapterHowToTake);
         howRegularly.setAdapter(adapterHowRegularly);
+
+        quantityValuesList = new ArrayList<>();
 
         // Find the linearLayoutWeekdays in the layout
         linearLayoutInterval = view.findViewById(R.id.linearLayoutInterval);
@@ -109,24 +116,79 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         linearLayoutWeekdays = view.findViewById(R.id.linearLayoutWeekdays);
         subtitleWeekdays = view.findViewById(R.id.subtitleWeekdays);
 
-
-        howToTakeMedicine.setOnClickListener(new View.OnClickListener() {
+        howToTakeMedicine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
+                quantityValuesList.clear();
+
+                if (position == 4) {
+                    // Milliliters input value
+                    isMilliliters = true;
+                    changeQuantityInputType(); // true = milliliters
+                } else {
+                    isMilliliters = false;
+                    changeQuantityInputType();
+                    if (position == 1) {
+                        // drops from 1 to 30
+                        // Add integers from 1 to 5
+                        for (int i = 1; i <= 30; i++) {
+                            quantityValuesList.add(String.valueOf(i));
+                        }
+                    } else {
+                        // tablets, sachets, suppositories, syringes, inhalatin from 1/4 to 5
+                        // Add fractional quantities
+                        quantityValuesList.add("1/4");
+                        quantityValuesList.add("1/2");
+                        quantityValuesList.add("3/4");
+                        // Add integers from 1 to 5
+                        for (int i = 1; i <= 5; i++) {
+                            quantityValuesList.add(String.valueOf(i));
+                        }
+                    }
+                    // Convert the list to an array
+                    quantityValues = quantityValuesList.toArray(new String[0]);
+
+                    // Create an ArrayAdapter using the string array and a default layout
+                    adapterQuantity = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_expandable_list_item_1, quantityValues);
+
+                    setQuantityAdapter();
                 }
             }
         });
 
+        quantity.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // Hide the keyboard
+                    InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+
+                    // Check if howToTakeMedicine has been selected
+                    if (howToTakeMedicine.getText().toString().isEmpty()) {
+                        // Set error message
+                        howToTakeMedicine.setError(getResources().getString(R.string.select_how_to_take_first));
+                        howToTakeMedicine.requestFocus();
+                    }
+
+                }
+                return false;
+            }
+        });
 
         howRegularly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
@@ -162,7 +224,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     // Hide the keyboard
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     }
@@ -175,7 +237,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         });
 
 
-        WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) getActivity(), R.id.weekdays_stub)
+        WeekdaysDataSource wds = new WeekdaysDataSource((AppCompatActivity) requireActivity(), R.id.weekdays_stub)
                 .setFirstDayOfWeek(Calendar.MONDAY)
                 .setUnselectedColorRes(R.color.bottom_nav_bar_background)
                 .setTextColorUnselectedRes(R.color.md_theme_light_primary)
@@ -201,7 +263,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             @Override
             public void onClick(View v) {
                 // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
@@ -223,34 +285,14 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     public void onClick(View v) {
                         int hour = materialTimePicker.getHour();
                         int minute = materialTimePicker.getMinute();
-                        String formattedTime = String.format("%02d:%02d", hour, minute);
+                        @SuppressLint("DefaultLocale") String formattedTime = String.format("%02d:%02d", hour, minute);
                         btnIntakeTime.setText(formattedTime);
                     }
                 });
             }
         });
 
-        quantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        });
-
-        quantity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getItemAtPosition(position).toString();
-
-            }
-        });
-
-
-        btnContinue = getView().findViewById(R.id.goNext);
+        Button btnContinue = requireView().findViewById(R.id.goNext);
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -267,13 +309,14 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @SuppressLint("SetTextI18n")
     private void addNewIntakeLayout() {
         // Inflate the layout from XML file
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View intakeLayout = inflater.inflate(R.layout.add_intake_layout, null);
 
         // Get the parent layout
-        LinearLayout parentLayout = getView().findViewById(R.id.parentLinearLayout);
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
 
         // Get the index of the second last view in parentLayout
         int index = parentLayout.getChildCount() - 1;
@@ -303,7 +346,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             @Override
             public void onClick(View v) {
                 // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
@@ -325,39 +368,24 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     public void onClick(View v) {
                         int hour = materialTimePicker.getHour();
                         int minute = materialTimePicker.getMinute();
-                        String formattedTime = String.format("%02d:%02d", hour, minute);
+                        @SuppressLint("DefaultLocale") String formattedTime = String.format("%02d:%02d", hour, minute);
                         btnIntakeTime.setText(formattedTime);
                     }
                 });
             }
         });
 
-        AutoCompleteTextView quantity = intakeLayout.findViewById(R.id.quantity);
+        AutoCompleteTextView quantity = intakeLayout.findViewById(R.id.quantityString);
 
-        quantity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hide the keyboard
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        });
-
-        quantity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getItemAtPosition(position).toString();
-
-            }
-        });
+        changeQuantityInputType();
+        quantity.setAdapter(adapterQuantity);
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateIntakeLabels() {
         // Get the parent layout
-        LinearLayout parentLayout = getView().findViewById(R.id.parentLinearLayout);
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
 
         // Initialize intakeCount to 1
         intakeCount = 1;
@@ -380,6 +408,50 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         }
     }
 
+    private void setQuantityAdapter() {
+        // Get the parent layout
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
+
+        // Iterate over all the child views of the parent layout
+        for (int i = 0; i < parentLayout.getChildCount(); i++) {
+            View childView = parentLayout.getChildAt(i);
+
+            // Check if the child view is an intake layout
+            if (childView.getId() == R.id.linearLayoutIntake) {
+                // Find the linearLayoutQuantityString and linearLayoutQuantityNumber in the child view
+                LinearLayout childLinearLayoutQuantityString = childView.findViewById(R.id.linearLayoutQuantityString);
+
+                AutoCompleteTextView quantity = childLinearLayoutQuantityString.findViewById(R.id.quantityString);
+                quantity.setAdapter(adapterQuantity);
+            }
+        }
+    }
+    private void changeQuantityInputType() {
+        // Get the parent layout
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
+
+        // Iterate over all the child views of the parent layout
+        for (int i = 0; i < parentLayout.getChildCount(); i++) {
+            View childView = parentLayout.getChildAt(i);
+
+            // Check if the child view is an intake layout
+            if (childView.getId() == R.id.linearLayoutIntake) {
+                // Find the linearLayoutQuantityString and linearLayoutQuantityNumber in the child view
+                LinearLayout childLinearLayoutQuantityString = childView.findViewById(R.id.linearLayoutQuantityString);
+                LinearLayout childLinearLayoutQuantityNumber = childView.findViewById(R.id.linearLayoutQuantityNumber);
+
+                if (isMilliliters) {
+                    // Milliliters input value
+                    childLinearLayoutQuantityString.setVisibility(View.GONE);
+                    childLinearLayoutQuantityNumber.setVisibility(View.VISIBLE);
+                } else {
+                    childLinearLayoutQuantityString.setVisibility(View.VISIBLE);
+                    childLinearLayoutQuantityNumber.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onWeekdaysItemClicked(int attachId, WeekdaysDataItem item) {
@@ -398,9 +470,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void showDialog() {
         // Create a dialog builder
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity(), R.style.CustomMaterialDialog);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireActivity(), R.style.CustomMaterialDialog);
 
         // Create a LinearLayout
         LinearLayout layout = new LinearLayout(getActivity());

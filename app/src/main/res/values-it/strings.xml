@@ -147,6 +147,8 @@
         <item quantity="other">mesi</item>
     </plurals>
 
+    <string name="select_how_to_take_first"> Seleziona prima la modalità di assunzione </string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- TODO: Remove or change this placeholder text -->

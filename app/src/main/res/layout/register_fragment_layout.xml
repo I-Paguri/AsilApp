@@ -141,7 +141,7 @@
                 android:layout_below="@+id/coutry"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="20dp"
-                android:text="@string/sign_up" />
+                android:text="@string/sign_up"/>
 
             <TextView
                 android:id="@+id/txtLogin"

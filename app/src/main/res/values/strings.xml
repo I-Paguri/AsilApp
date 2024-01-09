@@ -404,4 +404,6 @@
         <item quantity="one">month</item>
         <item quantity="other">months</item>
     </plurals>
+
+    <string name="select_how_to_take_first"> Select how to take the medication first </string>
 </resources>
