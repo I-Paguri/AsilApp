@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,12 +35,15 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 
 public class MainActivity extends AppCompatActivity {
 
     Fragment selectedFragment = null;
+
     private boolean doubleBackToExitPressedOnce = false;
 
     public static Context getContext() {
@@ -46,6 +54,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent = getIntent();
+        Patient loggedPatient = (Patient)intent.getParcelableExtra("loggedPatient");
+        if(loggedPatient!=null)
+        {
+            try {
+                FileOutputStream fos = openFileOutput(StringUtils.USER_LOGGED, Context.MODE_PRIVATE);
+                ObjectOutputStream os = new ObjectOutputStream(fos);
+                os.writeObject(loggedPatient);
+                Log.d("Patient", "Patient saved");
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 

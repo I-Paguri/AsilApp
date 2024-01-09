@@ -14,6 +14,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class CryptoUtil {
 
+    public static void deleteKey(String appendAlias) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
+        keyStore.load(null);
+        keyStore.deleteEntry("secretKey"+appendAlias);
+    }
     public static void generateandSaveSecretKey(String appendAlias) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("AndroidKeyStore");
         keyStore.load(null);

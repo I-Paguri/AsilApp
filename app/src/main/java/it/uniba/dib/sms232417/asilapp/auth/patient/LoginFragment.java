@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -39,12 +40,13 @@ import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class LoginFragment extends Fragment {
 
     FirebaseAuth mAuth;
     DatabaseAdapter dbAdapter;
-    final String NAME_FILE = "automaticLogin";
+
     FirebaseFirestore db;
     @Nullable
     @Override
@@ -112,7 +114,7 @@ public class LoginFragment extends Fragment {
                                     .create();
                             builder.setPositiveButton(R.string.yes, (dialog, which) -> {
                                 //Save password
-                                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("email", patient.getEmail());
                                 //Encrypt password con chiave simmetrica e salva su file
@@ -132,11 +134,13 @@ public class LoginFragment extends Fragment {
                                 editor.apply();
 
                                 Intent intent = new Intent(getContext(), MainActivity.class);
+                                intent.putExtra("loggedPatient", (Parcelable) patient);
                                 startActivity(intent);
                                 progressBar.setVisibility(ProgressBar.GONE);
                             });
                             builder.setNegativeButton(R.string.no, (dialog, which) -> {
                                 Intent intent = new Intent(getContext(), MainActivity.class);
+                                intent.putExtra("loggedPatient", (Parcelable) patient);
                                 startActivity(intent);
                                 progressBar.setVisibility(ProgressBar.GONE);
                             });

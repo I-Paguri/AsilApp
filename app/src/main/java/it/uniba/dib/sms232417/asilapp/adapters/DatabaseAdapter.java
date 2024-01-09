@@ -76,6 +76,8 @@ public class DatabaseAdapter {
                     callback.onCallbackError(new Exception());
                 });
     }
-
+    public void onLogout(){
+        mAuth.signOut();
+    }
 
 }

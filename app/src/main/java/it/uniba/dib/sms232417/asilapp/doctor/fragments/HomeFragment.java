@@ -28,7 +28,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class HomeFragment extends Fragment {
 
@@ -127,17 +135,13 @@ public class HomeFragment extends Fragment {
         */
 
         txtusername = view.findViewById(R.id.txtUser_Name);
-        mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null) {
-            db = FirebaseFirestore.getInstance();
-            db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    txtusername.setText((String) task.getResult().get("nome"));
-                }
-            });
-        }else {
-            txtusername.setText("Utente non loggato");
+        Patient loggedPatient = checkPatientLogged();
+        if (loggedPatient != null) {
+            txtusername.setText(loggedPatient.getNome());
+        } else {
+            txtusername.setText("Utente");
         }
+
     }
 
 
@@ -146,6 +150,21 @@ public class HomeFragment extends Fragment {
         super.onDetach();
         // This is called when the fragment is no longer attached to its activity.
         // This is where you can clean up any references to the activity.
+    }
+    public Patient checkPatientLogged(){
+        Patient loggedPatient;
+        try {
+            FileInputStream fis = requireActivity().openFileInput(StringUtils.USER_LOGGED);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            loggedPatient = (Patient) ois.readObject();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return loggedPatient;
     }
 
 }

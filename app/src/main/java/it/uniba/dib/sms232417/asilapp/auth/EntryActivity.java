@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -33,6 +34,7 @@ import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -44,7 +46,6 @@ import javax.crypto.spec.SecretKeySpec;
 public class EntryActivity extends AppCompatActivity {
 
     DatabaseAdapter dbAdapter;
-    final String NAME_FILE = "automaticLogin";
     public static Context getContext() {
       return getContext();
     }
@@ -80,7 +81,7 @@ public class EntryActivity extends AppCompatActivity {
 
         final Patient[] loggedPatient = {null};
 
-        SharedPreferences sharedPreferences = getSharedPreferences(NAME_FILE, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
         String email = sharedPreferences.getString("email", null);
         String password = sharedPreferences.getString("password", null);
         String iv = sharedPreferences.getString("iv", null);
@@ -105,7 +106,7 @@ public class EntryActivity extends AppCompatActivity {
                             RelativeLayout relativeLayout = findViewById(R.id.loading);
                             relativeLayout.setVisibility(RelativeLayout.GONE);
                             Intent intent = new Intent(EntryActivity.this, MainActivity.class);
-                            intent.putExtra("patient", patient);
+                            intent.putExtra("loggedPatient", (Parcelable) patient);
                             startActivity(intent);
                             finish();
                         }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -41,6 +42,7 @@ import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 
 @SuppressWarnings("unchecked")
@@ -52,7 +54,7 @@ public class RegisterFragment extends Fragment {
 
     String strDataNascita;
     String regione;
-    final String NAME_FILE = "automaticLogin";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -194,7 +196,7 @@ public class RegisterFragment extends Fragment {
                 builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
                 builder.setPositiveButton(R.string.yes, (dialog, which) -> {
 
-                    SharedPreferences.Editor editor = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE).edit();
+                    SharedPreferences.Editor editor = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE).edit();
                     editor.putString("email", patient.getEmail());
 
                     //Encrypt password con chiave simmetrica e salva su file
@@ -215,14 +217,14 @@ public class RegisterFragment extends Fragment {
                     editor.commit();
 
                     Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.putExtra("loggedPatient", patient);
+                    intent.putExtra("loggedPatient", (Parcelable) patient);
                     startActivity(intent);
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
                 });
 
                 builder.setNegativeButton(R.string.no, (dialog, which) -> {
                     Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.putExtra("loggedPatient", patient);
+                    intent.putExtra("loggedPatient", (Parcelable) patient);
                     startActivity(intent);
                 });
                 builder.show();
