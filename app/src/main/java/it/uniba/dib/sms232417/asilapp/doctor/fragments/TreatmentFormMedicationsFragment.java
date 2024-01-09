@@ -349,7 +349,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     transaction.addToBackStack(null);
                     transaction.commit();
                 } else {
-                    Toast.makeText(requireActivity(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireActivity(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -778,6 +778,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         if (!howToTakeMedicine.getText().toString().isEmpty()) {
             bundle.putString("howToTakeMedicine", howToTakeMedicine.getText().toString());
         }
+
         if (!howRegularly.getText().toString().isEmpty()) {
             bundle.putString("howRegularly", howRegularly.getText().toString());
         } else {
