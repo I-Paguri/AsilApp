@@ -68,6 +68,7 @@
     <string name="medication">Farmaco</string>
     <string name="notes">Note</string>
     <string name="my_data">I miei dati</string>
+    <string name="last_month_expenses">Nell\'ultimo mese hai speso:</string>
 
     <string name="treatment_goal_empty">L\'obiettivo della terapia non può essere vuoto</string>
     <string name="insert_medication">Inserisci un farmaco</string>

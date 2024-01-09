@@ -1,6 +1,9 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +17,18 @@ import it.uniba.dib.sms232417.asilapp.patientsFragments.ProductFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
@@ -123,5 +135,35 @@ public class ExpensesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Ottieni il riferimento a textViewBalance
+        TextView textViewBalance = view.findViewById(R.id.textViewBalance);
+
+        // Imposta il valore di textViewBalance a 500 €
+        textViewBalance.setText("500.00 € ");
+
+        //otteniamo il riferimento alla progress bar
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+        // Imposta il valore iniziale della ProgressBar a 0
+        progressBar.setProgress(0);
+
+        /* Non funziona animazione perchè
+        arriva fino alla fine e non si riesce ad impostare
+        valore finale
+        Animator animator = AnimatorInflater.loadAnimator(getContext(), R.animator.progress_anim);
+        animator.setTarget(progressBar);
+        // Avvia l'animazione
+        animator.start();
+
+         */
+        // Imposta il valore della ProgressBar qui.
+
+
+        progressBar.setProgress(75); // Imposta il progresso al 75%
+
+    }
 
 }

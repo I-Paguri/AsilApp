@@ -1,21 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/my_frame_layout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/my_linear_layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFE1F5FE"
     tools:context=".patientsFragments.ExpensesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        style="@style/CardViewTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:textColor="@color/black"
+        android:text="@string/last_month_expenses" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            style="@style/CardViewSubtitleText"
+            android:id="@+id/textViewBar"
+            android:textColor="@color/light_blue_600"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="16dp"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:text="@string/expenses" />
+
+        <TextView
+            style="@style/CardViewSubtitleText"
+            android:id="@+id/textViewBalance"
+            android:textColor="@color/light_blue_600"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"
+            android:gravity="right"
+            android:layout_marginRight="16dp"
+            android:paddingRight="1dp"
+            android:textStyle="italic"
+            android:text="Balance" />
+    </LinearLayout>
 
 
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="50"
+        android:progressDrawable="@drawable/progress_bar"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
     <LinearLayout
         android:id="@+id/linearLayoutCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
 
 
         <com.google.android.material.card.MaterialCardView
@@ -147,4 +211,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

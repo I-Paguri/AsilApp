@@ -381,6 +381,7 @@
     <string name="week">week/s</string>
     <string name="month">month/s</string>
 
+
     <string name="add_intake">Add another intake time</string>
     <string name="intake">Intake</string>
     <string name="intake_time">When do you take this medication?</string>
@@ -406,10 +407,11 @@
     </plurals>
 
     <string name="select_how_to_take_first"> Select how to take medication first </string>
-
+    <string name="last_month_expenses">In the last month you spent:</string>
     <string name="required_field"> This field is required </string>
     <string name="select_weekdays"> Please select at least one weekday </string>
     <string name="end_date_before_start_date"> End date cannot be before start date </string>
+
 
 
 </resources>
