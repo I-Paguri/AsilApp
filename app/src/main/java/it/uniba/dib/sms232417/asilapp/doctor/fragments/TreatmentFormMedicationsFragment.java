@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -291,12 +293,16 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TreatmentFormNotesFragment treatmentFormNotesFragment = new TreatmentFormNotesFragment();
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormNotesFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (validateInput()) {
+                    TreatmentFormNotesFragment treatmentFormNotesFragment = new TreatmentFormNotesFragment();
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormNotesFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                } else {
+                    Toast.makeText(requireActivity(), "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -427,6 +433,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             }
         }
     }
+
     private void changeQuantityInputType() {
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
@@ -452,7 +459,6 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             }
         }
     }
-
 
     @Override
     public void onWeekdaysItemClicked(int attachId, WeekdaysDataItem item) {
@@ -553,5 +559,56 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         // Create and show the dialog
         Dialog dialog = builder.create();
         dialog.show();
+    }
+
+    private boolean validateInput() {
+        AutoCompleteTextView medicinesList = getView().findViewById(R.id.medicines_list);
+        AutoCompleteTextView howToTakeMedicine = getView().findViewById(R.id.how_to_take_medicine);
+        AutoCompleteTextView howRegularly = getView().findViewById(R.id.how_regularly);
+        AutoCompleteTextView intervalSelection = getView().findViewById(R.id.intervalSelection);
+
+        boolean validInput;
+        validInput = true;
+
+        if (medicinesList.getText().toString().isEmpty() || howToTakeMedicine.getText().toString().isEmpty() || howRegularly.getText().toString().isEmpty()) {
+            validInput = false;
+        } else {
+            if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
+                if (intervalSelection.getText().toString().isEmpty()) {
+                    validInput = false;
+                }
+            } else {
+                if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[2])) {
+                    if (selectedWeekdays.isEmpty()) {
+                        validInput = false;
+                    }
+                }
+            }
+        }
+
+        // Get the parent layout
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
+
+
+        // Iterate over all the child views of the parent layout
+        for (int i = 0; i < parentLayout.getChildCount(); i++) {
+            View childView = parentLayout.getChildAt(i);
+
+            // Check if the child view is an intake layout
+            if (childView.getId() == R.id.linearLayoutIntake) {
+                // Find the intakeTime and quantity views in the child view
+                Button intakeTime = childView.findViewById(R.id.intakeTime);
+                AutoCompleteTextView quantity = childView.findViewById(R.id.quantityString);
+
+                // Check if intakeTime and quantity are filled
+                if (intakeTime.getText().toString().isEmpty() || quantity.getText().toString().isEmpty()) {
+                    validInput = false;
+                    break;
+                }
+            }
+        }
+
+
+        return validInput;
     }
 }
