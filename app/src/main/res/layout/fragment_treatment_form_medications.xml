@@ -71,7 +71,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/treatmentTargetInputLayout"
+                    android:id="@+id/medicationNameInputLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -113,6 +113,7 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/how_to_take_medicine_input_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -156,6 +157,7 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/how_regularly_input_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -241,6 +243,7 @@
                 android:visibility="gone">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/intervalSelectionInputLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

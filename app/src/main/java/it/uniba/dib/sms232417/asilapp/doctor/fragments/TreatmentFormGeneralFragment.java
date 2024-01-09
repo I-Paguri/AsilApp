@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.support.v4.media.MediaDescriptionCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,6 +158,30 @@ public class TreatmentFormGeneralFragment extends Fragment {
         }
 
         treatmentTarget = constraintLayout.findViewById(R.id.treatmentTargetEditText);
+
+        // Create a TextWatcher
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // No action needed here
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // After the text has changed, check if the field is now filled and if so, remove the error
+                if (!s.toString().isEmpty()) {
+                    ((TextInputLayout) treatmentTarget.getParent().getParent()).setError(null);
+                }
+            }
+        };
+
+        // Add the TextWatcher to your treatmentTarget
+        treatmentTarget.addTextChangedListener(textWatcher);
 
         // Get today date
         Date today = new Date();
@@ -324,7 +350,8 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         transaction.commit();
                     } else {
                         if (treatmentTarget.getText().toString().isEmpty()) {
-                            treatmentTarget.setError("Treatment target cannot be empty");
+                            TextInputLayout treatmentTargetInputLayout = constraintLayout.findViewById(R.id.treatmentTargetInputLayout);
+                            treatmentTargetInputLayout.setError(getResources().getString(R.string.required_field));
                         }
                         Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                     }
@@ -338,7 +365,8 @@ public class TreatmentFormGeneralFragment extends Fragment {
                         transaction.commit();
                     } else {
                         if (treatmentTarget.getText().toString().isEmpty()) {
-                            treatmentTarget.setError(getResources().getString(R.string.treatment_goal_empty));
+                            TextInputLayout treatmentTargetInputLayout = constraintLayout.findViewById(R.id.treatmentTargetInputLayout);
+                            treatmentTargetInputLayout.setError(getResources().getString(R.string.required_field));
                         }
                         Toast.makeText(getContext(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                     }

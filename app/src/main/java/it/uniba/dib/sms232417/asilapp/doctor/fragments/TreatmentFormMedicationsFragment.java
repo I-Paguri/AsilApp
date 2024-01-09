@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,11 +31,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataSource;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -115,6 +120,17 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         linearLayoutWeekdays = view.findViewById(R.id.linearLayoutWeekdays);
         subtitleWeekdays = view.findViewById(R.id.subtitleWeekdays);
+
+        howToTakeMedicine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        });
 
         howToTakeMedicine.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -562,25 +578,41 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     }
 
     private boolean validateInput() {
+        setupTextWatchers();
+
         AutoCompleteTextView medicinesList = getView().findViewById(R.id.medicines_list);
         AutoCompleteTextView howToTakeMedicine = getView().findViewById(R.id.how_to_take_medicine);
         AutoCompleteTextView howRegularly = getView().findViewById(R.id.how_regularly);
         AutoCompleteTextView intervalSelection = getView().findViewById(R.id.intervalSelection);
 
-        boolean validInput;
-        validInput = true;
+        boolean validInput = true;
 
-        if (medicinesList.getText().toString().isEmpty() || howToTakeMedicine.getText().toString().isEmpty() || howRegularly.getText().toString().isEmpty()) {
+        if (medicinesList.getText().toString().isEmpty()) {
+            TextInputLayout medicationsListLayout = getView().findViewById(R.id.medicationNameInputLayout);
+            medicationsListLayout.setError(getResources().getString(R.string.required_field));
+            validInput = false;
+        }
+        if (howToTakeMedicine.getText().toString().isEmpty()) {
+            TextInputLayout howToTakeMedicineLayout = getView().findViewById(R.id.how_to_take_medicine_input_layout);
+            howToTakeMedicineLayout.setError(getResources().getString(R.string.required_field));
+            validInput = false;
+        }
+        if (howRegularly.getText().toString().isEmpty()) {
+            TextInputLayout howRegularlyInputLayout = getView().findViewById(R.id.how_regularly_input_layout);
+            howRegularlyInputLayout.setError(getResources().getString(R.string.required_field));
             validInput = false;
         } else {
             if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
                 if (intervalSelection.getText().toString().isEmpty()) {
+                    TextInputLayout intervalSelectionInputLayout = getView().findViewById(R.id.intervalSelectionInputLayout);
+                    intervalSelectionInputLayout.setError(getResources().getString(R.string.required_field));
                     validInput = false;
                 }
             } else {
                 if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[2])) {
                     if (selectedWeekdays.isEmpty()) {
-                        validInput = false;
+                        // Assuming you have a TextView to display this error
+                        Toast.makeText(requireActivity(), getResources().getString(R.string.select_weekdays), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -588,7 +620,6 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
-
 
         // Iterate over all the child views of the parent layout
         for (int i = 0; i < parentLayout.getChildCount(); i++) {
@@ -598,17 +629,95 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             if (childView.getId() == R.id.linearLayoutIntake) {
                 // Find the intakeTime and quantity views in the child view
                 Button intakeTime = childView.findViewById(R.id.intakeTime);
-                AutoCompleteTextView quantity = childView.findViewById(R.id.quantityString);
+                TextInputLayout quantityStringInputLayout = childView.findViewById(R.id.quantityStringInputLayout);
+                TextInputLayout quantityNumberInputLayout = childView.findViewById(R.id.quantityNumberInputLayout);
+                AutoCompleteTextView quantityString = childView.findViewById(R.id.quantityString);
+                AutoCompleteTextView quantityNumber = childView.findViewById(R.id.quantityNumber);
 
                 // Check if intakeTime and quantity are filled
-                if (intakeTime.getText().toString().isEmpty() || quantity.getText().toString().isEmpty()) {
+                if (intakeTime.getText().toString().isEmpty()) {
+                    intakeTime.setError(getResources().getString(R.string.required_field));
                     validInput = false;
-                    break;
+                }
+
+                if (isMilliliters) {
+                    if (quantityNumber.getText().toString().isEmpty()) {
+                        quantityNumberInputLayout.setError(getResources().getString(R.string.required_field));
+                        validInput = false;
+                    }
+                } else {
+                    if (quantityString.getText().toString().isEmpty()) {
+                        quantityStringInputLayout.setError(getResources().getString(R.string.required_field));
+                        validInput = false;
+                    }
                 }
             }
         }
 
-
         return validInput;
     }
+
+    private void setupTextWatchers() {
+        AutoCompleteTextView medicinesList = getView().findViewById(R.id.medicines_list);
+        AutoCompleteTextView howToTakeMedicine = getView().findViewById(R.id.how_to_take_medicine);
+        AutoCompleteTextView howRegularly = getView().findViewById(R.id.how_regularly);
+        AutoCompleteTextView intervalSelection = getView().findViewById(R.id.intervalSelection);
+
+        // Create a TextWatcher
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // No action needed here
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // After the text has changed, check if the field is now filled and if so, remove the error
+                if (!s.toString().isEmpty()) {
+                    View view = getActivity().getCurrentFocus();
+                    if (view instanceof AutoCompleteTextView) {
+                        ((TextInputLayout) view.getParent().getParent()).setError(null);
+                    }
+                }
+            }
+        };
+
+        // Add the TextWatcher to your AutoCompleteTextViews
+        medicinesList.addTextChangedListener(textWatcher);
+        howToTakeMedicine.addTextChangedListener(textWatcher);
+        howRegularly.addTextChangedListener(textWatcher);
+        intervalSelection.addTextChangedListener(textWatcher);
+
+        // Get the parent layout
+        LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
+
+        // Iterate over all the child views of the parent layout
+        for (int i = 0; i < parentLayout.getChildCount(); i++) {
+            View childView = parentLayout.getChildAt(i);
+
+            // Check if the child view is an intake layout
+            if (childView.getId() == R.id.linearLayoutIntake) {
+                // Find the intakeTime and quantity views in the child view
+                Button intakeTime = childView.findViewById(R.id.intakeTime);
+                AutoCompleteTextView quantityString = childView.findViewById(R.id.quantityString);
+                AutoCompleteTextView quantityNumber = childView.findViewById(R.id.quantityNumber);
+
+                intakeTime.addTextChangedListener(textWatcher);
+
+                if (isMilliliters) {
+                    quantityNumber.addTextChangedListener(textWatcher);
+                } else {
+                    quantityString.addTextChangedListener(textWatcher);
+                }
+            }
+        }
+
+    }
+
+
 }

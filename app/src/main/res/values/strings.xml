@@ -405,5 +405,10 @@
         <item quantity="other">months</item>
     </plurals>
 
-    <string name="select_how_to_take_first"> Select how to take the medication first </string>
+    <string name="select_how_to_take_first"> Select how to take medication first </string>
+
+    <string name="required_field"> This field is required </string>
+    <string name="select_weekdays"> Please select at least one weekday </string>
+
+
 </resources>
