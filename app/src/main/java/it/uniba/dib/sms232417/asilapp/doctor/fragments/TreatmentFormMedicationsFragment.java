@@ -26,8 +26,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -307,6 +305,8 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
     @SuppressLint("SetTextI18n")
     private void addNewIntakeLayout() {
+        // Increment intakeCount
+        intakeCount++;
         // Inflate the layout from XML file
         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View intakeLayout = inflater.inflate(R.layout.add_intake_layout, null);
@@ -331,6 +331,8 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             public void onClick(View v) {
                 // Remove the intakeLayout from the parent layout
                 parentLayout.removeView(intakeLayout);
+                // Decrement intakeCount
+                intakeCount--;
                 updateIntakeLabels();
             }
         });
@@ -386,7 +388,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
 
         // Initialize intakeCount to 1
-        intakeCount = 1;
+        int intakeCount = 1;
 
         // Iterate over all the child views of the parent layout
         for (int i = 0; i < parentLayout.getChildCount(); i++) {
