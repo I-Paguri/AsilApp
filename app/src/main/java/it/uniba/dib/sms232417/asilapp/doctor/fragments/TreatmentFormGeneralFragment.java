@@ -121,7 +121,6 @@ public class TreatmentFormGeneralFragment extends Fragment {
         btnEndDate = constraintLayout.findViewById(R.id.endDate);
 
         TextInputLayout textInputLayout = constraintLayout.findViewById(R.id.treatmentTargetInputLayout);
-        TextInputEditText textInputEditText = constraintLayout.findViewById(R.id.treatmentTargetEditText);
 
         btnBack = constraintLayout.findViewById(R.id.goBack);
         btnNext = constraintLayout.findViewById(R.id.goNext);
@@ -269,6 +268,11 @@ public class TreatmentFormGeneralFragment extends Fragment {
         endDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(buttonView.getWindowToken(), 0);
+                }
+
                 if (isChecked) {
                     endDateLinearLayout.setVisibility(View.GONE);
                 } else {
