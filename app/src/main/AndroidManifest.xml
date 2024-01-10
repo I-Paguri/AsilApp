@@ -39,7 +39,8 @@
         </activity>
         <activity
             android:name=".auth.EntryActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
 
 
             <intent-filter>

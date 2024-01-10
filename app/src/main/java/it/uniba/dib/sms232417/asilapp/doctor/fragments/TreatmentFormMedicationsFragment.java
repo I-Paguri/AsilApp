@@ -670,7 +670,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 AutoCompleteTextView quantityNumber = childView.findViewById(R.id.quantityNumber);
 
                 // Check if intakeTime and quantity are filled
-                if (intakeTime.getText().toString().isEmpty()) {
+                if (intakeTime.getText().toString().isEmpty() || intakeTime.getText().toString().equals(getResources().getString(R.string.select_time))) {
                     intakeTime.setError(getResources().getString(R.string.required_field));
                     validInput = false;
                 }
@@ -809,7 +809,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 AutoCompleteTextView quantityNumber = childView.findViewById(R.id.quantityNumber);
 
                 // Check if intakeTime and quantity are filled
-                if (!intakeTime.getText().toString().isEmpty()) {
+                if (!intakeTime.getText().toString().isEmpty() && !intakeTime.getText().toString().equals(getResources().getString(R.string.select_time))) {
                     //treatment.addIntakeTime(intakeTime.getText().toString());
                     medication.addIntakeTime(intakeTime.getText().toString());
                 }
