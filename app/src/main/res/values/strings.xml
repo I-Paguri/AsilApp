@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AsilApp</string>
-
+    <string name="doctor" translatable="false">Doctor</string>
+    <string name="patient" translatable="false">Patient</string>
     <!-- Buttons strings -->
     <string name="btn_add">Measure</string>
     <string name="btn_healthcare">Healthcare</string>
@@ -25,7 +26,7 @@
     <string name="treatment">Treatment</string>
 
     <string name="new_treatment">New treatment</string>
-
+    <string name="decision_account" translatable="false">Who are you?</string>
     <string name="name">Name</string>
     <string name="surname">Surname</string>
     <string name="sign_up">SIGN UP</string>
@@ -33,6 +34,13 @@
     <string name="create_account">You don\'t have an account? Create Now!</string>
     <string name="login">Did you have an account? Log in!</string>
     <string name="login_doctor" translatable="false">Are you a doctor? Log in!</string>
+    <string name="login_doctor_lbl" translatable="false">Welcome Doctor!</string>
+    <string name="login_qr_code_doctor_explain" translatable="false">You can access by scanning the QRcode of your badge</string>
+    <string name="btn_qr_code_doctor" translatable="false">SCAN NOW</string>
+    <string name="btn_login_patient" translatable="false">Aren\'t you a doctor? Log in as a patient!</string>
+    <string name="numero_registrazione" translatable="false">Registration number</string>
+    <string name="select_specilization" translatable="false">Choose your specialization</string>
+    <string name="number_phone" translatable="false">Phone number</string>
     <string name="incorrect_login">Incorrect email or password!</string>
     <string name="registration_failed">Registration error!</string>
     <string name="registration_success">Registration success!</string>
@@ -46,6 +54,8 @@
     <string name="empty_fields_cognome" translatable="false">Please complete the surname field</string>
     <string name="empty_fields_data" translatable="false">Please complete the date of birth field</string>
     <string name="empty_fields_region" translatable="false">Please complete the region field</string>
+    <string name="empty_fields_registration_number" translatable="false">Please complete the registration number field</string>
+    <string name="empty_fields_specialization" translatable="false">Please complete the specialization field</string>
     <string name="measure">Measure</string>
     <string name="explain_measure">Here you can connect to the biomedical equipment container </string>
     <string name="last_measure">Last Measure</string>
@@ -128,6 +138,31 @@
         <item>Daily</item>
         <item>Interval</item>
         <item>Weekdays</item>
+    </string-array>
+
+    <string-array name="specialization_arry">
+        <item>Anesthesiology</item>
+        <item>Cardiology</item>
+        <item>General surgery</item>
+        <item>Dermatology</item>
+        <item>Endocrinology</item>
+        <item>Gastroenterology</item>
+        <item>Geriatrics</item>
+        <item>Gynecology and obstetrics</item>
+        <item>Immunology</item>
+        <item>Emergency medicine</item>
+        <item>Sports medicine</item>
+        <item>Family medicine</item>
+        <item>Internal medicine</item>
+        <item>Neurology</item>
+        <item>Oncology</item>
+        <item>Orthopedics</item>
+        <item>Otolaryngology (ENT)</item>
+        <item>Pediatrics</item>
+        <item>Psychiatry</item>
+        <item>Radiology</item>
+        <item>Rheumatology</item>
+        <item>Urology</item>
     </string-array>
 
     <string-array name="countries_array">

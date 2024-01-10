@@ -8,13 +8,13 @@ import android.os.Bundle;
 
 import android.os.Parcelable;
 import android.util.Base64;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.encoders.ObjectEncoder;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.security.KeyStore;
 
 import javax.crypto.SecretKey;
 
@@ -44,10 +37,7 @@ import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class LoginFragment extends Fragment {
 
-    FirebaseAuth mAuth;
     DatabaseAdapter dbAdapter;
-
-    FirebaseFirestore db;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,7 +55,16 @@ public class LoginFragment extends Fragment {
         TextView forgetPass = (TextView) getView().findViewById(R.id.txtForgetPass);
         TextView register = (TextView) getView().findViewById(R.id.txtRegister);
         Button login = (Button) getView().findViewById(R.id.btnLogin);
-        Button loginDoctor = (Button) getView().findViewById(R.id.btnLoginDoctor);
+        ImageView imageView = (ImageView) getView().findViewById(R.id.backArrow);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EntryActivity.class);
+                startActivity(intent);
+            }
+        });
+
         forgetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,15 +159,6 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-        //LoginUtente
-        loginDoctor.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                }
-        );
     }
 
     private void onForgettPass(View V) {

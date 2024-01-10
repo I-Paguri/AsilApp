@@ -6,6 +6,57 @@
     android:background="@color/seed"
     android:padding="10dp">
 
+        <RelativeLayout
+            android:id="@+id/decision_login_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_relative_layout"
+            android:padding="20dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+            <TextView
+                style="@style/TitleText"
+                android:id="@+id/lblTextText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AsilApp"
+                android:layout_centerHorizontal="true"/>
+            <TextView
+                style="@style/SubtitleText"
+                android:id="@+id/lblsubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/decision_account"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/lblTextText"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/lblsubText"
+                android:layout_centerHorizontal="true">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLoginPatient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/lblsubText"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/patient"
+                    app:icon="@drawable/my_account"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLoginDoctor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/lblsubText"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/doctor"
+                    app:icon="@drawable/doctor"/>
+            </LinearLayout>
+        </RelativeLayout>
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_height="wrap_content"
@@ -18,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="visible">
+        android:visibility="gone">
         <ImageView
             android:id="@+id/ivLogo"
             android:layout_width="300dp"
@@ -35,8 +86,4 @@
             android:indeterminateTint="@color/beige" />
 
     </RelativeLayout>
-
-
-
-
 </RelativeLayout>

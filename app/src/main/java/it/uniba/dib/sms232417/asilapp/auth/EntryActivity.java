@@ -4,48 +4,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import org.mindrot.jbcrypt.BCrypt;
-
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectStreamException;
-import java.security.KeyStore;
+import com.google.android.material.button.MaterialButton;
 
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
+import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 public class EntryActivity extends AppCompatActivity {
 
     DatabaseAdapter dbAdapter;
+    RelativeLayout decisionLogin;
+
     public static Context getContext() {
       return getContext();
     }
@@ -55,14 +42,35 @@ public class EntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entry_activity_layout);
 
+
         checkAutomaticLogin();
 
-        Fragment loginFragment = new LoginFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
 
-        fragmentTransaction.replace(R.id.fragment_container, loginFragment);
-        fragmentTransaction.commit();
+        MaterialButton btnPatient = findViewById(R.id.btnLoginPatient);
+        MaterialButton btnDoctor = findViewById(R.id.btnLoginDoctor);
+
+        btnPatient.setOnClickListener(v -> {
+            decisionLogin.setVisibility(RelativeLayout.GONE);
+            fragmentContainer.setVisibility(FrameLayout.VISIBLE);
+            LoginFragment loginFragment = new LoginFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+            fragmentTransaction.replace(R.id.fragment_container, loginFragment);
+            fragmentTransaction.commit();
+        });
+
+        btnDoctor.setOnClickListener(v -> {
+            decisionLogin.setVisibility(RelativeLayout.GONE);
+            fragmentContainer.setVisibility(FrameLayout.VISIBLE);
+            LoginDoctorFragment loginFragment = new LoginDoctorFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+            fragmentTransaction.replace(R.id.fragment_container, loginFragment);
+            fragmentTransaction.commit();
+        });
 
     }
 
@@ -79,7 +87,13 @@ public class EntryActivity extends AppCompatActivity {
 
     private void checkAutomaticLogin() {
 
+
         final Patient[] loggedPatient = {null};
+
+
+
+        RelativeLayout loading = findViewById(R.id.loading);
+        loading.setVisibility(RelativeLayout.VISIBLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
         String email = sharedPreferences.getString("email", null);
@@ -119,10 +133,9 @@ public class EntryActivity extends AppCompatActivity {
                 }
             }
         }else{
-            RelativeLayout relativeLayout = findViewById(R.id.loading);
-            relativeLayout.setVisibility(RelativeLayout.GONE);
-            FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
-            fragmentContainer.setVisibility(FrameLayout.VISIBLE);
+            loading.setVisibility(RelativeLayout.GONE);
+            decisionLogin = findViewById(R.id.decision_login_layout);
+            decisionLogin.setVisibility(RelativeLayout.VISIBLE);
         }
     }
 
