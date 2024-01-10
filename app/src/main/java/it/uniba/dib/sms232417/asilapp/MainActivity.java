@@ -9,12 +9,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,6 +38,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
@@ -173,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * This method is called when the back button is pressed.
      * If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment.
@@ -237,4 +241,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+
 }

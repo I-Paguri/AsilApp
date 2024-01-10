@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import static com.google.android.material.internal.ViewUtils.hideKeyboard;
 import static com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK;
 
 import android.annotation.SuppressLint;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -55,7 +57,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private View linearLayoutWeekdays;
     private TextView subtitleWeekdays;
     private Button btnIntakeTime;
-    private int intakeCount;
+    private int intakeCount = 1;
     private AutoCompleteTextView intervalSelection;
     private AutoCompleteTextView howRegularly;
     private AutoCompleteTextView howToTakeMedicine;
@@ -66,7 +68,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private ArrayList<WeekdaysDataItem> selectedWeekdays = new ArrayList<>();
     private String[] quantityValues;
     private List<String> quantityValuesList;
-    private boolean isMilliliters;
+    private boolean isMilliliters = false;
 
     // Received data from TreatmentFormGeneralFragment
     private String treatmentTarget;
@@ -77,6 +79,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private ArrayList<Medication> medications;
 
     private boolean validInput;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,15 +90,11 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         String[] descriptionData = new String[]{getResources().getString(R.string.planning), getResources().getString(R.string.medications), getResources().getString(R.string.notes)};
 
-        intakeCount = 1;
-        isMilliliters = false;
-
         StateProgressBar stateProgressBar = view.findViewById(R.id.state_progress_bar);
         stateProgressBar.setStateDescriptionData(descriptionData);
 
         return view;
     }
-
 
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -140,6 +141,15 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         linearLayoutWeekdays = view.findViewById(R.id.linearLayoutWeekdays);
         subtitleWeekdays = view.findViewById(R.id.subtitleWeekdays);
 
+        medicinesList.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
         howToTakeMedicine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -770,12 +780,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         if (!medicinesList.getText().toString().isEmpty()) {
             medicationNameString = medicinesList.getText().toString();
-            //treatment.setMedication(medicinesList.getText().toString());
         }
 
         if (!howToTakeMedicine.getText().toString().isEmpty()) {
             howToTakeString = howToTakeMedicine.getText().toString();
-            //treatment.setHowToTake(howToTakeMedicine.getText().toString());
         }
 
         if (!howRegularly.getText().toString().isEmpty()) {
@@ -784,10 +792,8 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
                 if (!intervalSelection.getText().toString().isEmpty()) {
                     intervalSelectedString = intervalSelection.getText().toString();
-                    //treatment.setIntervalSelection(intervalSelection.getText().toString());
                 }
             }
-            //treatment.setHowRegularly(howRegularly.getText().toString());
         }
 
         Medication medication = new Medication(medicationNameString, howToTakeString, howRegularlyString, selectedWeekdays);
@@ -810,7 +816,6 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
                 // Check if intakeTime and quantity are filled
                 if (!intakeTime.getText().toString().isEmpty() && !intakeTime.getText().toString().equals(getResources().getString(R.string.select_time))) {
-                    //treatment.addIntakeTime(intakeTime.getText().toString());
                     medication.addIntakeTime(intakeTime.getText().toString());
                 }
 
@@ -831,11 +836,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         treatment.addMedication(medication);
 
-        Log.d("Medication", medication.toString());
+        //Log.d("Medication", medication.toString());
         bundle.putParcelable("treatment", treatment);
 
         return bundle;
     }
-
 
 }

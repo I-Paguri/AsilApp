@@ -81,4 +81,5 @@ public class TreatmentFormNotesFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
     }
+
 }
