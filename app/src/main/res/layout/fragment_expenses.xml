@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFE1F5FE"
     tools:context=".patientsFragments.ExpensesFragment">
 
 
@@ -22,43 +21,43 @@
         android:textColor="@color/black"
         android:text="@string/last_month_expenses" />
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="5dp">
+        android:padding="10dp">
 
         <TextView
             style="@style/CardViewSubtitleText"
             android:id="@+id/textViewBar"
-            android:textColor="@color/light_blue_600"
+            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="16dp"
             android:textSize="16sp"
-            android:textStyle="italic"
             android:text="@string/expenses" />
 
         <TextView
-            style="@style/CardViewSubtitleText"
+            style="@style/RegularText"
             android:id="@+id/textViewBalance"
-            android:textColor="@color/light_blue_600"
+            android:textColor="@color/black"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
             android:textSize="16sp"
-            android:gravity="right"
-            android:layout_marginRight="16dp"
+            android:gravity="end"
             android:paddingRight="1dp"
-            android:textStyle="italic"
             android:text="Balance" />
     </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 
     <ProgressBar

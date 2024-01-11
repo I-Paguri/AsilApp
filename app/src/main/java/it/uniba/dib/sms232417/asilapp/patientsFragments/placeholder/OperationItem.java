@@ -14,16 +14,20 @@ import java.util.Map;
  */
 public class OperationItem {
     private String description;
-    private String money; // Changed from int to String
-    private String operationDate; // Changed from Date to String
+    private int money;
+    private String operationDate;
+    private String quantity;
+    private String category;
 
     // Constructor, getters and setters...
 
 
-    public OperationItem(String description, String money, String operationDate) {
+    public OperationItem(String description, int money, String operationDate, String quantity, String category) {
         this.description = description;
         this.money = money;
         this.operationDate = operationDate;
+        this.quantity = quantity;
+        this.category = category;
 
 
     }
@@ -44,12 +48,28 @@ public class OperationItem {
         this.description = description;
     }
 
-    public String getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(String money) {
+    public void setMoney(int money) {
         this.money = money;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantityProduct(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
 

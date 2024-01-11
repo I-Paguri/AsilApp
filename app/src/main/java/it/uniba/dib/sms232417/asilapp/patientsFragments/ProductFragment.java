@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import it.uniba.dib.sms232417.asilapp.adapters.OperationItemRecyclerViewAdapter;
 import it.uniba.dib.sms232417.asilapp.adapters.ProductAdapter;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -20,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.placeholder.ProductItem;
-
+import it.uniba.dib.sms232417.asilapp.patientsFragments.placeholder.OperationItem;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProductFragment#newInstance} factory method to
@@ -76,20 +76,24 @@ public class ProductFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
-        List<ProductItem> productItems = new ArrayList<>();
-        productItems.add(new ProductItem("Oki Task", "10"));
-        productItems.add(new ProductItem("Minoxidil", "10"));
-        productItems.add(new ProductItem("Aspirina", "20"));
-        productItems.add(new ProductItem("Sinifodil", "2"));
-        productItems.add(new ProductItem("Ibupofene", "10"));
-        productItems.add(new ProductItem("Viagra", "1"));
-        productItems.add(new ProductItem("Coca", "30"));
-        productItems.add(new ProductItem("Marijana", "10"));
+        List<OperationItem> productItem = new ArrayList<>();
+        productItem.add(new OperationItem("Probiotico per la gola", 56, "04/01/2024", "1", "Farmaci"));
+        productItem.add(new OperationItem("Preservativi durex comfort", 89, "04/01/2024",   "1", "Farmaci"));
+        productItem.add(new OperationItem("Flomax", 23, "04/01/2024", "1", "Farmaci"));
+        productItem.add(new OperationItem("Oki Task", 89, "04/01/2024", "1", "Farmaci"));
+        productItem.add(new OperationItem("Puntulil", 89, "04/01/2024", "1", "Farmaci"));
+        productItem.add(new OperationItem("Citromax", 89, "04/01/2024", "1", "Farmaci"));
+        productItem.add(new OperationItem("Spokkimax", 89, "04/01/2024",  "1", "Farmaci"));
+        productItem.add(new OperationItem("Spider-man", 89, "04/01/2024", "1", "Farmaci"));
 
 
         // Set up the RecyclerView
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(new ProductAdapter(productItems));
+        recyclerView.setAdapter(new ProductAdapter(productItem));
+
+
+        // Set up the RecyclerView
+
 
         return view;
 

@@ -68,19 +68,14 @@ public class LastOperationItemFragment extends Fragment {
 
         //Data 05/05/2020
         List<OperationItem> operationItems = new ArrayList<>();
-        operationItems.add(new OperationItem("Probiotico per la gola", "- 464$", "04/01/2024"));
-        operationItems.add(new OperationItem("Preservativi durex comfort", "- 20$", "04/01/2024"));
-        operationItems.add(new OperationItem("Probiotico per la gola", "- 464$", "04/01/2024"));
-        operationItems.add(new OperationItem("Preservativi durex comfort", "- 20$", "04/01/2024"));
-        operationItems.add(new OperationItem("Probiotico per la gola", "- 464$", "04/01/2024"));
-        operationItems.add(new OperationItem("Preservativi durex comfort", "- 20$", "04/01/2024"));
-        operationItems.add(new OperationItem("Probiotico per la gola", "- 464$", "04/01/2024"));
-        operationItems.add(new OperationItem("Preservativi durex comfort", "- 20$", "04/01/2024"));
-        operationItems.add(new OperationItem("Probiotico per la gola", "- 464$", "04/01/2024"));
-        operationItems.add(new OperationItem("Preservativi durex comfort", "- 20$", "04/01/2024"));
-
-
-
+        operationItems.add(new OperationItem("Probiotico per la gola", 56, "04/01/2024", "1", "Farmaci"));
+        operationItems.add(new OperationItem("Preservativi durex comfort", 89, "04/01/2024",   "1", "Farmaci"));
+        operationItems.add(new OperationItem("Flomax", 23, "04/01/2024", "1", "Farmaci"));
+        operationItems.add(new OperationItem("Oki Task", 89, "04/01/2024", "1", "Farmaci"));
+        operationItems.add(new OperationItem("Puntulil", 89, "04/01/2024", "1", "Farmaci"));
+        operationItems.add(new OperationItem("Citromax", 89, "04/01/2024", "1", "Farmaci"));
+        operationItems.add(new OperationItem("Spokkimax", 89, "04/01/2024",  "1", "Farmaci"));
+        operationItems.add(new OperationItem("Spider-man", 89, "04/01/2024", "1", "Farmaci"));
 
 
         // Set up the RecyclerView

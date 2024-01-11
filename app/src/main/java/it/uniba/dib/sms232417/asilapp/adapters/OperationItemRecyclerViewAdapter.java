@@ -40,8 +40,11 @@ public class OperationItemRecyclerViewAdapter extends RecyclerView.Adapter<Opera
     @Override
     public void onBindViewHolder(@NonNull OperationItemRecyclerViewAdapter.ViewHolder holder, int position) {
         OperationItem item = data.get(position);
+        //convert to string money
+        String moneyString = String.valueOf(item.getMoney());
+
         holder.description.setText(item.getDescription());
-        holder.money.setText(item.getMoney()); // No need to convert to String
+        holder.money.setText("-"+moneyString+"€");
         holder.operationDate.setText(item.getOperationDate()); // No need to convert to String
     }
 

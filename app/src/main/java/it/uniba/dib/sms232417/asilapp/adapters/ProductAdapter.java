@@ -14,16 +14,16 @@ import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.placeholder.OperationItem;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.placeholder.ProductItem;
+
 /**
- * {@link RecyclerView.Adapter} that can display a {@link ProductItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link OperationItem}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
-    private List<ProductItem> products;
+    private List<OperationItem> products;
 
-    public ProductAdapter(List<ProductItem> products) {
+    public ProductAdapter(List<OperationItem> products) {
         this.products = products;
     }
 
@@ -36,10 +36,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        ProductItem product = products.get(position);
-        holder.productName.setText(product.getNameProduct());
-        holder.quantityProduct.setText(holder.itemView.getContext().getResources().getString(R.string.quantity) + ": "+product.getQuantityProduct());
-        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), "Hai cliccato sul CardView " + product.getNameProduct(), Toast.LENGTH_SHORT).show());
+        OperationItem product = products.get(position);
+        holder.description.setText(product.getDescription());
+        holder.quantityProduct.setText(holder.itemView.getContext().getResources().getString(R.string.quantity) + ": "+product.getQuantity());
+        holder.itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), "Hai cliccato sul CardView " + product.getDescription(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -49,13 +49,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     static class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        TextView productName;
+        TextView description;
         TextView quantityProduct;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             quantityProduct = itemView.findViewById(R.id.quantity);
-            productName = itemView.findViewById(R.id.productName);
+            description = itemView.findViewById(R.id.description);
         }
     }
 }
