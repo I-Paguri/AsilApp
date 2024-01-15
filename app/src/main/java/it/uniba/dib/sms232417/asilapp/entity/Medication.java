@@ -100,6 +100,7 @@ public class Medication implements Parcelable {
     public void addSelectedWeekday(WeekdaysDataItem selectedWeekday) {
         this.selectedWeekdays.add(selectedWeekday);
     }
+
     public void setSelectedWeekdays(ArrayList<WeekdaysDataItem> selectedWeekdays) {
         this.selectedWeekdays = selectedWeekdays;
     }
@@ -151,39 +152,24 @@ public class Medication implements Parcelable {
     }
 
     @Override
-public String toString() {
-    String medicationString;
+    public String toString() {
+        String medicationString;
 
-    medicationString = "Medication: " + getMedicationName() + "\n";
-    medicationString = medicationString + "How to take: " + getHowToTake() + "\n";
-    medicationString = medicationString + "How regularly: " + getHowRegularly() + "\n";
+        medicationString = "Medication: " + getMedicationName() + "\n";
+        medicationString = medicationString + "How to take: " + getHowToTake() + "\n";
+        medicationString = medicationString + "How regularly: " + getHowRegularly() + "\n";
 
-    if (!getIntervalSelected().isEmpty()) {
-        medicationString = medicationString + "Interval selection: " + getIntervalSelected() + "\n";
-    }
-
-    if (!getSelectedWeekdays().isEmpty()) {
-        medicationString = medicationString + "Selected weekdays: " + getSelectedWeekdaysString() + "\n";
-    }
-
-    medicationString = medicationString + "Intakes time: [";
-    for (String intakesTime : getIntakesTime()) {
-        medicationString = medicationString + intakesTime;
-        if (getIntakesTime().indexOf(intakesTime) != getIntakesTime().size() - 1) {
-            medicationString = medicationString + ", ";
+        if (!getIntervalSelected().isEmpty()) {
+            medicationString = medicationString + "Interval selection: " + getIntervalSelected() + "\n";
         }
-    }
-    medicationString = medicationString + "]\n";
 
-    medicationString = medicationString + "Quantities: [";
-    for (String quantities : getQuantities()) {
-        medicationString = medicationString  + quantities;
-        if (getQuantities().indexOf(quantities) != getQuantities().size() - 1) {
-            medicationString = medicationString + ", ";
+        if (!getSelectedWeekdays().isEmpty()) {
+            medicationString = medicationString + "Selected weekdays: " + getSelectedWeekdaysString() + "\n";
         }
-    }
-    medicationString = medicationString + "]\n";
 
-    return medicationString;
-}
+        medicationString = medicationString + "Intakes time: [" + String.join(", ", getIntakesTime()) + "]\n";
+        medicationString = medicationString + "Quantities: [" + String.join(", ", getQuantities()) + "]\n";
+
+        return medicationString;
+    }
 }

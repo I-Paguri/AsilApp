@@ -148,6 +148,7 @@
     </plurals>
 
     <string name="select_how_to_take_first"> Seleziona prima la modalità di assunzione </string>
+    <string name="add_medication">Aggiungi farmaco</string>
 
     <!-- ERRORS -->
     <string name="required_field"> Questo campo non può essere vuoto </string>

@@ -446,6 +446,8 @@
     <string name="select_weekdays"> Please select at least one weekday </string>
     <string name="end_date_before_start_date"> End date cannot be before start date </string>
 
+    <string name="add_medication">Add medication</string>
+
 
 
 </resources>

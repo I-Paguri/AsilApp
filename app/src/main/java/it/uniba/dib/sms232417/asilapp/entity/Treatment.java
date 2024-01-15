@@ -110,6 +110,10 @@ public class Treatment implements Parcelable {
         this.medications.add(medication);
     }
 
+    public void removeMedicationAtIndex(int index) {
+        this.medications.remove(index);
+    }
+
     public String getNotes() {
         return notes;
     }

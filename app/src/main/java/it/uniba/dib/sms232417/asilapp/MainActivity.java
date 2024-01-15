@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -40,7 +41,6 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment selectedFragment = null;
 
     private boolean doubleBackToExitPressedOnce = false;
+    private TreatmentFormMedicationsFragment treatmentFormMedicationsFragment;
 
     public static Context getContext() {
         return getContext();
@@ -59,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
         Intent intent = getIntent();
-        Patient loggedPatient = (Patient)intent.getParcelableExtra("loggedPatient");
-        if(loggedPatient!=null)
-        {
+        Patient loggedPatient = (Patient) intent.getParcelableExtra("loggedPatient");
+        if (loggedPatient != null) {
             try {
                 FileOutputStream fos = openFileOutput(StringUtils.USER_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
+
+            treatmentFormMedicationsFragment.setIntakeCount(1);
             int itemId = item.getItemId();
             if (itemId == R.id.navigation_home) { // replace with your actual menu item id
                 selectedFragment = new HomeFragment();
@@ -197,56 +200,61 @@ public class MainActivity extends AppCompatActivity {
             transaction.addToBackStack(null);
             transaction.commit();
             bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        } else if (currentFragment instanceof TreatmentFormGeneralFragment) {
-            // If the current fragment is TreatmentFormGeneralFragment, show a dialog
-            new MaterialAlertDialogBuilder(this, R.style.CustomMaterialDialog)
-                    .setTitle(getResources().getString(R.string.going_back))
-                    .setMessage(getResources().getString(R.string.unsaved_changes))
-                    .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Respond to negative button press
-                        }
-                    })
-                    .setPositiveButton(getResources().getString(R.string.go_back), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Respond to positive button press
-                            // Navigate back
-                            getSupportFragmentManager().popBackStack();
-                        }
-                    })
-                    .create()
-                    .show();
-        } else if (currentFragment instanceof HomeFragment) {
-            if (doubleBackToExitPressedOnce) {
-                finish();
-                return;
-            }
-
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, getResources().getString(R.string.press_back_again), Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
         } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
+            if (currentFragment instanceof TreatmentFormGeneralFragment) {
+                // If the current fragment is TreatmentFormGeneralFragment, show a dialog
+                new MaterialAlertDialogBuilder(this, R.style.CustomMaterialDialog)
+                        .setTitle(getResources().getString(R.string.going_back))
+                        .setMessage(getResources().getString(R.string.unsaved_changes))
+                        .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Respond to negative button press
+                            }
+                        })
+                        .setPositiveButton(getResources().getString(R.string.go_back), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Respond to positive button press
+                                // Navigate back
+                                getSupportFragmentManager().popBackStack();
+                            }
+                        })
+                        .create()
+                        .show();
             } else {
-                super.onBackPressed();
+                if (currentFragment instanceof HomeFragment) {
+                    if (doubleBackToExitPressedOnce) {
+                        finish();
+                        return;
+                    }
+
+                    this.doubleBackToExitPressedOnce = true;
+                    Toast.makeText(this, getResources().getString(R.string.press_back_again), Toast.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce = false;
+                        }
+                    }, 2000);
+                } else {
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        super.onBackPressed();
+                    }
+                }
             }
         }
     }
 
+
+
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
 
 
 }

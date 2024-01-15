@@ -366,7 +366,8 @@
                             android:layout_height="match_parent"
                             android:editable="false"
                             android:imeOptions="actionNext"
-                            android:labelFor="@id/medicines_list">
+                            android:labelFor="@id/medicines_list"
+                            tools:ignore="Deprecated">
 
                         </AutoCompleteTextView>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -433,6 +434,22 @@
 
             </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linearLayoutAddMedication"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/addMedication"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:text="@string/add_medication"
+                android:textAllCaps="true"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
 
         </LinearLayout>
 

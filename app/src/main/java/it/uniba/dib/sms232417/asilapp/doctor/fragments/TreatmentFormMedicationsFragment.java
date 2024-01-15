@@ -9,11 +9,14 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -57,7 +60,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private View linearLayoutWeekdays;
     private TextView subtitleWeekdays;
     private Button btnIntakeTime;
-    private int intakeCount = 1;
+    private static int intakeCount = 1;
     private AutoCompleteTextView intervalSelection;
     private AutoCompleteTextView howRegularly;
     private AutoCompleteTextView howToTakeMedicine;
@@ -80,7 +83,17 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
     private boolean validInput;
 
+    public TreatmentFormMedicationsFragment() {
+        // Required empty public constructor
+    }
 
+    public int getIntakeCount() {
+        return intakeCount;
+    }
+
+    public void setIntakeCount(int intakeCount) {
+        this.intakeCount = intakeCount;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,13 +115,14 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Get the bundle
         Bundle bundle = this.getArguments();
-
         validInput = false;
         treatment = null;
         medications = new ArrayList<>();
         if (bundle != null) {
             treatment = bundle.getParcelable("treatment");
         }
+
+        //Log.d("IntakeCount", "Count: " + intakeCount);
 
         // Find the AutoCompleteTextView in the layout
         AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
@@ -285,6 +299,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 .setFontTypeFace(Typeface.defaultFromStyle(Typeface.BOLD))
                 .start(this);
 
+        // After inflating the RecyclerView from the ViewStub, give it a new ID
+        RecyclerView weekdaysRecyclerView = view.findViewById(R.id.weekdays_stub);
+        weekdaysRecyclerView.setId(View.generateViewId());
 
         TextView intakeLabel = view.findViewById(R.id.intakeLabel);
         intakeLabel.setText(getResources().getString(R.string.intake) + " " + intakeCount);
@@ -360,12 +377,46 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                if (fragmentManager != null) {
-                    fragmentManager.popBackStack();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack();
+            }
+        });
+
+        Button btnAddMedication = requireView().findViewById(R.id.addMedication);
+
+        btnAddMedication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create a new instance of the current fragment
+                if (validateInput()) {
+                    // Get the bundle
+                    Bundle bundle = setBundle();
+
+                    TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
+                    treatmentFormMedicationsFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                } else {
+                    Toast.makeText(requireActivity(), getResources().getString(R.string.fill_inputs), Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
+
+        // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                treatment.removeMedicationAtIndex(treatment.getMedications().size() - 1);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -382,9 +433,11 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
 
         // Get the index of the second last view in parentLayout
-        int index = parentLayout.getChildCount() - 1;
+        int index = parentLayout.getChildCount() - 2;
 
-        // Add the new layout to the parent layout at the index of the second last view
+
+
+        // Add the new layout to the parent layout at the index of the "Add Intake" button
         parentLayout.addView(intakeLayout, index);
 
         TextView intakeLabel = intakeLayout.findViewById(R.id.intakeLabel);
@@ -838,8 +891,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         //Log.d("Medication", medication.toString());
         bundle.putParcelable("treatment", treatment);
+        Log.d("Treatment medications:", treatment.getMedications().toString());
 
         return bundle;
     }
+
 
 }
