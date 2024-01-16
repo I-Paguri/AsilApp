@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.doctor.fragments;
+package it.uniba.dib.sms232417.asilapp.utilities;
 
 import org.json.JSONObject;
 

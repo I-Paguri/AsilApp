@@ -1,12 +1,9 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,6 +24,7 @@ import org.json.JSONObject;
 import java.util.concurrent.CompletableFuture;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.utilities.SerpHandler;
 
 public class HealthcareFragment extends Fragment {
     BottomNavigationView bottomNavigationView;
