@@ -20,11 +20,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.CompletableFuture;
+
 import it.uniba.dib.sms232417.asilapp.R;
 
 public class HealthcareFragment extends Fragment {
     BottomNavigationView bottomNavigationView;
     Toolbar toolbar;
+    private static OnSerpApiListener listener;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -37,6 +44,11 @@ public class HealthcareFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        String searchQuery =  "Healthcare";
+        SerpHandler sh = new SerpHandler();
+        CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
+
         super.onViewCreated(view, savedInstanceState);
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
@@ -72,5 +84,26 @@ public class HealthcareFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+        future.thenAccept(result -> {
+            try {
+                JSONArray videos = result.getJSONArray("video_results");
+                for(int i = 0; i < videos.length(); i++){
+                    JSONObject video = videos.getJSONObject(i);
+                    System.out.println(video.getString("title"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public interface OnSerpApiListener {
+        void onSerpApiCompleted(JSONObject result) throws JSONException;
+    }
+
+    // Setter method to assign the listener
+    public void setOnSerpApiListener(HealthcareFragment.OnSerpApiListener listener) {
+        this.listener = listener;
     }
 }
