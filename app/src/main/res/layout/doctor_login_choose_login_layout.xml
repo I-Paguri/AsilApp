@@ -31,13 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/info">
-        <FrameLayout
-            android:id="@+id/doctor_login_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/info"
-            >
 
             <RelativeLayout
                 android:id="@+id/doctor_login_layout_relative"
@@ -87,7 +80,6 @@
                         app:icon="@drawable/qr_code" />
                 </LinearLayout>
             </RelativeLayout>
-        </FrameLayout>
     </FrameLayout>
     <TextView
         android:id="@+id/lbl_create_account"

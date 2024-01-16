@@ -20,7 +20,7 @@ import com.google.android.material.button.MaterialButton;
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
-import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorFragment;
+import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorChooseFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
@@ -64,7 +64,7 @@ public class EntryActivity extends AppCompatActivity {
         btnDoctor.setOnClickListener(v -> {
             decisionLogin.setVisibility(RelativeLayout.GONE);
             fragmentContainer.setVisibility(FrameLayout.VISIBLE);
-            LoginDoctorFragment loginFragment = new LoginDoctorFragment();
+            LoginDoctorChooseFragment loginFragment = new LoginDoctorChooseFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
