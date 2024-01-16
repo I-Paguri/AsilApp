@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.auth;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +20,7 @@ import com.google.android.material.button.MaterialButton;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorChooseFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -30,7 +31,7 @@ import javax.crypto.SecretKey;
 
 public class EntryActivity extends AppCompatActivity {
 
-    DatabaseAdapter dbAdapter;
+    DatabaseAdapterPatient dbAdapter;
     RelativeLayout decisionLogin;
 
     public static Context getContext() {
@@ -91,7 +92,6 @@ public class EntryActivity extends AppCompatActivity {
         final Patient[] loggedPatient = {null};
 
 
-
         RelativeLayout loading = findViewById(R.id.loading);
         loading.setVisibility(RelativeLayout.VISIBLE);
 
@@ -113,7 +113,7 @@ public class EntryActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (password != null) {
-                    dbAdapter = new DatabaseAdapter();
+                    dbAdapter = new DatabaseAdapterPatient(getContext());
                     dbAdapter.onLogin(email, password, new OnPatientDataCallback() {
                         @Override
                         public void onCallback(Patient patient) {
@@ -126,8 +126,12 @@ public class EntryActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onCallbackError(Exception e) {
+                        public void onCallbackError(Exception e, String Message) {
                             e.printStackTrace();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle(R.string.error).setMessage(Message);
+                            builder.setPositiveButton(R.string.yes, null);
+                            builder.show();
                         }
                     });
                 }

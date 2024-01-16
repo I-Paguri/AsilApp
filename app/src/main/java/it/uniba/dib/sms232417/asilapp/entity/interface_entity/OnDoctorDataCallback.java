@@ -6,5 +6,5 @@ public interface OnDoctorDataCallback {
     void onCallback(Doctor doctor);
 
 
-    void onCallbackError(Exception exception);
+    void onCallbackError(Exception exception,String message);
 }

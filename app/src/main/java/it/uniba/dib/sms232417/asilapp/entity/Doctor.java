@@ -27,6 +27,28 @@ public class Doctor implements Parcelable, Serializable {
         this.numeroDiRegistrazioneMedica = numeroDiRegistrazioneMedica;
     }
 
+    protected Doctor(Parcel in) {
+        nome = in.readString();
+        cognome = in.readString();
+        email = in.readString();
+        dataNascita = in.readString();
+        regione = in.readString();
+        specializzazione = in.readString();
+        numeroDiRegistrazioneMedica = in.readString();
+    }
+
+    public static final Creator<Doctor> CREATOR = new Creator<Doctor>() {
+        @Override
+        public Doctor createFromParcel(Parcel in) {
+            return new Doctor(in);
+        }
+
+        @Override
+        public Doctor[] newArray(int size) {
+            return new Doctor[size];
+        }
+    };
+
     public String getNome() {
         return nome;
     }

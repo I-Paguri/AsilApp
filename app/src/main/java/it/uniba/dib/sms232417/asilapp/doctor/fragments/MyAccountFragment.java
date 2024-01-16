@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.SharedMemory;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,29 +22,27 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Calendar;
-import java.util.Date;
 
-import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
+import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class MyAccountFragment extends Fragment {
     Toolbar toolbar;
     Patient loggedPatient;
+    Doctor loggedDoctor;
     final String NAME_FILE = "automaticLogin";
-    DatabaseAdapter dbAdapter;
+    DatabaseAdapterPatient dbAdapter;
     BottomNavigationView bottomNavigationView;
 
     @Nullable
@@ -63,6 +59,7 @@ public class MyAccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         loggedPatient = checkPatientLogged();
+        loggedDoctor = checkDoctorLogged();
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         Button btnLogout = getView().findViewById(R.id.btn_logout);
@@ -120,10 +117,17 @@ public class MyAccountFragment extends Fragment {
             txtRegion.setText(loggedPatient.getRegione());
             String dataNascita = loggedPatient.getDataNascita();
 
+        }else if(loggedDoctor != null){
+            TextView txtName = getView().findViewById(R.id.txt_name);
+            TextView txtSurname = getView().findViewById(R.id.txt_surname);
+            TextView txtRegion = getView().findViewById(R.id.txt_region);
+
+            txtName.setText(loggedDoctor.getNome());
+            txtSurname.setText(loggedDoctor.getCognome());
+            txtRegion.setText(loggedDoctor.getRegione());
         }else {
             RelativeLayout relativeLayout = getView().findViewById(R.id.not_logged_user);
             relativeLayout.setVisibility(View.VISIBLE);
-
         }
 
 
@@ -131,7 +135,7 @@ public class MyAccountFragment extends Fragment {
     }
 
     public void onLogout(View v, String email) throws Exception {
-            dbAdapter = new DatabaseAdapter();
+            dbAdapter = new DatabaseAdapterPatient(getContext());
             dbAdapter.onLogout();
 
             Toast.makeText(getContext(),
@@ -143,24 +147,58 @@ public class MyAccountFragment extends Fragment {
             editor.apply();
             CryptoUtil.deleteKey(email);
 
+            File loggedPatientFile = new File(StringUtils.FILE_PATH_PATIENT_LOGGED);
+            File loggedDoctorFile = new File(StringUtils.FILE_PATH_DOCTOR_LOGGED);
+            if(loggedPatientFile.exists()){
+                loggedPatientFile.delete();
+            }
+            if(loggedDoctorFile.exists()){
+                loggedDoctorFile.delete();
+            }
+
             Intent esci = new Intent(getContext(), EntryActivity.class);
             startActivity(esci);
     }
 
     public Patient checkPatientLogged(){
-        Patient patient;
-        try {
-            FileInputStream fis = requireActivity().openFileInput(StringUtils.USER_LOGGED);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            patient = (Patient) ois.readObject();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return patient;
+        Patient loggedPatient;
+        File loggedPatientFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedPatient");
+        if(loggedPatientFile.exists()){
+            try {
+                FileInputStream fis = requireActivity().openFileInput(StringUtils.PATIENT_LOGGED);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                loggedPatient = (Patient) ois.readObject();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            return loggedPatient;
+        }else
+            return null;
+
+    }
+
+    public Doctor checkDoctorLogged(){
+        Doctor loggedDoctor;
+        File loggedDoctorFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedDoctor");
+        if(loggedDoctorFile.exists()){
+            try {
+                FileInputStream fis = requireActivity().openFileInput(StringUtils.DOCTOR_LOGGED);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                loggedDoctor = (Doctor) ois.readObject();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            return loggedDoctor;
+        }else
+            return null;
     }
 
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,6 +37,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
@@ -136,9 +139,12 @@ public class HomeFragment extends Fragment {
 
         txtusername = view.findViewById(R.id.txtUser_Name);
         Patient loggedPatient = checkPatientLogged();
+        Doctor loggedDoctor = checkDoctorLogged();
         if (loggedPatient != null) {
             txtusername.setText(loggedPatient.getNome());
-        } else {
+        } else if(loggedDoctor != null){
+            txtusername.setText("Dottor "+loggedDoctor.getNome());
+        }else{
             txtusername.setText("Utente");
         }
 
@@ -153,18 +159,44 @@ public class HomeFragment extends Fragment {
     }
     public Patient checkPatientLogged(){
         Patient loggedPatient;
-        try {
-            FileInputStream fis = requireActivity().openFileInput(StringUtils.USER_LOGGED);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            loggedPatient = (Patient) ois.readObject();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return loggedPatient;
+        File loggedPatientFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedPatient");
+        if(loggedPatientFile.exists()){
+            try {
+                FileInputStream fis = requireActivity().openFileInput(StringUtils.PATIENT_LOGGED);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                loggedPatient = (Patient) ois.readObject();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            return loggedPatient;
+        }else
+            return null;
+
+    }
+
+    public Doctor checkDoctorLogged(){
+        Doctor loggedDoctor;
+        File loggedDoctorFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedDoctor");
+        if(loggedDoctorFile.exists()){
+            Log.d("FILE", "File esiste");
+            try {
+                FileInputStream fis = requireActivity().openFileInput(loggedDoctorFile.getName());
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                loggedDoctor = (Doctor) ois.readObject();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            return loggedDoctor;
+    }else
+        return null;
     }
 
 }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Base64;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import javax.crypto.SecretKey;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
@@ -39,7 +40,7 @@ import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 public class RegistrationDoctorFragment extends Fragment {
 
     String strDataNascita = "";
-    DatabaseAdapter dbAdapter;
+    DatabaseAdapterDoctor dbAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -132,10 +133,11 @@ public class RegistrationDoctorFragment extends Fragment {
         ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
-        dbAdapter = new DatabaseAdapter();
+        dbAdapter = new DatabaseAdapterDoctor(getContext());
         dbAdapter.onRegistrationDoctor(nome, cognome, email, strDataNascita, regione, specializzazione, numeroRegistrazione, password, new OnDoctorDataCallback() {
             @Override
             public void onCallback(Doctor doctor) {
+                Log.d("REGISTER", "Richiesta login automatico");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
                 builder.setPositiveButton(R.string.yes, (dialog, which) -> {
@@ -166,16 +168,22 @@ public class RegistrationDoctorFragment extends Fragment {
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
 
             });
+                builder.setNegativeButton(R.string.no, (dialog, which) -> {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("loggedDoctor", (Parcelable) doctor);
+                    startActivity(intent);
+                    progressBar.setVisibility(ProgressBar.INVISIBLE);
+                });
+                builder.show();
             }
 
             @Override
-            public void onCallbackError(Exception exception) {
+            public void onCallbackError(Exception exception, String message) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage(R.string.registration_failed)
-                        .setTitle(R.string.error)
-                        .setPositiveButton(android.R.string.ok, null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                builder.setTitle(R.string.error).setMessage(message);
+                builder.setPositiveButton(R.string.yes, null);
+                builder.show();
+
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 

@@ -28,7 +28,7 @@ import javax.crypto.SecretKey;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
@@ -37,7 +37,7 @@ import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class LoginFragment extends Fragment {
 
-    DatabaseAdapter dbAdapter;
+    DatabaseAdapterPatient dbAdapter;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -103,7 +103,7 @@ public class LoginFragment extends Fragment {
                 } else {
                     ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
                     progressBar.setVisibility(ProgressBar.VISIBLE);
-                    dbAdapter = new DatabaseAdapter();
+                    dbAdapter = new DatabaseAdapterPatient(getContext());
                     dbAdapter.onLogin(email, password, new OnPatientDataCallback() {
                         @Override
                         public void onCallback(Patient patient) {
@@ -146,12 +146,12 @@ public class LoginFragment extends Fragment {
                             builder.show();
                         }
                         @Override
-                        public void onCallbackError(Exception exception) {
+                        public void onCallbackError(Exception exception, String message) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Error")
-                                    .setMessage(R.string.user_not_exists)
-                                    .create();
+                            builder.setTitle(R.string.error).setMessage(message);
+                            builder.setPositiveButton(R.string.yes, null);
                             builder.show();
+
                             progressBar.setVisibility(ProgressBar.GONE);
                         }
                     });

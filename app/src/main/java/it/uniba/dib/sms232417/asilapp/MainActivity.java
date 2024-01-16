@@ -40,6 +40,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
+import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
@@ -63,9 +64,10 @@ public class MainActivity extends AppCompatActivity {
         treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
         Intent intent = getIntent();
         Patient loggedPatient = (Patient) intent.getParcelableExtra("loggedPatient");
+        Doctor loggedDoctor = (Doctor) intent.getParcelableExtra("loggedDoctor");
         if (loggedPatient != null) {
             try {
-                FileOutputStream fos = openFileOutput(StringUtils.USER_LOGGED, Context.MODE_PRIVATE);
+                FileOutputStream fos = openFileOutput(StringUtils.PATIENT_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
                 os.writeObject(loggedPatient);
                 Log.d("Patient", "Patient saved");
@@ -74,7 +76,16 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
+        }
+        if(loggedDoctor !=null) {
+            try {
+                FileOutputStream fos = openFileOutput(StringUtils.DOCTOR_LOGGED, Context.MODE_PRIVATE);
+                ObjectOutputStream os = new ObjectOutputStream(fos);
+                os.writeObject(loggedDoctor);
+                Log.d("Doctor", "Doctor saved");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
 

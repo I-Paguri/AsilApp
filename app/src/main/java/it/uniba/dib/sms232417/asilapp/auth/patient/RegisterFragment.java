@@ -30,14 +30,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 //import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.crypto.SecretKey;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapter;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -50,7 +48,7 @@ public class RegisterFragment extends Fragment {
 
     FirebaseFirestore db;
     FirebaseAuth mAuth;
-    DatabaseAdapter dbAdapter;
+    DatabaseAdapterPatient dbAdapter;
 
     String strDataNascita;
     String regione;
@@ -188,7 +186,7 @@ public class RegisterFragment extends Fragment {
         ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
-        dbAdapter = new DatabaseAdapter();
+        dbAdapter = new DatabaseAdapterPatient(getContext());
         dbAdapter.onRegister(nome, cognome, email, dataNascita, regione, password, new OnPatientDataCallback() {
             @Override
             public void onCallback(Patient patient) {
@@ -232,15 +230,13 @@ public class RegisterFragment extends Fragment {
 
 
             @Override
-            public void onCallbackError(Exception e) {
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
+            public void onCallbackError(Exception e, String message) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Error")
-                        .setMessage(R.string.registration_failed)
-                        .setPositiveButton("Ok", null)
-                        .create();
-
+                builder.setTitle(R.string.error).setMessage(message);
+                builder.setPositiveButton(R.string.yes, null);
                 builder.show();
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
+
             }
         });
     }
