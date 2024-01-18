@@ -1,25 +1,25 @@
 
 <resources>
-    <attr name="colorNavy" format="color" />
-    <attr name="colorOnNavy" format="color" />
-    <attr name="colorNavyContainer" format="color" />
-    <attr name="colorOnNavyContainer" format="color" />
-    <attr name="harmonizeNavy" format="boolean" />
-    <attr name="colorBeige" format="color" />
-    <attr name="colorOnBeige" format="color" />
-    <attr name="colorBeigeContainer" format="color" />
-    <attr name="colorOnBeigeContainer" format="color" />
-    <attr name="harmonizeBeige" format="boolean" />
-    <attr name="colorPastel_red" format="color" />
-    <attr name="colorOnPastel_red" format="color" />
-    <attr name="colorPastel_redContainer" format="color" />
-    <attr name="colorOnPastel_redContainer" format="color" />
-    <attr name="harmonizePastel_red" format="boolean" />
-    <attr name="colorPastel_brown" format="color" />
-    <attr name="colorOnPastel_brown" format="color" />
-    <attr name="colorPastel_brownContainer" format="color" />
-    <attr name="colorOnPastel_brownContainer" format="color" />
-    <attr name="harmonizePastel_brown" format="boolean" />
+    <attr name="colorNavy" format="color"/>
+    <attr name="colorOnNavy" format="color"/>
+    <attr name="colorNavyContainer" format="color"/>
+    <attr name="colorOnNavyContainer" format="color"/>
+    <attr name="harmonizeNavy" format="boolean"/>
+    <attr name="colorBeige" format="color"/>
+    <attr name="colorOnBeige" format="color"/>
+    <attr name="colorBeigeContainer" format="color"/>
+    <attr name="colorOnBeigeContainer" format="color"/>
+    <attr name="harmonizeBeige" format="boolean"/>
+    <attr name="colorPastelRed" format="color"/>
+    <attr name="colorOnPastelRed" format="color"/>
+    <attr name="colorPastelRedContainer" format="color"/>
+    <attr name="colorOnPastelRedContainer" format="color"/>
+    <attr name="harmonizePastelRed" format="boolean"/>
+    <attr name="colorPastelBrown" format="color"/>
+    <attr name="colorOnPastelBrown" format="color"/>
+    <attr name="colorPastelBrownContainer" format="color"/>
+    <attr name="colorOnPastelBrownContainer" format="color"/>
+    <attr name="harmonizePastelBrown" format="boolean"/>
     <declare-styleable name="AppWidgetAttrs">
         <attr name="appWidgetPadding" format="dimension" />
         <attr name="appWidgetInnerRadius" format="dimension" />

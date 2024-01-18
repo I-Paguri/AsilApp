@@ -34,8 +34,14 @@ public class EntryActivity extends AppCompatActivity {
     DatabaseAdapterPatient dbAdapter;
     RelativeLayout decisionLogin;
 
+    /*
+    Prima era così ma crashava
     public static Context getContext() {
-      return getContext();
+        return getContext();
+    }
+     */
+    public Context getContext() {
+      return this;
     }
 
     @Override

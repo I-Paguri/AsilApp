@@ -30,22 +30,22 @@
         <item name="colorOnNavy">#003351</item>
         <item name="colorNavyContainer">#004b73</item>
         <item name="colorOnNavyContainer">#cce5ff</item>
-        <item name="harmonizeNavy">false</item>
+        <item name="harmonizeNavy">true</item>
         <item name="colorBeige">#ffb1c2</item>
         <item name="colorOnBeige">#5f112d</item>
-        <item name="colorBeigeContainer">#7c2943</item>
++        <item name="colorBeigeContainer">#7c2943</item>
         <item name="colorOnBeigeContainer">#ffd9e0</item>
-        <item name="harmonizeBeige">false</item>
-        <item name="colorPastel_red">#ffb3b4</item>
-        <item name="colorOnPastel_red">#5f131c</item>
-        <item name="colorPastel_redContainer">#7e2930</item>
-        <item name="colorOnPastel_redContainer">#ffdad9</item>
-        <item name="harmonizePastel_red">false</item>
-        <item name="colorPastel_brown">#ffafd7</item>
-        <item name="colorOnPastel_brown">#5b1141</item>
-        <item name="colorPastel_brownContainer">#772959</item>
-        <item name="colorOnPastel_brownContainer">#ffd8e9</item>
-        <item name="harmonizePastel_brown">false</item>
+        <item name="harmonizeBeige">true</item>
+        <item name="colorPastelRed">#ffb3b4</item>
+        <item name="colorOnPastelRed">#5f131c</item>
+        <item name="colorPastelRedContainer">#7e2930</item>
+        <item name="colorOnPastelRedContainer">#ffdad9</item>
+        <item name="harmonizePastelRed">true</item>
+        <item name="colorPastelBrown">#ffafd7</item>
+        <item name="colorOnPastelBrown">#5b1141</item>
+        <item name="colorPastelBrownContainer">#772959</item>
+        <item name="colorOnPastelBrownContainer">#ffd8e9</item>
+        <item name="harmonizePastelBrown">true</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
     </style>
 </resources>
