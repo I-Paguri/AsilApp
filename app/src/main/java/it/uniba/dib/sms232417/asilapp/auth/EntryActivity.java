@@ -34,21 +34,16 @@ public class EntryActivity extends AppCompatActivity {
     DatabaseAdapterPatient dbAdapter;
     RelativeLayout decisionLogin;
 
-    /*
-    Prima era così ma crashava
-    public static Context getContext() {
-        return getContext();
-    }
-     */
-    public Context getContext() {
-      return this;
-    }
+    Context context;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entry_activity_layout);
 
+        context = this;
 
         checkAutomaticLogin();
 
@@ -119,7 +114,7 @@ public class EntryActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (password != null) {
-                    dbAdapter = new DatabaseAdapterPatient(getContext());
+                    dbAdapter = new DatabaseAdapterPatient(context);
                     dbAdapter.onLogin(email, password, new OnPatientDataCallback() {
                         @Override
                         public void onCallback(Patient patient) {
@@ -134,10 +129,11 @@ public class EntryActivity extends AppCompatActivity {
                         @Override
                         public void onCallbackError(Exception e, String Message) {
                             e.printStackTrace();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             builder.setTitle(R.string.error).setMessage(Message);
                             builder.setPositiveButton(R.string.yes, null);
                             builder.show();
+
                         }
                     });
                 }
