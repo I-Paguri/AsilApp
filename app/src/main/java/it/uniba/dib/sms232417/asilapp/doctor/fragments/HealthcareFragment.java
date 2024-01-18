@@ -6,16 +6,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,32 +29,65 @@ import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.utilities.SerpHandler;
 
 public class HealthcareFragment extends Fragment {
-    BottomNavigationView bottomNavigationView;
-    Toolbar toolbar;
-    private static OnSerpApiListener listener;
+    private BottomNavigationView bottomNavigationView;
+    private Toolbar toolbar;
+    private YouTubePlayerView youTubePlayerView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_healthcare, container, false);
-
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        String searchQuery =  "Healthcare";
+        // Initialize UI elements
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+        youTubePlayerView = view.findViewById(R.id.youtubePlayerView);
+
+        // Set up YouTubePlayerView
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                // You can handle YouTubePlayer events here
+            }
+        });
+
+        // Perform YouTube API operations when video links are available
+        String searchQuery = "Healthcare";
         SerpHandler sh = new SerpHandler();
         CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
 
-        super.onViewCreated(view, savedInstanceState);
+        future.thenAccept(result -> {
+            try {
+                JSONArray videos = result.getJSONArray("video_results");
+                if (videos.length() > 0) {
+                    // Get the first video link
+                    JSONObject video = videos.getJSONObject(0);
+                    String videoLink = video.getString("link");
 
-        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+                    // Extract video ID from YouTube video link
+                    String videoId = extractVideoId(videoLink);
 
-        toolbar = requireActivity().findViewById(R.id.toolbar);
+                    // Load the video into YouTubePlayerView
+                    youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer -> {
+                        youTubePlayer.cueVideo(videoId, 0);
+                    });
+                } else {
+                    // Handle case when no videos are found
+                    Toast.makeText(requireContext(), "No videos found", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
 
+        // Set up the toolbar
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
         // Show home button
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -69,39 +104,25 @@ public class HealthcareFragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 
         // Set navigation click listener
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Navigate to HomeFragment
-                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
-        future.thenAccept(result -> {
-            try {
-                JSONArray videos = result.getJSONArray("video_results");
-                for(int i = 0; i < videos.length(); i++){
-                    JSONObject video = videos.getJSONObject(i);
-                    System.out.println(video.getString("title"));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        toolbar.setNavigationOnClickListener(v -> {
+            // Navigate to HomeFragment
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.nav_host_fragment_activity_main, new HomeFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
-    public interface OnSerpApiListener {
-        void onSerpApiCompleted(JSONObject result) throws JSONException;
-    }
-
-    // Setter method to assign the listener
-    public void setOnSerpApiListener(HealthcareFragment.OnSerpApiListener listener) {
-        this.listener = listener;
+    private String extractVideoId(String videoLink) {
+        // Extract video ID from YouTube video link
+        // Example link: https://www.youtube.com/watch?v=IB5qg81T8hg
+        String[] parts = videoLink.split("=");
+        if (parts.length > 1) {
+            return parts[1];
+        } else {
+            return "";
+        }
     }
 }
