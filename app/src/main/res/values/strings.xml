@@ -449,5 +449,5 @@
     <string name="add_medication">Add medication</string>
     <string name="error_login_section_patient" translatable="false">You\'re a Patient, sign in using your dedicated area</string>
     <string name="error_login_section_doctor" translatable="false">You\'re a Doctor, sign in using your dedicated area</string>
-
+    <string name="qr_code_authentication" translatable="false">Sign in using your badge</string>
 </resources>

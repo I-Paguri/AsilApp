@@ -27,7 +27,7 @@ public class LoginDoctorQrCodeFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorChooseFragment());
+                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorCredentialFragment());
             }
         });
     }

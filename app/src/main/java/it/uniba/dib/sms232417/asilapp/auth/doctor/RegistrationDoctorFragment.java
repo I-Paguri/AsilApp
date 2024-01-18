@@ -96,7 +96,7 @@ public class RegistrationDoctorFragment extends Fragment {
         loginDoctor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorChooseFragment());
+                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorCredentialFragment());
             }
         });
         btnRegister.setOnClickListener(new View.OnClickListener() {

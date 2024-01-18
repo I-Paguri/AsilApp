@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,10 +51,14 @@ public class LoginDoctorCredentialFragment extends Fragment {
         MaterialButton btnLogin = view.findViewById(R.id.btnLogin);
         TextInputEditText email = view.findViewById(R.id.txtEmail);
         TextInputEditText password = view.findViewById(R.id.txtPassword);
+        MaterialButton btnLoginQr = view.findViewById(R.id.btnLoginDoctorQrCode);
+        TextView txtForgotPassword = view.findViewById(R.id.txtForgetPass);
+        TextView txtRegister = view.findViewById(R.id.lbl_create_account);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorChooseFragment());
+                Intent intent = new Intent(getContext(), EntryActivity.class);
+                startActivity(intent);
             }
         });
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +86,20 @@ public class LoginDoctorCredentialFragment extends Fragment {
 
                     onLogin(v, email.getText().toString(), password.getText().toString());
                 };
+            }
+        });
+
+        btnLoginQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorQrCodeFragment());
+            }
+        });
+
+        txtRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((EntryActivity) getActivity()).replaceFragment(new RegistrationDoctorFragment());
             }
         });
 
