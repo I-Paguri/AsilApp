@@ -144,7 +144,7 @@ public class RegistrationDoctorFragment extends Fragment {
 
                     SharedPreferences.Editor editor = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE).edit();
                     editor.putString("email", doctor.getEmail());
-
+                    editor.putBoolean("isDoctor", true);
                     //Encrypt password con chiave simmetrica e salva su file
                     byte[] encryptedPassword = new byte[0];
                     byte[] iv = new byte[0];
