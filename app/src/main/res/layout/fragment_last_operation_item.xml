@@ -16,7 +16,7 @@
         android:layout_marginEnd="10dp" />
 
     <TextView
-        style="@style/CardViewSubtitleText"
+        style="@style/CardViewSubtitleText2"
         android:textColor="@color/black"
         android:id="@+id/operationDate"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_below="@id/description"/>
 
     <TextView
-        style="@style/CardViewTitleText"
+        style="@style/CardViewTitleText2"
         android:textColor="@color/black"
         android:id="@+id/money"
         android:layout_width="match_parent"

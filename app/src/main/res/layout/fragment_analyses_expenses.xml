@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/CardViewTitleText"
+            style="@style/CardViewTitleText2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/farmaci"
-        style="@style/CardViewTitleText"
+        style="@style/CardViewTitleText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/terapie"
-        style="@style/CardViewTitleText"
+        style="@style/CardViewTitleText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -78,7 +78,7 @@
 
     <TextView
         android:id="@+id/trattamenti"
-        style="@style/CardViewTitleText"
+        style="@style/CardViewTitleText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -97,7 +97,7 @@
 
     <TextView
         android:id="@+id/esami"
-        style="@style/CardViewTitleText"
+        style="@style/CardViewTitleText2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
