@@ -21,7 +21,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/titleText"
+                android:id="@+id/treatmentTarget"
                 style="@style/CardViewTitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
 
 
             <TextView
-                android:id="@+id/subtitleText"
+                android:id="@+id/medicationName"
                 style="@style/CardViewSubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
 
 
             <TextView
-                android:id="@+id/regularText2"
+                android:id="@+id/howRegularly"
                 style="@style/CardViewSubtitleText3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
