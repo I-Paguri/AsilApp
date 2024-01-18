@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -84,9 +85,9 @@ public class MyPatientsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
 
         List<listItem> list = new LinkedList<>();
-        list.add(new listItem("Police", "Don't stand so close to me", R.drawable.my_account));
-        list.add(new listItem("Rihanna", "Love the way you lie", R.drawable.my_account));
-        list.add(new listItem("Marco Mengoni", "L'essenziale", R.drawable.my_account));
+        list.add(new listItem("Mario Rossi", "22 anni", R.drawable.my_account));
+        list.add(new listItem("Rita De Crescenzo", "44 anni", R.drawable.my_account));
+        list.add(new listItem("Paolo Morante", "30 anni", R.drawable.my_account));
 
         // Set up the RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -99,6 +100,7 @@ public class MyPatientsFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
             patientFragment.setArguments(bundle);
+            bundle.putString("patientAge", clickedItem.getDescription()); // assuming getSubtitle() gets the patient's age
 
             // Replace current fragment with PatientFragment
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();

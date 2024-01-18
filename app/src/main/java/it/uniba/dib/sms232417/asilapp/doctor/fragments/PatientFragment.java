@@ -26,12 +26,17 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class PatientFragment extends Fragment {
     private Toolbar toolbar;
+    private String patientName, patientAge;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        patientName = "Patient Name";
+        patientAge = "Patient Age";
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_patient, container, false);
+
     }
 
     @Override
@@ -67,10 +72,15 @@ public class PatientFragment extends Fragment {
         });
 
         TextView textName = view.findViewById(R.id.txtName_inputlayout);
-        textName.setText("Nome Cognome");
+        if (this.getArguments() != null) {
+            patientName = this.getArguments().getString("patientName");
+            patientAge = this.getArguments().getString("patientAge");
+        }
+
+        textName.setText(patientName);
 
         TextView textAge = view.findViewById(R.id.txtAge);
-        textAge.setText("?? anni");
+        textAge.setText(patientAge);
 
         ImageView imagePatient = view.findViewById(R.id.imgProfile);
         imagePatient.setImageResource(R.drawable.my_account);
