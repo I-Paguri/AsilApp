@@ -16,10 +16,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Medication;
+import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 
 
 public class TreatmentFragment extends Fragment {
@@ -106,13 +111,44 @@ public class TreatmentFragment extends Fragment {
     }
 
     protected void addTreatmentCardView() {
+        String treatmentTarget, medicationName, howToTake, howRegularly;
+        Date startDate, endDate;
+
+        treatmentTarget = "Abbassare la febbre";
+        startDate = new Date();
+        endDate = new Date();
+
+        ArrayList< WeekdaysDataItem > selectedWeekdays;
+
+        medicationName = "Paracetamolo";
+        howToTake = "Supposta";
+        howRegularly = "Ogni giorno";
+        selectedWeekdays = new ArrayList<>();
+
+        Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
+        Medication medication2 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
+
+        Treatment treatment = new Treatment(treatmentTarget, startDate, endDate);
+
+        treatment.addMedication(medication1);
+        treatment.addMedication(medication2);
+
         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View intakeLayout = inflater.inflate(R.layout.treatment_layout, null);
+        @SuppressLint("InflateParams") View treatmentLayout = inflater.inflate(R.layout.treatment_layout, null);
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.linearLayoutCardView);
 
+        // Get the titleText TextView from the inflated layout
+        TextView titleText = treatmentLayout.findViewById(R.id.treatmentTarget);
+        // Set the new text for the titleText TextView
+        titleText.setText(treatmentTarget);
+        TextView dateText = treatmentLayout.findViewById(R.id.dateText);
+        dateText.setText(treatment.getStartDateString() + " - " + treatment.getEndDateString());
+
+
+
         // Add the new layout to the parent layout at the index of the "Add Intake" button
-        parentLayout.addView(intakeLayout);
+        parentLayout.addView(treatmentLayout);
     }
 }
