@@ -87,12 +87,22 @@ public class Medication implements Parcelable {
         return howToTake;
     }
 
+    public String toStringHowToTake(Context context) {
+        MappedValues mappedValues = new MappedValues(context);
+        return mappedValues.getHowToTake(getHowToTake());
+    }
+
     public void setHowToTake(Integer howToTake) {
         this.howToTake = howToTake;
     }
 
     public Integer getHowRegularly() {
         return howRegularly;
+    }
+
+    public String toStringHowRegularly(Context context) {
+        MappedValues mappedValues = new MappedValues(context);
+        return mappedValues.getHowRegularly(getHowRegularly());
     }
 
     public void setHowRegularly(Integer howRegularly) {
@@ -164,6 +174,19 @@ public class Medication implements Parcelable {
 
     public void addQuantity(String quantity) {
         this.quantities.add(quantity);
+    }
+
+    public String toStringInterval(Context context) {
+        String intervalString;
+        MappedValues mappedValues = new MappedValues(context);
+
+        intervalString = "";
+
+        if (getIntervalSelectedType() != -1 && getIntervalSelectedNumber() != -1) {
+            intervalString = context.getResources().getString(R.string.every) + " " + getIntervalSelectedNumber() + " " + mappedValues.getInterval(getIntervalSelectedType());
+        }
+
+        return intervalString;
     }
 
     @NonNull

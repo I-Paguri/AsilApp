@@ -9,8 +9,10 @@ public class MappedValues {
     private Map<Integer, String> mappedHowToTake;
     private Map<Integer, String> mappedHowRegularly;
     private Map<Integer, String> mappedInterval;
+    private Context context;
 
     public MappedValues(Context context) {
+        this.context = context;
         // Default constructor
         mappedHowToTake = new HashMap<>();
         mappedHowRegularly = new HashMap<>();
@@ -72,5 +74,46 @@ public class MappedValues {
             }
         }
         return -1;
+    }
+
+    public String getFormattedHowToTake(int howToTake, int quantity) {
+        String formattedHowToTake;
+
+        switch (howToTake) {
+            case 0:
+                // Tablet/s
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.tablet, quantity, quantity);
+                break;
+            case 1:
+                // Drop/s
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.drop, quantity, quantity);
+                break;
+            case 2:
+                // Sachet/s
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.sachet, quantity, quantity);
+                break;
+            case 3:
+                // Suppository/ies
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.suppository, quantity, quantity);
+                break;
+            case 4:
+                // Milliliters
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.milliliter, quantity, quantity);
+                break;
+            case 5:
+                // Syringe/s
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.syringe, quantity, quantity);
+                break;
+            case 6:
+                // Inhalation
+                formattedHowToTake = context.getResources().getQuantityString(R.plurals.inhalation, quantity, quantity);
+                break;
+            default:
+                formattedHowToTake = "";
+                break;
+
+        }
+
+        return formattedHowToTake;
     }
 }

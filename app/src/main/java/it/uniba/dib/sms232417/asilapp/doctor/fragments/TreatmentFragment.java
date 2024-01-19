@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -17,14 +18,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.api.Distribution;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
+import com.touchboarder.weekdaysbuttons.WeekdaysDrawableProvider;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
 
 
 public class TreatmentFragment extends Fragment {
@@ -111,23 +117,48 @@ public class TreatmentFragment extends Fragment {
     }
 
     protected void addTreatmentCardView() {
-        String treatmentTarget, medicationName;
+        String treatmentTarget, medicationName, notes;
         Integer howToTake, howRegularly;
         Date startDate, endDate;
 
-        treatmentTarget = "Abbassare la febbre";
+        treatmentTarget = "Abbassare la febbricola";
         startDate = new Date();
         endDate = new Date();
+        notes = "Prendere con molta acqua";
 
-        ArrayList< WeekdaysDataItem > selectedWeekdays;
+        ArrayList<WeekdaysDataItem> selectedWeekdays;
 
         medicationName = "Paracetamolo";
-        howToTake = 1;
+        howToTake = 0;
         howRegularly = 1;
         selectedWeekdays = new ArrayList<>();
+        // Create a WeekdaysDataItem object for Monday
+        // Define the parameters
+        int position = 2; // Position of the weekday (e.g., 2 for Monday if Sunday is 1)
+        int calendarId = Calendar.MONDAY; // Calendar ID of the weekday
+        String label = "Monday"; // Label of the weekday
+        Drawable drawable = getResources().getDrawable(R.drawable.healthcare); // Drawable for the weekday
+        int textDrawableType = WeekdaysDrawableProvider.MW_RECT; // Type of the drawable (e.g., DAY, NIGHT)
+        int numberOfLetters = 3; // Number of letters to display (e.g., 3 for "Mon")
+        boolean selected = true; // Whether the weekday is selected
+
+        // Instantiate the WeekdaysDataItem object
+        WeekdaysDataItem monday = new WeekdaysDataItem(position, calendarId, label, drawable, textDrawableType, numberOfLetters, selected);
+        // Add Monday to the selectedWeekdays list
+        selectedWeekdays.add(monday);
 
         Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
         Medication medication2 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
+
+        ArrayList<String> intakesTime = new ArrayList<>();
+        intakesTime.add("08:00");
+        intakesTime.add("12:00");
+        medication1.setIntakesTime(intakesTime);
+
+        ArrayList<String> quantities = new ArrayList<>();
+        quantities.add("1/4");
+        quantities.add("3");
+        medication1.setQuantities(quantities);
 
         Treatment treatment = new Treatment(treatmentTarget, startDate, endDate);
 
@@ -135,21 +166,125 @@ public class TreatmentFragment extends Fragment {
         treatment.addMedication(medication2);
 
         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("InflateParams") View treatmentLayout = inflater.inflate(R.layout.treatment_layout, null);
+        @SuppressLint("InflateParams")
+        View treatmentLayout = inflater.inflate(R.layout.treatment_layout, null);
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.linearLayoutCardView);
 
-        // Get the titleText TextView from the inflated layout
-        TextView titleText = treatmentLayout.findViewById(R.id.treatmentTarget);
-        // Set the new text for the titleText TextView
-        titleText.setText(treatmentTarget);
+
+        // TREATMENT TARGET
+        TextView treatmentTargetText = treatmentLayout.findViewById(R.id.treatmentTarget);
+        treatmentTargetText.setText(treatmentTarget);
+
+        // DATE
         TextView dateText = treatmentLayout.findViewById(R.id.dateText);
         dateText.setText(treatment.getStartDateString() + " - " + treatment.getEndDateString());
 
 
+        // MEDICATIONS
+        LinearLayout medicationsLayout = treatmentLayout.findViewById(R.id.linearLayoutMedications);
+        medicationsLayout.addView(getMedicationLayout(medication1));
 
-        // Add the new layout to the parent layout at the index of the "Add Intake" button
         parentLayout.addView(treatmentLayout);
+
+        // NOTES
+        TextView notesText = treatmentLayout.findViewById(R.id.notes);
+        notesText.setText(notes);
     }
+
+    protected View getMedicationLayout(Medication medication) {
+        MappedValues mappedValues = new MappedValues(requireContext());
+        String medicationName, howToTake, howRegularly;
+        ArrayList<WeekdaysDataItem> selectedWeekdays = null;
+
+
+        medicationName = medication.getMedicationName();
+        howToTake = medication.toStringHowToTake(requireContext());
+        howRegularly = medication.toStringHowRegularly(requireContext());
+
+        ArrayList<String> intakeTimes = new ArrayList<>();
+        intakeTimes = medication.getIntakesTime();
+
+        ArrayList<String> quantities = new ArrayList<>();
+        quantities = medication.getQuantities();
+
+        if (medication.getSelectedWeekdays() != null) {
+            selectedWeekdays = medication.getSelectedWeekdays();
+        }
+
+        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams") View medicationLayout = inflater.inflate(R.layout.medication_layout, null);
+
+        // MEDICATION NAME
+        TextView medicationNameText = medicationLayout.findViewById(R.id.medicationName);
+        medicationNameText.setText(medicationName);
+
+        // HOW REGULARLY
+        TextView howRegularlyText = medicationLayout.findViewById(R.id.howRegularly);
+
+        if (medication.getHowRegularly() == 0) {
+            // Daily
+            howRegularlyText.setText(howRegularly);
+        } else {
+            if (medication.getHowRegularly() == 1) {
+                // Weekdays
+                String selectedWeekdaysString;
+                selectedWeekdaysString = "";
+
+                for (WeekdaysDataItem selectedWeekday : medication.getSelectedWeekdays()) {
+                    selectedWeekdaysString = selectedWeekdaysString + selectedWeekday.getLabel();
+                    if (medication.getSelectedWeekdays().indexOf(selectedWeekday) != medication.getSelectedWeekdays().size() - 1) {
+                        selectedWeekdaysString = selectedWeekdaysString + ", ";
+                    } else {
+                        if (medication.getSelectedWeekdays().size() == 1) {
+                            selectedWeekdaysString = selectedWeekdaysString + " ";
+                        } else {
+                            selectedWeekdaysString = selectedWeekdaysString + getResources().getString(R.string.and);
+                        }
+                    }
+                }
+
+                howRegularlyText.setText(selectedWeekdaysString);
+            } else {
+                // Interval
+                howRegularlyText.setText(medication.toStringInterval(requireContext()));
+            }
+        }
+
+        // INTAKES
+        TextView intakesText = medicationLayout.findViewById(R.id.intakes);
+        // Quantity How to take at time
+        int size = intakeTimes.size();
+        int i;
+        int quantityNumber;
+
+        String quantity;
+        String intakeTime;
+        String intakesString;
+        intakesString = "";
+
+        for (i = 0; i < size; i++) {
+            quantity = quantities.get(i);
+            intakeTime = intakeTimes.get(i);
+
+            if (quantity.equals("1/4") || quantity.equals("1/2") || quantity.equals("3/4")) {
+                quantityNumber = 1; // Not plural
+            } else {
+                quantityNumber = 2; // Plural
+            }
+
+            intakesString = intakesString + quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(howToTake), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
+
+            if (i != size - 1) {
+                intakesString = intakesString + "\n";
+            }
+        }
+
+        intakesText.setText(intakesString);
+
+        return medicationLayout;
+    }
+
+
 }

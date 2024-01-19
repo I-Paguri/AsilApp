@@ -155,8 +155,41 @@
     <string name="select_weekdays"> Seleziona almeno un giorno della settimana </string>
     <string name="end_date_before_start_date"> La data di fine non può essere dopo quella di inizio </string>
 
+    <string name="at_time">alle</string>
+    <string name="and">e</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <plurals name="tablet">
+        <item quantity="one">Compressa</item>
+        <item quantity="other">Compresse</item>
+    </plurals>
+
+    <plurals name="drop">
+        <item quantity="one">Goccia</item>
+        <item quantity="other">Gocce</item>
+    </plurals>
+
+    <plurals name="sachet">
+        <item quantity="one">Bustina</item>
+        <item quantity="other">Bustine</item>
+    </plurals>
+
+    <plurals name="suppository">
+        <item quantity="one">Supposta</item>
+        <item quantity="other">Supposte</item>
+    </plurals>
+
+    <plurals name="milliliter">
+        <item quantity="one">Millilitro</item>
+        <item quantity="other">Millilitri</item>
+    </plurals>
+
+    <plurals name="syringe">
+        <item quantity="one">Siringa</item>
+        <item quantity="other">Siringhe</item>
+    </plurals>
+
+    <plurals name="inhalation">
+        <item quantity="one">Inalazione</item>
+        <item quantity="other">Inalazioni</item>
+    </plurals>
 </resources>

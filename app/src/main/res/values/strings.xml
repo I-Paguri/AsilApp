@@ -450,4 +450,42 @@
     <string name="error_login_section_patient" translatable="false">You\'re a Patient, sign in using your dedicated area</string>
     <string name="error_login_section_doctor" translatable="false">You\'re a Doctor, sign in using your dedicated area</string>
     <string name="qr_code_authentication" translatable="false">Sign in using your badge</string>
+
+    <string name="at_time">at</string>
+    <string name="and">and</string>
+
+    <plurals name="tablet">
+        <item quantity="one">Tablet</item>
+        <item quantity="other">Tablets</item>
+    </plurals>
+
+    <plurals name="drop">
+        <item quantity="one">Drop</item>
+        <item quantity="other">Drops</item>
+    </plurals>
+
+    <plurals name="sachet">
+        <item quantity="one">Sachet</item>
+        <item quantity="other">Sachets</item>
+    </plurals>
+
+    <plurals name="suppository">
+        <item quantity="one">Suppository</item>
+        <item quantity="other">Suppositories</item>
+    </plurals>
+
+    <plurals name="milliliter">
+        <item quantity="one">Milliliter</item>
+        <item quantity="other">Milliliters</item>
+    </plurals>
+
+    <plurals name="syringe">
+        <item quantity="one">Syringe</item>
+        <item quantity="other">Syringes</item>
+    </plurals>
+
+    <plurals name="inhalation">
+        <item quantity="one">Inhalation</item>
+        <item quantity="other">Inhalations</item>
+    </plurals>
 </resources>

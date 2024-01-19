@@ -12,7 +12,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="8dp">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -43,131 +43,22 @@
                 android:text="01/01/2024 - 01/02/2024" />
 
 
-
-            <TextView
-                android:id="@+id/medicationName"
-                style="@style/CardViewSubtitleText"
+            <LinearLayout
+                android:id="@+id/linearLayoutMedications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="0dp"
-                android:text="Oki 500mg" />
+                android:orientation="vertical">
+                >
 
-
-            <TextView
-                android:id="@+id/howRegularly"
-                style="@style/CardViewSubtitleText3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:text="Ogni giorno" />
-
-            <TextView
-                android:id="@+id/regularText"
-                style="@style/RegularText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:text="1 bustina alle 15:00" />
-
-            <TextView
-                android:id="@+id/regularText22"
-                style="@style/RegularText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="1 bustina alle 19:00" />
+            </LinearLayout>
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:dividerInsetStart="16dp"
                 android:layout_marginTop="8dp"
-                app:dividerInsetEnd="150dp"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/subtitleText32"
-                style="@style/CardViewSubtitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="0dp"
-                android:text="Melatonina" />
-
-
-            <TextView
-                android:id="@+id/regularText42"
-                style="@style/CardViewSubtitleText3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:text="Lunedì, Martedì, Venerdì" />
-
-            <TextView
-                android:id="@+id/regularText52"
-                style="@style/RegularText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="3 gocce alle 21:00" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:dividerInsetStart="16dp"
-                android:layout_marginTop="8dp"
                 app:dividerInsetEnd="150dp"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/subtitleText3"
-                style="@style/CardViewSubtitleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="0dp"
-                android:text="Melatonina" />
-
-
-            <TextView
-                android:id="@+id/regularText4"
-                style="@style/CardViewSubtitleText3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:text="Ogni 3 giorni" />
-
-            <TextView
-                android:id="@+id/regularText58"
-                style="@style/RegularText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="500 millilitri alle 19:00" />
+                app:dividerInsetStart="16dp" />
 
             <TextView
                 android:id="@+id/noteText"
@@ -181,7 +72,7 @@
                 android:text="@string/notes" />
 
             <TextView
-                android:id="@+id/noteContentText"
+                android:id="@+id/notes"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
