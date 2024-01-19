@@ -116,4 +116,30 @@ public class MappedValues {
 
         return formattedHowToTake;
     }
+
+    public String getFormattedInterval(int intervalSelectedType, int intervalSelectedNumber) {
+        String formattedInterval;
+
+        formattedInterval = context.getResources().getString(R.string.every) + " " + intervalSelectedNumber + " ";
+        switch (intervalSelectedType) {
+            case 0:
+                // Days
+                formattedInterval = formattedInterval + context.getResources().getQuantityString(R.plurals.days, intervalSelectedNumber, intervalSelectedNumber);
+                break;
+            case 1:
+                // Weeks
+                formattedInterval = formattedInterval + context.getResources().getQuantityString(R.plurals.weeks, intervalSelectedNumber, intervalSelectedNumber);
+                break;
+            case 2:
+                // Months
+                formattedInterval = formattedInterval + context.getResources().getQuantityString(R.plurals.months, intervalSelectedNumber, intervalSelectedNumber);
+                break;
+            default:
+                formattedInterval = "";
+                break;
+        }
+
+        return formattedInterval;
+
+    }
 }

@@ -52,12 +52,19 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linearLayoutNotes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
             <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                app:dividerInsetEnd="150dp"
+                app:dividerInsetEnd="120dp"
                 app:dividerInsetStart="16dp" />
 
             <TextView
@@ -81,7 +88,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="Misurare la pressione arteriosa 2 volte al giorno" />
-
+            </LinearLayout>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

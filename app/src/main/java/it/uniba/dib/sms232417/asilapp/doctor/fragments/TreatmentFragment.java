@@ -124,7 +124,7 @@ public class TreatmentFragment extends Fragment {
         treatmentTarget = "Abbassare la febbricola";
         startDate = new Date();
         endDate = new Date();
-        notes = "Prendere con molta acqua";
+        notes = "";
 
         ArrayList<WeekdaysDataItem> selectedWeekdays;
 
@@ -150,17 +150,23 @@ public class TreatmentFragment extends Fragment {
         Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
         Medication medication2 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
 
+        // every 2 weeks
+        medication1.setIntervalSelectedType(1);
+        medication1.setIntervalSelectedNumber(2);
+
         ArrayList<String> intakesTime = new ArrayList<>();
         intakesTime.add("08:00");
         intakesTime.add("12:00");
         medication1.setIntakesTime(intakesTime);
+        medication2.setIntakesTime(intakesTime);
 
         ArrayList<String> quantities = new ArrayList<>();
         quantities.add("1/4");
         quantities.add("3");
         medication1.setQuantities(quantities);
+        medication2.setQuantities(quantities);
 
-        Treatment treatment = new Treatment(treatmentTarget, startDate, endDate);
+        Treatment treatment = new Treatment(treatmentTarget, startDate, null);
 
         treatment.addMedication(medication1);
         treatment.addMedication(medication2);
@@ -179,18 +185,28 @@ public class TreatmentFragment extends Fragment {
 
         // DATE
         TextView dateText = treatmentLayout.findViewById(R.id.dateText);
-        dateText.setText(treatment.getStartDateString() + " - " + treatment.getEndDateString());
-
+        if (treatment.getEndDateString().equals("")) {
+            dateText.setText(treatment.getStartDateString() + " - " + getResources().getString(R.string.ongoing));
+        } else {
+            dateText.setText(treatment.getStartDateString() + " - " + treatment.getEndDateString());
+        }
 
         // MEDICATIONS
         LinearLayout medicationsLayout = treatmentLayout.findViewById(R.id.linearLayoutMedications);
         medicationsLayout.addView(getMedicationLayout(medication1));
+        medicationsLayout.addView(getMedicationLayout(medication2));
 
         parentLayout.addView(treatmentLayout);
 
         // NOTES
-        TextView notesText = treatmentLayout.findViewById(R.id.notes);
-        notesText.setText(notes);
+        if (notes == null || notes.equals("")) {
+            LinearLayout linearLayoutNotes = treatmentLayout.findViewById(R.id.linearLayoutNotes);
+            linearLayoutNotes.setVisibility(View.GONE);
+        } else {
+            TextView notesText = treatmentLayout.findViewById(R.id.notes);
+            notesText.setText(notes);
+        }
+
     }
 
     protected View getMedicationLayout(Medication medication) {
@@ -248,7 +264,7 @@ public class TreatmentFragment extends Fragment {
                 howRegularlyText.setText(selectedWeekdaysString);
             } else {
                 // Interval
-                howRegularlyText.setText(medication.toStringInterval(requireContext()));
+                howRegularlyText.setText(mappedValues.getFormattedInterval(medication.getIntervalSelectedType(), medication.getIntervalSelectedNumber()));
             }
         }
 

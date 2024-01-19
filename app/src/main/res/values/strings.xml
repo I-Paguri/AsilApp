@@ -488,4 +488,6 @@
         <item quantity="one">Inhalation</item>
         <item quantity="other">Inhalations</item>
     </plurals>
+
+    <string name="ongoing">Ongoing</string>
 </resources>

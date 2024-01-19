@@ -192,4 +192,6 @@
         <item quantity="one">Inalazione</item>
         <item quantity="other">Inalazioni</item>
     </plurals>
+
+    <string name="ongoing">In corso</string>
 </resources>
