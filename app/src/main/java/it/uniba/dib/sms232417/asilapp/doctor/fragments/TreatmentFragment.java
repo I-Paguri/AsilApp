@@ -111,7 +111,8 @@ public class TreatmentFragment extends Fragment {
     }
 
     protected void addTreatmentCardView() {
-        String treatmentTarget, medicationName, howToTake, howRegularly;
+        String treatmentTarget, medicationName;
+        Integer howToTake, howRegularly;
         Date startDate, endDate;
 
         treatmentTarget = "Abbassare la febbre";
@@ -121,8 +122,8 @@ public class TreatmentFragment extends Fragment {
         ArrayList< WeekdaysDataItem > selectedWeekdays;
 
         medicationName = "Paracetamolo";
-        howToTake = "Supposta";
-        howRegularly = "Ogni giorno";
+        howToTake = 1;
+        howRegularly = 1;
         selectedWeekdays = new ArrayList<>();
 
         Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);

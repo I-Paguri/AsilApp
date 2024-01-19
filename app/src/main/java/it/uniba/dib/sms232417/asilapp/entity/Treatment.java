@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.entity;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -102,6 +103,17 @@ public class Treatment implements Parcelable {
         return medications;
     }
 
+    public String getMedicationsString(Context context) {
+        String medicationsString = "";
+
+        for (Medication medication : medications) {
+            medicationsString = medicationsString + medication.toString(context);
+        }
+
+        return medicationsString;
+    }
+
+
     public void setMedications(ArrayList<Medication> medications) {
         this.medications = medications;
     }
@@ -135,21 +147,27 @@ public class Treatment implements Parcelable {
 
         treatmentString = treatmentString + "Medications: " + medications.toString() + "\n";
 
-        /*
-        treatmentString = treatmentString + "Medication: " + getMedication() + "\n";
-        treatmentString = treatmentString + "How to take: " + getHowToTake() + "\n";
-        treatmentString = treatmentString + "How regularly: " + getHowRegularly() + "\n";
-        if (!getIntervalSelection().isEmpty()) {
-            treatmentString = treatmentString + "Interval selection: " + getIntervalSelection() + "\n";
+
+        if (!getNotes().isEmpty()) {
+            treatmentString = treatmentString + "Notes: " + getNotes() + "\n";
         }
 
-        if (!getSelectedWeekdays().isEmpty()) {
-            treatmentString = treatmentString + "Selected weekdays: " + getSelectedWeekdays() + "\n";
+        return treatmentString;
+    }
+
+    public String toString(Context context) {
+        String treatmentString;
+
+        treatmentString = "Target: " + getTreatmentTarget() + "\n";
+        treatmentString = treatmentString + "Start date: " + getStartDateString() + "\n";
+        if (!getEndDateString().isEmpty()) {
+            treatmentString = treatmentString + "End date: " + getEndDateString() + "\n";
         }
 
-        treatmentString = treatmentString + "Intakes time: " + getIntakesTime() + "\n";
-        treatmentString = treatmentString + "Quantities: " + getQuantities() + "\n";
-        */
+
+        treatmentString = treatmentString + "Medications: " + getMedicationsString(context) + "\n";
+
+
         if (!getNotes().isEmpty()) {
             treatmentString = treatmentString + "Notes: " + getNotes() + "\n";
         }

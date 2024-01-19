@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.entity;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,32 +10,37 @@ import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.util.ArrayList;
 
+import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
+
 public class Medication implements Parcelable {
     private String medicationName;
-    private String howToTake;
-    private String howRegularly;
-    private String intervalSelected;
+    private Integer howToTake;
+    private Integer howRegularly;
+    private Integer intervalSelectedType; // day, week, month
+    private Integer intervalSelectedNumber;
     private ArrayList<WeekdaysDataItem> selectedWeekdays;
     private ArrayList<String> intakesTime;
     private ArrayList<String> quantities;
 
-    public Medication(String medicationName, String howToTake, String howRegularly, ArrayList<WeekdaysDataItem> selectedWeekdays) {
+    public Medication(String medicationName, Integer howToTake, Integer howRegularly, ArrayList<WeekdaysDataItem> selectedWeekdays) {
         this.medicationName = medicationName;
         this.howToTake = howToTake;
         this.howRegularly = howRegularly;
         this.selectedWeekdays = selectedWeekdays;
 
         // Default values
-        this.intervalSelected = "";
+        this.intervalSelectedType = -1;
         this.intakesTime = new ArrayList<>();
         this.quantities = new ArrayList<>();
     }
 
     protected Medication(Parcel in) {
         medicationName = in.readString();
-        howToTake = in.readString();
-        howRegularly = in.readString();
-        intervalSelected = in.readString();
+        howToTake = in.readInt();
+        howRegularly = in.readInt();
+        intervalSelectedNumber = in.readInt();
+        intervalSelectedType = in.readInt();
         selectedWeekdays = in.createTypedArrayList(WeekdaysDataItem.CREATOR);
         intakesTime = in.createStringArrayList();
         quantities = in.createStringArrayList();
@@ -60,9 +66,10 @@ public class Medication implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(medicationName);
-        dest.writeString(howToTake);
-        dest.writeString(howRegularly);
-        dest.writeString(intervalSelected);
+        dest.writeInt(howToTake);
+        dest.writeInt(howRegularly);
+        dest.writeInt(intervalSelectedNumber);
+        dest.writeInt(intervalSelectedType);
         dest.writeTypedList(selectedWeekdays);
         dest.writeStringList(intakesTime);
         dest.writeStringList(quantities);
@@ -76,19 +83,19 @@ public class Medication implements Parcelable {
         this.medicationName = medicationName;
     }
 
-    public String getHowToTake() {
+    public Integer getHowToTake() {
         return howToTake;
     }
 
-    public void setHowToTake(String howToTake) {
+    public void setHowToTake(Integer howToTake) {
         this.howToTake = howToTake;
     }
 
-    public String getHowRegularly() {
+    public Integer getHowRegularly() {
         return howRegularly;
     }
 
-    public void setHowRegularly(String howRegularly) {
+    public void setHowRegularly(Integer howRegularly) {
         this.howRegularly = howRegularly;
     }
 
@@ -119,12 +126,20 @@ public class Medication implements Parcelable {
         return selectedWeekdaysString;
     }
 
-    public String getIntervalSelected() {
-        return intervalSelected;
+    public Integer getIntervalSelectedType() {
+        return intervalSelectedType;
     }
 
-    public void setIntervalSelected(String intervalSelected) {
-        this.intervalSelected = intervalSelected;
+    public void setIntervalSelectedType(Integer intervalSelectedType) {
+        this.intervalSelectedType = intervalSelectedType;
+    }
+
+    public Integer getIntervalSelectedNumber() {
+        return intervalSelectedNumber;
+    }
+
+    public void setIntervalSelectedNumber(Integer intervalSelectedNumber) {
+        this.intervalSelectedNumber = intervalSelectedNumber;
     }
 
     public ArrayList<String> getIntakesTime() {
@@ -151,7 +166,7 @@ public class Medication implements Parcelable {
         this.quantities.add(quantity);
     }
 
-    @Override
+    @NonNull
     public String toString() {
         String medicationString;
 
@@ -159,8 +174,47 @@ public class Medication implements Parcelable {
         medicationString = medicationString + "How to take: " + getHowToTake() + "\n";
         medicationString = medicationString + "How regularly: " + getHowRegularly() + "\n";
 
-        if (!getIntervalSelected().isEmpty()) {
-            medicationString = medicationString + "Interval selection: " + getIntervalSelected() + "\n";
+        if (getIntervalSelectedType() != -1) {
+            medicationString = medicationString + "Interval selection: [" + getIntervalSelectedNumber() + ", " + getIntervalSelectedType() + "]\n";
+        }
+
+        if (!getSelectedWeekdays().isEmpty()) {
+            medicationString = medicationString + "Selected weekdays: " + getSelectedWeekdaysString() + "\n";
+        }
+
+        medicationString = medicationString + "Intakes time: [" + String.join(", ", getIntakesTime()) + "]\n";
+        medicationString = medicationString + "Quantities: [" + String.join(", ", getQuantities()) + "]\n";
+
+        return medicationString;
+    }
+
+    @NonNull
+    public String toString(Context context) {
+        String medicationString;
+        MappedValues mappedValues = new MappedValues(context);
+
+        medicationString = "Medication: " + getMedicationName() + "\n";
+        medicationString = medicationString + "How to take: " + mappedValues.getHowToTake(getHowToTake()) + "\n";
+        medicationString = medicationString + "How regularly: " + mappedValues.getHowRegularly(getHowRegularly()) + "\n";
+
+        if (getIntervalSelectedType() != -1) {
+            //medicationString = medicationString + "Interval selection: " + getIntervalSelectedType() + "\n";
+            String formattedSelectedType;
+
+            if (mappedValues.getInterval(intervalSelectedType).equals(context.getResources().getString(R.string.day))) {
+                // days
+                formattedSelectedType = context.getResources().getQuantityString(R.plurals.days, intervalSelectedNumber, intervalSelectedNumber);
+            } else {
+                if (mappedValues.getInterval(intervalSelectedType).equals(context.getResources().getString(R.string.week))) {
+                    // weeks
+                    formattedSelectedType = context.getResources().getQuantityString(R.plurals.weeks, intervalSelectedNumber, intervalSelectedNumber);
+                } else {
+                    // months
+                    formattedSelectedType = context.getResources().getQuantityString(R.plurals.months, intervalSelectedNumber, intervalSelectedNumber);
+                }
+            }
+
+            medicationString = medicationString + "Interval selected: " +  context.getResources().getString(R.string.every) + " " + intervalSelectedNumber + " " + formattedSelectedType + "\n";
         }
 
         if (!getSelectedWeekdays().isEmpty()) {

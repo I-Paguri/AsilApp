@@ -49,6 +49,7 @@ import java.util.List;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
 
 
 public class TreatmentFormMedicationsFragment extends Fragment implements WeekdaysDataSource.Callback {
@@ -63,7 +64,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private AutoCompleteTextView howRegularly;
     private AutoCompleteTextView howToTakeMedicine;
     private int intervalSelectedNumber;
-    private String intervalSelected;
+    private String intervalSelectedString;
     private ArrayAdapter<String> adapterQuantity;
     // Declare an ArrayList to hold the selected weekdays
     private ArrayList<WeekdaysDataItem> selectedWeekdays = new ArrayList<>();
@@ -116,6 +117,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
         validInput = false;
         treatment = null;
         medications = new ArrayList<>();
+        intervalSelectedNumber = -1;
+        intervalSelectedString = "";
+
         if (bundle != null) {
             treatment = bundle.getParcelable("treatment");
         }
@@ -632,15 +636,15 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 .setPositiveButton("OK", (dialog, id) -> {
                     // User clicked OK, retrieve the selected values
                     intervalSelectedNumber = numberPicker1.getValue();
-                    intervalSelected = displayedValues[numberPicker2.getValue()];
+                    intervalSelectedString = displayedValues[numberPicker2.getValue()];
 
-                    String formattedSelectedInterval = intervalSelected;
+                    String formattedSelectedInterval = intervalSelectedString;
 
-                    if (intervalSelected.equals(getResources().getString(R.string.day))) {
+                    if (intervalSelectedString.equals(getResources().getString(R.string.day))) {
                         // days
                         formattedSelectedInterval = getResources().getQuantityString(R.plurals.days, intervalSelectedNumber, intervalSelectedNumber);
                     } else {
-                        if (intervalSelected.equals(getResources().getString(R.string.week))) {
+                        if (intervalSelectedString.equals(getResources().getString(R.string.week))) {
                             // weeks
                             formattedSelectedInterval = getResources().getQuantityString(R.plurals.weeks, intervalSelectedNumber, intervalSelectedNumber);
                         } else {
@@ -651,7 +655,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
 
                     if (intervalSelectedNumber == 1) {
-                        if (intervalSelected.equals(getResources().getString(R.string.day))) {
+                        if (intervalSelectedString.equals(getResources().getString(R.string.day))) {
                             subtitleInterval.setVisibility(View.GONE);
                             linearLayoutInterval.setVisibility(View.GONE);
 
@@ -817,12 +821,13 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
     private Bundle setBundle() {
         Bundle bundle = new Bundle();
+        MappedValues mappedValues = new MappedValues(requireActivity());
 
-        String medicationNameString, howToTakeString, howRegularlyString, intervalSelectedString;
+        String medicationNameString, howToTakeString, howRegularlyString, intervalSelected;
         medicationNameString = "";
         howToTakeString = "";
         howRegularlyString = "";
-        intervalSelectedString = "";
+        intervalSelected = "";
 
         AutoCompleteTextView medicinesList = requireView().findViewById(R.id.medicines_list);
         AutoCompleteTextView howToTakeMedicine = requireView().findViewById(R.id.how_to_take_medicine);
@@ -835,21 +840,30 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         if (!howToTakeMedicine.getText().toString().isEmpty()) {
             howToTakeString = howToTakeMedicine.getText().toString();
+
         }
 
         if (!howRegularly.getText().toString().isEmpty()) {
             howRegularlyString = howRegularly.getText().toString();
 
+            /*
             if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
                 if (!intervalSelection.getText().toString().isEmpty()) {
-                    intervalSelectedString = intervalSelection.getText().toString();
+                    intervalSelected = intervalSelection.getText().toString();
                 }
             }
+             */
         }
 
-        Medication medication = new Medication(medicationNameString, howToTakeString, howRegularlyString, selectedWeekdays);
 
-        medication.setIntervalSelected(intervalSelectedString);
+        Medication medication = new Medication(medicationNameString, mappedValues.getHowToTakeKey(howToTakeString), mappedValues.getHowRegularlyKey(howRegularlyString), selectedWeekdays);
+
+        if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
+            if (!intervalSelection.getText().toString().isEmpty()) {
+                medication.setIntervalSelectedType(mappedValues.getIntervalKey(intervalSelectedString));
+                medication.setIntervalSelectedNumber(intervalSelectedNumber);
+            }
+        }
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.parentLinearLayout);
@@ -889,7 +903,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         //Log.d("Medication", medication.toString());
         bundle.putParcelable("treatment", treatment);
-        Log.d("Treatment medications:", treatment.getMedications().toString());
+        Log.d("Treatment medications:", treatment.getMedicationsString(requireActivity()));
 
         return bundle;
     }
