@@ -37,7 +37,7 @@ public class DatabaseAdapterPatient {
                         db = FirebaseFirestore.getInstance();
                         Log.d("LOGIN", "Login effettuato con successo");
 
-                        db.collection("users")
+                        db.collection("patient")
                                 .document(utente.getUid())
                                 .get()
                                 .addOnSuccessListener(datiUtente-> {
@@ -77,7 +77,7 @@ public class DatabaseAdapterPatient {
 
                         patient = new Patient(nome, cognome, email, dataNascita, regione);
 
-                        db.collection("users")
+                        db.collection("patient")
                                 .document(utente.getUid())
                                 .set(patient)
                                 .addOnSuccessListener(aVoid -> {
