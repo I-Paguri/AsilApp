@@ -6,12 +6,17 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 
 public class DatabaseAdapterPatient {
 
@@ -97,16 +102,62 @@ public class DatabaseAdapterPatient {
     }
 
     public void addTreatment(Treatment treatment) {
+        getTreatmentCount(new OnCountCallback() {
+            @Override
+            public void onCallback(int count) {
+                String treatmentId = "treatment" + (count + 1);
+                db.collection("patient")
+                        .document("kbHym7ohbDb80dhv94pzrtFevPX2")
+                        .collection("treatments")
+                        .document(treatmentId)
+                        .set(treatment)
+                        .addOnSuccessListener(aVoid -> {
+                            Log.d("Firestore", "Treatment successfully written!");
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.w("Firestore", "Error writing treatment", e);
+                        });
+            }
+
+            @Override
+            public void onCallbackFailed(Exception e) {
+                Log.w("Firestore", "Error getting treatment count", e);
+            }
+        });
+    }
+
+    private void getTreatmentCount(OnCountCallback callback) {
+        try {
+            db.collection("patient")
+                    .document("kbHym7ohbDb80dhv94pzrtFevPX2")
+                    .collection("treatments")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        callback.onCallback(queryDocumentSnapshots.size());
+                    })
+                    .addOnFailureListener(e -> {
+                        callback.onCallbackFailed(e);
+                    });
+        } catch (Exception e) {
+            callback.onCallbackFailed(e);
+        }
+    }
+
+
+    public void getTreatments(OnTreatmentsCallback callback) {
         db.collection("patient")
                 .document("kbHym7ohbDb80dhv94pzrtFevPX2")
                 .collection("treatments")
-                .document("treatment1")
-                .set(treatment)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("Firestore", "Treatment successfully written!");
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Treatment> treatments = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        treatments.add(doc.toObject(Treatment.class));
+                    }
+                    callback.onCallback(treatments);
                 })
                 .addOnFailureListener(e -> {
-                    Log.w("Firestore", "Error writing treatment", e);
+                    callback.onCallbackFailed(e);
                 });
     }
 }

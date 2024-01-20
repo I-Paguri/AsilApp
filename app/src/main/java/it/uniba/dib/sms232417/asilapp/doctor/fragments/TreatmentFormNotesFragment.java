@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +68,14 @@ public class TreatmentFormNotesFragment extends Fragment {
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
                 dbAdapter.addTreatment(treatment);
+
+                MyPatientsFragment myPatientsFragment = new MyPatientsFragment();
+                //treatmentFragment.setArguments(bundle);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, myPatientsFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
 
             }
         });

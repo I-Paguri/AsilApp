@@ -2,8 +2,6 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -19,19 +17,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.api.Distribution;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
-import com.touchboarder.weekdaysbuttons.WeekdaysDrawableProvider;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
 
 
@@ -48,105 +43,36 @@ public class TreatmentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        /*
+        
         // Create an instance of DatabaseAdapterPatient
-        DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
-        // Call the getTreatment method
-        Treatment treatment1 = dbAdapter.getTreatment();
+        DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
+        adapter.getTreatments(new OnTreatmentsCallback() {
+            @Override
+            public void onCallback(List<Treatment> treatments) {
 
+                if (treatments == null || treatments.isEmpty()) {
+                    LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    View noTreatmentLayout = inflater.inflate(R.layout.no_treatments_found_layout, null);
+                    // Add the inflated layout to the parent layout
+                    LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
+                    parentLayout.addView(noTreatmentLayout);
+                } else {
+                    for (Treatment treatment : treatments) {
+                        addTreatmentCardView(treatment);
+                    }
+                }
+            }
 
-        if (treatment1 != null) {
-            // Add the treatment to the view
-            Log.d("Treatment", "NULL");
-        } else {
-            // Add the treatment to the view
-            Log.d("Treatment", "NOT NULL");
-        }
-         */
-
-        // Get the parent layout
-        LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
-
-        // Convert dp to pixels
-        int dp85 = (int) (85 * Resources.getSystem().getDisplayMetrics().density);
-        //int dp16 = (int) (16 * Resources.getSystem().getDisplayMetrics().density);
-        //int dp8 = (int) (8 * Resources.getSystem().getDisplayMetrics().density);
-        //int dp2 = (int) (2 * Resources.getSystem().getDisplayMetrics().density);
-
-        int numberOfCards = 6;
-        int i;
-
-        for (i = 0; i < numberOfCards; i++) {
-            String treatmentTarget, medicationName, notes;
-            Integer howToTake, howRegularly;
-            Date startDate, endDate;
-
-            treatmentTarget = "Abbassare la febbricola";
-            startDate = new Date();
-            endDate = new Date();
-            notes = "Prendere con molta acqua";
-
-            ArrayList<WeekdaysDataItem> selectedWeekdays;
-
-            medicationName = "Paracetamolo";
-            howToTake = 0;
-            howRegularly = 2;
-            selectedWeekdays = new ArrayList<>();
-            // Create a WeekdaysDataItem object for Monday
-            // Define the parameters
-            int position = 2; // Position of the weekday (e.g., 2 for Monday if Sunday is 1)
-            int calendarId = Calendar.MONDAY; // Calendar ID of the weekday
-            String label = "Monday"; // Label of the weekday
-            Drawable drawable = getResources().getDrawable(R.drawable.healthcare); // Drawable for the weekday
-            int textDrawableType = WeekdaysDrawableProvider.MW_RECT; // Type of the drawable (e.g., DAY, NIGHT)
-            int numberOfLetters = 3; // Number of letters to display (e.g., 3 for "Mon")
-            boolean selected = true; // Whether the weekday is selected
-
-            // Instantiate the WeekdaysDataItem object
-            WeekdaysDataItem monday = new WeekdaysDataItem(position, calendarId, label, drawable, textDrawableType, numberOfLetters, selected);
-            // Add Monday to the selectedWeekdays list
-            selectedWeekdays.add(monday);
-
-            Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
-            Medication medication2 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
-
-            // every 2 weeks
-            medication1.setIntervalSelectedType(1);
-            medication1.setIntervalSelectedNumber(2);
-            medication2.setIntervalSelectedType(1);
-            medication2.setIntervalSelectedNumber(2);
-
-            ArrayList<String> intakesTime = new ArrayList<>();
-            intakesTime.add("08:00");
-            intakesTime.add("12:00");
-            medication1.setIntakesTime(intakesTime);
-            medication2.setIntakesTime(intakesTime);
-
-            ArrayList<String> quantities = new ArrayList<>();
-            quantities.add("1/4");
-            quantities.add("3");
-            medication1.setQuantities(quantities);
-            medication2.setQuantities(quantities);
-
-            Treatment treatment = new Treatment(treatmentTarget, startDate, null);
-
-            treatment.addMedication(medication1);
-            treatment.addMedication(medication2);
-
-            // Create a new instance of MaterialCardView
-            addTreatmentCardView(treatment);
-        }
-
-        // Get the last added card view
-        LinearLayout linearLayoutTreatment = (LinearLayout) parentLayout.getChildAt(i - 1);
-
-        // Get the current layout parameters of the card view
-        LinearLayout.LayoutParams linearLayoutTreatmentLayoutParams = (LinearLayout.LayoutParams) linearLayoutTreatment.getLayoutParams();
-
-        linearLayoutTreatmentLayoutParams.setMargins(0, 0, 0, dp85);
-        // Apply the new layout parameters to the card view
-        linearLayoutTreatment.setLayoutParams(linearLayoutTreatmentLayoutParams);
+            @Override
+            public void onCallbackFailed(Exception e) {
+                Log.e("Error", "Failed to get treatments", e);
+                LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View noTreatmentLayout = inflater.inflate(R.layout.no_treatments_found_layout, null);
+                // Add the inflated layout to the parent layout
+                LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
+                parentLayout.addView(noTreatmentLayout);
+            }
+        });
 
         final ExtendedFloatingActionButton fab = view.findViewById(R.id.fab);
 

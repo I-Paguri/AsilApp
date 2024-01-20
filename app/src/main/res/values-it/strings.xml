@@ -194,4 +194,6 @@
     </plurals>
 
     <string name="ongoing">In corso</string>
+    <string name="no_treatment_found">Nessuna terapia trovata</string>
+    <string name="add_one_if_needed">Aggiungi una se necessario</string>
 </resources>
