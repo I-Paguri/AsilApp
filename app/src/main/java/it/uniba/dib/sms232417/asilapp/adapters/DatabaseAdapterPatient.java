@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
+import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 
@@ -20,7 +21,7 @@ public class DatabaseAdapterPatient {
     Patient resultPatient;
     Context context;
 
-    public DatabaseAdapterPatient(Context context){
+    public DatabaseAdapterPatient(Context context) {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         this.context = context;
@@ -40,7 +41,7 @@ public class DatabaseAdapterPatient {
                         db.collection("patient")
                                 .document(utente.getUid())
                                 .get()
-                                .addOnSuccessListener(datiUtente-> {
+                                .addOnSuccessListener(datiUtente -> {
                                     if (datiUtente.exists()) {
                                         resultPatient = new Patient(datiUtente.getString("nome"),
                                                 datiUtente.getString("cognome"),
@@ -48,8 +49,8 @@ public class DatabaseAdapterPatient {
                                                 datiUtente.getString("dataNascita"),
                                                 datiUtente.getString("regione"));
                                         callback.onCallback(resultPatient);
-                                    }else {
-                                        callback.onCallbackError(new Exception(),context.getString(R.string.error_login_section_doctor));
+                                    } else {
+                                        callback.onCallbackError(new Exception(), context.getString(R.string.error_login_section_doctor));
                                     }
                                 })
                                 .addOnFailureListener(task1 -> {
@@ -57,13 +58,14 @@ public class DatabaseAdapterPatient {
                                     callback.onCallbackError(new Exception(), task1.toString());
                                 });
 
-                }
+                    }
                 })
                 .addOnFailureListener(task -> {
                     callback.onCallbackError(new Exception(), task.toString());
 
                 });
     }
+
     public void onRegister(String nome, String cognome, String email, String dataNascita, String regione, String password, OnPatientDataCallback callback) {
 
         mAuth = FirebaseAuth.getInstance();
@@ -89,9 +91,22 @@ public class DatabaseAdapterPatient {
                     callback.onCallbackError(new Exception(), task.toString());
                 });
     }
-    public void onLogout(){
+
+    public void onLogout() {
         mAuth.signOut();
     }
 
-
+    public void addTreatment(Treatment treatment) {
+        db.collection("patient")
+                .document("kbHym7ohbDb80dhv94pzrtFevPX2")
+                .collection("treatments")
+                .document("treatment1")
+                .set(treatment)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Treatment successfully written!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error writing treatment", e);
+                });
+    }
 }

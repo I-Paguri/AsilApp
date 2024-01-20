@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 
 public class TreatmentFormNotesFragment extends Fragment {
@@ -63,6 +64,9 @@ public class TreatmentFormNotesFragment extends Fragment {
 
                 Log.d("Treatment", treatment.toString());
 
+                // ADD TREATMENT TO DB
+                DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
+                dbAdapter.addTreatment(treatment);
 
             }
         });

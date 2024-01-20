@@ -14,18 +14,26 @@ import java.util.Locale;
 public class Treatment implements Parcelable {
     private String treatmentTarget;
     private Date startDate, endDate;
-    private SimpleDateFormat dateFormat;
     private ArrayList<Medication> medications;
     private String notes;
     private Patient patient;
+
+    public Treatment() {
+
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
     public Treatment(String treatmentTarget, Date startDate, Date endDate) {
         this.treatmentTarget = treatmentTarget;
         this.startDate = startDate;
         this.endDate = endDate;
-
-        // Utility date format
-        this.dateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
 
         // Default values
         this.medications = new ArrayList<>();
@@ -73,6 +81,7 @@ public class Treatment implements Parcelable {
     }
 
     public String getStartDateString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
         return dateFormat.format(startDate);
     }
 
@@ -85,6 +94,7 @@ public class Treatment implements Parcelable {
     }
 
     public String getEndDateString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
         String endDateString;
         endDateString = "";
 

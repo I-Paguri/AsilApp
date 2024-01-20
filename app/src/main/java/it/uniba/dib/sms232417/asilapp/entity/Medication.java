@@ -23,6 +23,10 @@ public class Medication implements Parcelable {
     private ArrayList<String> intakesTime;
     private ArrayList<String> quantities;
 
+    public Medication() {
+
+    }
+
     public Medication(String medicationName, Integer howToTake, Integer howRegularly, ArrayList<WeekdaysDataItem> selectedWeekdays) {
         this.medicationName = medicationName;
         this.howToTake = howToTake;

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
@@ -47,6 +49,21 @@ public class TreatmentFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        /*
+        // Create an instance of DatabaseAdapterPatient
+        DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
+        // Call the getTreatment method
+        Treatment treatment1 = dbAdapter.getTreatment();
+
+
+        if (treatment1 != null) {
+            // Add the treatment to the view
+            Log.d("Treatment", "NULL");
+        } else {
+            // Add the treatment to the view
+            Log.d("Treatment", "NOT NULL");
+        }
+         */
 
         // Get the parent layout
         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
@@ -61,8 +78,64 @@ public class TreatmentFragment extends Fragment {
         int i;
 
         for (i = 0; i < numberOfCards; i++) {
+            String treatmentTarget, medicationName, notes;
+            Integer howToTake, howRegularly;
+            Date startDate, endDate;
+
+            treatmentTarget = "Abbassare la febbricola";
+            startDate = new Date();
+            endDate = new Date();
+            notes = "Prendere con molta acqua";
+
+            ArrayList<WeekdaysDataItem> selectedWeekdays;
+
+            medicationName = "Paracetamolo";
+            howToTake = 0;
+            howRegularly = 2;
+            selectedWeekdays = new ArrayList<>();
+            // Create a WeekdaysDataItem object for Monday
+            // Define the parameters
+            int position = 2; // Position of the weekday (e.g., 2 for Monday if Sunday is 1)
+            int calendarId = Calendar.MONDAY; // Calendar ID of the weekday
+            String label = "Monday"; // Label of the weekday
+            Drawable drawable = getResources().getDrawable(R.drawable.healthcare); // Drawable for the weekday
+            int textDrawableType = WeekdaysDrawableProvider.MW_RECT; // Type of the drawable (e.g., DAY, NIGHT)
+            int numberOfLetters = 3; // Number of letters to display (e.g., 3 for "Mon")
+            boolean selected = true; // Whether the weekday is selected
+
+            // Instantiate the WeekdaysDataItem object
+            WeekdaysDataItem monday = new WeekdaysDataItem(position, calendarId, label, drawable, textDrawableType, numberOfLetters, selected);
+            // Add Monday to the selectedWeekdays list
+            selectedWeekdays.add(monday);
+
+            Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
+            Medication medication2 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
+
+            // every 2 weeks
+            medication1.setIntervalSelectedType(1);
+            medication1.setIntervalSelectedNumber(2);
+            medication2.setIntervalSelectedType(1);
+            medication2.setIntervalSelectedNumber(2);
+
+            ArrayList<String> intakesTime = new ArrayList<>();
+            intakesTime.add("08:00");
+            intakesTime.add("12:00");
+            medication1.setIntakesTime(intakesTime);
+            medication2.setIntakesTime(intakesTime);
+
+            ArrayList<String> quantities = new ArrayList<>();
+            quantities.add("1/4");
+            quantities.add("3");
+            medication1.setQuantities(quantities);
+            medication2.setQuantities(quantities);
+
+            Treatment treatment = new Treatment(treatmentTarget, startDate, null);
+
+            treatment.addMedication(medication1);
+            treatment.addMedication(medication2);
+
             // Create a new instance of MaterialCardView
-            addTreatmentCardView();
+            addTreatmentCardView(treatment);
         }
 
         // Get the last added card view
@@ -116,62 +189,11 @@ public class TreatmentFragment extends Fragment {
         });
     }
 
-    protected void addTreatmentCardView() {
-        String treatmentTarget, medicationName, notes;
-        Integer howToTake, howRegularly;
-        Date startDate, endDate;
-
-        treatmentTarget = "Abbassare la febbricola";
-        startDate = new Date();
-        endDate = new Date();
-        notes = "Prendere con molta acqua";
-
-        ArrayList<WeekdaysDataItem> selectedWeekdays;
-
-        medicationName = "Paracetamolo";
-        howToTake = 0;
-        howRegularly = 2;
-        selectedWeekdays = new ArrayList<>();
-        // Create a WeekdaysDataItem object for Monday
-        // Define the parameters
-        int position = 2; // Position of the weekday (e.g., 2 for Monday if Sunday is 1)
-        int calendarId = Calendar.MONDAY; // Calendar ID of the weekday
-        String label = "Monday"; // Label of the weekday
-        Drawable drawable = getResources().getDrawable(R.drawable.healthcare); // Drawable for the weekday
-        int textDrawableType = WeekdaysDrawableProvider.MW_RECT; // Type of the drawable (e.g., DAY, NIGHT)
-        int numberOfLetters = 3; // Number of letters to display (e.g., 3 for "Mon")
-        boolean selected = true; // Whether the weekday is selected
-
-        // Instantiate the WeekdaysDataItem object
-        WeekdaysDataItem monday = new WeekdaysDataItem(position, calendarId, label, drawable, textDrawableType, numberOfLetters, selected);
-        // Add Monday to the selectedWeekdays list
-        selectedWeekdays.add(monday);
-
-        Medication medication1 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
-        Medication medication2 = new Medication(medicationName, howToTake, howRegularly, selectedWeekdays);
-
-        // every 2 weeks
-        medication1.setIntervalSelectedType(1);
-        medication1.setIntervalSelectedNumber(2);
-        medication2.setIntervalSelectedType(1);
-        medication2.setIntervalSelectedNumber(2);
-
-        ArrayList<String> intakesTime = new ArrayList<>();
-        intakesTime.add("08:00");
-        intakesTime.add("12:00");
-        medication1.setIntakesTime(intakesTime);
-        medication2.setIntakesTime(intakesTime);
-
-        ArrayList<String> quantities = new ArrayList<>();
-        quantities.add("1/4");
-        quantities.add("3");
-        medication1.setQuantities(quantities);
-        medication2.setQuantities(quantities);
-
-        Treatment treatment = new Treatment(treatmentTarget, startDate, null);
-
-        treatment.addMedication(medication1);
-        treatment.addMedication(medication2);
+    protected void addTreatmentCardView(Treatment treatment) {
+        String treatmentTarget, notes;
+        int i;
+        ArrayList<Medication> medications;
+        Medication medication;
 
         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams")
@@ -182,6 +204,7 @@ public class TreatmentFragment extends Fragment {
 
 
         // TREATMENT TARGET
+        treatmentTarget = treatment.getTreatmentTarget();
         TextView treatmentTargetText = treatmentLayout.findViewById(R.id.treatmentTarget);
         treatmentTargetText.setText(treatmentTarget);
 
@@ -195,12 +218,16 @@ public class TreatmentFragment extends Fragment {
 
         // MEDICATIONS
         LinearLayout medicationsLayout = treatmentLayout.findViewById(R.id.linearLayoutMedications);
-        medicationsLayout.addView(getMedicationLayout(medication1));
-        medicationsLayout.addView(getMedicationLayout(medication2));
+        medications = treatment.getMedications();
+        for (i = 0; i < medications.size(); i++) {
+            medication = medications.get(i);
+            medicationsLayout.addView(getMedicationLayout(medication));
+        }
 
         parentLayout.addView(treatmentLayout);
 
         // NOTES
+        notes = treatment.getNotes();
         if (notes == null || notes.equals("")) {
             LinearLayout linearLayoutNotes = treatmentLayout.findViewById(R.id.linearLayoutNotes);
             linearLayoutNotes.setVisibility(View.GONE);
@@ -214,17 +241,17 @@ public class TreatmentFragment extends Fragment {
     protected View getMedicationLayout(Medication medication) {
         MappedValues mappedValues = new MappedValues(requireContext());
         String medicationName, howToTake, howRegularly;
-        ArrayList<WeekdaysDataItem> selectedWeekdays = null;
+        ArrayList<WeekdaysDataItem> selectedWeekdays = null; // MODIFICARE
 
 
         medicationName = medication.getMedicationName();
         howToTake = medication.toStringHowToTake(requireContext());
         howRegularly = medication.toStringHowRegularly(requireContext());
 
-        ArrayList<String> intakeTimes = new ArrayList<>();
+        ArrayList<String> intakeTimes;
         intakeTimes = medication.getIntakesTime();
 
-        ArrayList<String> quantities = new ArrayList<>();
+        ArrayList<String> quantities;
         quantities = medication.getQuantities();
 
         if (medication.getSelectedWeekdays() != null) {
@@ -236,7 +263,7 @@ public class TreatmentFragment extends Fragment {
 
         // MEDICATION NAME
         TextView medicationNameText = medicationLayout.findViewById(R.id.medicationName);
-        medicationNameText.setText("\u2022 "+medicationName);
+        medicationNameText.setText("\u2022 " + medicationName);
 
         // HOW REGULARLY
         TextView howRegularlyText = medicationLayout.findViewById(R.id.howRegularly);
