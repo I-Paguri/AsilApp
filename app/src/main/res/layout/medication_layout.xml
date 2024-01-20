@@ -15,7 +15,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="0dp"
-        android:text="Medication name" />
+        android:text="\u2022 Medication name" />
 
 
     <TextView
@@ -23,7 +23,7 @@
         style="@style/CardViewSubtitleText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:text="How regularly" />
@@ -33,7 +33,7 @@
         style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"

@@ -124,7 +124,7 @@ public class TreatmentFragment extends Fragment {
         treatmentTarget = "Abbassare la febbricola";
         startDate = new Date();
         endDate = new Date();
-        notes = "";
+        notes = "Prendere con molta acqua";
 
         ArrayList<WeekdaysDataItem> selectedWeekdays;
 
@@ -234,7 +234,7 @@ public class TreatmentFragment extends Fragment {
 
         // MEDICATION NAME
         TextView medicationNameText = medicationLayout.findViewById(R.id.medicationName);
-        medicationNameText.setText(medicationName);
+        medicationNameText.setText("\u2022 "+medicationName);
 
         // HOW REGULARLY
         TextView howRegularlyText = medicationLayout.findViewById(R.id.howRegularly);
