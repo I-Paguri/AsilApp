@@ -17,6 +17,7 @@ public class Treatment implements Parcelable {
     private SimpleDateFormat dateFormat;
     private ArrayList<Medication> medications;
     private String notes;
+    private Patient patient;
 
     public Treatment(String treatmentTarget, Date startDate, Date endDate) {
         this.treatmentTarget = treatmentTarget;

@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
+import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnDoctorDataCallback;
 
 public class DatabaseAdapterDoctor {
@@ -17,7 +18,7 @@ public class DatabaseAdapterDoctor {
     FirebaseFirestore db;
     Doctor doctor;
     Context context;
-    public DatabaseAdapterDoctor(Context context){
+    public DatabaseAdapterDoctor(Context context) {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         this.context = context;
@@ -53,7 +54,8 @@ public class DatabaseAdapterDoctor {
                 .addOnFailureListener(e -> {
                     callback.onCallbackError(new Exception(), e.toString());
                 });
-            }
+    }
+
     public void onLogin(String email, String password, OnDoctorDataCallback callback){
         Log.d("LOGIN", "inizioMetodo");
         mAuth = FirebaseAuth.getInstance();
@@ -86,6 +88,9 @@ public class DatabaseAdapterDoctor {
                 .addOnFailureListener(e -> {
                     callback.onCallbackError(new Exception(), e.toString());
                 });
+    }
+
+    public void addTreatment(Treatment treatment) {
 
     }
 }

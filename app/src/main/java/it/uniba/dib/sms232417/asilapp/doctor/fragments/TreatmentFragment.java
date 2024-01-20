@@ -130,7 +130,7 @@ public class TreatmentFragment extends Fragment {
 
         medicationName = "Paracetamolo";
         howToTake = 0;
-        howRegularly = 1;
+        howRegularly = 2;
         selectedWeekdays = new ArrayList<>();
         // Create a WeekdaysDataItem object for Monday
         // Define the parameters
@@ -153,6 +153,8 @@ public class TreatmentFragment extends Fragment {
         // every 2 weeks
         medication1.setIntervalSelectedType(1);
         medication1.setIntervalSelectedNumber(2);
+        medication2.setIntervalSelectedType(1);
+        medication2.setIntervalSelectedNumber(2);
 
         ArrayList<String> intakesTime = new ArrayList<>();
         intakesTime.add("08:00");
