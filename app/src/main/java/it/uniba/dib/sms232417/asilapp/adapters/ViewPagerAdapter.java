@@ -1,5 +1,7 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -8,8 +10,11 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasurementsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
-    public ViewPagerAdapter(@NonNull Fragment fragment) {
+    private Bundle bundle;
+
+    public ViewPagerAdapter(@NonNull Fragment fragment, Bundle bundle) {
         super(fragment);
+        this.bundle = bundle;
     }
 
     @NonNull
@@ -19,9 +24,11 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 0:
                 return new MeasurementsFragment();
             case 1:
-                return new TreatmentFragment();
+                TreatmentFragment treatmentFragment = new TreatmentFragment();
+                treatmentFragment.setArguments(bundle);
+                return treatmentFragment;
             default:
-                return new MeasurementsFragment();
+                return null;
         }
     }
 

@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class PatientFragment extends Fragment {
     private Toolbar toolbar;
-    private String patientName, patientAge;
+    private String patientUUID, patientName, patientAge;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +35,7 @@ public class PatientFragment extends Fragment {
 
         patientName = "Patient Name";
         patientAge = "Patient Age";
+        patientUUID = "";
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_patient, container, false);
 
@@ -73,6 +75,8 @@ public class PatientFragment extends Fragment {
 
         TextView textName = view.findViewById(R.id.txtName_inputlayout);
         if (this.getArguments() != null) {
+            patientUUID = this.getArguments().getString("patientUUID");
+            Log.d("PatientUUID", patientUUID);
             patientName = this.getArguments().getString("patientName");
             patientAge = this.getArguments().getString("patientAge");
         }
@@ -89,8 +93,12 @@ public class PatientFragment extends Fragment {
         // Find the ViewPager2 in your layout
         ViewPager2 viewPager = view.findViewById(R.id.viewPager);
 
+        // Create a bundle and put patientUUID into it
+        Bundle bundle = new Bundle();
+        bundle.putString("patientUUID", patientUUID);
+
         // Create an adapter that knows which fragment should be shown on each page
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this, bundle);
 
         // Set the adapter onto the ViewPager2
         viewPager.setAdapter(adapter);

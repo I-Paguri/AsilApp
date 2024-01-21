@@ -57,6 +57,7 @@ public class MyPatientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Bundle bundle = new Bundle();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -77,16 +78,25 @@ public class MyPatientsFragment extends Fragment {
                     Log.d("PATIENT", "Aggiunto");
                     list.add(new listItem(patient.getNome() + " " + patient.getCognome(), "22 anni", R.drawable.my_account));
                 }
+
                     adapter = new RecyclerListViewAdapter(list, position -> {
                         // Handle item click here
                         listItem clickedItem = list.get(position);
 
                         // Open PatientFragment and pass the patient's name as an argument
                         PatientFragment patientFragment = new PatientFragment();
-                        Bundle bundle = new Bundle();
+
+                        String patientUUID =  myPatientsList.get(position).getUUID();
+
+                        Log.d("PatientUUID_MyPatientsFragment", patientUUID);
+                        Log.d("PatientUUID_MyPatientsFragment", "Position: "+position);
+
+                        bundle.putString("patientUUID", patientUUID);
+
                         bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
-                        patientFragment.setArguments(bundle);
                         bundle.putString("patientAge", clickedItem.getDescription());// assuming getSubtitle() gets the patient's age
+
+                        patientFragment.setArguments(bundle);
 
                         // Replace current fragment with PatientFragment
                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();

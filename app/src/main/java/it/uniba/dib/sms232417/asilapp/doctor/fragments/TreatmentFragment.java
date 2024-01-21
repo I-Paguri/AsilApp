@@ -48,6 +48,10 @@ public class TreatmentFragment extends Fragment {
         DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
 
         String patientUUID = "";
+
+        if (this.getArguments() != null) {
+            patientUUID = this.getArguments().getString("patientUUID");
+        }
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
             public void onCallback(List<Treatment> treatments) {
