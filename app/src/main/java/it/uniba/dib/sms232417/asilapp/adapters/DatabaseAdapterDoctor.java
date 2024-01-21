@@ -92,7 +92,41 @@ public class DatabaseAdapterDoctor {
 
     }
 
+    public void onLoginQrCode(String token, OnDoctorDataCallback callback){
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signInWithCustomToken(token)
+                .addOnSuccessListener(authResult -> {
+                    FirebaseUser dottore = mAuth.getCurrentUser();
+                    db = FirebaseFirestore.getInstance();
 
+                    db.collection("doctor")
+                            .document(dottore.getUid())
+                            .get()
+                            .addOnSuccessListener(datiUtente-> {
+                                if (datiUtente.exists()) {
+                                    Log.d("Login", "Login in corso");
+                                    doctor = new Doctor(datiUtente.getString("nome"),
+                                            datiUtente.getString("cognome"),
+                                            datiUtente.getString("email"),
+                                            datiUtente.getString("dataNascita"),
+                                            datiUtente.getString("regione"),
+                                            datiUtente.getString("specializzazione"),
+                                            datiUtente.getString("numeroDiRegistrazioneMedica"));
+
+                                    List<String> myPatients = (List<String>) datiUtente.get("myPatients");
+                                    doctor.setMyPatientsUUID(myPatients);
+                                    if(myPatients == null || myPatients.isEmpty())
+                                        Log.d("MyPatients", "Non ce");
+                                    if (myPatients != null && !myPatients.isEmpty())
+                                        Log.d("MyPatients", myPatients.toString());
+                                    callback.onCallback(doctor);
+                                }else{
+                                    callback.onCallbackError(new Exception(), "QR Code non valido");
+                                    Log.d("Login", "Login non effettuato");
+                                }
+                            });
+                });
+    }
 
     public void addTreatment(Treatment treatment) {
 

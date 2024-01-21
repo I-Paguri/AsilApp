@@ -1,20 +1,28 @@
 package it.uniba.dib.sms232417.asilapp.auth.doctor;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Base64;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
@@ -45,11 +53,18 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.crypto.SecretKey;
+
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
+import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
+import it.uniba.dib.sms232417.asilapp.entity.Doctor;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class LoginDoctorQrCodeFragment extends Fragment {
 
@@ -57,7 +72,8 @@ public class LoginDoctorQrCodeFragment extends Fragment {
     private ExecutorService cameraExecutor;
     private PreviewView previewView;
     private LettoreQr analyzer;
-
+    DatabaseAdapterDoctor dbAdapterDoctor;
+    private boolean isBarcodeRead = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -126,7 +142,13 @@ public class LoginDoctorQrCodeFragment extends Fragment {
 
         @Override
         public void analyze(@NotNull ImageProxy imageProxy) {
-            scanBarcode(imageProxy);
+            if(!isBarcodeRead) {
+                scanBarcode(imageProxy);
+                RelativeLayout relativeLayout = getView().findViewById(R.id.charge_layout);
+                RelativeLayout relativeLayout2 = getView().findViewById(R.id.progressBarLayout);
+                relativeLayout.setBackgroundResource(R.drawable.rounded_relative_layout);
+                relativeLayout2.setVisibility(View.GONE);
+            }
         }
 
         private void scanBarcode(ImageProxy imageProxy) {
@@ -145,6 +167,7 @@ public class LoginDoctorQrCodeFragment extends Fragment {
                         @Override
                         public void onSuccess(List<Barcode> barcodes) {
                             readBarcodeData(barcodes);
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -176,11 +199,36 @@ public class LoginDoctorQrCodeFragment extends Fragment {
             switch (valueType) {
                 case Barcode.TYPE_TEXT:
                     String uuid = barcode.getDisplayValue();
-                    Toast.makeText(getContext(), uuid, Toast.LENGTH_SHORT).show();
+                    if (uuid != null) {
+                            RelativeLayout relativeLayout = getView().findViewById(R.id.charge_layout);
+                            RelativeLayout relativeLayout2 = getView().findViewById(R.id.progressBarLayout);
+                            relativeLayout.setBackgroundResource(R.drawable.rounded_relative_layout_charge);
+                            relativeLayout2.setVisibility(View.VISIBLE);
+                            isBarcodeRead = true;
+                            dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
+                            dbAdapterDoctor.onLoginQrCode(uuid, new OnDoctorDataCallback() {
+                                @Override
+                                public void onCallback(Doctor doctor) {
+                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        intent.putExtra("loggedDoctor", (Parcelable) doctor);
+                                        startActivity(intent);
+                                }
+
+
+                                @Override
+                                public void onCallbackError(Exception e, String message) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setTitle(R.string.error).setMessage(message);
+                                    builder.setPositiveButton(R.string.yes, null);
+                                    builder.show();
+                                    isBarcodeRead = false;
+                                }
+                            });
+                        }
+                    }
+
             }
+
         }
-
-    }
-
-
 }
+
