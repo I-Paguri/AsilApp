@@ -110,6 +110,8 @@ public class PatientFragment extends Fragment {
 
         // Connect the TabLayout with the ViewPager2
         // This will update the TabLayout when the ViewPager2 is swiped
+        // Connect the TabLayout with the ViewPager2
+// This will update the TabLayout when the ViewPager2 is swiped
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     switch (position) {
@@ -131,8 +133,21 @@ public class PatientFragment extends Fragment {
             if (tab != null) {
                 tab.select();
                 viewPager.setCurrentItem(selectedTab);
-                adapter.notifyDataSetChanged();
+                adapter = new ViewPagerAdapter(this, getArguments());
+                viewPager.setAdapter(adapter);
 
+            }
+        }
+
+        // Check if there are arguments and if "selectedTab" is present
+        if (getArguments() != null && getArguments().containsKey("selectedTab")) {
+            int selectedTab = getArguments().getInt("selectedTab");
+            TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
+            if (tab != null) {
+                tab.select();
+                viewPager.post(() -> {
+                    viewPager.setCurrentItem(selectedTab);
+                });
             }
         }
     }

@@ -1,6 +1,7 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,6 +27,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
             case 1:
                 TreatmentFragment treatmentFragment = new TreatmentFragment();
                 treatmentFragment.setArguments(bundle);
+                Log.d("SonoQui", bundle.toString());
                 return treatmentFragment;
             default:
                 return null;
