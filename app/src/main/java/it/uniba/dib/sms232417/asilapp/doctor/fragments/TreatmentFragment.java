@@ -73,7 +73,12 @@ public class TreatmentFragment extends Fragment {
                     parentLayout.addView(noTreatmentLayout);
                 } else {
                     for (Treatment treatment : treatments) {
-                        addTreatmentCardView(treatment);
+                        if (treatments.indexOf(treatment) == treatments.size() - 1) {
+                            addTreatmentCardView(treatment, true);
+                        } else {
+                            addTreatmentCardView(treatment, false);
+                        }
+                        //addTreatmentCardView(treatment);
                     }
                 }
             }
@@ -143,7 +148,7 @@ public class TreatmentFragment extends Fragment {
         Log.d("TreatmentFragment", "onDestroyView");
     }
 
-    protected void addTreatmentCardView(Treatment treatment) {
+    protected void addTreatmentCardView(Treatment treatment, boolean isLast) {
         String treatmentTarget, notes;
         int i;
         ArrayList<Medication> medications;
@@ -152,6 +157,18 @@ public class TreatmentFragment extends Fragment {
         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams")
         View treatmentLayout = inflater.inflate(R.layout.treatment_layout, null);
+
+        if (isLast) {
+            int bottomMarginDp = 85;
+            float density = getResources().getDisplayMetrics().density;
+            int bottomMarginPx = (int) (bottomMarginDp * density);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 0, 0, bottomMarginPx);
+            treatmentLayout.setLayoutParams(params);
+        }
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.linearLayoutCardView);
