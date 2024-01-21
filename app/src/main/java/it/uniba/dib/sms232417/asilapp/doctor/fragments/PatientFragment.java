@@ -89,7 +89,6 @@ public class PatientFragment extends Fragment {
         ImageView imagePatient = view.findViewById(R.id.imgProfile);
         imagePatient.setImageResource(R.drawable.my_account);
 
-        
         // Find the ViewPager2 in your layout
         ViewPager2 viewPager = view.findViewById(R.id.viewPager);
 

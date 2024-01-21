@@ -73,28 +73,26 @@ public class MyPatientsFragment extends Fragment {
             @Override
             public void onCallback(List<Patient> patientList) {
                 myPatientsList = patientList;
-                for (Patient patient : myPatientsList) {
-                    Log.d("PATIENT", patient.getNome() + " " + patient.getCognome());
-                    Log.d("PATIENT", "Aggiunto");
-                    list.add(new listItem(patient.getNome() + " " + patient.getCognome(), "22 anni", R.drawable.my_account));
+                int indexUUID[] = new int[myPatientsList.size()];
+                for(int i=0;i<myPatientsList.size();i++){
+                    list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(), myPatientsList.get(i).getDataNascita(), R.drawable.my_account, myPatientsList.get(i).getUUID()));
+
                 }
 
+                    Log.d("Lunghezza lista", String.valueOf(list.size()));
+                    Log.d("Lista", myPatientsList.toString());
                     adapter = new RecyclerListViewAdapter(list, position -> {
                         // Handle item click here
                         listItem clickedItem = list.get(position);
 
+
                         // Open PatientFragment and pass the patient's name as an argument
                         PatientFragment patientFragment = new PatientFragment();
 
-                        String patientUUID =  myPatientsList.get(position).getUUID();
-
-                        Log.d("PatientUUID_MyPatientsFragment", patientUUID);
-                        Log.d("PatientUUID_MyPatientsFragment", "Position: "+position);
-
-                        bundle.putString("patientUUID", patientUUID);
-
+                        bundle.putString("patientUUID", clickedItem.getUUID());
                         bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
                         bundle.putString("patientAge", clickedItem.getDescription());// assuming getSubtitle() gets the patient's age
+
 
                         patientFragment.setArguments(bundle);
 

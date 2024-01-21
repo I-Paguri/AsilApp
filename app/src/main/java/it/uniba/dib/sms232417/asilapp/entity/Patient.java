@@ -54,6 +54,10 @@ public class Patient implements Parcelable, Serializable {
         }
     };
 
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
+
     public String getUUID() {
         return UUID;
     }
