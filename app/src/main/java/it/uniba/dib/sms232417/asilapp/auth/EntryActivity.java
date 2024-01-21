@@ -2,6 +2,7 @@ package it.uniba.dib.sms232417.asilapp.auth;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,7 +27,9 @@ import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
+import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorQrCodeFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
@@ -217,6 +221,41 @@ public class EntryActivity extends AppCompatActivity {
             }
         }
     }
+    public void checkPermission() {
+        try {
+            if (ActivityCompat.checkSelfPermission(EntryActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(EntryActivity.this, android.Manifest.permission.CAMERA)) {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.explain_permission_camera);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ActivityCompat.requestPermissions(EntryActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
+
+                } else {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.explain_permission_camera);
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+
+                }
+            } else {
+                replaceFragment(new LoginDoctorQrCodeFragment());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
+    }
 }

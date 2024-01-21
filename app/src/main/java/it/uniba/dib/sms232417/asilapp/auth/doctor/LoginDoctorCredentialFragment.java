@@ -53,7 +53,6 @@ public class LoginDoctorCredentialFragment extends Fragment {
         TextInputEditText password = view.findViewById(R.id.txtPassword);
         MaterialButton btnLoginQr = view.findViewById(R.id.btnLoginDoctorQrCode);
         TextView txtForgotPassword = view.findViewById(R.id.txtForgetPass);
-        TextView txtRegister = view.findViewById(R.id.lbl_create_account);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,23 +67,26 @@ public class LoginDoctorCredentialFragment extends Fragment {
                 //Nascondere la tastiera
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                String email = ((TextInputEditText) getView().findViewById(R.id.txtEmail)).getText().toString();
+                String password = ((TextInputEditText) getView().findViewById(R.id.txtPassword)).getText().toString();
 
-
-                if (email.toString().isEmpty()) {
+                if (email.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_email)
                             .create();
+                    builder.setPositiveButton("Ok", null);
                     builder.show();
-                } else if (password.toString().isEmpty()) {
+                } else if (password.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_password)
                             .create();
+                    builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else{
 
-                    onLogin(v, email.getText().toString(), password.getText().toString());
+                    onLogin(v, email, password);
                 };
             }
         });
@@ -92,16 +94,10 @@ public class LoginDoctorCredentialFragment extends Fragment {
         btnLoginQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorQrCodeFragment());
+                ((EntryActivity) getActivity()).checkPermission();
             }
         });
 
-        txtRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((EntryActivity) getActivity()).replaceFragment(new RegistrationDoctorFragment());
-            }
-        });
 
     }
 
