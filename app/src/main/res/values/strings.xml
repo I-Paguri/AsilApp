@@ -492,4 +492,5 @@
     <string name="ongoing">Ongoing</string>
     <string name="no_treatment_found">No treatment found</string>
     <string name="add_one_if_needed">Add one if needed</string>
+    <string name="no_patient_found">No patient found</string>
 </resources>
