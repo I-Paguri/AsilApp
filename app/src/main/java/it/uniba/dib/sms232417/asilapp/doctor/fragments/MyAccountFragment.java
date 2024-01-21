@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
@@ -43,6 +44,7 @@ public class MyAccountFragment extends Fragment {
     Doctor loggedDoctor;
     final String NAME_FILE = "automaticLogin";
     DatabaseAdapterPatient dbAdapter;
+    DatabaseAdapterDoctor dbAdapterDoctor;
     BottomNavigationView bottomNavigationView;
 
     @Nullable
@@ -66,10 +68,18 @@ public class MyAccountFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    onLogout(v, loggedPatient.getEmail());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                if(loggedDoctor != null)
+                    try {
+                        onLogout(v, loggedDoctor.getEmail());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                else if(loggedPatient != null){
+                    try {
+                        onLogout(v, loggedPatient.getEmail());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -135,8 +145,9 @@ public class MyAccountFragment extends Fragment {
     }
 
     public void onLogout(View v, String email) throws Exception {
+            dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
             dbAdapter = new DatabaseAdapterPatient(getContext());
-            dbAdapter.onLogout();
+
 
             Toast.makeText(getContext(),
                     "Logout effettuato",
@@ -151,14 +162,19 @@ public class MyAccountFragment extends Fragment {
             File loggedDoctorFile = new File(StringUtils.FILE_PATH_DOCTOR_LOGGED);
             if(loggedPatientFile.exists()){
                 loggedPatientFile.delete();
+                dbAdapter.onLogout();
             }
             if(loggedDoctorFile.exists()){
                 loggedDoctorFile.delete();
+                dbAdapterDoctor.onLogout();
             }
 
             Intent esci = new Intent(getContext(), EntryActivity.class);
             startActivity(esci);
     }
+
+
+
 
     public Patient checkPatientLogged(){
         Patient loggedPatient;

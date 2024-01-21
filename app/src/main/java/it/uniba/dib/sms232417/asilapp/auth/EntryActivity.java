@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.button.MaterialButton;
 
 
+import java.util.List;
+
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
@@ -185,12 +187,14 @@ public class EntryActivity extends AppCompatActivity {
 
                             @Override
                             public void onCallback(Doctor doctor) {
+
                                 RelativeLayout relativeLayout = findViewById(R.id.loading);
                                 relativeLayout.setVisibility(RelativeLayout.GONE);
                                 Intent intent = new Intent(EntryActivity.this, MainActivity.class);
                                 intent.putExtra("loggedDoctor", (Parcelable) doctor);
                                 startActivity(intent);
                                 finish();
+
                             }
 
                             @Override

@@ -3,10 +3,12 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -19,12 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
+import java.io.DataInput;
 import java.util.LinkedList;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.RecyclerListViewAdapter;
+import it.uniba.dib.sms232417.asilapp.entity.Doctor;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientListDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.listItem;
 
 public class MyPatientsFragment extends Fragment {
@@ -34,6 +40,9 @@ public class MyPatientsFragment extends Fragment {
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
 
+    Doctor doctor;
+    List<Patient> myPatientsList;
+    DatabaseAdapterDoctor dbAdapterDoctor;
 
     @Nullable
     @Override
@@ -47,6 +56,59 @@ public class MyPatientsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<listItem> list = new LinkedList<>();
+
+        if (this.getArguments() != null) {
+            doctor = (Doctor) this.getArguments().getParcelable("doctor");
+        }
+
+
+        dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
+        dbAdapterDoctor.getDoctorPatients(doctor.getMyPatientsUUID(), new OnPatientListDataCallback() {
+            @Override
+            public void onCallback(List<Patient> patientList) {
+                myPatientsList = patientList;
+                for (Patient patient : myPatientsList) {
+                    Log.d("PATIENT", patient.getNome() + " " + patient.getCognome());
+                    Log.d("PATIENT", "Aggiunto");
+                    list.add(new listItem(patient.getNome() + " " + patient.getCognome(), "22 anni", R.drawable.my_account));
+                }
+                    adapter = new RecyclerListViewAdapter(list, position -> {
+                        // Handle item click here
+                        listItem clickedItem = list.get(position);
+
+                        // Open PatientFragment and pass the patient's name as an argument
+                        PatientFragment patientFragment = new PatientFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
+                        patientFragment.setArguments(bundle);
+                        bundle.putString("patientAge", clickedItem.getDescription()); // assuming getSubtitle() gets the patient's age
+
+                        // Replace current fragment with PatientFragment
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                    });
+                    recyclerView.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onCallbackError(Exception exception, String message) {
+
+            }
+        });
+
+
+
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
 
@@ -82,35 +144,13 @@ public class MyPatientsFragment extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.recyclerView);
 
-        List<listItem> list = new LinkedList<>();
-        list.add(new listItem("Mario Rossi", "22 anni", R.drawable.my_account));
-        list.add(new listItem("Rita De Crescenzo", "44 anni", R.drawable.my_account));
-        list.add(new listItem("Paolo Morante", "30 anni", R.drawable.my_account));
+
+
 
         // Set up the RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecyclerListViewAdapter(list, position -> {
-            // Handle item click here
-            listItem clickedItem = list.get(position);
 
-            // Open PatientFragment and pass the patient's name as an argument
-            PatientFragment patientFragment = new PatientFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
-            patientFragment.setArguments(bundle);
-            bundle.putString("patientAge", clickedItem.getDescription()); // assuming getSubtitle() gets the patient's age
 
-            // Replace current fragment with PatientFragment
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-        });
-        recyclerView.setAdapter(adapter);
     }
 
 }

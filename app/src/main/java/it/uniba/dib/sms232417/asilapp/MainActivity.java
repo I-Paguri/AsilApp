@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     if (itemId == R.id.navigation_my_patients) { // replace with your actual menu item id
                         selectedFragment = new MyPatientsFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("doctor", loggedDoctor);
+                        selectedFragment.setArguments(bundle);
                     } else {
                         if (itemId == R.id.navigation_my_account) {
                             // replace with your actual menu item id

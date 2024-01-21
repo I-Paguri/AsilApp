@@ -19,6 +19,8 @@ public class Patient implements Parcelable, Serializable {
     private List<Treatment> treatments;
     private Doctor doctor;
 
+    public Patient() {
+    }
 
     public Patient(String UUID, String nome, String cognome, String email, String dataNascita, String regione){
         this.nome = nome;

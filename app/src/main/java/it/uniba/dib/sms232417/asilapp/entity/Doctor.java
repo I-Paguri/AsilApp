@@ -17,7 +17,10 @@ public class Doctor implements Parcelable, Serializable {
     private String regione;
     private String specializzazione;
     private String numeroDiRegistrazioneMedica;
-    private List<Patient> myPatients;
+    private List<String> myPatientsUUID;
+
+    public Doctor() {
+    }
 
     public Doctor(String nome, String cognome, String email, String dataNascita, String regione, String specializzazione, String numeroDiRegistrazioneMedica) {
         this.nome = nome;
@@ -29,7 +32,7 @@ public class Doctor implements Parcelable, Serializable {
 
         this.numeroDiRegistrazioneMedica = numeroDiRegistrazioneMedica;
 
-        this.myPatients = new ArrayList<>();
+        this.myPatientsUUID = new ArrayList<>();
     }
 
     protected Doctor(Parcel in) {
@@ -40,6 +43,7 @@ public class Doctor implements Parcelable, Serializable {
         regione = in.readString();
         specializzazione = in.readString();
         numeroDiRegistrazioneMedica = in.readString();
+        myPatientsUUID = in.createStringArrayList();
     }
 
     public static final Creator<Doctor> CREATOR = new Creator<Doctor>() {
@@ -54,16 +58,12 @@ public class Doctor implements Parcelable, Serializable {
         }
     };
 
-    public void addPatient(Patient patient) {
-        myPatients.add(patient);
+    public List<String> getMyPatientsUUID() {
+        return myPatientsUUID;
     }
 
-    public List<Patient> getMyPatients() {
-        return myPatients;
-    }
-
-    public void setMyPatients(List<Patient> myPatients) {
-        this.myPatients = myPatients;
+    public void setMyPatientsUUID(List<String> myPatients) {
+        this.myPatientsUUID = myPatients;
     }
 
     public String getNome() {
@@ -109,7 +109,7 @@ public class Doctor implements Parcelable, Serializable {
         dest.writeString(regione);
         dest.writeString(specializzazione);
         dest.writeString(numeroDiRegistrazioneMedica);
-
+        dest.writeStringList(myPatientsUUID);
     }
     /*
 
