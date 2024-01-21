@@ -23,6 +23,9 @@ public class TreatmentFormNotesFragment extends Fragment {
 
     private Treatment treatment;
     private String notesString;
+    private String patientUUID;
+    private String patientName;
+    private String patientAge;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,11 +45,18 @@ public class TreatmentFormNotesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
+        patientName = "";
+        patientAge = "";
+        patientUUID = "";
+
         treatment = null;
         Bundle bundle = this.getArguments();
 
         if (bundle != null) {
             treatment = bundle.getParcelable("treatment");
+            patientUUID = bundle.getString("patientUUID");
+            patientName = bundle.getString("patientName");
+            patientAge = bundle.getString("patientAge");
         }
 
         Button btnContinue = requireView().findViewById(R.id.goNext);
@@ -64,19 +74,24 @@ public class TreatmentFormNotesFragment extends Fragment {
                 }
 
                 Log.d("Treatment", treatment.toString());
-
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
                 dbAdapter.addTreatment(treatment);
 
-                MyPatientsFragment myPatientsFragment = new MyPatientsFragment();
-                //treatmentFragment.setArguments(bundle);
+                Log.d("UUID", patientUUID);
+                PatientFragment patientFragment = new PatientFragment();
+                // Create a new bundle to pass the selected tab index
+                Bundle bundleWithSelectedTab = new Bundle();
+                bundleWithSelectedTab.putString("patientUUID", patientUUID);
+                bundleWithSelectedTab.putString("patientName", patientName);
+                bundleWithSelectedTab.putString("patientAge", patientAge);
+                bundleWithSelectedTab.putInt("selectedTab", 1); // 1 is the index of the Treatment tab
+                patientFragment.setArguments(bundleWithSelectedTab);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, myPatientsFragment);
-                transaction.addToBackStack(null);
+                transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
+                //transaction.addToBackStack(null);
                 transaction.commit();
-
             }
         });
 

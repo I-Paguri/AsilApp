@@ -32,9 +32,14 @@ import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
 
 public class TreatmentFragment extends Fragment {
 
+    private String patientUUID;
+    private String patientName;
+    private String patientAge;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("TreatmentFragment", "onCreateView");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_treatment, container, false);
     }
@@ -44,13 +49,17 @@ public class TreatmentFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        patientUUID = "";
+        patientName = "";
+        patientAge = "";
+
         // Create an instance of DatabaseAdapterPatient
         DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
 
-        String patientUUID = "";
-
         if (this.getArguments() != null) {
             patientUUID = this.getArguments().getString("patientUUID");
+            patientName = this.getArguments().getString("patientName");
+            patientAge = this.getArguments().getString("patientAge");
         }
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
@@ -112,6 +121,14 @@ public class TreatmentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 TreatmentFormGeneralFragment treatmentFormGeneralFragment = new TreatmentFormGeneralFragment();
+                // Create a bundle and put patientUUID, patientName, and patientAge into it
+                Bundle bundle = new Bundle();
+                bundle.putString("patientUUID", patientUUID);
+                bundle.putString("patientName", patientName);
+                bundle.putString("patientAge", patientAge);
+
+                // Set the bundle as arguments to the fragment
+                treatmentFormGeneralFragment.setArguments(bundle);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormGeneralFragment);
@@ -119,6 +136,11 @@ public class TreatmentFragment extends Fragment {
                 transaction.commit();
             }
         });
+    }
+
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("TreatmentFragment", "onDestroyView");
     }
 
     protected void addTreatmentCardView(Treatment treatment) {

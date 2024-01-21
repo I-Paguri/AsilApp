@@ -58,6 +58,9 @@ public class TreatmentFormGeneralFragment extends Fragment {
     private String[] descriptionData;
 
     private Treatment treatment;
+    private String patientUUID;
+    private String patientName;
+    private String patientAge;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -147,6 +150,16 @@ public class TreatmentFormGeneralFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        patientUUID = "";
+        patientName = "";
+        patientAge = "";
+
+        if (this.getArguments() != null) {
+            patientUUID = this.getArguments().getString("patientUUID");
+            patientName = this.getArguments().getString("patientName");
+            patientAge = this.getArguments().getString("patientAge");
+        }
 
 
         builderStartDate = MaterialDatePicker.Builder.datePicker();
@@ -346,6 +359,9 @@ public class TreatmentFormGeneralFragment extends Fragment {
                 if (validateInput()) {
                     // Create a Bundle to hold the data
                     Bundle bundle = setBundle();
+                    bundle.putString("patientUUID", patientUUID);
+                    bundle.putString("patientName", patientName);
+                    bundle.putString("patientAge", patientAge);
                     // Navigate to the next fragment
                     TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
                     treatmentFormMedicationsFragment.setArguments(bundle);

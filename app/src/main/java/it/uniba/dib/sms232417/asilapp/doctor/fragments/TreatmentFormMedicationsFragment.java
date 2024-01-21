@@ -81,6 +81,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     private ArrayList<Medication> medications;
 
     private boolean validInput;
+    private String patientUUID;
+    private String patientName;
+    private String patientAge;
 
     public TreatmentFormMedicationsFragment() {
         // Required empty public constructor
@@ -112,6 +115,11 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        patientName = "";
+        patientAge = "";
+        patientUUID = "";
+
         // Get the bundle
         Bundle bundle = this.getArguments();
         validInput = false;
@@ -122,6 +130,9 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         if (bundle != null) {
             treatment = bundle.getParcelable("treatment");
+            patientName = bundle.getString("patientName");
+            patientAge = bundle.getString("patientAge");
+            patientUUID = bundle.getString("patientUUID");
         }
 
         //Log.d("IntakeCount", "Count: " + intakeCount);
@@ -360,6 +371,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 if (validateInput()) {
                     // Get the bundle
                     Bundle bundle = setBundle();
+
+                    bundle.putString("patientName", patientName);
+                    bundle.putString("patientAge", patientAge);
+                    bundle.putString("patientUUID", patientUUID);
 
                     TreatmentFormNotesFragment treatmentFormNotesFragment = new TreatmentFormNotesFragment();
                     treatmentFormNotesFragment.setArguments(bundle);

@@ -20,6 +20,7 @@ import it.uniba.dib.sms232417.asilapp.adapters.ViewPagerAdapter;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
@@ -28,14 +29,12 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class PatientFragment extends Fragment {
     private Toolbar toolbar;
     private String patientUUID, patientName, patientAge;
+    private ViewPagerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        patientName = "Patient Name";
-        patientAge = "Patient Age";
-        patientUUID = "";
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_patient, container, false);
 
@@ -44,6 +43,10 @@ public class PatientFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        patientName = "Patient Name";
+        patientAge = "Patient Age";
+        patientUUID = "";
 
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
@@ -95,11 +98,11 @@ public class PatientFragment extends Fragment {
         // Create a bundle and put patientUUID into it
         Bundle bundle = new Bundle();
         bundle.putString("patientUUID", patientUUID);
+        bundle.putString("patientName", patientName);
+        bundle.putString("patientAge", patientAge);
 
         // Create an adapter that knows which fragment should be shown on each page
-        ViewPagerAdapter adapter = new ViewPagerAdapter(this, bundle);
-
-        // Set the adapter onto the ViewPager2
+        adapter = new ViewPagerAdapter(this, bundle);
         viewPager.setAdapter(adapter);
 
         // Find the TabLayout in your layout
@@ -124,8 +127,12 @@ public class PatientFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("selectedTab")) {
             int selectedTab = getArguments().getInt("selectedTab");
             TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
+            Log.d("SelectedTab", String.valueOf(selectedTab));
             if (tab != null) {
                 tab.select();
+                viewPager.setCurrentItem(selectedTab);
+                adapter.notifyDataSetChanged();
+
             }
         }
     }

@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,15 +71,23 @@ public class MyPatientsFragment extends Fragment {
         }
 
         dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
-        dbAdapterDoctor.getDoctorPatients(doctor.getMyPatientsUUID(), new OnPatientListDataCallback() {
-            @Override
-            public void onCallback(List<Patient> patientList) {
-                myPatientsList = patientList;
-                int indexUUID[] = new int[myPatientsList.size()];
-                for(int i=0;i<myPatientsList.size();i++){
-                    list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(), myPatientsList.get(i).getDataNascita(), R.drawable.my_account, myPatientsList.get(i).getUUID()));
 
-                }
+        if (doctor.getMyPatientsUUID() == null || doctor.getMyPatientsUUID().isEmpty()) {
+            LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View noTreatmentLayout = inflater.inflate(R.layout.no_patients_layout, null);
+            // Add the inflated layout to the parent layout
+            LinearLayout parentLayout = view.findViewById(R.id.linearLayoutPatientsList);
+            parentLayout.addView(noTreatmentLayout);
+        } else {
+            dbAdapterDoctor.getDoctorPatients(doctor.getMyPatientsUUID(), new OnPatientListDataCallback() {
+                @Override
+                public void onCallback(List<Patient> patientList) {
+                    myPatientsList = patientList;
+                    int indexUUID[] = new int[myPatientsList.size()];
+                    for (int i = 0; i < myPatientsList.size(); i++) {
+                        list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(), myPatientsList.get(i).getDataNascita(), R.drawable.my_account, myPatientsList.get(i).getUUID()));
+
+                    }
 
                     Log.d("Lunghezza lista", String.valueOf(list.size()));
                     Log.d("Lista", myPatientsList.toString());
@@ -106,13 +116,14 @@ public class MyPatientsFragment extends Fragment {
                     });
                     recyclerView.setAdapter(adapter);
 
-            }
+                }
 
-            @Override
-            public void onCallbackError(Exception exception, String message) {
+                @Override
+                public void onCallbackError(Exception exception, String message) {
 
-            }
-        });
+                }
+            });
+        }
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
 
