@@ -67,7 +67,6 @@ public class MyPatientsFragment extends Fragment {
             doctor = (Doctor) this.getArguments().getParcelable("doctor");
         }
 
-
         dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
         dbAdapterDoctor.getDoctorPatients(doctor.getMyPatientsUUID(), new OnPatientListDataCallback() {
             @Override
@@ -107,9 +106,6 @@ public class MyPatientsFragment extends Fragment {
             }
         });
 
-
-
-
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
 
         toolbar = requireActivity().findViewById(R.id.toolbar);
@@ -143,14 +139,6 @@ public class MyPatientsFragment extends Fragment {
                 transaction.commit();
             }
         });
-
-
-
-
-
-        // Set up the RecyclerView
-
-
     }
 
 }

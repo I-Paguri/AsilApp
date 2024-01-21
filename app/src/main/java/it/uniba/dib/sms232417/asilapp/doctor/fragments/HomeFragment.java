@@ -48,7 +48,8 @@ public class HomeFragment extends Fragment {
     private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
     private TextView txtusername;
-
+    Bundle bundlePatient;
+    Bundle bundleDoctor;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -72,6 +73,20 @@ public class HomeFragment extends Fragment {
         // This is called immediately after onCreateView() has returned, and fragment's view hierarchy has been instantiated.
         // You can use this method to do final initialization once these pieces are in place, such as retrieving views or restoring state.
         // Ottengo un riferimento alla cardView dei pazienti
+        txtusername = view.findViewById(R.id.txtUser_Name);
+        Patient loggedPatient = checkPatientLogged();
+        Doctor loggedDoctor = checkDoctorLogged();
+        if (loggedPatient != null) {
+            txtusername.setText(loggedPatient.getNome());
+            bundlePatient = new Bundle();
+            bundlePatient.putParcelable("patient", loggedPatient);
+        } else if(loggedDoctor != null){
+            txtusername.setText("Dottor "+loggedDoctor.getNome());
+            bundleDoctor = new Bundle();
+            bundleDoctor.putParcelable("doctor", loggedDoctor);
+        }else{
+            txtusername.setText("Utente");
+        }
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
 
@@ -98,7 +113,9 @@ public class HomeFragment extends Fragment {
         cardViewMyPatients.setOnClickListener(v -> {
             // Quando viene cliccata la cardView dei pazienti, viene aperto il fragment dei pazienti
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_activity_main, new MyPatientsFragment());
+            MyPatientsFragment myPatientsFragment = new MyPatientsFragment();
+            myPatientsFragment.setArguments(bundleDoctor);
+            transaction.replace(R.id.nav_host_fragment_activity_main, myPatientsFragment);
             transaction.addToBackStack(null);
             transaction.commit();
             // Quando viene aperto il fragment dei pazienti viene aggiornata l'icona selezionata nella bottom navigation bar
@@ -112,6 +129,7 @@ public class HomeFragment extends Fragment {
 
         // Imposto il listener per la cardView dei pazienti
         cardViewHealthcare.setOnClickListener(v -> {
+
             // Quando viene cliccata la cardView dei pazienti, viene aperto il fragment dei pazienti
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -137,16 +155,7 @@ public class HomeFragment extends Fragment {
         BadgeUtils.attachBadgeDrawable(badgeDrawable, anchor);
         */
 
-        txtusername = view.findViewById(R.id.txtUser_Name);
-        Patient loggedPatient = checkPatientLogged();
-        Doctor loggedDoctor = checkDoctorLogged();
-        if (loggedPatient != null) {
-            txtusername.setText(loggedPatient.getNome());
-        } else if(loggedDoctor != null){
-            txtusername.setText("Dottor "+loggedDoctor.getNome());
-        }else{
-            txtusername.setText("Utente");
-        }
+
 
     }
 
