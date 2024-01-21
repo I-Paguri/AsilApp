@@ -86,7 +86,7 @@ public class MyPatientsFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
                         patientFragment.setArguments(bundle);
-                        bundle.putString("patientAge", clickedItem.getDescription()); // assuming getSubtitle() gets the patient's age
+                        bundle.putString("patientAge", clickedItem.getDescription());// assuming getSubtitle() gets the patient's age
 
                         // Replace current fragment with PatientFragment
                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
