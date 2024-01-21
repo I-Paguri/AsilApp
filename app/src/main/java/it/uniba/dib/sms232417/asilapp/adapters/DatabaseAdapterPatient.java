@@ -13,7 +13,7 @@ import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
-import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;

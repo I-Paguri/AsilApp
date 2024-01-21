@@ -31,7 +31,7 @@ import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
-import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnDoctorDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class LoginDoctorCredentialFragment extends Fragment {

@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.entity.interface_entity;
+package it.uniba.dib.sms232417.asilapp.interfaces;
 
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 

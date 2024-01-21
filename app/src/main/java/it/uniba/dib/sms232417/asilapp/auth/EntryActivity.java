@@ -26,8 +26,8 @@ import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
-import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnDoctorDataCallback;
-import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnPatientDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 import javax.crypto.SecretKey;

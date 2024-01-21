@@ -43,7 +43,7 @@ public class TreatmentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         // Create an instance of DatabaseAdapterPatient
         DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
         adapter.getTreatments(new OnTreatmentsCallback() {

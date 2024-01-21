@@ -10,7 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
-import it.uniba.dib.sms232417.asilapp.entity.interface_entity.OnDoctorDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 
 public class DatabaseAdapterDoctor {
 
