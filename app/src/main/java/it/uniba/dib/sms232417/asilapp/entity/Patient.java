@@ -6,33 +6,33 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Patient implements Parcelable, Serializable {
+    private String UUID;
     private String nome;
     private String cognome;
     private String email;
     private String dataNascita;
     private String regione;
-
-    public Patient(Patient patient){
-        this.nome = patient.getNome();
-        this.cognome = patient.getCognome();
-        this.email = patient.getEmail();
-        this.dataNascita = patient.getDataNascita();
-        this.regione = patient.getRegione();
+    private List<Treatment> treatments;
+    private Doctor doctor;
 
 
-    }
-    public Patient(String nome, String cognome, String email, String dataNascita, String regione){
+    public Patient(String UUID, String nome, String cognome, String email, String dataNascita, String regione){
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.dataNascita = dataNascita;
         this.regione = regione;
 
+        this.UUID = UUID;
+
     }
 
     protected Patient(Parcel in) {
+        UUID = in.readString();
         nome = in.readString();
         cognome = in.readString();
         email = in.readString();
@@ -51,6 +51,10 @@ public class Patient implements Parcelable, Serializable {
             return new Patient[size];
         }
     };
+
+    public String getUUID() {
+        return UUID;
+    }
 
     public String getCognome() {
         return cognome;
@@ -73,10 +77,18 @@ public class Patient implements Parcelable, Serializable {
     }
 
 
+    public void setTreatments(List<Treatment> treatments) {
+        this.treatments = treatments;
+    }
+
+    public List<Treatment> getTreatments() {
+        return treatments;
+    }
 
     @Override
     public String toString() {
         return "Patient{" +
+                "UUID='" + UUID + '\'' +
                 "nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", email='" + email + '\'' +
@@ -92,6 +104,7 @@ public class Patient implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(UUID);
         dest.writeString(nome);
         dest.writeString(cognome);
         dest.writeString(email);

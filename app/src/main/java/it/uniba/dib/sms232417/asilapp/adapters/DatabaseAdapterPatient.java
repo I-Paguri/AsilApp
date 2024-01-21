@@ -48,7 +48,7 @@ public class DatabaseAdapterPatient {
                                 .get()
                                 .addOnSuccessListener(datiUtente -> {
                                     if (datiUtente.exists()) {
-                                        resultPatient = new Patient(datiUtente.getString("nome"),
+                                        resultPatient = new Patient(utente.getUid(), datiUtente.getString("nome"),
                                                 datiUtente.getString("cognome"),
                                                 datiUtente.getString("email"),
                                                 datiUtente.getString("dataNascita"),
@@ -82,7 +82,7 @@ public class DatabaseAdapterPatient {
                         db = FirebaseFirestore.getInstance();
                         Log.d("REGISTER", "Registrazione effettuata con successo");
 
-                        patient = new Patient(nome, cognome, email, dataNascita, regione);
+                        patient = new Patient(utente.getUid(), nome, cognome, email, dataNascita, regione);
 
                         db.collection("patient")
                                 .document(utente.getUid())
@@ -144,9 +144,10 @@ public class DatabaseAdapterPatient {
     }
 
 
-    public void getTreatments(OnTreatmentsCallback callback) {
+    public void getTreatments(String patientUUID, OnTreatmentsCallback callback) {
+
         db.collection("patient")
-                .document("kbHym7ohbDb80dhv94pzrtFevPX2")
+                .document(patientUUID)
                 .collection("treatments")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {

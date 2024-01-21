@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Doctor implements Parcelable, Serializable {
     private String nome;
@@ -15,6 +17,7 @@ public class Doctor implements Parcelable, Serializable {
     private String regione;
     private String specializzazione;
     private String numeroDiRegistrazioneMedica;
+    private List<Patient> myPatients;
 
     public Doctor(String nome, String cognome, String email, String dataNascita, String regione, String specializzazione, String numeroDiRegistrazioneMedica) {
         this.nome = nome;
@@ -25,6 +28,8 @@ public class Doctor implements Parcelable, Serializable {
         this.specializzazione = specializzazione;
 
         this.numeroDiRegistrazioneMedica = numeroDiRegistrazioneMedica;
+
+        this.myPatients = new ArrayList<>();
     }
 
     protected Doctor(Parcel in) {
@@ -48,6 +53,18 @@ public class Doctor implements Parcelable, Serializable {
             return new Doctor[size];
         }
     };
+
+    public void addPatient(Patient patient) {
+        myPatients.add(patient);
+    }
+
+    public List<Patient> getMyPatients() {
+        return myPatients;
+    }
+
+    public void setMyPatients(List<Patient> myPatients) {
+        this.myPatients = myPatients;
+    }
 
     public String getNome() {
         return nome;
@@ -94,4 +111,11 @@ public class Doctor implements Parcelable, Serializable {
         dest.writeString(numeroDiRegistrazioneMedica);
 
     }
+    /*
+
+    public void addTreatment(Treatment treatment, Patient patient) {
+        String UUID = patient.getUUID();
+
+    }
+    */
 }

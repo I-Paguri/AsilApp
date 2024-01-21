@@ -46,7 +46,9 @@ public class TreatmentFragment extends Fragment {
 
         // Create an instance of DatabaseAdapterPatient
         DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
-        adapter.getTreatments(new OnTreatmentsCallback() {
+
+        String patientUUID = "";
+        adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
             public void onCallback(List<Treatment> treatments) {
 
