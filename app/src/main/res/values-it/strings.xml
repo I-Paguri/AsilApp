@@ -197,5 +197,7 @@
     <string name="no_treatment_found">Nessuna terapia trovata</string>
     <string name="add_one_if_needed">Aggiungi una se necessario</string>
     <string name="no_patient_found">Nessun paziente trovato</string>
-
+    <string name="delete">Elimina</string>
+    <string name="delete_treatment">Vuoi eliminare questa terapia?</string>
+    <string name="keep">Mantieni</string>
 </resources>

@@ -41,12 +41,12 @@
                     android:text="@string/treatment_goal" />
 
                 <Button
-                    android:id="@+id/closeButton"
+                    android:id="@+id/deleteButton"
                     style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:contentDescription="prova"
+                    android:contentDescription="@string/delete"
                     android:gravity="end"
                     app:icon="@drawable/bin"
                     app:iconTint="@color/pastel_brown" />
