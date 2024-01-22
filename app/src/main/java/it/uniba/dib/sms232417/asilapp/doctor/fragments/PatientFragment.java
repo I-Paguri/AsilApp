@@ -79,7 +79,6 @@ public class PatientFragment extends Fragment {
         TextView textName = view.findViewById(R.id.txtName_inputlayout);
         if (this.getArguments() != null) {
             patientUUID = this.getArguments().getString("patientUUID");
-            Log.d("PatientUUID", patientUUID);
             patientName = this.getArguments().getString("patientName");
             patientAge = this.getArguments().getString("patientAge");
         }
@@ -129,7 +128,7 @@ public class PatientFragment extends Fragment {
         if (getArguments() != null && getArguments().containsKey("selectedTab")) {
             int selectedTab = getArguments().getInt("selectedTab");
             TabLayout.Tab tab = tabLayout.getTabAt(selectedTab);
-            Log.d("SelectedTab", String.valueOf(selectedTab));
+
             if (tab != null) {
                 tab.select();
                 viewPager.setCurrentItem(selectedTab);

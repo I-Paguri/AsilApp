@@ -89,8 +89,6 @@ public class MyPatientsFragment extends Fragment {
 
                     }
 
-                    Log.d("Lunghezza lista", String.valueOf(list.size()));
-                    Log.d("Lista", myPatientsList.toString());
                     adapter = new RecyclerListViewAdapter(list, position -> {
                         // Handle item click here
                         listItem clickedItem = list.get(position);

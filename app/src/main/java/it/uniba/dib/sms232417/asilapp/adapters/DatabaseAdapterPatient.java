@@ -8,10 +8,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -102,6 +104,13 @@ public class DatabaseAdapterPatient {
     }
 
     public void addTreatment(Treatment treatment) {
+        ArrayList<Medication> medications = treatment.getMedications();
+
+        for (Medication medication : medications) {
+            // Set selected weekdays
+            medication.setSelectedWeekdays(medication.getSelectedWeekdays());
+        }
+
         getTreatmentCount(new OnCountCallback() {
             @Override
             public void onCallback(int count) {
@@ -152,8 +161,13 @@ public class DatabaseAdapterPatient {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Treatment> treatments = new ArrayList<>();
+
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        treatments.add(doc.toObject(Treatment.class));
+                        
+                        Treatment treatment = doc.toObject(Treatment.class);
+                        treatments.add(treatment);
+
+                        Log.d("Firestore", treatment.toString());
                     }
                     callback.onCallback(treatments);
                 })

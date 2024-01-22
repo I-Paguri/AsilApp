@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.firestore.Exclude;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ public class Medication implements Parcelable {
     private Integer howRegularly;
     private Integer intervalSelectedType; // day, week, month
     private Integer intervalSelectedNumber;
+
     private ArrayList<WeekdaysDataItem> selectedWeekdays;
+    private String selectedWeekdaysString;
     private ArrayList<String> intakesTime;
     private ArrayList<String> quantities;
 
@@ -32,6 +35,7 @@ public class Medication implements Parcelable {
         this.howToTake = howToTake;
         this.howRegularly = howRegularly;
         this.selectedWeekdays = selectedWeekdays;
+        this.selectedWeekdaysString = getSelectedWeekdaysString();
 
         // Default values
         this.intervalSelectedType = -1;
@@ -46,6 +50,7 @@ public class Medication implements Parcelable {
         intervalSelectedNumber = in.readInt();
         intervalSelectedType = in.readInt();
         selectedWeekdays = in.createTypedArrayList(WeekdaysDataItem.CREATOR);
+        selectedWeekdaysString = in.readString();
         intakesTime = in.createStringArrayList();
         quantities = in.createStringArrayList();
     }
@@ -75,6 +80,7 @@ public class Medication implements Parcelable {
         dest.writeInt(intervalSelectedNumber);
         dest.writeInt(intervalSelectedType);
         dest.writeTypedList(selectedWeekdays);
+        dest.writeString(selectedWeekdaysString);
         dest.writeStringList(intakesTime);
         dest.writeStringList(quantities);
     }
@@ -113,6 +119,7 @@ public class Medication implements Parcelable {
         this.howRegularly = howRegularly;
     }
 
+    @Exclude
 
     public ArrayList<WeekdaysDataItem> getSelectedWeekdays() {
         return selectedWeekdays;
@@ -120,24 +127,35 @@ public class Medication implements Parcelable {
 
     public void addSelectedWeekday(WeekdaysDataItem selectedWeekday) {
         this.selectedWeekdays.add(selectedWeekday);
+        this.selectedWeekdaysString = getSelectedWeekdaysString();
     }
 
+    @Exclude
     public void setSelectedWeekdays(ArrayList<WeekdaysDataItem> selectedWeekdays) {
         this.selectedWeekdays = selectedWeekdays;
+        this.selectedWeekdaysString = getSelectedWeekdaysString();
     }
+
 
     public String getSelectedWeekdaysString() {
         String selectedWeekdaysString;
         selectedWeekdaysString = "";
 
-        for (WeekdaysDataItem selectedWeekday : getSelectedWeekdays()) {
-            selectedWeekdaysString = selectedWeekdaysString + selectedWeekday.getLabel();
-            if (getSelectedWeekdays().indexOf(selectedWeekday) != getSelectedWeekdays().size() - 1) {
-                selectedWeekdaysString = selectedWeekdaysString + ", ";
+        if (selectedWeekdays != null && !selectedWeekdays.isEmpty()) {
+            for (WeekdaysDataItem selectedWeekday : selectedWeekdays) {
+                selectedWeekdaysString = selectedWeekdaysString + selectedWeekday.getLabel();
+                if (selectedWeekdays.indexOf(selectedWeekday) != selectedWeekdays.size() - 1) {
+                    selectedWeekdaysString = selectedWeekdaysString + ", ";
+                }
             }
         }
 
+
         return selectedWeekdaysString;
+    }
+
+    public void setSelectedWeekdaysString(String selectedWeekdaysString) {
+        this.selectedWeekdaysString = selectedWeekdaysString;
     }
 
     public Integer getIntervalSelectedType() {
@@ -205,7 +223,7 @@ public class Medication implements Parcelable {
             medicationString = medicationString + "Interval selection: [" + getIntervalSelectedNumber() + ", " + getIntervalSelectedType() + "]\n";
         }
 
-        if (!getSelectedWeekdays().isEmpty()) {
+        if (!getSelectedWeekdaysString().isEmpty()) {
             medicationString = medicationString + "Selected weekdays: " + getSelectedWeekdaysString() + "\n";
         }
 
@@ -241,7 +259,7 @@ public class Medication implements Parcelable {
                 }
             }
 
-            medicationString = medicationString + "Interval selected: " +  context.getResources().getString(R.string.every) + " " + intervalSelectedNumber + " " + formattedSelectedType + "\n";
+            medicationString = medicationString + "Interval selected: " + context.getResources().getString(R.string.every) + " " + intervalSelectedNumber + " " + formattedSelectedType + "\n";
         }
 
         if (!getSelectedWeekdays().isEmpty()) {

@@ -39,7 +39,6 @@ public class TreatmentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("TreatmentFragment", "onCreateView");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_treatment, container, false);
     }
@@ -212,7 +211,7 @@ public class TreatmentFragment extends Fragment {
     protected View getMedicationLayout(Medication medication) {
         MappedValues mappedValues = new MappedValues(requireContext());
         String medicationName, howToTake, howRegularly;
-        ArrayList<WeekdaysDataItem> selectedWeekdays = null; // MODIFICARE
+        ArrayList<WeekdaysDataItem> selectedWeekdays;
 
 
         medicationName = medication.getMedicationName();
@@ -244,27 +243,17 @@ public class TreatmentFragment extends Fragment {
             howRegularlyText.setText(howRegularly);
         } else {
             if (medication.getHowRegularly() == 1) {
-                // Weekdays
-                String selectedWeekdaysString;
-                selectedWeekdaysString = "";
-
-                for (WeekdaysDataItem selectedWeekday : medication.getSelectedWeekdays()) {
-                    selectedWeekdaysString = selectedWeekdaysString + selectedWeekday.getLabel();
-                    if (medication.getSelectedWeekdays().indexOf(selectedWeekday) != medication.getSelectedWeekdays().size() - 1) {
-                        selectedWeekdaysString = selectedWeekdaysString + ", ";
-                    } else {
-                        if (medication.getSelectedWeekdays().size() == 1) {
-                            selectedWeekdaysString = selectedWeekdaysString + " ";
-                        } else {
-                            selectedWeekdaysString = selectedWeekdaysString + getResources().getString(R.string.and);
-                        }
-                    }
-                }
-
-                howRegularlyText.setText(selectedWeekdaysString);
-            } else {
                 // Interval
                 howRegularlyText.setText(mappedValues.getFormattedInterval(medication.getIntervalSelectedType(), medication.getIntervalSelectedNumber()));
+            } else {
+                // Weekdays
+                String selectedWeekdaysString;
+
+
+                selectedWeekdaysString = medication.getSelectedWeekdaysString();
+
+                Log.d("medication: ", medication.getSelectedWeekdaysString());
+                howRegularlyText.setText(selectedWeekdaysString);
             }
         }
 

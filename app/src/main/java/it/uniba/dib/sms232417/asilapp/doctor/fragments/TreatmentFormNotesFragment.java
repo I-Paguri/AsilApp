@@ -73,12 +73,13 @@ public class TreatmentFormNotesFragment extends Fragment {
                     treatment.setNotes(notesString);
                 }
 
-                Log.d("Treatment", treatment.toString());
+
+                Log.d("TreatmentFormNotes", treatment.toString());
+
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
                 dbAdapter.addTreatment(treatment);
 
-                Log.d("UUID", patientUUID);
                 PatientFragment patientFragment = new PatientFragment();
                 // Create a new bundle to pass the selected tab index
                 Bundle bundleWithSelectedTab = new Bundle();
@@ -86,6 +87,8 @@ public class TreatmentFormNotesFragment extends Fragment {
                 bundleWithSelectedTab.putString("patientName", patientName);
                 bundleWithSelectedTab.putString("patientAge", patientAge);
                 bundleWithSelectedTab.putInt("selectedTab", 1); // 1 is the index of the Treatment tab
+
+
                 patientFragment.setArguments(bundleWithSelectedTab);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();

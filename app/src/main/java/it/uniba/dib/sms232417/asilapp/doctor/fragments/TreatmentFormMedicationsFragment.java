@@ -135,8 +135,6 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
             patientUUID = bundle.getString("patientUUID");
         }
 
-        //Log.d("IntakeCount", "Count: " + intakeCount);
-
         // Find the AutoCompleteTextView in the layout
         AutoCompleteTextView medicinesList = view.findViewById(R.id.medicines_list);
         howToTakeMedicine = view.findViewById(R.id.how_to_take_medicine);
@@ -408,6 +406,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                 if (validateInput()) {
                     // Get the bundle
                     Bundle bundle = setBundle();
+
+                    bundle.putString("patientName", patientName);
+                    bundle.putString("patientAge", patientAge);
+                    bundle.putString("patientUUID", patientUUID);
 
                     TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
                     treatmentFormMedicationsFragment.setArguments(bundle);
@@ -916,9 +918,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         treatment.addMedication(medication);
 
-        //Log.d("Medication", medication.toString());
         bundle.putParcelable("treatment", treatment);
-        Log.d("Treatment medications:", treatment.getMedicationsString(requireActivity()));
 
         return bundle;
     }
