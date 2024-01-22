@@ -103,15 +103,15 @@ public class DatabaseAdapterPatient {
         mAuth.signOut();
     }
 
-    public void addTreatment(Treatment treatment) {
+    public void addTreatment(String patientUUID, Treatment treatment) {
         Log.d("AddedNewTreatment", treatment.toString());
 
-        getTreatmentCount(new OnCountCallback() {
+        getTreatmentCount(patientUUID, new OnCountCallback() {
             @Override
             public void onCallback(int count) {
                 String treatmentId = "treatment" + (count + 1);
                 db.collection("patient")
-                        .document("kbHym7ohbDb80dhv94pzrtFevPX2")
+                        .document(patientUUID)
                         .collection("treatments")
                         .document(treatmentId)
                         .set(treatment)
@@ -130,10 +130,10 @@ public class DatabaseAdapterPatient {
         });
     }
 
-    private void getTreatmentCount(OnCountCallback callback) {
+    private void getTreatmentCount(String patientUUID, OnCountCallback callback) {
         try {
             db.collection("patient")
-                    .document("kbHym7ohbDb80dhv94pzrtFevPX2")
+                    .document(patientUUID)
                     .collection("treatments")
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {

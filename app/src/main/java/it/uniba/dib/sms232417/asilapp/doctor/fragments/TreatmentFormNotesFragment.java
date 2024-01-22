@@ -80,7 +80,7 @@ public class TreatmentFormNotesFragment extends Fragment {
 
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
-                dbAdapter.addTreatment(treatment);
+                dbAdapter.addTreatment(patientUUID, treatment);
 
                 PatientFragment patientFragment = new PatientFragment();
                 // Create a new bundle to pass the selected tab index
