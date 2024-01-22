@@ -86,9 +86,9 @@ public class TreatmentFormNotesFragment extends Fragment {
                 bundleWithSelectedTab.putString("patientAge", patientAge);
                 bundleWithSelectedTab.putInt("selectedTab", 1); // 1 is the index of the Treatment tab
 
-                patientFragment.setArguments(bundleWithSelectedTab);
 
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();+
+                patientFragment.setArguments(bundleWithSelectedTab);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
