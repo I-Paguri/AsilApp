@@ -93,8 +93,10 @@ public class TreatmentFormNotesFragment extends Fragment {
 
                 patientFragment.setArguments(bundleWithSelectedTab);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
+
                 //transaction.addToBackStack(null);
                 transaction.commit();
             }

@@ -146,14 +146,11 @@ public class PatientFragment extends Fragment {
                 tab.select();
                 viewPager.post(() -> {
                     viewPager.setCurrentItem(selectedTab);
+
                 });
             }
         }
     }
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 }

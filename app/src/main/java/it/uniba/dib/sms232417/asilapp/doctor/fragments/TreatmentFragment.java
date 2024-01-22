@@ -142,10 +142,6 @@ public class TreatmentFragment extends Fragment {
         });
     }
 
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d("TreatmentFragment", "onDestroyView");
-    }
 
     protected void addTreatmentCardView(Treatment treatment, boolean isLast) {
         String treatmentTarget, notes;
