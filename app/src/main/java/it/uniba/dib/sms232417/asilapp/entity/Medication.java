@@ -20,7 +20,7 @@ public class Medication implements Parcelable {
     private Integer howRegularly;
     private Integer intervalSelectedType; // day, week, month
     private Integer intervalSelectedNumber;
-
+    @Exclude
     private ArrayList<WeekdaysDataItem> selectedWeekdays;
     private String selectedWeekdaysString;
     private ArrayList<String> intakesTime;
@@ -35,7 +35,7 @@ public class Medication implements Parcelable {
         this.howToTake = howToTake;
         this.howRegularly = howRegularly;
         this.selectedWeekdays = selectedWeekdays;
-        this.selectedWeekdaysString = getSelectedWeekdaysString();
+        this.selectedWeekdaysString = convertWeekdaysToString();
 
         // Default values
         this.intervalSelectedType = -1;
@@ -127,17 +127,17 @@ public class Medication implements Parcelable {
 
     public void addSelectedWeekday(WeekdaysDataItem selectedWeekday) {
         this.selectedWeekdays.add(selectedWeekday);
-        this.selectedWeekdaysString = getSelectedWeekdaysString();
+        this.selectedWeekdaysString = convertWeekdaysToString();
     }
 
     @Exclude
     public void setSelectedWeekdays(ArrayList<WeekdaysDataItem> selectedWeekdays) {
         this.selectedWeekdays = selectedWeekdays;
-        this.selectedWeekdaysString = getSelectedWeekdaysString();
+        this.selectedWeekdaysString = convertWeekdaysToString();
     }
 
 
-    public String getSelectedWeekdaysString() {
+    public String convertWeekdaysToString() {
         String selectedWeekdaysString;
         selectedWeekdaysString = "";
 
@@ -151,6 +151,10 @@ public class Medication implements Parcelable {
         }
 
 
+        return selectedWeekdaysString;
+    }
+
+    public String getSelectedWeekdaysString() {
         return selectedWeekdaysString;
     }
 
@@ -223,8 +227,8 @@ public class Medication implements Parcelable {
             medicationString = medicationString + "Interval selection: [" + getIntervalSelectedNumber() + ", " + getIntervalSelectedType() + "]\n";
         }
 
-        if (!getSelectedWeekdaysString().isEmpty()) {
-            medicationString = medicationString + "Selected weekdays: " + getSelectedWeekdaysString() + "\n";
+        if (!convertWeekdaysToString().isEmpty()) {
+            medicationString = medicationString + "Selected weekdays: " + convertWeekdaysToString() + "\n";
         }
 
         medicationString = medicationString + "Intakes time: [" + String.join(", ", getIntakesTime()) + "]\n";
@@ -263,7 +267,7 @@ public class Medication implements Parcelable {
         }
 
         if (!getSelectedWeekdays().isEmpty()) {
-            medicationString = medicationString + "Selected weekdays: " + getSelectedWeekdaysString() + "\n";
+            medicationString = medicationString + "Selected weekdays: " + selectedWeekdaysString + "\n";
         }
 
         medicationString = medicationString + "Intakes time: [" + String.join(", ", getIntakesTime()) + "]\n";

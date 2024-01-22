@@ -104,12 +104,7 @@ public class DatabaseAdapterPatient {
     }
 
     public void addTreatment(Treatment treatment) {
-        ArrayList<Medication> medications = treatment.getMedications();
-
-        for (Medication medication : medications) {
-            // Set selected weekdays
-            medication.setSelectedWeekdays(medication.getSelectedWeekdays());
-        }
+        Log.d("AddedNewTreatment", treatment.toString());
 
         getTreatmentCount(new OnCountCallback() {
             @Override
@@ -155,6 +150,7 @@ public class DatabaseAdapterPatient {
 
     public void getTreatments(String patientUUID, OnTreatmentsCallback callback) {
 
+
         db.collection("patient")
                 .document(patientUUID)
                 .collection("treatments")
@@ -163,7 +159,6 @@ public class DatabaseAdapterPatient {
                     List<Treatment> treatments = new ArrayList<>();
 
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        
                         Treatment treatment = doc.toObject(Treatment.class);
                         treatments.add(treatment);
 

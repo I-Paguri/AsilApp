@@ -76,6 +76,8 @@ public class TreatmentFormNotesFragment extends Fragment {
 
                 Log.d("TreatmentFormNotes", treatment.toString());
 
+                Log.d("SelectedWeekdaysString (TreatmentFormNotes): ", treatment.getMedications().get(0).getSelectedWeekdaysString());
+
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
                 dbAdapter.addTreatment(treatment);

@@ -875,6 +875,10 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
 
         Medication medication = new Medication(medicationNameString, mappedValues.getHowToTakeKey(howToTakeString), mappedValues.getHowRegularlyKey(howRegularlyString), selectedWeekdays);
 
+        medication.setSelectedWeekdays(selectedWeekdays);
+        medication.setSelectedWeekdaysString(medication.convertWeekdaysToString());
+        Log.d("SelectedWeekdaysString (TreatmentFormMedication): ", medication.getSelectedWeekdaysString());
+
         if (howRegularly.getText().toString().equals(getResources().getStringArray(R.array.how_regularly_list)[1])) {
             if (!intervalSelection.getText().toString().isEmpty()) {
                 medication.setIntervalSelectedType(mappedValues.getIntervalKey(intervalSelectedString));

@@ -250,9 +250,9 @@ public class TreatmentFragment extends Fragment {
                 String selectedWeekdaysString;
 
 
-                selectedWeekdaysString = medication.getSelectedWeekdaysString();
+                selectedWeekdaysString = medication.convertWeekdaysToString();
 
-                Log.d("medication: ", medication.getSelectedWeekdaysString());
+                Log.d("medication: ", medication.convertWeekdaysToString());
                 howRegularlyText.setText(selectedWeekdaysString);
             }
         }
