@@ -200,4 +200,5 @@
     <string name="delete">Elimina</string>
     <string name="delete_treatment">Vuoi eliminare questa terapia?</string>
     <string name="keep">Mantieni</string>
+    <string name="delete_treatment_msg">Una volta eliminata questa terapia non sarà possibile recuperarla.</string>
 </resources>

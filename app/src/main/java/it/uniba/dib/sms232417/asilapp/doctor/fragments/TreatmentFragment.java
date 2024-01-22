@@ -2,6 +2,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -13,14 +14,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
@@ -62,7 +67,7 @@ public class TreatmentFragment extends Fragment {
         }
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
-            public void onCallback(List<Treatment> treatments) {
+            public void onCallback(Map<String, Treatment> treatments) {
 
                 if (treatments == null || treatments.isEmpty()) {
                     LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -71,13 +76,17 @@ public class TreatmentFragment extends Fragment {
                     LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
                     parentLayout.addView(noTreatmentLayout);
                 } else {
-                    for (Treatment treatment : treatments) {
-                        if (treatments.indexOf(treatment) == treatments.size() - 1) {
-                            addTreatmentCardView(treatment, true);
+                    Iterator<Map.Entry<String, Treatment>> iterator = treatments.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry<String, Treatment> entry = iterator.next();
+                        String treatmentId = entry.getKey();
+                        Treatment treatment = entry.getValue();
+
+                        if (!iterator.hasNext()) { // Check if it is the last treatment
+                            addTreatmentCardView(treatmentId, treatment, true);
                         } else {
-                            addTreatmentCardView(treatment, false);
+                            addTreatmentCardView(treatmentId, treatment, false);
                         }
-                        //addTreatmentCardView(treatment);
                     }
                 }
             }
@@ -143,7 +152,7 @@ public class TreatmentFragment extends Fragment {
     }
 
 
-    protected void addTreatmentCardView(Treatment treatment, boolean isLast) {
+    protected void addTreatmentCardView(String treatmentId, Treatment treatment, boolean isLast) {
         String treatmentTarget, notes;
         int i;
         ArrayList<Medication> medications;
@@ -167,7 +176,6 @@ public class TreatmentFragment extends Fragment {
 
         // Get the parent layout
         LinearLayout parentLayout = requireView().findViewById(R.id.linearLayoutCardView);
-
 
         // TREATMENT TARGET
         treatmentTarget = treatment.getTreatmentTarget();
@@ -201,6 +209,52 @@ public class TreatmentFragment extends Fragment {
             TextView notesText = treatmentLayout.findViewById(R.id.notes);
             notesText.setText(notes);
         }
+
+        // DELETE BUTTON
+        // Find the delete button
+        Button deleteButton = treatmentLayout.findViewById(R.id.deleteButton);
+
+        // Create an instance of DatabaseAdapterPatient
+        DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
+        // Set an OnClickListener for the delete button
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Delete the treatment from your data source
+                // You might need to create a method in your DatabaseAdapterPatient class to delete a treatment by its id
+                new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                        .setTitle(getResources().getString(R.string.delete_treatment))
+                        .setMessage(getResources().getString(R.string.delete_treatment_msg))
+                        .setNegativeButton(getResources().getString(R.string.keep), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Respond to negative button press
+                            }
+                        })
+                        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Respond to positive button press
+                                adapter.deleteTreatment(patientUUID, treatmentId);
+
+                                // Remove the treatmentLayout from the parentLayout
+                                parentLayout.removeView(treatmentLayout);
+
+                                // If there are no more treatments, show the noTreatmentLayout
+                                if (parentLayout.getChildCount() == 0) {
+                                    LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                    View noTreatmentLayout = inflater.inflate(R.layout.no_treatments_found_layout, null);
+                                    // Add the inflated layout to the parent layout
+                                    parentLayout.addView(noTreatmentLayout);
+                                }
+
+                            }
+                        })
+                        .create()
+                        .show();
+
+            }
+        });
 
     }
 
@@ -244,7 +298,6 @@ public class TreatmentFragment extends Fragment {
             } else {
                 // Weekdays
                 String selectedWeekdaysString;
-
 
                 selectedWeekdaysString = medication.getSelectedWeekdaysString();
 

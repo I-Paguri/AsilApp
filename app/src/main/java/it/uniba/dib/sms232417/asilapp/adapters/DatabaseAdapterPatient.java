@@ -10,7 +10,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
@@ -155,19 +157,33 @@ public class DatabaseAdapterPatient {
                 .collection("treatments")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Treatment> treatments = new ArrayList<>();
+                    Map<String, Treatment> treatments = new HashMap<>();
 
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         Treatment treatment = doc.toObject(Treatment.class);
+                        String treatmentId = doc.getId(); // Get the treatmentId
 
-                        Log.d("ciao", treatment.toString());
-                        treatments.add(treatment);
-
+                        treatments.put(treatmentId, treatment); // Add the treatmentId and Treatment object to the map
                     }
-                    callback.onCallback(treatments);
+                    callback.onCallback(treatments); // Pass the map to the callback
                 })
                 .addOnFailureListener(e -> {
                     callback.onCallbackFailed(e);
+                });
+    }
+
+
+    public void deleteTreatment(String patientUUID, String treatmentId) {
+        db.collection("patient")
+                .document(patientUUID)
+                .collection("treatments")
+                .document(treatmentId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Treatment successfully deleted!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error deleting treatment", e);
                 });
     }
 }
