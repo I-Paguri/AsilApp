@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.entity;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -227,8 +228,8 @@ public class Medication implements Parcelable {
             medicationString = medicationString + "Interval selection: [" + getIntervalSelectedNumber() + ", " + getIntervalSelectedType() + "]\n";
         }
 
-        if (!convertWeekdaysToString().isEmpty()) {
-            medicationString = medicationString + "Selected weekdays: " + convertWeekdaysToString() + "\n";
+        if (!selectedWeekdaysString.isEmpty()) {
+            medicationString = medicationString + "Selected weekdays: " + selectedWeekdaysString + "\n";
         }
 
         medicationString = medicationString + "Intakes time: [" + String.join(", ", getIntakesTime()) + "]\n";
@@ -266,7 +267,8 @@ public class Medication implements Parcelable {
             medicationString = medicationString + "Interval selected: " + context.getResources().getString(R.string.every) + " " + intervalSelectedNumber + " " + formattedSelectedType + "\n";
         }
 
-        if (!getSelectedWeekdays().isEmpty()) {
+        Log.d("ciao", "Ciao");
+        if (!selectedWeekdaysString.isEmpty()) {
             medicationString = medicationString + "Selected weekdays: " + selectedWeekdaysString + "\n";
         }
 

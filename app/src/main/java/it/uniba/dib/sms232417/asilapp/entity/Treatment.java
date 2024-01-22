@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.entity;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -146,6 +147,7 @@ public class Treatment implements Parcelable {
             treatmentString = treatmentString + "End date: " + getEndDateString() + "\n";
         }
 
+        Log.d("ciao", medications.toString());
 
         treatmentString = treatmentString + "Medications: " + medications.toString() + "\n";
 
@@ -157,23 +159,5 @@ public class Treatment implements Parcelable {
         return treatmentString;
     }
 
-    public String toString(Context context) {
-        String treatmentString;
 
-        treatmentString = "Target: " + getTreatmentTarget() + "\n";
-        treatmentString = treatmentString + "Start date: " + getStartDateString() + "\n";
-        if (!getEndDateString().isEmpty()) {
-            treatmentString = treatmentString + "End date: " + getEndDateString() + "\n";
-        }
-
-
-        treatmentString = treatmentString + "Medications: " + getMedicationsString(context) + "\n";
-
-
-        if (!getNotes().isEmpty()) {
-            treatmentString = treatmentString + "Notes: " + getNotes() + "\n";
-        }
-
-        return treatmentString;
-    }
 }

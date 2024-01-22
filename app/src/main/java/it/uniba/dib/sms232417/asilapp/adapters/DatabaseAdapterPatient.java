@@ -150,7 +150,6 @@ public class DatabaseAdapterPatient {
 
     public void getTreatments(String patientUUID, OnTreatmentsCallback callback) {
 
-
         db.collection("patient")
                 .document(patientUUID)
                 .collection("treatments")
@@ -160,9 +159,10 @@ public class DatabaseAdapterPatient {
 
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         Treatment treatment = doc.toObject(Treatment.class);
+
+                        Log.d("ciao", treatment.toString());
                         treatments.add(treatment);
 
-                        Log.d("Firestore", treatment.toString());
                     }
                     callback.onCallback(treatments);
                 })
