@@ -74,10 +74,6 @@ public class TreatmentFormNotesFragment extends Fragment {
                 }
 
 
-                Log.d("TreatmentFormNotes", treatment.toString());
-
-                Log.d("SelectedWeekdaysString (TreatmentFormNotes): ", treatment.getMedications().get(0).getSelectedWeekdaysString());
-
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
                 dbAdapter.addTreatment(patientUUID, treatment);
@@ -90,9 +86,9 @@ public class TreatmentFormNotesFragment extends Fragment {
                 bundleWithSelectedTab.putString("patientAge", patientAge);
                 bundleWithSelectedTab.putInt("selectedTab", 1); // 1 is the index of the Treatment tab
 
-
                 patientFragment.setArguments(bundleWithSelectedTab);
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();+
 
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
