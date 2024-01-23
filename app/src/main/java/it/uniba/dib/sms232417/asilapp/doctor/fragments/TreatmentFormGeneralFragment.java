@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.transition.MaterialContainerTransform;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.text.SimpleDateFormat;
@@ -143,6 +145,17 @@ public class TreatmentFormGeneralFragment extends Fragment {
         StateProgressBar stateProgressBar = (StateProgressBar) constraintLayout.findViewById(R.id.state_progress_bar);
         stateProgressBar.setStateDescriptionData(descriptionData);
 
+        // Set the transition name for the root view
+        constraintLayout.setTransitionName("shared_element_container");
+
+        // Create an instance of MaterialContainerTransform for the return transition
+        MaterialContainerTransform transform = new MaterialContainerTransform();
+        transform.setDuration(600);
+        transform.setScrimColor(Color.TRANSPARENT);
+        transform.setAllContainerColors(requireContext().getResources().getColor(R.color.md_theme_light_surface));
+
+        // Set the shared element return transition for the fragment
+        setSharedElementReturnTransition(transform);
 
         return constraintLayout;
     }
@@ -367,6 +380,7 @@ public class TreatmentFormGeneralFragment extends Fragment {
                     treatmentFormMedicationsFragment.setArguments(bundle);
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                     transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormMedicationsFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();

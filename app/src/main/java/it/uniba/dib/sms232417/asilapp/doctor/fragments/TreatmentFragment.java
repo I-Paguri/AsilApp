@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.widget.NestedScrollView;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.transition.MaterialContainerTransform;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class TreatmentFragment extends Fragment {
     private String patientUUID;
     private String patientName;
     private String patientAge;
+    private ExtendedFloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,7 +105,7 @@ public class TreatmentFragment extends Fragment {
             }
         });
 
-        final ExtendedFloatingActionButton fab = view.findViewById(R.id.fab);
+        fab = view.findViewById(R.id.fab);
 
         // register the nestedScrollView from the main layout
         NestedScrollView nestedScrollView = view.findViewById(R.id.nestedScrollView);
@@ -133,7 +136,19 @@ public class TreatmentFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Set the transition name for the FAB
+                fab.setTransitionName("shared_element_container");
+
+                // Create an instance of MaterialContainerTransform
+                MaterialContainerTransform transform = new MaterialContainerTransform();
+                transform.setDuration(600);
+                transform.setScrimColor(Color.TRANSPARENT);
+                transform.setAllContainerColors(requireContext().getResources().getColor(R.color.md_theme_light_surface));
+
+                // Set the shared element enter transition for the fragment
                 TreatmentFormGeneralFragment treatmentFormGeneralFragment = new TreatmentFormGeneralFragment();
+                treatmentFormGeneralFragment.setSharedElementEnterTransition(transform);
+
                 // Create a bundle and put patientUUID, patientName, and patientAge into it
                 Bundle bundle = new Bundle();
                 bundle.putString("patientUUID", patientUUID);
@@ -144,6 +159,10 @@ public class TreatmentFragment extends Fragment {
                 treatmentFormGeneralFragment.setArguments(bundle);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                // Add the shared element to the transaction
+                transaction.addSharedElement(fab, fab.getTransitionName());
+
                 transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormGeneralFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
@@ -339,5 +358,7 @@ public class TreatmentFragment extends Fragment {
         return medicationLayout;
     }
 
-
+    public ExtendedFloatingActionButton getFab() {
+        return fab;
+    }
 }
