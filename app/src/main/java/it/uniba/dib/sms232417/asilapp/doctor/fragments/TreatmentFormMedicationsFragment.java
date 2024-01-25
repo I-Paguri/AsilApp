@@ -378,6 +378,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     treatmentFormNotesFragment.setArguments(bundle);
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
                     transaction.replace(R.id.nav_host_fragment_activity_main, treatmentFormNotesFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
