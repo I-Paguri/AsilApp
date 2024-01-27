@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -23,9 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.DataInput;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
@@ -54,7 +56,6 @@ public class MyPatientsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_my_patients, container, false);
     }
 
-    @Nullable
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -83,10 +84,9 @@ public class MyPatientsFragment extends Fragment {
                 @Override
                 public void onCallback(List<Patient> patientList) {
                     myPatientsList = patientList;
-                    int indexUUID[] = new int[myPatientsList.size()];
+                    int[] indexUUID = new int[myPatientsList.size()];
                     for (int i = 0; i < myPatientsList.size(); i++) {
-                        list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(), myPatientsList.get(i).getDataNascita(), R.drawable.my_account, myPatientsList.get(i).getUUID()));
-
+                        list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(), myPatientsList.get(i).getAge() + " anni", R.drawable.my_account, myPatientsList.get(i).getUUID()));
                     }
 
                     adapter = new RecyclerListViewAdapter(list, position -> {

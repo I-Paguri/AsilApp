@@ -43,6 +43,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsF
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
         }
-        if(loggedDoctor !=null) {
+        if (loggedDoctor != null) {
             try {
                 FileOutputStream fos = openFileOutput(StringUtils.DOCTOR_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -97,32 +98,34 @@ public class MainActivity extends AppCompatActivity {
 
             treatmentFormMedicationsFragment.setIntakeCount(1);
             int itemId = item.getItemId();
-            if (itemId == R.id.navigation_home) { // replace with your actual menu item id
+            /*
+                * If the selected item is HomeFragment, HealthcareFragment, MyPatientsFragment, or MyAccountFragment,
+                * replace the current fragment with the selected one.
+                * If the selected item is MeasureFragment, check the permission to use the camera.
+             */
+            if (itemId == R.id.navigation_home) {
                 selectedFragment = new HomeFragment();
             } else {
-                if (itemId == R.id.navigation_healthcare) { // replace with your actual menu item id
+                if (itemId == R.id.navigation_healthcare) {
                     selectedFragment = new HealthcareFragment();
                 } else {
-                    if (itemId == R.id.navigation_my_patients) { // replace with your actual menu item id
+                    if (itemId == R.id.navigation_my_patients) {
                         selectedFragment = new MyPatientsFragment();
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("doctor", loggedDoctor);
                         selectedFragment.setArguments(bundle);
                     } else {
                         if (itemId == R.id.navigation_my_account) {
-                            // replace with your actual menu item id
                             selectedFragment = new MyAccountFragment();
                         } else {
                             if (itemId == R.id.navigation_measure) {
                                 checkPermission();
                             }
-
                         }
                     }
 
                 }
             }
-            // add more else-if here for other menu items
 
             if (selectedFragment != null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -140,46 +143,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkPermission() {
-    try {
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.attention);
-                builder.setMessage(R.string.explain_permission_camera);
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
+        try {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.explain_permission_camera);
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.show();
 
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle(R.string.attention);
+                    builder.setMessage(R.string.explain_permission_camera);
+                    builder.setPositiveButton("OK", null);
+                    builder.show();
+
+                }
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.attention);
-                builder.setMessage(R.string.explain_permission_camera);
-                builder.setPositiveButton("OK", null);
-                builder.show();
+                selectedFragment = new MeasureFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
 
             }
-        } else {
-            selectedFragment = new MeasureFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
 
-}
+    }
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -261,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     public void hideKeyboard(View view) {
