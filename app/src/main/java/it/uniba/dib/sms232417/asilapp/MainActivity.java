@@ -42,6 +42,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragm
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 
