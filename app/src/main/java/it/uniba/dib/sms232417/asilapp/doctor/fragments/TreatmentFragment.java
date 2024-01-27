@@ -361,4 +361,12 @@ public class TreatmentFragment extends Fragment {
     public ExtendedFloatingActionButton getFab() {
         return fab;
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
+    }
 }

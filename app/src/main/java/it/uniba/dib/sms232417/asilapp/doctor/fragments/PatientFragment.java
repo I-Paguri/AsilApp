@@ -139,7 +139,6 @@ public class PatientFragment extends Fragment {
         }
 
 
-
         // Check if there are arguments and if "selectedTab" is present
         if (getArguments() != null && getArguments().containsKey("selectedTab")) {
             int selectedTab = getArguments().getInt("selectedTab");
@@ -152,7 +151,14 @@ public class PatientFragment extends Fragment {
                 });
             }
         }
-        
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
 }
