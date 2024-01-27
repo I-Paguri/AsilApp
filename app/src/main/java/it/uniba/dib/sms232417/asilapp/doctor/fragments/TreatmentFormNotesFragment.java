@@ -90,7 +90,7 @@ public class TreatmentFormNotesFragment extends Fragment {
                 patientFragment.setArguments(bundleWithSelectedTab);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                FragmentTransaction transaction = fragmentManager.beginTransaction().detach(patientFragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left).attach(patientFragment);
 
                 transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
 
