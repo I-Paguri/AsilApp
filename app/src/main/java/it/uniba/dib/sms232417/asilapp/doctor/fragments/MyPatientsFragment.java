@@ -86,7 +86,11 @@ public class MyPatientsFragment extends Fragment {
                     myPatientsList = patientList;
                     int[] indexUUID = new int[myPatientsList.size()];
                     for (int i = 0; i < myPatientsList.size(); i++) {
-                        list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(), myPatientsList.get(i).getAge() + " anni", R.drawable.my_account, myPatientsList.get(i).getUUID()));
+                        list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(),
+                                myPatientsList.get(i).getAge() + " " + getResources().getQuantityString(R.plurals.age,
+                                        myPatientsList.get(i).getAge(), myPatientsList.get(i).getAge()),
+                                R.drawable.my_account,
+                                myPatientsList.get(i).getUUID()));
                     }
 
                     adapter = new RecyclerListViewAdapter(list, position -> {

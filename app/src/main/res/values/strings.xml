@@ -498,4 +498,9 @@
     <string name="keep">Keep</string>
     <string name="delete_treatment_msg">This action cannot be undone.</string>
 
+    <plurals name="age">
+        <item quantity="one">year</item>
+        <item quantity="other">years</item>
+    </plurals>
+
 </resources>

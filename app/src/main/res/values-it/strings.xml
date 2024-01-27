@@ -201,4 +201,9 @@
     <string name="delete_treatment">Vuoi eliminare questa terapia?</string>
     <string name="keep">Mantieni</string>
     <string name="delete_treatment_msg">Una volta eliminata questa terapia non sarà possibile recuperarla.</string>
+
+    <plurals name="age">
+        <item quantity="one">anno</item>
+        <item quantity="other">anni</item>
+    </plurals>
 </resources>
