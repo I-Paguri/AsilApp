@@ -24,6 +24,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,6 +86,7 @@ public class MyPatientsFragment extends Fragment {
                 @Override
                 public void onCallback(List<Patient> patientList) {
                     myPatientsList = patientList;
+
                     int[] indexUUID = new int[myPatientsList.size()];
                     for (int i = 0; i < myPatientsList.size(); i++) {
                         list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(),
@@ -92,6 +95,16 @@ public class MyPatientsFragment extends Fragment {
                                 R.drawable.my_account,
                                 myPatientsList.get(i).getUUID()));
                     }
+
+                    // Sort list<ListItem> by the myPatientsList.get(i) of each ListItem
+                    Collections.sort(list, new Comparator<listItem>() {
+                        @Override
+                        public int compare(listItem l1, listItem l2) {
+                            int index1 = myPatientsList.indexOf(l1);
+                            int index2 = myPatientsList.indexOf(l2);
+                            return Integer.compare(index1, index2);
+                        }
+                    });
 
                     adapter = new RecyclerListViewAdapter(list, position -> {
                         // Handle item click here

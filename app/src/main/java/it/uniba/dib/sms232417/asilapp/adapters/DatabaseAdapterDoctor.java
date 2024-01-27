@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -73,25 +74,32 @@ public class DatabaseAdapterDoctor {
     }
 
     public void getDoctorPatients(List<String> patientUUID, OnPatientListDataCallback callback) {
-        db = FirebaseFirestore.getInstance();
+    db = FirebaseFirestore.getInstance();
 
-        for (String uuid : patientUUID){
-            db.collection("patient")
-                    .whereIn("uuid", Collections.singletonList(uuid))
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<Patient> patients = queryDocumentSnapshots.toObjects(Patient.class);
-                            callback.onCallback(patients);
-                        } else {
-                            Log.d("PATIENT", "Error");
-                            callback.onCallbackError(new Exception(), "Errore caricamento pazienti");
-                        }
-                    });
-        }
+    for (String uuid : patientUUID){
+        db.collection("patient")
+                .whereIn("uuid", Collections.singletonList(uuid))
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<Patient> patients = queryDocumentSnapshots.toObjects(Patient.class);
 
+                        // Sort patients by name
+                        Collections.sort(patients, new Comparator<Patient>() {
+                            @Override
+                            public int compare(Patient p1, Patient p2) {
+                                return p1.getNome().compareTo(p2.getNome());
+                            }
+                        });
+
+                        callback.onCallback(patients);
+                    } else {
+                        Log.d("PATIENT", "Error");
+                        callback.onCallbackError(new Exception(), "Errore caricamento pazienti");
+                    }
+                });
     }
-
+}
     public void onLoginQrCode(String token, OnDoctorDataCallback callback){
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithCustomToken(token)
