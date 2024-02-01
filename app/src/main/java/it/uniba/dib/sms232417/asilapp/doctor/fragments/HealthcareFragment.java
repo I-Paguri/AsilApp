@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -23,7 +24,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -34,6 +37,13 @@ public class HealthcareFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
     private YouTubePlayerView youTubePlayerView;
+
+    // Lista per memorizzare gli ID dei video
+    private List<String> videoIds = new ArrayList<>();
+
+    // Indice per tenere traccia del video corrente
+    private int currentVideoIndex = 0;
+
 
     @Nullable
     @Override
@@ -57,11 +67,11 @@ public class HealthcareFragment extends Fragment {
         SerpHandler sh = new SerpHandler();
         CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
 
+
         // Set up YouTubePlayerView
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-
                 future.thenAccept(result -> {
                     try {
                         JSONArray videos = result.getJSONArray("video_results");
@@ -77,6 +87,13 @@ public class HealthcareFragment extends Fragment {
                             // Load the video into YouTubePlayerView
                             youTubePlayer.cueVideo(videoId, 0);
 
+                            // Store video IDs for later use
+                            for (int i = 0; i < videos.length(); i++) {
+                                video = videos.getJSONObject(i);
+                                videoLink = video.getString("link");
+                                videoId = sh.extractLink(videoLink);
+                                videoIds.add(videoId);
+                            }
                         } else {
                             // Handle case when no videos are found
                             Toast.makeText(requireContext(), "No videos found", Toast.LENGTH_SHORT).show();
@@ -85,6 +102,15 @@ public class HealthcareFragment extends Fragment {
                         e.printStackTrace();
                     }
                 });
+            }
+
+            @Override
+            public void onStateChange(@NonNull YouTubePlayer youTubePlayer, @NonNull PlayerConstants.PlayerState state) {
+                if (state == PlayerConstants.PlayerState.ENDED) {
+                    // Play next video when current video ends
+                    currentVideoIndex = (currentVideoIndex + 1) % videoIds.size();
+                    youTubePlayer.loadVideo(videoIds.get(currentVideoIndex), 0);
+                }
             }
         });
 
