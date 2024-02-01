@@ -23,10 +23,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.utilities.SerpHandler;
+import it.uniba.dib.sms232417.asilapp.utilities.Video;
 
 public class HealthcareFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
@@ -50,37 +52,77 @@ public class HealthcareFragment extends Fragment {
         toolbar = requireActivity().findViewById(R.id.toolbar);
         youTubePlayerView = view.findViewById(R.id.youtubePlayerView);
 
-        // Set up YouTubePlayerView
-        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                // You can handle YouTubePlayer events here
-            }
-        });
-
         // Perform YouTube API operations when video links are available
         String searchQuery = "Healthcare";
         SerpHandler sh = new SerpHandler();
         CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
 
+        // Set up YouTubePlayerView
+        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+            @Override
+            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+
+                future.thenAccept(result -> {
+                    try {
+                        JSONArray videos = result.getJSONArray("video_results");
+                        if (videos.length() > 0) {
+                            // Get the first video link
+                            JSONObject video = videos.getJSONObject(0);
+                            String videoLink = video.getString("link");
+
+                            // Extract video ID from YouTube video link using SerpHandler
+                            SerpHandler sh = new SerpHandler();
+                            String videoId = sh.extractLink(videoLink);
+
+                            // Load the video into YouTubePlayerView
+                            youTubePlayer.cueVideo(videoId, 0);
+
+                        } else {
+                            // Handle case when no videos are found
+                            Toast.makeText(requireContext(), "No videos found", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        });
+
         future.thenAccept(result -> {
             try {
-                JSONArray videos = result.getJSONArray("video_results");
-                if (videos.length() > 0) {
-                    // Get the first video link
-                    JSONObject video = videos.getJSONObject(0);
-                    String videoLink = video.getString("link");
+                if (result.has("video_results")) {
+                    JSONArray videoResults = result.getJSONArray("video_results");
 
-                    // Extract video ID from YouTube video link
-                    String videoId = extractVideoId(videoLink);
+                    // Estraggo i dati dal JSON e creo un oggetto Video per ogni risultato
+                    for (int i = 0; i < videoResults.length(); i++) {
+                        JSONObject currentObject = videoResults.getJSONObject(i);
 
-                    // Load the video into YouTubePlayerView
-                    youTubePlayerView.getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.cueVideo(videoId, 0);
-                    });
+                        String title = sh.extractTitle(currentObject);
+                        String link = sh.extractLink(currentObject.getString("link"));
+                        String channel = sh.extractChannel(currentObject).getString("name");
+                        Date publishedDate = sh.extractPublishedDate(currentObject);
+                        int views = sh.extractViews(currentObject);
+                        String length = sh.extractLength(currentObject);
+                        String description = sh.extractDescription(currentObject);
+                        JSONArray extensions = sh.extractExtensions(currentObject);
+                        String thumbnail = sh.extractThumbnail(currentObject);
+
+                        Video video = new Video(title, link, channel, publishedDate, views, length, description, extensions, thumbnail);
+
+                        System.out.println("Video " + i + ":");
+                        System.out.println("Title: " + video.getTitle());
+                        System.out.println("Link: " + video.getLink());
+                        System.out.println("Channel: " + video.getChannel());
+                        System.out.println("Published Date: " + video.getPublishedDate());
+                        System.out.println("Views: " + video.getViews());
+                        System.out.println("Length: " + length);
+                        System.out.println("Description: " + description);
+                        System.out.println("Extensions: " + extensions);
+                        System.out.println("Thumbnail: " + thumbnail);
+                    }
+
                 } else {
-                    // Handle case when no videos are found
-                    Toast.makeText(requireContext(), "No videos found", Toast.LENGTH_SHORT).show();
+                    System.out.println("Oggetto 'video_results' non trovato in 'result'.");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -113,16 +155,5 @@ public class HealthcareFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
-    }
-
-    private String extractVideoId(String videoLink) {
-        // Extract video ID from YouTube video link
-        // Example link: https://www.youtube.com/watch?v=IB5qg81T8hg
-        String[] parts = videoLink.split("=");
-        if (parts.length > 1) {
-            return parts[1];
-        } else {
-            return "";
-        }
     }
 }
