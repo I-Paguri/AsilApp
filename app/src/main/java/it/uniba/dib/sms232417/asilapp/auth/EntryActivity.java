@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -57,25 +58,24 @@ public class EntryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entry_activity_layout);
 
-        context = this;
-
         checkAutomaticLogin();
-
         replaceFragment(new LoginDecisionFragment());
 
 
     }
 
     public void replaceFragment(Fragment fragment) {
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.replace(R.id.fragment_container,fragment);
-        FrameLayout frameLayout = findViewById(R.id.fragment_container);
-        if(frameLayout.getVisibility() == FrameLayout.GONE)
+        fragmentTransaction.replace(R.id.fragment_container_login,fragment);
+        FrameLayout frameLayout = findViewById(R.id.fragment_container_login);
+
+        if(frameLayout.getVisibility() == FrameLayout.VISIBLE)
             frameLayout.setVisibility(FrameLayout.VISIBLE);
+
 
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -85,119 +85,129 @@ public class EntryActivity extends AppCompatActivity {
 
         final Patient[] loggedPatient = {null};
 
-
         RelativeLayout loading = findViewById(R.id.loading);
         loading.setVisibility(RelativeLayout.VISIBLE);
-        
+
+        FrameLayout frameLayout = findViewById(R.id.fragment_container_login);
+        frameLayout.setVisibility(FrameLayout.GONE);
+
+        if(frameLayout.getVisibility() == FrameLayout.GONE)
+            Log.d("Visibility_auth", "GONE");
+
         SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
-        String email = sharedPreferences.getString("email", null);
-        String password = sharedPreferences.getString("password", null);
-        String iv = sharedPreferences.getString("iv", null);
-        boolean isDoctor = sharedPreferences.getBoolean("isDoctor", false);
+            String email = sharedPreferences.getString("email", null);
+            String password = sharedPreferences.getString("password", null);
+            String iv = sharedPreferences.getString("iv", null);
+            boolean isDoctor = sharedPreferences.getBoolean("isDoctor", false);
 
-        if(!isDoctor) {
-            if (email != null) {
-                if (password != null) {
-
-                    byte[] encryptPassword = Base64.decode(password, Base64.DEFAULT);
-                    byte[] ivByte = Base64.decode(iv, Base64.DEFAULT);
-                    try {
-                        SecretKey secretKey = CryptoUtil.loadSecretKey(email);
-                        byte[] decryptData = CryptoUtil.decryptWithKey(secretKey, encryptPassword, ivByte);
-                        password = new String(decryptData);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            if(!isDoctor) {
+                if (email != null) {
                     if (password != null) {
-                        dbAdapterPatient = new DatabaseAdapterPatient(context);
-                        dbAdapterPatient.onLogin(email, password, new OnPatientDataCallback() {
-                            @Override
-                            public void onCallback(Patient patient) {
-                                RelativeLayout relativeLayout = findViewById(R.id.loading);
-                                relativeLayout.setVisibility(RelativeLayout.GONE);
-                                Intent intent = new Intent(EntryActivity.this, MainActivity.class);
-                                intent.putExtra("loggedPatient", (Parcelable) patient);
-                                startActivity(intent);
-                                finish();
-                            }
 
-                            @Override
-                            public void onCallbackError(Exception e, String Message) {
-                                e.printStackTrace();
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(R.string.error).setMessage(Message);
-                                builder.setPositiveButton(R.string.yes, null);
-                                builder.show();
+                        byte[] encryptPassword = Base64.decode(password, Base64.DEFAULT);
+                        byte[] ivByte = Base64.decode(iv, Base64.DEFAULT);
+                        try {
+                            SecretKey secretKey = CryptoUtil.loadSecretKey(email);
+                            byte[] decryptData = CryptoUtil.decryptWithKey(secretKey, encryptPassword, ivByte);
+                            password = new String(decryptData);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (password != null) {
+                            dbAdapterPatient = new DatabaseAdapterPatient(context);
+                            dbAdapterPatient.onLogin(email, password, new OnPatientDataCallback() {
+                                @Override
+                                public void onCallback(Patient patient) {
+                                    RelativeLayout relativeLayout = findViewById(R.id.loading);
+                                    relativeLayout.setVisibility(RelativeLayout.GONE);
+                                    Intent intent = new Intent(EntryActivity.this, MainActivity.class);
+                                    intent.putExtra("loggedPatient", (Parcelable) patient);
+                                    startActivity(intent);
+                                    finish();
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void onCallbackError(Exception e, String Message) {
+                                    e.printStackTrace();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                    builder.setTitle(R.string.error).setMessage(Message);
+                                    builder.setPositiveButton(R.string.yes, null);
+                                    builder.show();
+
+                                }
+                            });
+                        }
                     }
+                } else {
+                    loading.setVisibility(RelativeLayout.GONE);
+                    frameLayout.setVisibility(FrameLayout.VISIBLE);
                 }
-            } else {
-                loading.setVisibility(RelativeLayout.GONE);
-            }
-        }else
-            checkAutomaticLoginDoctor();
+            }else
+                checkAutomaticLoginDoctor();
     }
+
 
     private void checkAutomaticLoginDoctor() {
         final Doctor[] loggedDoctor = {null};
-
-
         RelativeLayout loading = findViewById(R.id.loading);
         loading.setVisibility(RelativeLayout.VISIBLE);
+        FrameLayout frameLayout = findViewById(R.id.fragment_container_login);
+        frameLayout.setVisibility(FrameLayout.GONE);
 
         SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
-        String email = sharedPreferences.getString("email", null);
-        String password = sharedPreferences.getString("password", null);
-        String iv = sharedPreferences.getString("iv", null);
-        boolean isDoctor = sharedPreferences.getBoolean("isDoctor", false);
-        if (isDoctor) {
-            if (email != null) {
-                if (password != null) {
 
-                    byte[] encryptPassword = Base64.decode(password, Base64.DEFAULT);
-                    byte[] ivByte = Base64.decode(iv, Base64.DEFAULT);
-                    try {
-                        SecretKey secretKey = CryptoUtil.loadSecretKey(email);
-                        byte[] decryptData = CryptoUtil.decryptWithKey(secretKey, encryptPassword, ivByte);
-                        password = new String(decryptData);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+
+            String email = sharedPreferences.getString("email", null);
+            String password = sharedPreferences.getString("password", null);
+            String iv = sharedPreferences.getString("iv", null);
+            boolean isDoctor = sharedPreferences.getBoolean("isDoctor", false);
+            if (isDoctor) {
+                if (email != null) {
                     if (password != null) {
 
-                        dbAdapterDoctor = new DatabaseAdapterDoctor(context);
-                        dbAdapterDoctor.onLogin(email, password, new OnDoctorDataCallback() {
+                        byte[] encryptPassword = Base64.decode(password, Base64.DEFAULT);
+                        byte[] ivByte = Base64.decode(iv, Base64.DEFAULT);
+                        try {
+                            SecretKey secretKey = CryptoUtil.loadSecretKey(email);
+                            byte[] decryptData = CryptoUtil.decryptWithKey(secretKey, encryptPassword, ivByte);
+                            password = new String(decryptData);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (password != null) {
 
-                            @Override
-                            public void onCallback(Doctor doctor) {
+                            dbAdapterDoctor = new DatabaseAdapterDoctor(context);
+                            dbAdapterDoctor.onLogin(email, password, new OnDoctorDataCallback() {
 
-                                RelativeLayout relativeLayout = findViewById(R.id.loading);
-                                relativeLayout.setVisibility(RelativeLayout.GONE);
-                                Intent intent = new Intent(EntryActivity.this, MainActivity.class);
-                                intent.putExtra("loggedDoctor", (Parcelable) doctor);
-                                startActivity(intent);
-                                finish();
+                                @Override
+                                public void onCallback(Doctor doctor) {
 
-                            }
+                                    RelativeLayout relativeLayout = findViewById(R.id.loading);
+                                    relativeLayout.setVisibility(RelativeLayout.GONE);
+                                    Intent intent = new Intent(EntryActivity.this, MainActivity.class);
+                                    intent.putExtra("loggedDoctor", (Parcelable) doctor);
+                                    startActivity(intent);
+                                    finish();
 
-                            @Override
-                            public void onCallbackError(Exception e, String Message) {
-                                e.printStackTrace();
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(R.string.error).setMessage(Message);
-                                builder.setPositiveButton(R.string.yes, null);
-                                builder.show();
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void onCallbackError(Exception e, String Message) {
+                                    e.printStackTrace();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                    builder.setTitle(R.string.error).setMessage(Message);
+                                    builder.setPositiveButton(R.string.yes, null);
+                                    builder.show();
 
+                                }
+                            });
+
+                        }
                     }
+                } else {
+                    loading.setVisibility(RelativeLayout.GONE);
+                    frameLayout.setVisibility(FrameLayout.VISIBLE);
                 }
-            } else {
-                loading.setVisibility(RelativeLayout.GONE);
-            }
         }
     }
     public void checkPermission() {
@@ -238,7 +248,7 @@ public class EntryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container_login);
 
         if(currentFragment instanceof LoginDoctorQrCodeFragment){
             replaceFragment(new LoginDoctorCredentialFragment());

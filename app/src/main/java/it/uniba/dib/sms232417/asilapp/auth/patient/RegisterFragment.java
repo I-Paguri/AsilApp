@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,6 +31,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 //import java.util.Base64;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.crypto.SecretKey;
 
@@ -77,15 +84,24 @@ public class RegisterFragment extends Fragment {
                     public void onClick(View v) {
                         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
                         builder.setTitleText("Select a Date");
-                        MaterialDatePicker materialDatePicker = builder.build();
-                        materialDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-                            @Override
-                            public void onPositiveButtonClick(Object selection) {
-                                btnDataNascita.setText(materialDatePicker.getHeaderText());
-                                strDataNascita = materialDatePicker.getHeaderText();
 
-                            }
+                        Calendar calendarStart = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        calendarStart.set(1940, 0, 1);
+                        long minDate = calendarStart.getTimeInMillis();
+                        Calendar calendarEnd = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        calendarEnd.set(2006, 0, 1);
+                        long maxDate = calendarEnd.getTimeInMillis();
+                        builder.setCalendarConstraints(new CalendarConstraints.Builder().setStart(minDate).setEnd(maxDate).build());
+
+                        MaterialDatePicker<Long> materialDatePicker = builder.build();
+                        materialDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                        materialDatePicker.addOnPositiveButtonClickListener(selection ->  {
+                            Date selectedDate = new Date(selection);
+                            SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                            String date = format.format(selectedDate);
+                            btnDataNascita.setText(date);
+                            strDataNascita = date;
+
                         });
                         materialDatePicker.addOnNegativeButtonClickListener(
                                 dialog -> {
