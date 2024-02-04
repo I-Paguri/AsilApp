@@ -104,6 +104,7 @@ public class DatabaseAdapterDoctor {
         mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithCustomToken(token)
                 .addOnSuccessListener(authResult -> {
+                    Log.d("Login", "Login in corso");
                     FirebaseUser dottore = mAuth.getCurrentUser();
                     db = FirebaseFirestore.getInstance();
 
@@ -133,6 +134,10 @@ public class DatabaseAdapterDoctor {
                                     Log.d("Login", "Login non effettuato");
                                 }
                             });
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("Login", "Login non effettuato");
+                    callback.onCallbackError(new Exception(), e.toString());
                 });
     }
 

@@ -74,6 +74,8 @@ public class LoginDoctorQrCodeFragment extends Fragment {
     private LettoreQr analyzer;
     DatabaseAdapterDoctor dbAdapterDoctor;
     private boolean isBarcodeRead = false;
+    int i = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -107,21 +109,20 @@ public class LoginDoctorQrCodeFragment extends Fragment {
         cameraProviderFuture.addListener(new Runnable() {
             @Override
             public void run() {
-                try {
-                    ProcessCameraProvider processCameraProvider = (ProcessCameraProvider) cameraProviderFuture.get();
-                    bindpreview(processCameraProvider);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    try {
+                        ProcessCameraProvider processCameraProvider = (ProcessCameraProvider) cameraProviderFuture.get();
+                        bindpreview(processCameraProvider);
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
 
             }
         }, ContextCompat.getMainExecutor(getContext()));
-
-
     }
+
     private void bindpreview(ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder().build();
         CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
@@ -138,20 +139,18 @@ public class LoginDoctorQrCodeFragment extends Fragment {
         private FragmentManager fragmentManager;
 
         // private ResultQrCodeDialog resultQrCodeDialog;
-        public LettoreQr() {}
+        public LettoreQr() {
+        }
 
         @Override
         public void analyze(@NotNull ImageProxy imageProxy) {
-            if(!isBarcodeRead) {
-                scanBarcode(imageProxy);
-                RelativeLayout relativeLayout = getView().findViewById(R.id.charge_layout);
-                RelativeLayout relativeLayout2 = getView().findViewById(R.id.progressBarLayout);
-                relativeLayout.setBackgroundResource(R.drawable.rounded_relative_layout);
-                relativeLayout2.setVisibility(View.GONE);
-            }
+            scanBarcode(imageProxy);
+
+
         }
 
         private void scanBarcode(ImageProxy imageProxy) {
+
             @SuppressLint("UnsafeOptInUsageError") Image img1 = imageProxy.getImage();
             assert img1 != null;
             InputImage inputImage = InputImage.fromMediaImage(img1, imageProxy.getImageInfo().getRotationDegrees());
@@ -162,11 +161,16 @@ public class LoginDoctorQrCodeFragment extends Fragment {
                                     Barcode.FORMAT_AZTEC)
                             .build();
             BarcodeScanner scanner = BarcodeScanning.getClient(options);
+
             Task<List<Barcode>> result = scanner.process(inputImage)
                     .addOnSuccessListener(new OnSuccessListener<List<Barcode>>() {
                         @Override
                         public void onSuccess(List<Barcode> barcodes) {
-                            readBarcodeData(barcodes);
+                            Log.d("isBarcodeRead", String.valueOf(isBarcodeRead));
+                            if(!isBarcodeRead){
+                                readBarcodeData(barcodes);
+
+                            }
 
                         }
                     })
@@ -183,36 +187,36 @@ public class LoginDoctorQrCodeFragment extends Fragment {
                             imageProxy.close();
                         }
                     });
+
         }
 
-    }
+        private void readBarcodeData(List<Barcode> barcodes) {
+            for (Barcode barcode : barcodes) {
+                Rect bounds = barcode.getBoundingBox();
+                Point[] corners = barcode.getCornerPoints();
 
-    private void readBarcodeData(List<Barcode> barcodes) {
-        for (Barcode barcode: barcodes) {
-            Rect bounds = barcode.getBoundingBox();
-            Point[] corners = barcode.getCornerPoints();
+                String rawValue = barcode.getRawValue();
 
-            String rawValue = barcode.getRawValue();
-
-            int valueType = barcode.getValueType();
-            // See API reference for complete list of supported types
-            switch (valueType) {
-                case Barcode.TYPE_TEXT:
-                    String uuid = barcode.getDisplayValue();
-                    if (uuid != null) {
+                int valueType = barcode.getValueType();
+                // See API reference for complete list of supported types
+                switch (valueType) {
+                    case Barcode.TYPE_TEXT:
+                        String uuid = barcode.getDisplayValue();
+                        if (uuid != null) {
+                            isBarcodeRead = true;
+                            Log.d("QRCode", "UUID: " + uuid);
                             RelativeLayout relativeLayout = getView().findViewById(R.id.charge_layout);
                             RelativeLayout relativeLayout2 = getView().findViewById(R.id.progressBarLayout);
                             relativeLayout.setBackgroundResource(R.drawable.rounded_relative_layout_charge);
                             relativeLayout2.setVisibility(View.VISIBLE);
-                            isBarcodeRead = true;
                             dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
                             dbAdapterDoctor.onLoginQrCode(uuid, new OnDoctorDataCallback() {
                                 @Override
                                 public void onCallback(Doctor doctor) {
-                                        Intent intent = new Intent(getContext(), MainActivity.class);
-                                        intent.putExtra("loggedDoctor", (Parcelable) doctor);
-                                        startActivity(intent);
-                                        requireActivity().finish();
+                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                    intent.putExtra("loggedDoctor", (Parcelable) doctor);
+                                    startActivity(intent);
+                                    requireActivity().finish();
                                 }
 
 
@@ -220,16 +224,27 @@ public class LoginDoctorQrCodeFragment extends Fragment {
                                 public void onCallbackError(Exception e, String message) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                     builder.setTitle(R.string.error).setMessage(message);
-                                    builder.setPositiveButton(R.string.yes, null);
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // User clicked Yes button
+                                            LoginDoctorQrCodeFragment.this.isBarcodeRead = false;
+                                        }
+                                    });
                                     builder.show();
-                                    isBarcodeRead = false;
+                                    RelativeLayout relativeLayout = getView().findViewById(R.id.charge_layout);
+                                    RelativeLayout relativeLayout2 = getView().findViewById(R.id.progressBarLayout);
+                                    relativeLayout.setBackgroundResource(R.drawable.rounded_relative_layout);
+                                    relativeLayout2.setVisibility(View.GONE);
                                 }
                             });
                         }
-                    }
+                }
 
             }
 
+
         }
+    }
 }
+
 
