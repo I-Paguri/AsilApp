@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Base64;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,6 +31,8 @@ import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorQrCodeFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
+import it.uniba.dib.sms232417.asilapp.auth.patient.RegisterFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -42,7 +46,7 @@ public class EntryActivity extends AppCompatActivity {
 
     DatabaseAdapterPatient dbAdapterPatient;
     DatabaseAdapterDoctor dbAdapterDoctor;
-    RelativeLayout decisionLogin;
+    private boolean doubleBackToExitPressedOnce = false;
 
     Context context;
 
@@ -57,42 +61,21 @@ public class EntryActivity extends AppCompatActivity {
 
         checkAutomaticLogin();
 
+        replaceFragment(new LoginDecisionFragment());
 
-        FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
-
-        MaterialButton btnPatient = findViewById(R.id.btnLoginPatient);
-        MaterialButton btnDoctor = findViewById(R.id.btnLoginDoctor);
-
-        btnPatient.setOnClickListener(v -> {
-            decisionLogin.setVisibility(RelativeLayout.GONE);
-            fragmentContainer.setVisibility(FrameLayout.VISIBLE);
-            LoginFragment loginFragment = new LoginFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-            fragmentTransaction.replace(R.id.fragment_container, loginFragment);
-            fragmentTransaction.commit();
-        });
-
-        btnDoctor.setOnClickListener(v -> {
-            decisionLogin.setVisibility(RelativeLayout.GONE);
-            fragmentContainer.setVisibility(FrameLayout.VISIBLE);
-            LoginDoctorCredentialFragment loginFragment = new LoginDoctorCredentialFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-
-            fragmentTransaction.replace(R.id.fragment_container, loginFragment);
-            fragmentTransaction.commit();
-        });
 
     }
 
     public void replaceFragment(Fragment fragment) {
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.replace(R.id.fragment_container,fragment);
+        FrameLayout frameLayout = findViewById(R.id.fragment_container);
+        if(frameLayout.getVisibility() == FrameLayout.GONE)
+            frameLayout.setVisibility(FrameLayout.VISIBLE);
 
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -152,8 +135,6 @@ public class EntryActivity extends AppCompatActivity {
                 }
             } else {
                 loading.setVisibility(RelativeLayout.GONE);
-                decisionLogin = findViewById(R.id.decision_login_layout);
-                decisionLogin.setVisibility(RelativeLayout.VISIBLE);
             }
         }else
             checkAutomaticLoginDoctor();
@@ -216,8 +197,6 @@ public class EntryActivity extends AppCompatActivity {
                 }
             } else {
                 loading.setVisibility(RelativeLayout.GONE);
-                decisionLogin = findViewById(R.id.decision_login_layout);
-                decisionLogin.setVisibility(RelativeLayout.VISIBLE);
             }
         }
     }
@@ -255,7 +234,42 @@ public class EntryActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if(currentFragment instanceof LoginDoctorQrCodeFragment){
+            replaceFragment(new LoginDoctorCredentialFragment());
+        } else if (currentFragment instanceof LoginFragment) {
+            replaceFragment(new LoginDecisionFragment());
+        }else if(currentFragment instanceof RegisterFragment) {
+            replaceFragment(new LoginFragment());
+        }else if(currentFragment instanceof LoginDoctorCredentialFragment){
+            replaceFragment(new LoginDecisionFragment());
+        }else if (currentFragment instanceof LoginDecisionFragment) {
+            if (doubleBackToExitPressedOnce) {
+                finish();
+
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, getResources().getString(R.string.press_back_again), Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        } else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                super.onBackPressed();
+            }
+        }
 
     }
 }

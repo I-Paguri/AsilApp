@@ -136,6 +136,7 @@ public class LoginDoctorCredentialFragment extends Fragment {
                     intent.putExtra("loggedDoctor", (Parcelable) doctor);
                     startActivity(intent);
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    requireActivity().finish();
             });
 
                 builder.setNegativeButton(R.string.no, (dialog, which) -> {
@@ -143,6 +144,7 @@ public class LoginDoctorCredentialFragment extends Fragment {
                     intent.putExtra("loggedDoctor", (Parcelable) doctor);
                     startActivity(intent);
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    requireActivity().finish();
                 });
                 builder.show();
             }

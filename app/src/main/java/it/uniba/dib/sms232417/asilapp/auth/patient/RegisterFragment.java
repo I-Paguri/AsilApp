@@ -224,12 +224,14 @@ public class RegisterFragment extends Fragment {
                     intent.putExtra("loggedPatient", (Parcelable) patient);
                     startActivity(intent);
                     progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    requireActivity().finish();
                 });
 
                 builder.setNegativeButton(R.string.no, (dialog, which) -> {
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.putExtra("loggedPatient", (Parcelable) patient);
                     startActivity(intent);
+                    requireActivity().finish();
                 });
                 builder.show();
             }

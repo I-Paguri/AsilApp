@@ -212,6 +212,7 @@ public class LoginDoctorQrCodeFragment extends Fragment {
                                         Intent intent = new Intent(getContext(), MainActivity.class);
                                         intent.putExtra("loggedDoctor", (Parcelable) doctor);
                                         startActivity(intent);
+                                        requireActivity().finish();
                                 }
 
 

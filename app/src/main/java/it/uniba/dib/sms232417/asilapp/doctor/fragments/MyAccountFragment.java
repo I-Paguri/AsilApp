@@ -171,6 +171,7 @@ public class MyAccountFragment extends Fragment {
 
             Intent esci = new Intent(getContext(), EntryActivity.class);
             startActivity(esci);
+            requireActivity().finish();
     }
 
 
