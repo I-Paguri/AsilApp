@@ -73,19 +73,21 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Patient loggedPatient = (Patient) intent.getParcelableExtra("loggedPatient");
         Doctor loggedDoctor = (Doctor) intent.getParcelableExtra("loggedDoctor");
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView.getMenu().clear();
         if (loggedPatient != null) {
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
             try {
                 FileOutputStream fos = openFileOutput(StringUtils.PATIENT_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
                 os.writeObject(loggedPatient);
                 Log.d("Patient", "Patient saved");
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
         if (loggedDoctor != null) {
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
             try {
                 FileOutputStream fos = openFileOutput(StringUtils.DOCTOR_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -95,9 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException(e);
             }
         }
-
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
 

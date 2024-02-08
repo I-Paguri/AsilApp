@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/home"
+        android:title="@string/btn_home" />
+
+
+    <item
+        android:id="@+id/navigation_healthcare"
+        android:icon="@drawable/diary"
+        android:title="@string/btn_healthcare" />
+
+
+    <item
+        android:id="@+id/navigation_measure"
+        android:icon="@drawable/add"
+        android:title="@string/btn_add" />
+
+
+    <item
+        android:id="@+id/navigation_my_patients"
+        android:icon="@drawable/diary"
+        android:title="@string/btn_my_patients" />
+
+
+    <item
+        android:id="@+id/navigation_my_account"
+        android:icon="@drawable/my_account"
+        android:title="@string/btn_my_account" />
+
+</menu>
