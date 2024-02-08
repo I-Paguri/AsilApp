@@ -497,6 +497,8 @@
     <string name="delete_treatment">Delete this treatment?</string>
     <string name="keep">Keep</string>
     <string name="delete_treatment_msg">This action cannot be undone.</string>
+    <string name="treatment_added_successfully"> Treatment added successfully! </string>
+    <string name="error_occured_treatment"> An error occurred while adding the treatment! Check your network and try again. </string>
 
     <plurals name="age">
         <item quantity="one">year</item>

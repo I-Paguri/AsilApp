@@ -4,15 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -99,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
             treatmentFormMedicationsFragment.setIntakeCount(1);
             int itemId = item.getItemId();
             /*
-                * If the selected item is HomeFragment, HealthcareFragment, MyPatientsFragment, or MyAccountFragment,
-                * replace the current fragment with the selected one.
-                * If the selected item is MeasureFragment, check the permission to use the camera.
+             * If the selected item is HomeFragment, HealthcareFragment, MyPatientsFragment, or MyAccountFragment,
+             * replace the current fragment with the selected one.
+             * If the selected item is MeasureFragment, check the permission to use the camera.
              */
             if (itemId == R.id.navigation_home) {
                 selectedFragment = new HomeFragment();

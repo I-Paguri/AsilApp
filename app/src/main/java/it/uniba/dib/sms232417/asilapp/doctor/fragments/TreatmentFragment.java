@@ -26,7 +26,6 @@ import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -85,11 +84,10 @@ public class TreatmentFragment extends Fragment {
                         String treatmentId = entry.getKey();
                         Treatment treatment = entry.getValue();
 
-                        if (!iterator.hasNext()) { // Check if it is the last treatment
-                            addTreatmentCardView(treatmentId, treatment, true);
-                        } else {
-                            addTreatmentCardView(treatmentId, treatment, false);
-                        }
+                        // Add the treatment to the parent layout
+                        // Check if it is the last treatment
+                        // if it is last treatment then a bottom margin of 85dp is added to the last treatment layout
+                        addTreatmentCardView(treatmentId, treatment, !iterator.hasNext());
                     }
                 }
             }

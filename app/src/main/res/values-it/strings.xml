@@ -201,6 +201,8 @@
     <string name="delete_treatment">Vuoi eliminare questa terapia?</string>
     <string name="keep">Mantieni</string>
     <string name="delete_treatment_msg">Una volta eliminata questa terapia non sarà possibile recuperarla.</string>
+    <string name="treatment_added_successfully"> Terapia aggiunta con successo! </string>
+    <string name="error_occured_treatment"> Si è verificato un errore durante l\'aggiunta della terapia! Controlla la connessione e riprova. </string>
 
     <plurals name="age">
         <item quantity="one">anno</item>

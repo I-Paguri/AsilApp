@@ -12,12 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kofigyan.stateprogressbar.StateProgressBar;
+
+import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 
 public class TreatmentFormNotesFragment extends Fragment {
 
@@ -74,9 +78,34 @@ public class TreatmentFormNotesFragment extends Fragment {
                 }
 
 
+                View bottomNavView = requireActivity().findViewById(R.id.nav_view);
+
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
-                dbAdapter.addTreatment(patientUUID, treatment);
+
+                dbAdapter.addTreatment(patientUUID, treatment, new OnTreatmentsCallback() {
+                    @Override
+                    public void onCallback(Map<String, Treatment> treatments) {
+                        View rootView = requireActivity().findViewById(android.R.id.content);
+                        Snackbar snackbar = Snackbar.make(rootView, getResources().getString(R.string.treatment_added_successfully), Snackbar.LENGTH_LONG);
+                        // Set the anchor view to bottom navigation view to show the snackbar above the bottom navigation view
+                        snackbar.setAnchorView(bottomNavView);
+                        snackbar.show();
+                        Log.d("TreatmentAdded", "Treatment added successfully");
+                    }
+
+                    @Override
+                    public void onCallbackFailed(Exception e) {
+
+                        View rootView = requireActivity().findViewById(android.R.id.content);
+                        Snackbar snackbar = Snackbar.make(rootView, getResources().getString(R.string.error_occured_treatment), Snackbar.LENGTH_LONG);
+                        // Set the anchor view to bottom navigation view to show the snackbar above the bottom navigation view
+                        snackbar.setAnchorView(bottomNavView);
+                        snackbar.show();
+
+                    }
+                });
+
 
                 PatientFragment patientFragment = new PatientFragment();
                 // Create a new bundle to pass the selected tab index

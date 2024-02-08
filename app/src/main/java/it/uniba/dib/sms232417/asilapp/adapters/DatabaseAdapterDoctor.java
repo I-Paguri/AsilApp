@@ -6,9 +6,9 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -79,18 +79,11 @@ public class DatabaseAdapterDoctor {
     for (String uuid : patientUUID){
         db.collection("patient")
                 .whereIn("uuid", Collections.singletonList(uuid))
+                .orderBy("nome", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
                         List<Patient> patients = queryDocumentSnapshots.toObjects(Patient.class);
-
-                        // Sort patients by name
-                        Collections.sort(patients, new Comparator<Patient>() {
-                            @Override
-                            public int compare(Patient p1, Patient p2) {
-                                return p1.getNome().compareTo(p2.getNome());
-                            }
-                        });
 
                         callback.onCallback(patients);
                     } else {

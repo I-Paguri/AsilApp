@@ -8,14 +8,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -105,7 +101,7 @@ public class DatabaseAdapterPatient {
         mAuth.signOut();
     }
 
-    public void addTreatment(String patientUUID, Treatment treatment) {
+    public void addTreatment(String patientUUID, Treatment treatment, OnTreatmentsCallback onTreatmentsCallback) {
         Log.d("AddedNewTreatment", treatment.toString());
 
         getTreatmentCount(patientUUID, new OnCountCallback() {
@@ -119,15 +115,18 @@ public class DatabaseAdapterPatient {
                         .set(treatment)
                         .addOnSuccessListener(aVoid -> {
                             Log.d("Firestore", "Treatment successfully written!");
+                            onTreatmentsCallback.onCallback(null);
                         })
                         .addOnFailureListener(e -> {
                             Log.w("Firestore", "Error writing treatment", e);
+                            onTreatmentsCallback.onCallbackFailed(e);
                         });
             }
 
             @Override
             public void onCallbackFailed(Exception e) {
                 Log.w("Firestore", "Error getting treatment count", e);
+                onTreatmentsCallback.onCallbackFailed(e);
             }
         });
     }
