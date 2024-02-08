@@ -109,6 +109,11 @@ public class HomeFragment extends Fragment {
         MaterialCardView cardViewMyPatients = view.findViewById(R.id.cardViewMyPatients);
 
 
+        if (loggedDoctor != null) {
+            cardViewMyPatients.setVisibility(View.VISIBLE);
+        } else {
+            cardViewMyPatients.setVisibility(View.GONE);
+        }
         // Imposto il listener per la cardView dei pazienti
         cardViewMyPatients.setOnClickListener(v -> {
             // Quando viene cliccata la cardView dei pazienti, viene aperto il fragment dei pazienti
@@ -154,8 +159,6 @@ public class HomeFragment extends Fragment {
         // Attach the badge
         BadgeUtils.attachBadgeDrawable(badgeDrawable, anchor);
         */
-
-
 
     }
 
