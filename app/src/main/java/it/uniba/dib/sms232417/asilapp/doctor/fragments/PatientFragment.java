@@ -28,7 +28,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class PatientFragment extends Fragment {
     private Toolbar toolbar;
-    private String patientUUID, patientName, patientAge;
+    private String patientUUID, patientName, patientAge, user;
     private ViewPagerAdapter adapter;
 
     @Override
@@ -81,6 +81,7 @@ public class PatientFragment extends Fragment {
             patientUUID = this.getArguments().getString("patientUUID");
             patientName = this.getArguments().getString("patientName");
             patientAge = this.getArguments().getString("patientAge");
+            user = this.getArguments().getString("user");
         }
 
         textName.setText(patientName);
@@ -99,6 +100,7 @@ public class PatientFragment extends Fragment {
         bundle.putString("patientUUID", patientUUID);
         bundle.putString("patientName", patientName);
         bundle.putString("patientAge", patientAge);
+        bundle.putString("user", user);
 
         // Create an adapter that knows which fragment should be shown on each page
         adapter = new ViewPagerAdapter(this, bundle);
@@ -110,7 +112,7 @@ public class PatientFragment extends Fragment {
         // Connect the TabLayout with the ViewPager2
         // This will update the TabLayout when the ViewPager2 is swiped
         // Connect the TabLayout with the ViewPager2
-// This will update the TabLayout when the ViewPager2 is swiped
+        // This will update the TabLayout when the ViewPager2 is swiped
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     switch (position) {

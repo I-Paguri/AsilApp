@@ -44,10 +44,12 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.PatientFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
@@ -73,10 +75,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Patient loggedPatient = (Patient) intent.getParcelableExtra("loggedPatient");
         Doctor loggedDoctor = (Doctor) intent.getParcelableExtra("loggedDoctor");
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.getMenu().clear();
+
         if (loggedPatient != null) {
-            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
             try {
                 FileOutputStream fos = openFileOutput(StringUtils.PATIENT_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -85,9 +88,65 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
+
+            bottomNavigationView.setOnItemSelectedListener(item -> {
+
+
+                treatmentFormMedicationsFragment.setIntakeCount(1);
+                int itemId = item.getItemId();
+                /*
+                 * If the selected item is HomeFragment, HealthcareFragment, MyPatientsFragment, or MyAccountFragment,
+                 * replace the current fragment with the selected one.
+                 * If the selected item is MeasureFragment, check the permission to use the camera.
+                 */
+                if (itemId == R.id.navigation_home) {
+                    selectedFragment = new HomeFragment();
+                } else {
+                    if (itemId == R.id.navigation_payments) {
+                        selectedFragment = new ExpensesFragment();
+                    } else {
+                        if (itemId == R.id.navigation_diary) {
+                            selectedFragment = new PatientFragment();
+                            Bundle bundle = new Bundle();
+
+                            bundle.putString("patientUUID", loggedPatient.getUUID());
+                            bundle.putString("patientName", loggedPatient.getNome());
+                            bundle.putString("patientAge", loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age,
+                                    loggedPatient.getAge(), loggedPatient.getAge()));
+                            bundle.putString("user", "patient");
+
+                            selectedFragment.setArguments(bundle);
+                        } else {
+                            if (itemId == R.id.navigation_my_account) {
+                                selectedFragment = new MyAccountFragment();
+                            } else {
+                                if (itemId == R.id.navigation_measure) {
+                                    checkPermission();
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                if (selectedFragment != null) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+
+                return true;
+            });
+
+            // Set default selection
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
+
         }
         if (loggedDoctor != null) {
-            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
             try {
                 FileOutputStream fos = openFileOutput(StringUtils.DOCTOR_LOGGED, Context.MODE_PRIVATE);
                 ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -96,56 +155,59 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
+            bottomNavigationView.setOnItemSelectedListener(item -> {
 
 
-            treatmentFormMedicationsFragment.setIntakeCount(1);
-            int itemId = item.getItemId();
-            /*
-             * If the selected item is HomeFragment, HealthcareFragment, MyPatientsFragment, or MyAccountFragment,
-             * replace the current fragment with the selected one.
-             * If the selected item is MeasureFragment, check the permission to use the camera.
-             */
-            if (itemId == R.id.navigation_home) {
-                selectedFragment = new HomeFragment();
-            } else {
-                if (itemId == R.id.navigation_healthcare) {
-                    selectedFragment = new HealthcareFragment();
+                treatmentFormMedicationsFragment.setIntakeCount(1);
+                int itemId = item.getItemId();
+                /*
+                 * If the selected item is HomeFragment, HealthcareFragment, MyPatientsFragment, or MyAccountFragment,
+                 * replace the current fragment with the selected one.
+                 * If the selected item is MeasureFragment, check the permission to use the camera.
+                 */
+                if (itemId == R.id.navigation_home) {
+                    selectedFragment = new HomeFragment();
                 } else {
-                    if (itemId == R.id.navigation_my_patients) {
-                        selectedFragment = new MyPatientsFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("doctor", loggedDoctor);
-                        selectedFragment.setArguments(bundle);
+                    if (itemId == R.id.navigation_healthcare) {
+                        selectedFragment = new HealthcareFragment();
                     } else {
-                        if (itemId == R.id.navigation_my_account) {
-                            selectedFragment = new MyAccountFragment();
+                        if (itemId == R.id.navigation_my_patients) {
+                            selectedFragment = new MyPatientsFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("doctor", loggedDoctor);
+                            selectedFragment.setArguments(bundle);
                         } else {
-                            if (itemId == R.id.navigation_measure) {
-                                checkPermission();
+                            if (itemId == R.id.navigation_my_account) {
+                                selectedFragment = new MyAccountFragment();
+                            } else {
+                                if (itemId == R.id.navigation_measure) {
+                                    checkPermission();
+                                }
                             }
                         }
+
                     }
-
                 }
-            }
 
-            if (selectedFragment != null) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
+                if (selectedFragment != null) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
 
-            return true;
-        });
+                return true;
+            });
 
-        // Set default selection
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
-    }
+            // Set default selection
+            bottomNavigationView.setSelectedItemId(R.id.navigation_home); // replace with your actual menu item id
+
+        }
+
+        }
 
     public void checkPermission() {
         try {
