@@ -208,4 +208,7 @@
         <item quantity="one">anno</item>
         <item quantity="other">anni</item>
     </plurals>
+
+    <string name="payments">Spese</string>
+    <string name="diary">Diario</string>
 </resources>

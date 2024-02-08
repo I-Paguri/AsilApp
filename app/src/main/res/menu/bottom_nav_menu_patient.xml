@@ -9,8 +9,8 @@
 
     <item
         android:id="@+id/navigation_healthcare"
-        android:icon="@drawable/diary"
-        android:title="@string/btn_healthcare" />
+        android:icon="@drawable/payments"
+        android:title="@string/payments" />
 
 
     <item
@@ -22,7 +22,7 @@
     <item
         android:id="@+id/navigation_my_patients"
         android:icon="@drawable/diary"
-        android:title="@string/btn_my_patients" />
+        android:title="@string/diary" />
 
 
     <item

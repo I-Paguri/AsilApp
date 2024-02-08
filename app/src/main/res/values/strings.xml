@@ -505,4 +505,6 @@
         <item quantity="other">years</item>
     </plurals>
 
+    <string name="payments">Payments</string>
+    <string name="diary">Diary</string>
 </resources>
