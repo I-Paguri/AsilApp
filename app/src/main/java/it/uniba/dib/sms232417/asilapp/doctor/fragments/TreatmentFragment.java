@@ -191,9 +191,10 @@ public class TreatmentFragment extends Fragment {
         @SuppressLint("InflateParams")
         View treatmentLayout = inflater.inflate(R.layout.treatment_layout, null);
 
+        float density = getResources().getDisplayMetrics().density;
+
         if (isLast) {
             int bottomMarginDp = 85;
-            float density = getResources().getDisplayMetrics().density;
             int bottomMarginPx = (int) (bottomMarginDp * density);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -243,48 +244,66 @@ public class TreatmentFragment extends Fragment {
         // Find the delete button
         Button deleteButton = treatmentLayout.findViewById(R.id.deleteButton);
 
-        // Create an instance of DatabaseAdapterPatient
-        DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
-        // Set an OnClickListener for the delete button
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Delete the treatment from your data source
-                // You might need to create a method in your DatabaseAdapterPatient class to delete a treatment by its id
-                new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
-                        .setTitle(getResources().getString(R.string.delete_treatment))
-                        .setMessage(getResources().getString(R.string.delete_treatment_msg))
-                        .setNegativeButton(getResources().getString(R.string.keep), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Respond to negative button press
-                            }
-                        })
-                        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Respond to positive button press
-                                adapter.deleteTreatment(patientUUID, treatmentId);
+        if ("patient".equals(user)) {
+            deleteButton.setVisibility(View.GONE);
+            // set treatmentTarget textView marginTop to 16
+            // Convert dp to pixels
+            int startMarginPx = (int) (16 * density);
+            int endMarginPx = (int) (4 * density);
+            int topMarginPx = (int) (8 * density);
+            int bottomMarginPx = (int) (8 * density);
 
-                                // Remove the treatmentLayout from the parentLayout
-                                parentLayout.removeView(treatmentLayout);
+            // Get the current LayoutParams and set the new margins
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) treatmentTargetText.getLayoutParams();
+            params.setMargins(startMarginPx, topMarginPx, endMarginPx, bottomMarginPx);
 
-                                // If there are no more treatments, show the noTreatmentLayout
-                                if (parentLayout.getChildCount() == 0) {
-                                    LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                                    View noTreatmentLayout = inflater.inflate(R.layout.no_treatments_found_layout, null);
-                                    // Add the inflated layout to the parent layout
-                                    parentLayout.addView(noTreatmentLayout);
+            // Apply the new LayoutParams to the TextView
+            treatmentTargetText.setLayoutParams(params);
+        } else {
+
+
+            // Create an instance of DatabaseAdapterPatient
+            DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
+            // Set an OnClickListener for the delete button
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Delete the treatment from your data source
+                    // You might need to create a method in your DatabaseAdapterPatient class to delete a treatment by its id
+                    new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                            .setTitle(getResources().getString(R.string.delete_treatment))
+                            .setMessage(getResources().getString(R.string.delete_treatment_msg))
+                            .setNegativeButton(getResources().getString(R.string.keep), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Respond to negative button press
                                 }
+                            })
+                            .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Respond to positive button press
+                                    adapter.deleteTreatment(patientUUID, treatmentId);
 
-                            }
-                        })
-                        .create()
-                        .show();
+                                    // Remove the treatmentLayout from the parentLayout
+                                    parentLayout.removeView(treatmentLayout);
 
-            }
-        });
+                                    // If there are no more treatments, show the noTreatmentLayout
+                                    if (parentLayout.getChildCount() == 0) {
+                                        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                        View noTreatmentLayout = inflater.inflate(R.layout.no_treatments_found_layout, null);
+                                        // Add the inflated layout to the parent layout
+                                        parentLayout.addView(noTreatmentLayout);
+                                    }
 
+                                }
+                            })
+                            .create()
+                            .show();
+
+                }
+            });
+        }
     }
 
     protected View getMedicationLayout(Medication medication) {
