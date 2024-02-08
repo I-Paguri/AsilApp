@@ -417,7 +417,7 @@
     <string name="month">month/s</string>
 
 
-    <string name="add_intake">Add another intake time</string>
+    <string name="add_intake">Add intake time</string>
     <string name="intake">Intake</string>
     <string name="intake_time">When do you take this medication?</string>
     <string name="quantity">Quantity</string>

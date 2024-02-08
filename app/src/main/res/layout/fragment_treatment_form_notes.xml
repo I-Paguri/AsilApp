@@ -98,7 +98,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="85dp"
-        android:background="@drawable/ic_list_header_background"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">

@@ -417,44 +417,76 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="vertical">
 
+
+
                 <Button
                     android:id="@+id/btnAddIntake"
                     style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
                     android:text="@string/add_intake"
                     android:textAllCaps="true"
-                    app:icon="@drawable/add_circled"
+                    app:icon="@drawable/more_time"
                     app:iconGravity="textEnd"
                     app:iconPadding="10dp" />
 
+                <Button
+                    android:id="@+id/addMedication"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/add_medication"
+                    android:textAllCaps="true"
+                    app:icon="@drawable/add"
+                    app:iconGravity="textEnd"
+                    tools:ignore="ButtonStyle" />
+
             </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayoutAddMedication"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/linearLayoutButtons"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-            <Button
-                android:id="@+id/addMedication"
-                android:layout_width="wrap_content"
-                android:layout_height="56dp"
-                android:text="@string/add_medication"
-                android:textAllCaps="true"
-                tools:ignore="ButtonStyle" />
+                <Button
+                    android:id="@+id/goBack"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/go_back" />
+
+                <Button
+                    android:id="@+id/goNext"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:text="@string/btn_continue"
+                    android:textAllCaps="true"
+                    tools:ignore="ButtonStyle" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
+<!--
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
         android:layout_width="match_parent"
@@ -487,4 +519,5 @@
 
     </LinearLayout>
 
+    -->
 </androidx.constraintlayout.widget.ConstraintLayout>

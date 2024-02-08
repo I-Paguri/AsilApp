@@ -124,7 +124,7 @@
     <string name="week">settimana/e</string>
     <string name="month">mese/i</string>
 
-    <string name="add_intake">Aggiungi un\'altra assunzione</string>
+    <string name="add_intake">Aggiungi assunzione</string>
     <string name="intake">Assunzione</string>
     <string name="intake_time">Quando assumi questo farmaco?</string>
     <string name="quantity">Quantità</string>
