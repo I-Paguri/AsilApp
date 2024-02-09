@@ -6,18 +6,20 @@
         android:icon="@drawable/home"
         android:title="@string/btn_home"
         />
-
+    <!--
     <item
         android:id="@+id/navigation_healthcare"
         android:icon="@drawable/healthcare"
         android:title="@string/btn_healthcare"
         />
 
+
     <item
         android:id="@+id/navigation_measure"
         android:icon="@drawable/add"
         android:title="@string/btn_add" />
 
+-->
     <item
         android:id="@+id/navigation_my_patients"
         android:icon="@drawable/my_patients"

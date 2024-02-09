@@ -170,26 +170,19 @@ public class MainActivity extends AppCompatActivity {
                 if (itemId == R.id.navigation_home) {
                     selectedFragment = new HomeFragment();
                 } else {
-                    if (itemId == R.id.navigation_healthcare) {
-                        selectedFragment = new HealthcareFragment();
+                    if (itemId == R.id.navigation_my_patients) {
+                        selectedFragment = new MyPatientsFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("doctor", loggedDoctor);
+                        selectedFragment.setArguments(bundle);
                     } else {
-                        if (itemId == R.id.navigation_my_patients) {
-                            selectedFragment = new MyPatientsFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("doctor", loggedDoctor);
-                            selectedFragment.setArguments(bundle);
-                        } else {
-                            if (itemId == R.id.navigation_my_account) {
-                                selectedFragment = new MyAccountFragment();
-                            } else {
-                                if (itemId == R.id.navigation_measure) {
-                                    checkPermission();
-                                }
-                            }
+                        if (itemId == R.id.navigation_my_account) {
+                            selectedFragment = new MyAccountFragment();
                         }
-
                     }
+
                 }
+
 
                 if (selectedFragment != null) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -207,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        }
+    }
 
     public void checkPermission() {
         try {
@@ -244,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.addToBackStack(null);
                 transaction.commit();
 
-           }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

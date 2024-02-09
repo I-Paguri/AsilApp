@@ -142,7 +142,7 @@ public class HomeFragment extends Fragment {
             transaction.addToBackStack(null);
             transaction.commit();
             // Quando viene aperto il fragment dei pazienti viene aggiornata l'icona selezionata nella bottom navigation bar
-            bottomNavigationView.setSelectedItemId(R.id.navigation_healthcare);
+            //bottomNavigationView.setSelectedItemId(R.id.navigation_healthcare);
         });
 
         /*
