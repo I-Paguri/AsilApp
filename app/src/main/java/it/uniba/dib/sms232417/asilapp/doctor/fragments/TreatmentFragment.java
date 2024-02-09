@@ -579,11 +579,16 @@ public class TreatmentFragment extends Fragment {
                         quantityNumber = 2; // Plural
                     }
 
-                    intakesString = intakesString + quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(medication.toStringHowToTake(requireContext())), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
+                    intakesString = quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(medication.toStringHowToTake(requireContext())), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
 
                     canvas.drawText(intakesString, x + 10, y, paintRegular);
-                    y = y + 25;
+
+                    if (i != size - 1) {
+                        y = y + 20;
+                    }
                 }
+
+                y = y + 25;
 
 
             }
