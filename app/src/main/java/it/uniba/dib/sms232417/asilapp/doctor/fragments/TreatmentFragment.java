@@ -448,6 +448,7 @@ public class TreatmentFragment extends Fragment {
     private void createAndSharePdf(Map<String, Treatment> treatments) {
         // Create a new PdfDocument
         PdfDocument pdfDocument = new PdfDocument();
+        MappedValues mappedValues = new MappedValues(requireContext());
 
         // Start a page with default page info
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
@@ -483,11 +484,19 @@ public class TreatmentFragment extends Fragment {
         // Set the typeface to the Paint object
         paintSubtitle.setTypeface(ember_bold);
 
+        // Draw the text on the Canvas
+        Paint paintSubtitle2 = new Paint();
+        paintSubtitle2.setTextSize(16);
+
+        // Set the typeface to the Paint object
+        paintSubtitle2.setTypeface(ember_bold);
+
         // TITLE
         canvas.drawText(getResources().getString(R.string.treatments), 210, 50, paintTitle);
 
         // Iterate through the treatments
         int i;
+        int x = 40;
         int y = 100;
         // Get the iterator
         Iterator<Map.Entry<String, Treatment>> iterator = treatments.entrySet().iterator();
@@ -500,15 +509,15 @@ public class TreatmentFragment extends Fragment {
             Treatment treatment = entry.getValue();
 
             // TREATMENT TARGET
-            canvas.drawText(treatment.getTreatmentTarget(), 50, y, paintSubtitle);
+            canvas.drawText(treatment.getTreatmentTarget(), x, y, paintSubtitle);
             y = y + 30;
 
             // DURATION
             if (treatment.getEndDateString().isEmpty()) {
                 // Ongoing treatment
-                canvas.drawText("Duration: " + treatment.getStartDateString() + " - " + getResources().getString(R.string.ongoing), 50, y, paintRegular);
+                canvas.drawText(treatment.getStartDateString() + " - " + getResources().getString(R.string.ongoing), x, y, paintRegular);
             } else {
-                canvas.drawText("Duration: " + treatment.getStartDateString() + " - " + treatment.getEndDateString(), 50, y, paintRegular);
+                canvas.drawText(treatment.getStartDateString() + " - " + treatment.getEndDateString(), x, y, paintRegular);
             }
 
             y = y + 30;
@@ -517,11 +526,64 @@ public class TreatmentFragment extends Fragment {
             ArrayList<Medication> medications = treatment.getMedications();
             Iterator<Medication> medicationIterator = medications.iterator();
             while (medicationIterator.hasNext()) {
+                Medication medication = medicationIterator.next();
+
+                // MEDICATION NAME
+                canvas.drawText("\u2022 " + medication.getMedicationName(), x, y, paintRegular);
+                y = y + 20;
+
+
+                // INTAKES
+                if (medication.getHowRegularly() == 0) {
+                    // Daily
+                    canvas.drawText(medication.toStringHowRegularly(requireContext()), x + 10, y, paintRegular);
+                } else {
+                    if (medication.getHowRegularly() == 1) {
+                        // Interval
+                        canvas.drawText(mappedValues.getFormattedInterval(medication.getIntervalSelectedType(), medication.getIntervalSelectedNumber()), x + 10, y, paintRegular);
+                    } else {
+                        // Weekdays
+                        String selectedWeekdaysString;
+
+                        selectedWeekdaysString = medication.getSelectedWeekdaysString();
+
+                        canvas.drawText(selectedWeekdaysString, x + 10, y, paintRegular);
+                    }
+                }
+
+                y = y + 20;
+
+                // INTAKES
+                // Quantity How to take at time
+                int size = medication.getIntakesTime().size();
+                int quantityNumber;
+
+                String quantity;
+                String intakeTime;
+                String intakesString;
+                intakesString = "";
+
+                for (i = 0; i < size; i++) {
+                    quantity = medication.getQuantities().get(i);
+                    intakeTime = medication.getIntakesTime().get(i);
+
+                    if (quantity.equals("1/4") || quantity.equals("1/2") || quantity.equals("3/4")) {
+                        quantityNumber = 1; // Not plural
+                    } else {
+                        quantityNumber = 2; // Plural
+                    }
+
+                    intakesString = intakesString + quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(medication.toStringHowToTake(requireContext())), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
+
+                    canvas.drawText(intakesString, x + 10, y, paintRegular);
+                    y = y + 20;
+                }
+
 
             }
 
             if (!treatment.getNotes().isEmpty()) {
-                canvas.drawText("Notes: " + treatment.getNotes(), 50, y, paintRegular);
+                canvas.drawText("Notes: " + treatment.getNotes(), x, y, paintRegular);
                 y = y + 30;
             }
 
