@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_margin="16dp">
 
         <TextView
             android:id="@+id/healthcareTextView"
@@ -20,12 +21,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/healthcareRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/healthcareImageSlider"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            app:iss_auto_cycle="false"
+            app:iss_period="1000"
+            app:iss_delay="1000"
+            app:iss_text_align="CENTER"
+            app:iss_corner_radius="50"/>
 
-        </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/mentalHealthTextView"
@@ -36,12 +41,15 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mentalHealthRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
+        <com.denzcoskun.imageslider.ImageSlider
+            android:id="@+id/mentalHealthImageSlider"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            app:iss_auto_cycle="false"
+            app:iss_period="1000"
+            app:iss_delay="1000"
+            app:iss_text_align="CENTER"
+            app:iss_corner_radius="50"/>
 
         <TextView
             android:id="@+id/healthyFoodTextView"
@@ -52,29 +60,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/healthyFoodRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="16dp">
-
         <com.denzcoskun.imageslider.ImageSlider
-            android:id="@+id/image_slider"
+            android:id="@+id/healthyFoodImageSlider"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             app:iss_auto_cycle="false"
             app:iss_period="1000"
             app:iss_delay="1000"
-            app:iss_text_align="CENTER"/>
+            app:iss_text_align="CENTER"
+            app:iss_corner_radius="50"/>
 
-        </LinearLayout>
 
         <!-- Add other UI elements as needed -->
 

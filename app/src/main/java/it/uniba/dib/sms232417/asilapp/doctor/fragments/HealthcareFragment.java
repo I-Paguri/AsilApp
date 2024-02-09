@@ -1,23 +1,25 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -30,12 +32,12 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.ImageAdapter;
 import it.uniba.dib.sms232417.asilapp.utilities.SerpHandler;
 
 public class HealthcareFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
+    private List<String> videoUrlsHealthyFood; // List of video URLs for healthy food tips
 
     @Nullable
     @Override
@@ -54,36 +56,46 @@ public class HealthcareFragment extends Fragment {
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
         // Set up for healthcare category
-        RecyclerView healthcareRecyclerView = view.findViewById(R.id.healthcareRecyclerView);
-        healthcareRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ImageSlider healthcareImageSlider = view.findViewById(R.id.healthcareImageSlider);
         String healthcareQuery = getResources().getString(R.string.healthcare);
-        setupCategory(healthcareQuery, healthcareRecyclerView);
+        setupSlide(healthcareQuery, healthcareImageSlider);
 
         // Set up for mental health tips category
-        RecyclerView mentalHealthRecyclerView = view.findViewById(R.id.mentalHealthRecyclerView);
-        mentalHealthRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ImageSlider mentalHealthcareimageSlider = view.findViewById(R.id.mentalHealthImageSlider);
         String mentalHealthQuery = getResources().getString(R.string.mental_health_tips);
-        setupCategory(mentalHealthQuery, mentalHealthRecyclerView);
+        setupSlide(mentalHealthQuery, mentalHealthcareimageSlider);
 
-        /*
         // Set up for healthy food tips category
-        RecyclerView healthyFoodRecyclerView = view.findViewById(R.id.healthyFoodRecyclerView);
-        healthyFoodRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ImageSlider healthyFoodImageSlider = view.findViewById(R.id.healthyFoodImageSlider);
         String healthyFoodQuery = getResources().getString(R.string.healthy_food_tips);
-        setupCategory(healthyFoodQuery, healthyFoodRecyclerView);
-        */
+        setupSlide(healthyFoodQuery, healthyFoodImageSlider);
+        healthyFoodImageSlider.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void doubleClick(int i) {
+                Toast.makeText(getContext(), "Double clicked image at position: " + i, Toast.LENGTH_SHORT).show();
+            }
 
-        ArrayList<SlideModel> imageList = new ArrayList<>(); // Create image list
+            @Override
+            public void onItemSelected(int position) {
+                if (!videoUrlsHealthyFood.isEmpty()) {
+                    String videoUrl = videoUrlsHealthyFood.get(position); // Get the video URL
+                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoUrl));
 
-        // imageList.add(new SlideModel("String Url" or R.drawable));
-        // imageList.add(new SlideModel("String Url" or R.drawable, "title")); // You can add title
+                    // Check if the YouTube app is installed
+                    if (appIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                        // If YouTube app is installed, use it to open the video
+                        getContext().startActivity(appIntent);
+                    } else {
+                        // If YouTube app is not installed, use the web browser to open the video
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+                        getContext().startActivity(webIntent);
+                    }
+                } else {
+                    Toast.makeText(getContext(), "No video URLs available", Toast.LENGTH_SHORT).show();
+                }
 
-        imageList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years.", ScaleTypes.FIT));
-        imageList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct.", ScaleTypes.FIT));
-        imageList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that.", ScaleTypes.FIT));
-
-        ImageSlider imageSlider = view.findViewById(R.id.image_slider);
-        imageSlider.setImageList(imageList);
+            }
+        });
 
         // Set up the toolbar
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -111,11 +123,12 @@ public class HealthcareFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
     }
 
-    private void setupCategory(String query, RecyclerView recyclerView) {
-        List<String> thumbnailUrls = new ArrayList<>();
-        List<String> videoUrls = new ArrayList<>(); // List of video URLs
+    private void setupSlide(String query, ImageSlider imageSlider) {
+        List<SlideModel> slideModels = new ArrayList<>();
+        List<String> videoUrls = new ArrayList<>();
 
         SerpHandler sh = new SerpHandler();
         CompletableFuture<JSONObject> future = sh.performSerpQuery(query);
@@ -128,24 +141,38 @@ public class HealthcareFragment extends Fragment {
                     for (int i = 0; i < videoResults.length(); i++) {
                         JSONObject currentObject = videoResults.getJSONObject(i);
                         String thumbnail = sh.extractThumbnail(currentObject);
-                        String videoLink = sh.extractLink(currentObject.getString("link"));
-                        String videoUrl = "https://www.youtube.com/watch?v=" + videoLink;
+                        String videoUrl = sh.extractLink(currentObject.getString("link"));
 
-                        thumbnailUrls.add(thumbnail);
-                        videoUrls.add(videoUrl); // Add video URL to list
+                        slideModels.add(new SlideModel(thumbnail, "", ScaleTypes.FIT));
+                        videoUrls.add(videoUrl);
                     }
-                    if (!thumbnailUrls.isEmpty() && !videoUrls.isEmpty()) {
-                        Context context = getContext();
-                        if (context != null) {
-                            requireActivity().runOnUiThread(() -> {
-                                try {
-                                    ImageAdapter imageAdapter = new ImageAdapter(context, thumbnailUrls, videoUrls); // Pass video URLs to ImageAdapter
-                                    recyclerView.setAdapter(imageAdapter);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+
+                    if (!slideModels.isEmpty()) {
+                        requireActivity().runOnUiThread(() -> {
+                            imageSlider.setImageList(slideModels);
+                            imageSlider.setItemClickListener(new ItemClickListener() {
+                                @Override
+                                public void doubleClick(int i) {
+                                    Toast.makeText(getContext(), "Double clicked image at position: " + i, Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onItemSelected(int position) {
+                                    String videoUrl = videoUrls.get(position);
+                                    Log.i("HealthcareFragment", "Video URL: " + videoUrl);
+                                    // Use the full YouTube URL when constructing the appIntent
+                                    Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoUrl));
+
+                                    if (appIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                                        getContext().startActivity(appIntent);
+                                    } else {
+                                        // If YouTube app is not installed, use the web browser to open the video
+                                        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoUrl));
+                                        getContext().startActivity(webIntent);
+                                    }
                                 }
                             });
-                        }
+                        });
                     }
                 }
             } catch (JSONException e) {
@@ -153,4 +180,5 @@ public class HealthcareFragment extends Fragment {
             }
         });
     }
+
 }

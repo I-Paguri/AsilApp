@@ -10,7 +10,7 @@
     <string name="btn_my_account">Account</string>
 
     <string name="home"> Home </string>
-    <string name="healthcare"> Healthcare </string>
+    <string name="healthcare">Healthcare</string>
     <string name="my_patients"> My Patients </string>
     <string name="my_account"> My Account </string>
     <string name="my_data"> My Date </string>
@@ -106,8 +106,8 @@
     <string name="insert_note">Insert a note</string>
     <string name="select_time">Select time</string>
 
-    <string name="mental_health_tips"> Mental health </string>
-    <string name="healthy_food_tips"> Healthy food </string>
+    <string name="mental_health_tips">Mental health</string>
+    <string name="healthy_food_tips">Healthy food</string>
 
     <string-array name="medicines_list">
         <item>Paracetamol</item>

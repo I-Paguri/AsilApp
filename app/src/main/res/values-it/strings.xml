@@ -9,7 +9,7 @@
     <string name="btn_my_account">Account</string>
 
     <string name="home"> Home </string>
-    <string name="healthcare"> Healthcare </string>
+    <string name="healthcare">Healthcare</string>
     <string name="my_patients"> I miei pazienti </string>
     <string name="my_account"> Il mio account </string>
     <string name="press_back_again"> Premi di nuovo indietro per uscire </string>
@@ -82,8 +82,8 @@
     <string name="insert_note">Inserisci una nota</string>
     <string name="select_time">Seleziona l\'orario</string>
 
-    <string name="mental_health_tips"> L\'importanza del benessere mentale </string>
-    <string name="healthy_food_tips"> L\'importanza del cibo salutare </string>
+    <string name="mental_health_tips">L\'importanza del benessere mentale</string>
+    <string name="healthy_food_tips">L\'importanza del cibo salutare</string>
 
     <string-array name="medicines_list">
         <item>Paracetamolo</item>
