@@ -451,6 +451,8 @@ public class TreatmentFragment extends Fragment {
         MappedValues mappedValues = new MappedValues(requireContext());
 
         // Start a page with default page info
+        int pageHeight = 842;
+        int pageWidth = 595;
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
 
@@ -512,6 +514,17 @@ public class TreatmentFragment extends Fragment {
             // Get the treatment
             Treatment treatment = entry.getValue();
 
+            // Check if y exceeds pageHeight
+            if (y > pageHeight - 50) {
+                // If y exceeds pageHeight, finish the current page and start a new one
+                pdfDocument.finishPage(page);
+                page = pdfDocument.startPage(pageInfo);
+                canvas = page.getCanvas();
+
+                // Reset y to the starting y-coordinate for the new page
+                y = 50;
+            }
+
             // TREATMENT TARGET
             canvas.drawText(treatment.getTreatmentTarget(), x, y, paintSubtitle);
             y = y + 30;
@@ -532,13 +545,34 @@ public class TreatmentFragment extends Fragment {
             while (medicationIterator.hasNext()) {
                 Medication medication = medicationIterator.next();
 
+                // Check if y exceeds pageHeight
+                if (y > pageHeight - 50) {
+                    // If y exceeds pageHeight, finish the current page and start a new one
+                    pdfDocument.finishPage(page);
+                    page = pdfDocument.startPage(pageInfo);
+                    canvas = page.getCanvas();
+
+                    // Reset y to the starting y-coordinate for the new page
+                    y = 50;
+                }
                 // MEDICATION NAME
                 canvas.drawText("\u2022 " + medication.getMedicationName(), x, y, paintRegular);
                 y = y + 20;
 
 
+
                 paintRegular.setColor(getResources().getColor(R.color.md_theme_light_tertiary));
                 // INTAKES
+                // Check if y exceeds pageHeight
+                if (y > pageHeight - 50) {
+                    // If y exceeds pageHeight, finish the current page and start a new one
+                    pdfDocument.finishPage(page);
+                    page = pdfDocument.startPage(pageInfo);
+                    canvas = page.getCanvas();
+
+                    // Reset y to the starting y-coordinate for the new page
+                    y = 50;
+                }
                 if (medication.getHowRegularly() == 0) {
                     // Daily
                     canvas.drawText(medication.toStringHowRegularly(requireContext()), x + 10, y, paintRegular);
@@ -567,7 +601,6 @@ public class TreatmentFragment extends Fragment {
                 String quantity;
                 String intakeTime;
                 String intakesString;
-                intakesString = "";
 
                 for (i = 0; i < size; i++) {
                     quantity = medication.getQuantities().get(i);
@@ -581,6 +614,16 @@ public class TreatmentFragment extends Fragment {
 
                     intakesString = quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(medication.toStringHowToTake(requireContext())), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
 
+                    // Check if y exceeds pageHeight
+                    if (y > pageHeight - 50) {
+                        // If y exceeds pageHeight, finish the current page and start a new one
+                        pdfDocument.finishPage(page);
+                        page = pdfDocument.startPage(pageInfo);
+                        canvas = page.getCanvas();
+
+                        // Reset y to the starting y-coordinate for the new page
+                        y = 50;
+                    }
                     canvas.drawText(intakesString, x + 10, y, paintRegular);
 
                     if (i != size - 1) {
@@ -594,6 +637,16 @@ public class TreatmentFragment extends Fragment {
             }
 
             if (!treatment.getNotes().isEmpty()) {
+                // Check if y exceeds pageHeight
+                if (y > pageHeight - 50) {
+                    // If y exceeds pageHeight, finish the current page and start a new one
+                    pdfDocument.finishPage(page);
+                    page = pdfDocument.startPage(pageInfo);
+                    canvas = page.getCanvas();
+
+                    // Reset y to the starting y-coordinate for the new page
+                    y = 50;
+                }
                 canvas.drawText(getResources().getString(R.string.notes) + ": " + treatment.getNotes(), x, y, paintRegular);
                 y = y + 40;
             }
