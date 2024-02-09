@@ -1,12 +1,22 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -26,6 +37,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.transition.MaterialContainerTransform;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -46,6 +60,7 @@ public class TreatmentFragment extends Fragment {
     private String user;
     private ExtendedFloatingActionButton fab;
     private FloatingActionButton share;
+    private Map<String, Treatment> treatments;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,6 +100,7 @@ public class TreatmentFragment extends Fragment {
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
             public void onCallback(Map<String, Treatment> treatments) {
+                TreatmentFragment.this.treatments = treatments;
 
                 if (treatments == null || treatments.isEmpty()) {
                     LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -108,16 +124,19 @@ public class TreatmentFragment extends Fragment {
                     share.show();
 
                     // Set the OnClickListener for the share button here
+
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // Handle the share button click event
-                            // For example, you can start a share intent
-                            Intent shareIntent = new Intent();
-                            shareIntent.setAction(Intent.ACTION_SEND);
-                            shareIntent.putExtra(Intent.EXTRA_TEXT, "Here is the share content");
-                            shareIntent.setType("text/plain");
-                            startActivity(Intent.createChooser(shareIntent, "Share via"));
+                            // Check if the application has the WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE permissions
+                            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                                    && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                // If the application has the permissions, call the createAndSharePdf method
+                                createAndSharePdf(treatments);
+                            } else {
+                                // If the application does not have the permissions, request them from the user
+                                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
+                            }
                         }
                     });
                 }
@@ -287,7 +306,6 @@ public class TreatmentFragment extends Fragment {
             treatmentTargetText.setLayoutParams(params);
         } else {
 
-
             // Create an instance of DatabaseAdapterPatient
             DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
             // Set an OnClickListener for the delete button
@@ -423,5 +441,63 @@ public class TreatmentFragment extends Fragment {
         super.onResume();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
+    }
+
+    private void createAndSharePdf(Map<String, Treatment> treatments) {
+        // Create a new PdfDocument
+        PdfDocument pdfDocument = new PdfDocument();
+
+        // Start a page with default page info
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+
+        // Create a Canvas from the started page
+        Canvas canvas = page.getCanvas();
+
+        // Draw the text on the Canvas
+        Paint paint = new Paint();
+        paint.setTextSize(12);
+        canvas.drawText(treatments.toString(), 10, 10, paint);
+
+        // Finish the page
+        pdfDocument.finishPage(page);
+
+        // Write the PdfDocument to a file
+        File file = new File(requireContext().getExternalFilesDir(null), "treatments.pdf");
+        try {
+            pdfDocument.writeTo(new FileOutputStream(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Close the PdfDocument
+        pdfDocument.close();
+
+        // Share the file
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+
+        // Use FileProvider to get a content URI
+        Uri fileUri = FileProvider.getUriForFile(requireContext(), requireContext().getApplicationContext().getPackageName() + ".provider", file);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+
+        // Grant temporary read permission to the content URI
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        shareIntent.setType("application/pdf");
+        startActivity(Intent.createChooser(shareIntent, "Share via"));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // If the permissions are granted, call the createAndSharePdf method
+                createAndSharePdf(treatments);
+            } else {
+                // If the permissions are denied, show a message to the user explaining why the permissions are needed
+                Toast.makeText(requireContext(), "Storage permissions are required to create and share a PDF.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
