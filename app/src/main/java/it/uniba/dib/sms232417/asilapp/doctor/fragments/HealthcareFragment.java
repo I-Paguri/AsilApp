@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -74,12 +75,12 @@ public class HealthcareFragment extends Fragment {
 
         ArrayList<SlideModel> imageList = new ArrayList<>(); // Create image list
 
-// imageList.add(new SlideModel("String Url" or R.drawable));
-// imageList.add(new SlideModel("String Url" or R.drawable, "title")); // You can add title
+        // imageList.add(new SlideModel("String Url" or R.drawable));
+        // imageList.add(new SlideModel("String Url" or R.drawable, "title")); // You can add title
 
-        imageList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years."));
-        imageList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct."));
-        imageList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that."));
+        imageList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years.", ScaleTypes.FIT));
+        imageList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct.", ScaleTypes.FIT));
+        imageList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that.", ScaleTypes.FIT));
 
         ImageSlider imageSlider = view.findViewById(R.id.image_slider);
         imageSlider.setImageList(imageList);
