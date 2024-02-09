@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
@@ -25,13 +28,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.ImageAdapter;
 import it.uniba.dib.sms232417.asilapp.utilities.SerpHandler;
-import it.uniba.dib.sms232417.asilapp.utilities.Video;
 
 public class HealthcareFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
@@ -43,7 +45,6 @@ public class HealthcareFragment extends Fragment {
 
     // Indice per tenere traccia del video corrente
     private int currentVideoIndex = 0;
-
 
     @Nullable
     @Override
@@ -62,11 +63,15 @@ public class HealthcareFragment extends Fragment {
         toolbar = requireActivity().findViewById(R.id.toolbar);
         youTubePlayerView = view.findViewById(R.id.youtubePlayerView);
 
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List <String> thumbnailUrls = new ArrayList<>();
+
         // Perform YouTube API operations when video links are available
         String searchQuery = "Healthcare";
         SerpHandler sh = new SerpHandler();
         CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
-
 
         // Set up YouTubePlayerView
         youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
@@ -119,36 +124,24 @@ public class HealthcareFragment extends Fragment {
                 if (result.has("video_results")) {
                     JSONArray videoResults = result.getJSONArray("video_results");
 
-                    // Estraggo i dati dal JSON e creo un oggetto Video per ogni risultato
                     for (int i = 0; i < videoResults.length(); i++) {
                         JSONObject currentObject = videoResults.getJSONObject(i);
-
-                        String title = sh.extractTitle(currentObject);
-                        String link = sh.extractLink(currentObject.getString("link"));
-                        String channel = sh.extractChannel(currentObject).getString("name");
-                        Date publishedDate = sh.extractPublishedDate(currentObject);
-                        int views = sh.extractViews(currentObject);
-                        String length = sh.extractLength(currentObject);
-                        String description = sh.extractDescription(currentObject);
-                        JSONArray extensions = sh.extractExtensions(currentObject);
                         String thumbnail = sh.extractThumbnail(currentObject);
-
-                        Video video = new Video(title, link, channel, publishedDate, views, length, description, extensions, thumbnail);
-
-                        System.out.println("Video " + i + ":");
-                        System.out.println("Title: " + video.getTitle());
-                        System.out.println("Link: " + video.getLink());
-                        System.out.println("Channel: " + video.getChannel());
-                        System.out.println("Published Date: " + video.getPublishedDate());
-                        System.out.println("Views: " + video.getViews());
-                        System.out.println("Length: " + length);
-                        System.out.println("Description: " + description);
-                        System.out.println("Extensions: " + extensions);
-                        System.out.println("Thumbnail: " + thumbnail);
+                        thumbnailUrls.add(thumbnail);
                     }
-
-                } else {
-                    System.out.println("Oggetto 'video_results' non trovato in 'result'.");
+                    if (!thumbnailUrls.isEmpty()) {
+                        Context context = getContext();
+                        if (context != null) {
+                            requireActivity().runOnUiThread(() -> {
+                                try {
+                                    ImageAdapter imageAdapter = new ImageAdapter(context, thumbnailUrls);
+                                    recyclerView.setAdapter(imageAdapter);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

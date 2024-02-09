@@ -63,4 +63,19 @@ public class Video {
     public String getThumbnail() {
         return thumbnail;
     }
+
+    @Override
+    public String toString() {
+        return "Video{" +
+                "title='" + title + '\'' +
+                ", link='" + link + '\'' +
+                ", channel='" + channel + '\'' +
+                ", publishedDate=" + publishedDate +
+                ", views=" + views +
+                ", length='" + length + '\'' +
+                ", description='" + description + '\'' +
+                ", extensions=" + extensions +
+                ", thumbnail='" + thumbnail + '\'' +
+                '}';
+    }
 }
