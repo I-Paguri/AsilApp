@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
@@ -62,11 +64,25 @@ public class HealthcareFragment extends Fragment {
         String mentalHealthQuery = getResources().getString(R.string.mental_health_tips);
         setupCategory(mentalHealthQuery, mentalHealthRecyclerView);
 
+        /*
         // Set up for healthy food tips category
         RecyclerView healthyFoodRecyclerView = view.findViewById(R.id.healthyFoodRecyclerView);
         healthyFoodRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         String healthyFoodQuery = getResources().getString(R.string.healthy_food_tips);
         setupCategory(healthyFoodQuery, healthyFoodRecyclerView);
+        */
+
+        ArrayList<SlideModel> imageList = new ArrayList<>(); // Create image list
+
+// imageList.add(new SlideModel("String Url" or R.drawable));
+// imageList.add(new SlideModel("String Url" or R.drawable, "title")); // You can add title
+
+        imageList.add(new SlideModel("https://bit.ly/2YoJ77H", "The animal population decreased by 58 percent in 42 years."));
+        imageList.add(new SlideModel("https://bit.ly/2BteuF2", "Elephants and tigers may become extinct."));
+        imageList.add(new SlideModel("https://bit.ly/3fLJf72", "And people do that."));
+
+        ImageSlider imageSlider = view.findViewById(R.id.image_slider);
+        imageSlider.setImageList(imageList);
 
         // Set up the toolbar
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);

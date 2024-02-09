@@ -107,8 +107,9 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10'
     testImplementation 'org.mockito:mockito-core:3.6.28'
 
-    // Libreria per YouTube Player
-    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
+    // Libreria per la creazione di slideshow di immagini
+    implementation 'com.github.denzcoskun:ImageSlideshow:0.1.2'
+
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
