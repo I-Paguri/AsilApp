@@ -465,6 +465,7 @@ public class TreatmentFragment extends Fragment {
         Typeface ember_light = ResourcesCompat.getFont(requireContext(), R.font.ember_light);
         // Set the typeface to the Paint object
         paintRegular.setTypeface(ember_light);
+        paintRegular.setColor(getResources().getColor(R.color.seed));
 
         // Draw the text on the Canvas
         Paint paintTitle = new Paint();
@@ -474,6 +475,7 @@ public class TreatmentFragment extends Fragment {
         Typeface ember_display_light = ResourcesCompat.getFont(requireContext(), R.font.ember_display_light);
         // Set the typeface to the Paint object
         paintTitle.setTypeface(ember_display_light);
+        paintTitle.setColor(getResources().getColor(R.color.seed));
 
         // Draw the text on the Canvas
         Paint paintSubtitle = new Paint();
@@ -483,10 +485,12 @@ public class TreatmentFragment extends Fragment {
         Typeface ember_bold = ResourcesCompat.getFont(requireContext(), R.font.ember_bold);
         // Set the typeface to the Paint object
         paintSubtitle.setTypeface(ember_bold);
+        paintSubtitle.setColor(getResources().getColor(R.color.seed));
 
         // Draw the text on the Canvas
         Paint paintSubtitle2 = new Paint();
         paintSubtitle2.setTextSize(16);
+        paintSubtitle2.setColor(getResources().getColor(R.color.seed));
 
         // Set the typeface to the Paint object
         paintSubtitle2.setTypeface(ember_bold);
@@ -533,6 +537,7 @@ public class TreatmentFragment extends Fragment {
                 y = y + 20;
 
 
+                paintRegular.setColor(getResources().getColor(R.color.md_theme_light_tertiary));
                 // INTAKES
                 if (medication.getHowRegularly() == 0) {
                     // Daily
@@ -550,6 +555,7 @@ public class TreatmentFragment extends Fragment {
                         canvas.drawText(selectedWeekdaysString, x + 10, y, paintRegular);
                     }
                 }
+                paintRegular.setColor(getResources().getColor(R.color.seed));
 
                 y = y + 20;
 
@@ -576,15 +582,15 @@ public class TreatmentFragment extends Fragment {
                     intakesString = intakesString + quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(medication.toStringHowToTake(requireContext())), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
 
                     canvas.drawText(intakesString, x + 10, y, paintRegular);
-                    y = y + 20;
+                    y = y + 25;
                 }
 
 
             }
 
             if (!treatment.getNotes().isEmpty()) {
-                canvas.drawText("Notes: " + treatment.getNotes(), x, y, paintRegular);
-                y = y + 30;
+                canvas.drawText(getResources().getString(R.string.notes) + ": " + treatment.getNotes(), x, y, paintRegular);
+                y = y + 40;
             }
 
         }
@@ -593,7 +599,7 @@ public class TreatmentFragment extends Fragment {
         pdfDocument.finishPage(page);
 
         // Write the PdfDocument to a file
-        File file = new File(requireContext().getExternalFilesDir(null), "treatments.pdf");
+        File file = new File(requireContext().getExternalFilesDir(null), getResources().getString(R.string.treatments) + ".pdf");
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
         } catch (IOException e) {
