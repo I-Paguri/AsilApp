@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -455,9 +457,75 @@ public class TreatmentFragment extends Fragment {
         Canvas canvas = page.getCanvas();
 
         // Draw the text on the Canvas
-        Paint paint = new Paint();
-        paint.setTextSize(12);
-        canvas.drawText(treatments.toString(), 10, 10, paint);
+        Paint paintRegular = new Paint();
+        paintRegular.setTextSize(16);
+
+        // Get the font from res/font directory
+        Typeface ember_light = ResourcesCompat.getFont(requireContext(), R.font.ember_light);
+        // Set the typeface to the Paint object
+        paintRegular.setTypeface(ember_light);
+
+        // Draw the text on the Canvas
+        Paint paintTitle = new Paint();
+        paintTitle.setTextSize(36);
+
+        // Get the font from res/font directory
+        Typeface ember_display_light = ResourcesCompat.getFont(requireContext(), R.font.ember_display_light);
+        // Set the typeface to the Paint object
+        paintTitle.setTypeface(ember_display_light);
+
+        // Draw the text on the Canvas
+        Paint paintSubtitle = new Paint();
+        paintSubtitle.setTextSize(20);
+
+        // Get the font from res/font directory
+        Typeface ember_bold = ResourcesCompat.getFont(requireContext(), R.font.ember_bold);
+        // Set the typeface to the Paint object
+        paintSubtitle.setTypeface(ember_bold);
+
+        // TITLE
+        canvas.drawText(getResources().getString(R.string.treatments), 210, 50, paintTitle);
+
+        // Iterate through the treatments
+        int i;
+        int y = 100;
+        // Get the iterator
+        Iterator<Map.Entry<String, Treatment>> iterator = treatments.entrySet().iterator();
+
+        // Loop through the treatments
+        while (iterator.hasNext()) {
+            Map.Entry<String, Treatment> entry = iterator.next();
+
+            // Get the treatment
+            Treatment treatment = entry.getValue();
+
+            // TREATMENT TARGET
+            canvas.drawText(treatment.getTreatmentTarget(), 50, y, paintSubtitle);
+            y = y + 30;
+
+            // DURATION
+            if (treatment.getEndDateString().isEmpty()) {
+                // Ongoing treatment
+                canvas.drawText("Duration: " + treatment.getStartDateString() + " - " + getResources().getString(R.string.ongoing), 50, y, paintRegular);
+            } else {
+                canvas.drawText("Duration: " + treatment.getStartDateString() + " - " + treatment.getEndDateString(), 50, y, paintRegular);
+            }
+
+            y = y + 30;
+
+            // MEDICATIONS
+            ArrayList<Medication> medications = treatment.getMedications();
+            Iterator<Medication> medicationIterator = medications.iterator();
+            while (medicationIterator.hasNext()) {
+
+            }
+
+            if (!treatment.getNotes().isEmpty()) {
+                canvas.drawText("Notes: " + treatment.getNotes(), 50, y, paintRegular);
+                y = y + 30;
+            }
+
+        }
 
         // Finish the page
         pdfDocument.finishPage(page);

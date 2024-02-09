@@ -267,7 +267,6 @@ public class Medication implements Parcelable {
             medicationString = medicationString + "Interval selected: " + context.getResources().getString(R.string.every) + " " + intervalSelectedNumber + " " + formattedSelectedType + "\n";
         }
 
-        Log.d("ciao", "Ciao");
         if (!selectedWeekdaysString.isEmpty()) {
             medicationString = medicationString + "Selected weekdays: " + selectedWeekdaysString + "\n";
         }

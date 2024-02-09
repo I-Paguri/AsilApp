@@ -147,7 +147,6 @@ public class Treatment implements Parcelable {
             treatmentString = treatmentString + "End date: " + getEndDateString() + "\n";
         }
 
-        Log.d("ciao", medications.toString());
 
         treatmentString = treatmentString + "Medications: " + medications.toString() + "\n";
 
