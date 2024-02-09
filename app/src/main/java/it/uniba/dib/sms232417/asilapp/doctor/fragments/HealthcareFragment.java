@@ -138,12 +138,14 @@ public class HealthcareFragment extends Fragment {
                 if (result.has("video_results")) {
                     JSONArray videoResults = result.getJSONArray("video_results");
 
-                    for (int i = 0; i < videoResults.length(); i++) {
+                    int maxVideos = 5;
+                    for (int i = 0; i < maxVideos; i++) {
                         JSONObject currentObject = videoResults.getJSONObject(i);
                         String thumbnail = sh.extractThumbnail(currentObject);
                         String videoUrl = sh.extractLink(currentObject.getString("link"));
+                        String videoTitle = sh.extractTitle(currentObject);
 
-                        slideModels.add(new SlideModel(thumbnail, "", ScaleTypes.FIT));
+                        slideModels.add(new SlideModel(thumbnail, videoTitle, ScaleTypes.FIT));
                         videoUrls.add(videoUrl);
                     }
 

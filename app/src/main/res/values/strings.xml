@@ -510,4 +510,6 @@
 
     <string name="payments">Payments</string>
     <string name="diary">Diary</string>
+
+    <string name="my_videos">My videos</string>
 </resources>

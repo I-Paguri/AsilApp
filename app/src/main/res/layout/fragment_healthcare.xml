@@ -9,22 +9,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="16dp">
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/titleText"
+            style="@style/TitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_videos"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="16dp" />
+        <TextView
             android:id="@+id/healthcareTextView"
+            style="@style/SubtitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/healthcare"
-            android:textSize="24sp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="17dp"
             android:layout_marginTop="16dp" />
 
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/healthcareImageSlider"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
+            android:layout_margin="16dp"
             app:iss_auto_cycle="false"
             app:iss_period="1000"
             app:iss_delay="1000"
@@ -34,17 +42,18 @@
 
         <TextView
             android:id="@+id/mentalHealthTextView"
+            style="@style/SubtitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mental_health_tips"
-            android:textSize="24sp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="17dp"
             android:layout_marginTop="16dp"/>
 
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/mentalHealthImageSlider"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
+            android:layout_margin="16dp"
             app:iss_auto_cycle="false"
             app:iss_period="1000"
             app:iss_delay="1000"
@@ -53,17 +62,21 @@
 
         <TextView
             android:id="@+id/healthyFoodTextView"
+            style="@style/SubtitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/healthy_food_tips"
-            android:textSize="24sp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="17dp"
             android:layout_marginTop="16dp"/>
 
         <com.denzcoskun.imageslider.ImageSlider
             android:id="@+id/healthyFoodImageSlider"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="60dp"
             app:iss_auto_cycle="false"
             app:iss_period="1000"
             app:iss_delay="1000"
