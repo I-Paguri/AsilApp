@@ -61,63 +61,16 @@ public class HealthcareFragment extends Fragment {
         // Initialize UI elements
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         toolbar = requireActivity().findViewById(R.id.toolbar);
-        youTubePlayerView = view.findViewById(R.id.youtubePlayerView);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         List <String> thumbnailUrls = new ArrayList<>();
 
         // Perform YouTube API operations when video links are available
-        String searchQuery = "Healthcare";
+        String searchQuery = getResources().getString(R.string.healthcare);
         SerpHandler sh = new SerpHandler();
         CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
-
-        // Set up YouTubePlayerView
-        youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-            @Override
-            public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                future.thenAccept(result -> {
-                    try {
-                        JSONArray videos = result.getJSONArray("video_results");
-                        if (videos.length() > 0) {
-                            // Get the first video link
-                            JSONObject video = videos.getJSONObject(0);
-                            String videoLink = video.getString("link");
-
-                            // Extract video ID from YouTube video link using SerpHandler
-                            SerpHandler sh = new SerpHandler();
-                            String videoId = sh.extractLink(videoLink);
-
-                            // Load the video into YouTubePlayerView
-                            youTubePlayer.cueVideo(videoId, 0);
-
-                            // Store video IDs for later use
-                            for (int i = 0; i < videos.length(); i++) {
-                                video = videos.getJSONObject(i);
-                                videoLink = video.getString("link");
-                                videoId = sh.extractLink(videoLink);
-                                videoIds.add(videoId);
-                            }
-                        } else {
-                            // Handle case when no videos are found
-                            Toast.makeText(requireContext(), "No videos found", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-
-            @Override
-            public void onStateChange(@NonNull YouTubePlayer youTubePlayer, @NonNull PlayerConstants.PlayerState state) {
-                if (state == PlayerConstants.PlayerState.ENDED) {
-                    // Play next video when current video ends
-                    currentVideoIndex = (currentVideoIndex + 1) % videoIds.size();
-                    youTubePlayer.loadVideo(videoIds.get(currentVideoIndex), 0);
-                }
-            }
-        });
 
         future.thenAccept(result -> {
             try {

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +34,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        new DownloadImageTask(holder.imageView).execute(thumbnailUrls.get(position));
+        holder.progressBar.setVisibility(View.VISIBLE);
+        new DownloadImageTask(holder.imageView, holder.progressBar).execute(thumbnailUrls.get(position));
         Log.i("ImageAdapter", "Downloading image for position: " + position + " URL: " + thumbnailUrls.get(position));
     }
 
@@ -44,10 +46,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public static class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ProgressBar progressBar;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
+            progressBar = itemView.findViewById(R.id.progressBar);
         }
     }
 }
