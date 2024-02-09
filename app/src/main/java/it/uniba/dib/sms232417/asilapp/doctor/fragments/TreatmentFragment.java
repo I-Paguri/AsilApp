@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.transition.MaterialContainerTransform;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
@@ -43,6 +45,7 @@ public class TreatmentFragment extends Fragment {
     private String patientAge;
     private String user;
     private ExtendedFloatingActionButton fab;
+    private FloatingActionButton share;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +63,11 @@ public class TreatmentFragment extends Fragment {
         patientName = "";
         patientAge = "";
         user = ""; // Type of user: "patient" or "doctor"
+
+        fab = view.findViewById(R.id.fab);
+        share = view.findViewById(R.id.share);
+
+        share.hide();
 
         // Create an instance of DatabaseAdapterPatient
         DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
@@ -96,6 +104,22 @@ public class TreatmentFragment extends Fragment {
                         // if it is last treatment then a bottom margin of 85dp is added to the last treatment layout
                         addTreatmentCardView(treatmentId, treatment, !iterator.hasNext());
                     }
+
+                    share.show();
+
+                    // Set the OnClickListener for the share button here
+                    share.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Handle the share button click event
+                            // For example, you can start a share intent
+                            Intent shareIntent = new Intent();
+                            shareIntent.setAction(Intent.ACTION_SEND);
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, "Here is the share content");
+                            shareIntent.setType("text/plain");
+                            startActivity(Intent.createChooser(shareIntent, "Share via"));
+                        }
+                    });
                 }
             }
 
@@ -110,7 +134,6 @@ public class TreatmentFragment extends Fragment {
             }
         });
 
-        fab = view.findViewById(R.id.fab);
 
         if ("patient".equals(user)) {
             fab.setVisibility(View.GONE);
@@ -127,17 +150,20 @@ public class TreatmentFragment extends Fragment {
                     // the delay of the extension of the FAB is set for 12 items
                     if (scrollY > oldScrollY + 12 && fab.isExtended()) {
                         fab.shrink();
+                        share.hide();
                     }
 
                     // the delay of the extension of the FAB is set for 12 items
                     if (scrollY < oldScrollY - 12 && !fab.isExtended()) {
                         fab.extend();
+                        share.show();
                     }
 
                     // if the nestedScrollView is at the first item of the list then the
                     // extended floating action should be in extended state
                     if (scrollY == 0) {
                         fab.extend();
+                        share.show();
                     }
                 }
             });
@@ -194,7 +220,7 @@ public class TreatmentFragment extends Fragment {
         float density = getResources().getDisplayMetrics().density;
 
         if (isLast) {
-            int bottomMarginDp = 85;
+            int bottomMarginDp = 140;
             int bottomMarginPx = (int) (bottomMarginDp * density);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
