@@ -82,6 +82,9 @@
     <string name="insert_note">Inserisci una nota</string>
     <string name="select_time">Seleziona l\'orario</string>
 
+    <string name="mental_health_tips"> L\'importanza del benessere mentale </string>
+    <string name="healthy_food_tips"> L\'importanza del cibo salutare </string>
+
     <string-array name="medicines_list">
         <item>Paracetamolo</item>
         <item>Aspirina</item>

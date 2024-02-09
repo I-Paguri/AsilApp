@@ -1,28 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".doctor.fragments.HealthcareFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/healthcare"
-        android:textSize="24sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView">
+        android:orientation="vertical">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/healthcareTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/healthcare"
+            android:textSize="24sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/healthcareRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <!-- Add other UI elements as needed -->
+        </androidx.recyclerview.widget.RecyclerView>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/mentalHealthTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mental_health_tips"
+            android:textSize="24sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mentalHealthRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/healthyFoodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/healthy_food_tips"
+            android:textSize="24sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/healthyFoodRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <!-- Add other UI elements as needed -->
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,13 +33,6 @@ import it.uniba.dib.sms232417.asilapp.utilities.SerpHandler;
 public class HealthcareFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
     private Toolbar toolbar;
-    private YouTubePlayerView youTubePlayerView;
-
-    // Lista per memorizzare gli ID dei video
-    private List<String> videoIds = new ArrayList<>();
-
-    // Indice per tenere traccia del video corrente
-    private int currentVideoIndex = 0;
 
     @Nullable
     @Override
@@ -62,44 +50,23 @@ public class HealthcareFragment extends Fragment {
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        // Set up for healthcare category
+        RecyclerView healthcareRecyclerView = view.findViewById(R.id.healthcareRecyclerView);
+        healthcareRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        String healthcareQuery = getResources().getString(R.string.healthcare);
+        setupCategory(healthcareQuery, healthcareRecyclerView);
 
-        List <String> thumbnailUrls = new ArrayList<>();
+        // Set up for mental health tips category
+        RecyclerView mentalHealthRecyclerView = view.findViewById(R.id.mentalHealthRecyclerView);
+        mentalHealthRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        String mentalHealthQuery = getResources().getString(R.string.mental_health_tips);
+        setupCategory(mentalHealthQuery, mentalHealthRecyclerView);
 
-        // Perform YouTube API operations when video links are available
-        String searchQuery = getResources().getString(R.string.healthcare);
-        SerpHandler sh = new SerpHandler();
-        CompletableFuture<JSONObject> future = sh.performSerpQuery(searchQuery);
-
-        future.thenAccept(result -> {
-            try {
-                if (result.has("video_results")) {
-                    JSONArray videoResults = result.getJSONArray("video_results");
-
-                    for (int i = 0; i < videoResults.length(); i++) {
-                        JSONObject currentObject = videoResults.getJSONObject(i);
-                        String thumbnail = sh.extractThumbnail(currentObject);
-                        thumbnailUrls.add(thumbnail);
-                    }
-                    if (!thumbnailUrls.isEmpty()) {
-                        Context context = getContext();
-                        if (context != null) {
-                            requireActivity().runOnUiThread(() -> {
-                                try {
-                                    ImageAdapter imageAdapter = new ImageAdapter(context, thumbnailUrls);
-                                    recyclerView.setAdapter(imageAdapter);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        // Set up for healthy food tips category
+        RecyclerView healthyFoodRecyclerView = view.findViewById(R.id.healthyFoodRecyclerView);
+        healthyFoodRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        String healthyFoodQuery = getResources().getString(R.string.healthy_food_tips);
+        setupCategory(healthyFoodQuery, healthyFoodRecyclerView);
 
         // Set up the toolbar
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -126,6 +93,47 @@ public class HealthcareFragment extends Fragment {
                     .replace(R.id.nav_host_fragment_activity_main, new HomeFragment())
                     .addToBackStack(null)
                     .commit();
+        });
+    }
+
+    private void setupCategory(String query, RecyclerView recyclerView) {
+        List<String> thumbnailUrls = new ArrayList<>();
+        List<String> videoUrls = new ArrayList<>(); // List of video URLs
+
+        SerpHandler sh = new SerpHandler();
+        CompletableFuture<JSONObject> future = sh.performSerpQuery(query);
+
+        future.thenAccept(result -> {
+            try {
+                if (result.has("video_results")) {
+                    JSONArray videoResults = result.getJSONArray("video_results");
+
+                    for (int i = 0; i < videoResults.length(); i++) {
+                        JSONObject currentObject = videoResults.getJSONObject(i);
+                        String thumbnail = sh.extractThumbnail(currentObject);
+                        String videoLink = sh.extractLink(currentObject.getString("link"));
+                        String videoUrl = "https://www.youtube.com/watch?v=" + videoLink;
+
+                        thumbnailUrls.add(thumbnail);
+                        videoUrls.add(videoUrl); // Add video URL to list
+                    }
+                    if (!thumbnailUrls.isEmpty() && !videoUrls.isEmpty()) {
+                        Context context = getContext();
+                        if (context != null) {
+                            requireActivity().runOnUiThread(() -> {
+                                try {
+                                    ImageAdapter imageAdapter = new ImageAdapter(context, thumbnailUrls, videoUrls); // Pass video URLs to ImageAdapter
+                                    recyclerView.setAdapter(imageAdapter);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
     }
 }
