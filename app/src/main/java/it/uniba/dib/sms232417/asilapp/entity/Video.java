@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.utilities;
+package it.uniba.dib.sms232417.asilapp.entity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

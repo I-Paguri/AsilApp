@@ -121,7 +121,7 @@ public class MyAccountFragment extends Fragment {
             TextView txtSurname = getView().findViewById(R.id.txt_surname);
             TextView txtRegion = getView().findViewById(R.id.txt_region);
 
-            TextView txtage = getView().findViewById(R.id.txt_age);
+            // TextView txtage = getView().findViewById(R.id.txt_age);
             txtName.setText(loggedPatient.getNome());
             txtSurname.setText(loggedPatient.getCognome());
             txtRegion.setText(loggedPatient.getRegione());
