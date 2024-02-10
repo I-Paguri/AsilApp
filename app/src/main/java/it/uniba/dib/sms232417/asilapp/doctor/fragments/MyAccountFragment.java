@@ -1,20 +1,26 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +53,8 @@ public class MyAccountFragment extends Fragment {
     DatabaseAdapterDoctor dbAdapterDoctor;
     BottomNavigationView bottomNavigationView;
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -68,13 +76,13 @@ public class MyAccountFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(loggedDoctor != null)
+                if (loggedDoctor != null)
                     try {
                         onLogout(v, loggedDoctor.getEmail());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                else if(loggedPatient != null){
+                else if (loggedPatient != null) {
                     try {
                         onLogout(v, loggedPatient.getEmail());
                     } catch (Exception e) {
@@ -127,7 +135,16 @@ public class MyAccountFragment extends Fragment {
             txtRegion.setText(loggedPatient.getRegione());
             String dataNascita = loggedPatient.getDataNascita();
 
-        }else if(loggedDoctor != null){
+            // Gestione del click sull'immagine di profilo
+            ImageView addProfilePic = getView().findViewById(R.id.add_profile_pic);
+            addProfilePic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleAddProfilePicClick();
+                }
+            });
+
+        } else if (loggedDoctor != null) {
             TextView txtName = getView().findViewById(R.id.txt_name);
             TextView txtSurname = getView().findViewById(R.id.txt_surname);
             TextView txtRegion = getView().findViewById(R.id.txt_region);
@@ -135,52 +152,50 @@ public class MyAccountFragment extends Fragment {
             txtName.setText(loggedDoctor.getNome());
             txtSurname.setText(loggedDoctor.getCognome());
             txtRegion.setText(loggedDoctor.getRegione());
-        }else {
+        } else {
             RelativeLayout relativeLayout = getView().findViewById(R.id.not_logged_user);
             relativeLayout.setVisibility(View.VISIBLE);
         }
 
 
-
     }
+
 
     public void onLogout(View v, String email) throws Exception {
-            dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
-            dbAdapter = new DatabaseAdapterPatient(getContext());
+        dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
+        dbAdapter = new DatabaseAdapterPatient(getContext());
 
 
-            Toast.makeText(getContext(),
-                    "Logout effettuato",
-                    Toast.LENGTH_SHORT).show();
-            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-            CryptoUtil.deleteKey(email);
+        Toast.makeText(getContext(),
+                "Logout effettuato",
+                Toast.LENGTH_SHORT).show();
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        CryptoUtil.deleteKey(email);
 
-            File loggedPatientFile = new File(StringUtils.FILE_PATH_PATIENT_LOGGED);
-            File loggedDoctorFile = new File(StringUtils.FILE_PATH_DOCTOR_LOGGED);
-            if(loggedPatientFile.exists()){
-                loggedPatientFile.delete();
-                dbAdapter.onLogout();
-            }
-            if(loggedDoctorFile.exists()){
-                loggedDoctorFile.delete();
-                dbAdapterDoctor.onLogout();
-            }
+        File loggedPatientFile = new File(StringUtils.FILE_PATH_PATIENT_LOGGED);
+        File loggedDoctorFile = new File(StringUtils.FILE_PATH_DOCTOR_LOGGED);
+        if (loggedPatientFile.exists()) {
+            loggedPatientFile.delete();
+            dbAdapter.onLogout();
+        }
+        if (loggedDoctorFile.exists()) {
+            loggedDoctorFile.delete();
+            dbAdapterDoctor.onLogout();
+        }
 
-            Intent esci = new Intent(getContext(), EntryActivity.class);
-            startActivity(esci);
-            requireActivity().finish();
+        Intent esci = new Intent(getContext(), EntryActivity.class);
+        startActivity(esci);
+        requireActivity().finish();
     }
 
 
-
-
-    public Patient checkPatientLogged(){
+    public Patient checkPatientLogged() {
         Patient loggedPatient;
         File loggedPatientFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedPatient");
-        if(loggedPatientFile.exists()){
+        if (loggedPatientFile.exists()) {
             try {
                 FileInputStream fis = requireActivity().openFileInput(StringUtils.PATIENT_LOGGED);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -193,15 +208,15 @@ public class MyAccountFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             return loggedPatient;
-        }else
+        } else
             return null;
 
     }
 
-    public Doctor checkDoctorLogged(){
+    public Doctor checkDoctorLogged() {
         Doctor loggedDoctor;
         File loggedDoctorFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedDoctor");
-        if(loggedDoctorFile.exists()){
+        if (loggedDoctorFile.exists()) {
             try {
                 FileInputStream fis = requireActivity().openFileInput(StringUtils.DOCTOR_LOGGED);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -214,9 +229,77 @@ public class MyAccountFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             return loggedDoctor;
-        }else
+        } else
             return null;
     }
 
+    public void handleAddProfilePicClick() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        boolean isProfilePicExists = false;
+        if (isProfilePicExists) {
+            builder.setTitle("Modifica immagine di profilo");
+        } else {
+            builder.setTitle("Aggiungi una foto profilo");
+        }
+        String[] options = {"Scatta fotografia", "Seleziona dalla galleria"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        // Gestire il clic su "Scatta fotografia"
+                        handlePermissionDialog();
+
+                        break;
+                    case 1:
+                        // Gestire il clic su "Seleziona dalla galleria"
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Apri il fragment ProfileCameraFragment
+            ProfileCameraFragment profileCameraFragment = new ProfileCameraFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.nav_host_fragment_activity_main, profileCameraFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+    public void handlePermissionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Permesso fotocamera");
+        String[] options = {"Consenti", "Non consentire"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        // Gestire "Consenti quando utilizzi l'app"
+                        // Questo richiederà il permesso e lo manterrà fino a quando l'utente non lo revoca manualmente nelle impostazioni dell'app.
+                        requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
+                        break;
+                    case 1:
+                        // Gestire "Non consentire"
+                        // Non fare nulla, l'utente ha scelto di non concedere il permesso.
+                        // Creare un nuovo dialogo per informare l'utente
+                        AlertDialog.Builder warningBuilder = new AlertDialog.Builder(getContext());
+                        warningBuilder.setTitle("Attenzione");
+                        warningBuilder.setMessage("Per utilizzare la fotocamera devi consentirne l'accesso");
+                        warningBuilder.setPositiveButton("OK", null);
+                        warningBuilder.show();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
 
 }
