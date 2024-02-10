@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class MyAccountFragment extends Fragment {
     BottomNavigationView bottomNavigationView;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private static final int REQUEST_IMAGE_GALLERY = 2;
 
     @Nullable
     @Override
@@ -249,10 +252,10 @@ public class MyAccountFragment extends Fragment {
                     case 0:
                         // Gestire il clic su "Scatta fotografia"
                         handlePermissionDialog();
-
                         break;
                     case 1:
                         // Gestire il clic su "Seleziona dalla galleria"
+                        handleGalleryPermissionDialog();
                         break;
                 }
             }
@@ -270,8 +273,16 @@ public class MyAccountFragment extends Fragment {
             transaction.replace(R.id.nav_host_fragment_activity_main, profileCameraFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        } else if (requestCode == REQUEST_IMAGE_GALLERY && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Apri la galleria del dispositivo
+            openGallery();
+        } else {
+            // Gestisci il caso in cui il permesso è stato negato
+            // Puoi fornire un messaggio all'utente o prendere altre azioni appropriate
+            Toast.makeText(getContext(), "Permesso negato", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public void handlePermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -282,7 +293,7 @@ public class MyAccountFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        // Gestire "Consenti quando utilizzi l'app"
+                        // Gestire "Consenti"
                         // Questo richiederà il permesso e lo manterrà fino a quando l'utente non lo revoca manualmente nelle impostazioni dell'app.
                         requestPermissions(new String[]{android.Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
                         break;
@@ -300,6 +311,53 @@ public class MyAccountFragment extends Fragment {
             }
         });
         builder.show();
+    }
+
+    public void handleGalleryPermissionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Permesso galleria");
+        String[] options = {"Consenti", "Non consentire"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        // Gestire "Consenti"
+                        requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_IMAGE_GALLERY);
+                        // Apri la galleria del dispositivo
+                        Intent i = new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                        startActivityForResult(i, REQUEST_IMAGE_GALLERY);
+                        break;
+                    case 1:
+                        // Gestire "Non consentire"
+                        AlertDialog.Builder warningBuilder = new AlertDialog.Builder(getContext());
+                        warningBuilder.setTitle("Attenzione");
+                        warningBuilder.setMessage("Per accedere alla galleria devi consentirne l'accesso");
+                        warningBuilder.setPositiveButton("OK", null);
+                        warningBuilder.show();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    // Aggiungi questo metodo alla tua classe per avviare l'intento della galleria dopo aver ottenuto il permesso
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            // L'utente ha selezionato un'immagine dalla galleria
+            // Non è necessario fare nulla in questo momento
+        }
     }
 
 }
