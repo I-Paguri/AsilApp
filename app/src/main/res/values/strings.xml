@@ -109,6 +109,17 @@
     <string name="mental_health_tips">Mental health</string>
     <string name="healthy_food_tips">Healthy food</string>
 
+
+
+    <string-array name="searchOnMaps_array">
+        <item>Ambulatorio</item>
+        <item>Farmacia</item>
+        <item>Posta</item>
+        <item>Scuola di Italiano</item>
+        <item>Chiesa</item>
+        <item>Comune</item>
+    </string-array>
+
     <string-array name="medicines_list">
         <item>Paracetamol</item>
         <item>Aspirin</item>

@@ -4,19 +4,27 @@ import static androidx.core.location.LocationManagerCompat.requestLocationUpdate
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import org.osmdroid.views.MapView;
 import org.json.JSONArray;
@@ -78,36 +86,83 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Set the title of the fragment richiamando il metodo
+        setTitle();
+
+        FloatingActionButton my_location_button = view.findViewById(R.id.my_location_button);
+
+        //popolo spinner
+        Spinner spinner = view.findViewById(R.id.spinner);
+        // Crea un ArrayAdapter utilizzando l'array di stringhe e il layout predefinito dello spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),R.array.searchOnMaps_array, android.R.layout.simple_spinner_item);        // Specifica il layout da utilizzare quando appare la lista di scelte
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Applica l'adapter allo spinner
+        spinner.setAdapter(adapter);
+
+
+
         FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-
-
-
+       //per ora non serve, prossimo alla rimozione
+        fab.setVisibility(View.GONE);
+        my_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestLocationUpdates();
                 enableMyLocation();
-
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                         && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    // If the permissions are granted, call the API
-                    callApi();
+                    LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (lastKnownLocation != null) {
+                        LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                    }
                 }
             }
         });
 
 
+
+        // Richiesta dei permessi non appena si apre il fragment
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+
+
+
+        FloatingActionButton medicalCrossButton = view.findViewById(R.id.medical_cross_button);
+        medicalCrossButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    // If the permissions are granted, call the API
+                    String query = spinner.getSelectedItem().toString();
+                    callApi(query);
+                }
+            }
+        });
+
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
 
-        // Check if the location permissions are already granted
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // If the permissions are granted, call the API
-            callApi();
-        }
+        ImageButton infoButton = view.findViewById(R.id.info_button);
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Informazioni")
+                        .setMessage("Se rifiuti 2 volte i permessi non sarà possibile mostrarti i punti di interesse.")
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show();
+            }
+        });
 
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -118,7 +173,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
             }
+            //disabilito i pulsanti per la navigazione prefefiniti di google
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
         }
     }
 
@@ -170,16 +227,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     //metodo che serve a richiamare il metodo in ManageJson per gestire la risposta json
-    private void callApi() {
+    private void callApi(String query) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         float latitude = sharedPreferences.getFloat("latitude", 0);
         float longitude = sharedPreferences.getFloat("longitude", 0);
+
 
         Map<String, String> parameters = new HashMap<>();
         //modofico in modo da non consumare troppe richieste
         //parameters.put("engine", "google_maps");
         parameters.put("engine", "google_maps");
-        parameters.put("q", "farmacia");
+        parameters.put("q", query);
         parameters.put("ll", "@" + latitude + "," + longitude + ",14z");
         parameters.put("type", "search");
         parameters.put("api_key", "97f69511113f9b69bdba905e6f9c3315e9c6eec0e678136469e2c057d793cd9c");
@@ -234,6 +292,22 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+
+    //metodo per impostare title
+    public void setTitle() {
+
+        // Show home button
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Drawable homeIcon = getResources().getDrawable(R.drawable.home, null);
+        // Set color filter
+        homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
+
+        // Set toolbar title
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Servizi Vicini");
+
+    }
 
 
 }

@@ -39,6 +39,7 @@ import java.io.ObjectInputStream;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class HomeFragment extends Fragment {
@@ -107,12 +108,15 @@ public class HomeFragment extends Fragment {
         toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 
         MaterialCardView cardViewMyPatients = view.findViewById(R.id.cardViewMyPatients);
+        MaterialCardView cardViewMaps = view.findViewById(R.id.cardViewMaps);
 
 
         if (loggedDoctor != null) {
             cardViewMyPatients.setVisibility(View.VISIBLE);
+            cardViewMaps.setVisibility(View.GONE);
         } else {
             cardViewMyPatients.setVisibility(View.GONE);
+            cardViewMaps.setVisibility(View.VISIBLE);
         }
         // Imposto il listener per la cardView dei pazienti
         cardViewMyPatients.setOnClickListener(v -> {
@@ -144,6 +148,19 @@ public class HomeFragment extends Fragment {
             // Quando viene aperto il fragment dei pazienti viene aggiornata l'icona selezionata nella bottom navigation bar
             //bottomNavigationView.setSelectedItemId(R.id.navigation_healthcare);
         });
+
+           // Imposto il listener per la cardViewMaps
+        cardViewMaps.setOnClickListener(v -> {
+            // Quando viene cliccata la cardViewMaps, viene aperto il MapsFragment
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            MapsFragment mapsFragment = new MapsFragment();
+            transaction.replace(R.id.nav_host_fragment_activity_main, mapsFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        });
+
+
 
         /*
         // Create the badge
