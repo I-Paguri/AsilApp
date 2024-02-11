@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
@@ -77,6 +78,20 @@ public class MyAccountFragment extends Fragment {
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         Button btnLogout = getView().findViewById(R.id.btn_logout);
+
+        // Verifica se il Bundle degli argomenti è null
+        if (getArguments() != null) {
+            // Ottieni l'URL dell'immagine del profilo dal bundle
+            String profileImageUrl = getArguments().getString("profile_image_url");
+
+            // Aggiorna l'immagine del profilo
+            ImageView profileImageView = getView().findViewById(R.id.my_account);
+            Glide.with(this)
+                    .load(profileImageUrl)
+                    .circleCrop()
+                    .into(profileImageView);
+        }
+
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -283,7 +298,8 @@ public class MyAccountFragment extends Fragment {
             Toast.makeText(getContext(), "Permesso negato", Toast.LENGTH_SHORT).show();
         }
     }
-    public void checkCameraPermission(){
+
+    public void checkCameraPermission() {
 
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != getActivity().getPackageManager().PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.CAMERA)) {
@@ -322,7 +338,7 @@ public class MyAccountFragment extends Fragment {
 
     }
 
-    public void checkGalleryPermission(){
+    public void checkGalleryPermission() {
 
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != getActivity().getPackageManager().PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.CAMERA)) {
@@ -352,7 +368,7 @@ public class MyAccountFragment extends Fragment {
         } else {
             // Apri la galleria del dispositivo
             Intent i = new Intent(Intent.ACTION_PICK,
-            android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(i, REQUEST_IMAGE_GALLERY);
         }
     }

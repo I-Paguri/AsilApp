@@ -72,21 +72,28 @@ public class ProfileCameraFragment extends Fragment {
                 imageCapture.takePicture(cameraExecutor, new ImageCapture.OnImageCapturedCallback() {
                     @Override
                     public void onCaptureSuccess(@NonNull ImageProxy image) {
-                        // Converti l'ImageProxy in un Bitmap
+                        // Converti ImageProxy in Bitmap
                         Bitmap bitmap = convertImageProxyToBitmap(image);
 
-                        // Passa il Bitmap al nuovo fragment/activity
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("captured_image", bitmap);
+                        // Ottieni l'orientamento dell'immagine
+                        int orientation = image.getImageInfo().getRotationDegrees();
 
-                        // Naviga al nuovo fragment/activity
+                        // Crea un nuovo CapturedImageFragment
                         CapturedImageFragment capturedImageFragment = new CapturedImageFragment();
+
+                        // Crea un nuovo Bundle
+                        Bundle bundle = new Bundle();
+
+                        // Aggiungi l'immagine catturata e l'orientamento al Bundle
+                        bundle.putParcelable("captured_image", bitmap);
+                        bundle.putInt("orientation", orientation);
+
+                        // Imposta gli argomenti del CapturedImageFragment
                         capturedImageFragment.setArguments(bundle);
+
+                        // Naviga al CapturedImageFragment
                         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.nav_host_fragment_activity_main, capturedImageFragment).commit();
-
-                        // Chiudi l'ImageProxy
-                        image.close();
                     }
 
                     @Override
