@@ -316,12 +316,14 @@ public class MyAccountFragment extends Fragment {
                         // Gestire il clic su "Scatta fotografia"
                         ImagePicker.with(MyAccountFragment.this)
                                 .cameraOnly()
+                                .cropSquare() // Add this line to crop the image
                                 .start();
                         break;
                     case 1:
                         // Gestire il clic su "Seleziona dalla galleria"
                         ImagePicker.with(MyAccountFragment.this)
                                 .galleryOnly()
+                                .cropSquare() // Add this line to crop the image
                                 .start();
                         break;
                 }
