@@ -1,9 +1,11 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -29,13 +31,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.UUID;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
@@ -56,8 +66,9 @@ public class MyAccountFragment extends Fragment {
     DatabaseAdapterDoctor dbAdapterDoctor;
     BottomNavigationView bottomNavigationView;
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private StorageReference storageReference;
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GALLERY = 2;
 
     @Nullable
@@ -66,7 +77,19 @@ public class MyAccountFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_my_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_account, container, false);
+
+        ImageView addProfilePicImageView = view.findViewById(R.id.add_profile_pic);
+        addProfilePicImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showImagePickerDialog();
+            }
+        });
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        return view;
     }
 
     @Override
@@ -210,6 +233,30 @@ public class MyAccountFragment extends Fragment {
         requireActivity().finish();
     }
 
+    private void showImagePickerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Choose an option")
+                .setItems(new CharSequence[]{"Take Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                // Take Photo
+                                ImagePicker.with(MyAccountFragment.this)
+                                        .cameraOnly()
+                                        .start();
+                                break;
+                            case 1:
+                                // Choose from Gallery
+                                ImagePicker.with(MyAccountFragment.this)
+                                        .galleryOnly()
+                                        .start();
+                                break;
+                        }
+                    }
+                })
+                .show();
+    }
 
     public Patient checkPatientLogged() {
         Patient loggedPatient;
@@ -267,11 +314,15 @@ public class MyAccountFragment extends Fragment {
                 switch (which) {
                     case 0:
                         // Gestire il clic su "Scatta fotografia"
-                        checkCameraPermission();
+                        ImagePicker.with(MyAccountFragment.this)
+                                .cameraOnly()
+                                .start();
                         break;
                     case 1:
                         // Gestire il clic su "Seleziona dalla galleria"
-                        checkGalleryPermission();
+                        ImagePicker.with(MyAccountFragment.this)
+                                .galleryOnly()
+                                .start();
                         break;
                 }
             }
@@ -280,113 +331,67 @@ public class MyAccountFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Apri il fragment ProfileCameraFragment
-            ProfileCameraFragment profileCameraFragment = new ProfileCameraFragment();
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_activity_main, profileCameraFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        } else if (requestCode == REQUEST_IMAGE_GALLERY && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Apri la galleria del dispositivo
-            openGallery();
-        } else {
-            // Gestisci il caso in cui il permesso è stato negato
-            // Puoi fornire un messaggio all'utente o prendere altre azioni appropriate
-            Toast.makeText(getContext(), "Permesso negato", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public void checkCameraPermission() {
-
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != getActivity().getPackageManager().PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.CAMERA)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.attention);
-                builder.setMessage(R.string.explain_permission_camera);
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 101);
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.attention);
-                builder.setMessage(R.string.explain_permission_camera);
-                builder.setPositiveButton("OK", null);
-                builder.show();
-
-            }
-        } else {
-            // Apri il fragment ProfileCameraFragment
-            ProfileCameraFragment profileCameraFragment = new ProfileCameraFragment();
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_activity_main, profileCameraFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-
-    }
-
-    public void checkGalleryPermission() {
-
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != getActivity().getPackageManager().PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.CAMERA)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.attention);
-                builder.setMessage(R.string.explain_permission_gallery);
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 101);
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                builder.show();
-
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.attention);
-                builder.setMessage(R.string.explain_permission_gallery);
-                builder.setPositiveButton("OK", null);
-                builder.show();
-
-            }
-        } else {
-            // Apri la galleria del dispositivo
-            Intent i = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-            startActivityForResult(i, REQUEST_IMAGE_GALLERY);
-        }
-    }
-
-    // Aggiungi questo metodo alla tua classe per avviare l'intento della galleria dopo aver ottenuto il permesso
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == AppCompatActivity.RESULT_OK && data != null) {
-            // L'utente ha selezionato un'immagine dalla galleria
-
+        if (resultCode == Activity.RESULT_OK) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
+                uploadImage(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+    private void uploadImage(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+
+        UploadTask uploadTask = ref.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getContext(), "Upload failed", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Aggiorna l'URL dell'immagine del profilo nell'UI corrente
+                        updateProfileImage(uri.toString());
+
+                        // Opzionalmente, puoi anche passare l'URL come argomento al fragment
+                        // e creare una nuova istanza solo se necessario
+                        Bundle bundle = new Bundle();
+                        bundle.putString("profile_image_url", uri.toString());
+
+                        MyAccountFragment myAccountFragment = new MyAccountFragment();
+                        myAccountFragment.setArguments(bundle);
+
+                        // Non creare una nuova istanza del fragment, invece, aggiorna l'immagine direttamente
+                        updateProfileImage(uri.toString());
+                    }
+                });
+            }
+        });
+    }
+
+    // Metodo per aggiornare l'immagine del profilo nell'UI corrente
+    private void updateProfileImage(String imageUrl) {
+        if (getView() != null) {
+            ImageView profileImageView = getView().findViewById(R.id.my_account);
+            Glide.with(MyAccountFragment.this)
+                    .load(imageUrl)
+                    .circleCrop()
+                    .into(profileImageView);
+        }
+    }
+
 
 }

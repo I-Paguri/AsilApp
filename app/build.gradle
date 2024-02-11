@@ -117,6 +117,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
+    // Libreria per gestire la galleria e la fotocamera
+    implementation 'com.github.dhaval2404:imagepicker:2.1'
+
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
