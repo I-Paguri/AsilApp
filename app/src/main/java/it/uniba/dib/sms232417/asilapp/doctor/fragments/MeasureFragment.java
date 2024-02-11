@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.widget.Toolbar;
@@ -88,7 +90,12 @@ public class MeasureFragment extends Fragment {
     }
 
     private void onMeasureClick() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment_activity_main, new QRCodeAuth()).commit();
+        QRCodeAuth qrCodeAuth = new QRCodeAuth();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.nav_host_fragment_activity_main, qrCodeAuth);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 }

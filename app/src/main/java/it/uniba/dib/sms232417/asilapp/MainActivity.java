@@ -39,6 +39,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
@@ -92,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
 
             bottomNavigationView.setOnItemSelectedListener(item -> {
-
 
                 treatmentFormMedicationsFragment.setIntakeCount(1);
                 int itemId = item.getItemId();
@@ -299,6 +299,13 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .create()
                         .show();
+            }else if(currentFragment instanceof QRCodeAuth){
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, new MeasureFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
             } else {
                 if (currentFragment instanceof HomeFragment) {
                     if (doubleBackToExitPressedOnce) {

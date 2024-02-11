@@ -110,6 +110,7 @@
     <string name="mental_health_tips">Mental health</string>
     <string name="healthy_food_tips">Healthy food</string>
 
+    <string name="scan_qr_code_container">Please Scan the QR Code on yout container to connect!</string>
 
 
     <string-array name="searchOnMaps_array">
@@ -465,7 +466,9 @@
     <string name="error_login_section_patient" translatable="false">You\'re a Patient, sign in using your dedicated area</string>
     <string name="error_login_section_doctor" translatable="false">You\'re a Doctor, sign in using your dedicated area</string>
     <string name="qr_code_authentication" translatable="false">Sign in using your badge</string>
-
+    <string name="misuration_continue">You can move to your container and measure your vitals</string>
+    <string name="misuration_continue_explain">If you want to stop the measurement click cancel</string>
+    <string name="cancel_misuration">Cancel</string>
     <string name="at_time">at</string>
     <string name="and">and</string>
 

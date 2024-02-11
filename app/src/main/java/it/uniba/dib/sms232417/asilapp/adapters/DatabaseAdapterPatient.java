@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.adapters;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -10,6 +11,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
@@ -184,5 +186,23 @@ public class DatabaseAdapterPatient {
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error deleting treatment", e);
                 });
+    }
+
+    public void connectToContainer(String token, String patientUUID){
+
+        db.collection("qr_code_container")
+                .document(token)
+                .update("uuid", patientUUID)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Container successfully connected!");
+                })
+                .addOnFailureListener(e -> {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+                    builder.setTitle("Errore");
+                    builder.setMessage(e.getMessage());
+                    builder.setPositiveButton("OK", null);
+                });
+
+
     }
 }
