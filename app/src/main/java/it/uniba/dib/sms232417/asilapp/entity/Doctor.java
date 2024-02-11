@@ -18,6 +18,7 @@ public class Doctor implements Parcelable, Serializable {
     private String specializzazione;
     private String numeroDiRegistrazioneMedica;
     private List<String> myPatientsUUID;
+    private String profileImageUrl;
 
     public Doctor() {
     }
@@ -62,6 +63,14 @@ public class Doctor implements Parcelable, Serializable {
 
     public void setMyPatientsUUID(List<String> myPatients) {
         this.myPatientsUUID = myPatients;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public String getNome() {

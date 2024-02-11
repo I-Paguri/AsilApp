@@ -219,6 +219,20 @@ public class MyAccountFragment extends Fragment {
                 }
             });
 
+            dbAdapterDoctor.getProfileImage(loggedDoctor.getEmail(), new OnProfileImageCallback() {
+                @Override
+                public void onCallback(String profileImageUrl) {
+                    // Aggiorna l'immagine del profilo con l'URL recuperato
+                    updateProfileImage(profileImageUrl);
+                }
+
+                @Override
+                public void onCallbackError(Exception e) {
+                    // Gestisci l'errore
+                    Toast.makeText(getContext(), "Error loading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } else {
             RelativeLayout relativeLayout = getView().findViewById(R.id.not_logged_user);
             relativeLayout.setVisibility(View.VISIBLE);
@@ -375,7 +389,16 @@ public class MyAccountFragment extends Fragment {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+        String userUUID;
+        if (loggedPatient != null) {
+            userUUID = loggedPatient.getUUID();
+        } else if (loggedDoctor != null) {
+            userUUID = loggedDoctor.getEmail(); // Utilizza l'email del dottore come UUID univoco
+        } else {
+            throw new RuntimeException("No user is logged in");
+        }
+
+        StorageReference ref = storageReference.child("images/" + userUUID + "/" + UUID.randomUUID().toString());
 
         UploadTask uploadTask = ref.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -396,7 +419,7 @@ public class MyAccountFragment extends Fragment {
                         if (loggedPatient != null) {
                             dbAdapterPatient.updateProfileImage(loggedPatient.getUUID(), uri.toString());
                         } else if (loggedDoctor != null) {
-                            // dbAdapterDoctor.updateProfileImage(loggedDoctor.getUUID(), uri.toString());
+                            dbAdapterDoctor.updateProfileImage(loggedDoctor.getEmail(), uri.toString());
                         }
                     }
                 });

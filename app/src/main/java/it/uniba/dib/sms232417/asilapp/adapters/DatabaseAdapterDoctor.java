@@ -138,8 +138,41 @@ public class DatabaseAdapterDoctor {
                 });
     }
 
-    public void addTreatment(Treatment treatment) {
+    public void updateProfileImage(String email, String imageUrl) {
+        db.collection("doctor")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        String docId = queryDocumentSnapshots.getDocuments().get(0).getId();
+                        db.collection("doctor")
+                                .document(docId)
+                                .update("profileImageUrl", imageUrl)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Firestore", "Profile image successfully updated!");
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error updating profile image", e);
+                                });
+                    }
+                });
+    }
 
+    public void getProfileImage(String email, OnProfileImageCallback callback) {
+        db.collection("doctor")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        String profileImageUrl = queryDocumentSnapshots.getDocuments().get(0).getString("profileImageUrl");
+                        callback.onCallback(profileImageUrl);
+                    } else {
+                        callback.onCallbackError(new Exception("No profile image found for this user."));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallbackError(e);
+                });
     }
 
 }
