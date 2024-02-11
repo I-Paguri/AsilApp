@@ -45,6 +45,7 @@
     <string name="last_measure_explain" translatable="false">Qui verrano visualizzati i risultati delle ultime misurazioni</string>
     <string name="attention" translatable="false">Attenzione!</string>
     <string name="explain_permission_camera" translatable="false">Devi accettare i permessi per poter accedere a tali funzioni</string>
+    <string name= "explain_permission_gallery"> transalatable = "false" Devi accettare i permessi per poter accedere alla galleria </string>
     <string name="cancel" translatable="false">Annulla</string>
     <string name="confirm">Conferma</string>
     <string name="accept">Accetta</string>

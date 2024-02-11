@@ -23,7 +23,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_margin="16dp"
-        android:src="@drawable/close_camera"
+        android:src="@drawable/close_icon"
         android:clickable="true" />
 
 </RelativeLayout>

@@ -62,6 +62,7 @@
     <string name="last_measure_explain">Here you can see the result of your last Measure</string>
     <string name="attention">Attention!</string>
     <string name="explain_permission_camera">You must allow the use of the camera to use this function</string>
+    <string name="explain_permission_gallery">You must allow the use of the photo gallery to use this function</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="accept">Accept</string>
