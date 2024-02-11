@@ -188,11 +188,11 @@ public class DatabaseAdapterPatient {
                 });
     }
 
-    public void connectToContainer(String token, String patientUUID){
+    public void connectToContainer(String token, String patientUUID, boolean isConnect){
 
         db.collection("qr_code_container")
                 .document(token)
-                .update("uuid", patientUUID)
+                .update("uuid", patientUUID, "isConnect", isConnect)
                 .addOnSuccessListener(aVoid -> {
                     Log.d("Firestore", "Container successfully connected!");
                 })
@@ -202,7 +202,19 @@ public class DatabaseAdapterPatient {
                     builder.setMessage(e.getMessage());
                     builder.setPositiveButton("OK", null);
                 });
-
-
+    }
+    public void setFlagContainer(boolean flag, String token){
+        db.collection("qr_code_container")
+                .document(token)
+                .update("isConnect", flag)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Flag successfully set!");
+                })
+                .addOnFailureListener(e -> {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+                    builder.setTitle("Errore");
+                    builder.setMessage(e.getMessage());
+                    builder.setPositiveButton("OK", null);
+                });
     }
 }

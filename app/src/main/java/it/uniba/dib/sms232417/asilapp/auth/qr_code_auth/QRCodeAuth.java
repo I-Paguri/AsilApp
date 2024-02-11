@@ -86,6 +86,7 @@ public class QRCodeAuth extends Fragment {
 
     private Patient loggedPatient;
     private boolean isBarcodeRead = false;
+    private boolean isConnect = false;
     int i = 0;
 
     @Nullable
@@ -226,16 +227,22 @@ public class QRCodeAuth extends Fragment {
                         String token = barcode.getDisplayValue();
                         if (token != null) {
                             isBarcodeRead = true;
-
+                            isConnect = true;
                             dbAdapterPatient = new DatabaseAdapterPatient(getContext());
-                            dbAdapterPatient.connectToContainer(token,loggedPatient.getUUID());
+                            dbAdapterPatient.connectToContainer(token,loggedPatient.getUUID(),isConnect);
                             LayoutInflater inflater = getLayoutInflater();
                             View dialogView = inflater.inflate(R.layout.dialog_progress, null);
 
                                 // Crea il dialogo utilizzando il layout personalizzato
                                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                            builder.setView(dialogView)
-                                    .setNegativeButton(R.string.cancel_misuration,null);// Impedisce all'utente di chiudere il dialogo
+                                builder.setView(dialogView)
+                                        .setNegativeButton(R.string.cancel_misuration, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                isConnect = false;
+                                                isBarcodeRead = false;
+                                                dbAdapterPatient.setFlagContainer(isConnect, token);
+                                            }
+                                        });
                                 // Mostra il dialogo
                             AlertDialog dialog = builder.create();
                             dialog.show();
