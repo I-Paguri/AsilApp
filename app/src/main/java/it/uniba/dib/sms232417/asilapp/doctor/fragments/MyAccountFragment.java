@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,6 +53,7 @@ import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class MyAccountFragment extends Fragment {
@@ -62,14 +61,12 @@ public class MyAccountFragment extends Fragment {
     Patient loggedPatient;
     Doctor loggedDoctor;
     final String NAME_FILE = "automaticLogin";
-    DatabaseAdapterPatient dbAdapter;
+    DatabaseAdapterPatient dbAdapterPatient;
     DatabaseAdapterDoctor dbAdapterDoctor;
     BottomNavigationView bottomNavigationView;
 
     private StorageReference storageReference;
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int REQUEST_IMAGE_GALLERY = 2;
 
     @Nullable
     @Override
@@ -98,6 +95,10 @@ public class MyAccountFragment extends Fragment {
 
         loggedPatient = checkPatientLogged();
         loggedDoctor = checkDoctorLogged();
+
+        // Inizializza dbAdapterPatient e dbAdapterDoctor
+        dbAdapterPatient = new DatabaseAdapterPatient(getContext());
+        dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         Button btnLogout = getView().findViewById(R.id.btn_logout);
@@ -186,6 +187,20 @@ public class MyAccountFragment extends Fragment {
                 }
             });
 
+            dbAdapterPatient.getProfileImage(loggedPatient.getUUID(), new OnProfileImageCallback() {
+                @Override
+                public void onCallback(String profileImageUrl) {
+                    // Aggiorna l'immagine del profilo con l'URL recuperato
+                    updateProfileImage(profileImageUrl);
+                }
+
+                @Override
+                public void onCallbackError(Exception e) {
+                    // Gestisci l'errore
+                    Toast.makeText(getContext(), "Error loading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } else if (loggedDoctor != null) {
             TextView txtName = getView().findViewById(R.id.txt_name);
             TextView txtSurname = getView().findViewById(R.id.txt_surname);
@@ -194,18 +209,27 @@ public class MyAccountFragment extends Fragment {
             txtName.setText(loggedDoctor.getNome());
             txtSurname.setText(loggedDoctor.getCognome());
             txtRegion.setText(loggedDoctor.getRegione());
+
+            // Gestione del click sull'immagine di profilo
+            ImageView addProfilePic = getView().findViewById(R.id.add_profile_pic);
+            addProfilePic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleAddProfilePicClick();
+                }
+            });
+
         } else {
             RelativeLayout relativeLayout = getView().findViewById(R.id.not_logged_user);
             relativeLayout.setVisibility(View.VISIBLE);
         }
-
 
     }
 
 
     public void onLogout(View v, String email) throws Exception {
         dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
-        dbAdapter = new DatabaseAdapterPatient(getContext());
+        dbAdapterPatient = new DatabaseAdapterPatient(getContext());
 
 
         Toast.makeText(getContext(),
@@ -221,7 +245,7 @@ public class MyAccountFragment extends Fragment {
         File loggedDoctorFile = new File(StringUtils.FILE_PATH_DOCTOR_LOGGED);
         if (loggedPatientFile.exists()) {
             loggedPatientFile.delete();
-            dbAdapter.onLogout();
+            dbAdapterPatient.onLogout();
         }
         if (loggedDoctorFile.exists()) {
             loggedDoctorFile.delete();
@@ -316,14 +340,14 @@ public class MyAccountFragment extends Fragment {
                         // Gestire il clic su "Scatta fotografia"
                         ImagePicker.with(MyAccountFragment.this)
                                 .cameraOnly()
-                                .cropSquare() // Add this line to crop the image
+                                .cropSquare()
                                 .start();
                         break;
                     case 1:
                         // Gestire il clic su "Seleziona dalla galleria"
                         ImagePicker.with(MyAccountFragment.this)
                                 .galleryOnly()
-                                .cropSquare() // Add this line to crop the image
+                                .cropSquare()
                                 .start();
                         break;
                 }
@@ -368,16 +392,12 @@ public class MyAccountFragment extends Fragment {
                         // Aggiorna l'URL dell'immagine del profilo nell'UI corrente
                         updateProfileImage(uri.toString());
 
-                        // Opzionalmente, puoi anche passare l'URL come argomento al fragment
-                        // e creare una nuova istanza solo se necessario
-                        Bundle bundle = new Bundle();
-                        bundle.putString("profile_image_url", uri.toString());
-
-                        MyAccountFragment myAccountFragment = new MyAccountFragment();
-                        myAccountFragment.setArguments(bundle);
-
-                        // Non creare una nuova istanza del fragment, invece, aggiorna l'immagine direttamente
-                        updateProfileImage(uri.toString());
+                        // Aggiorna l'URL dell'immagine del profilo nel database
+                        if (loggedPatient != null) {
+                            dbAdapterPatient.updateProfileImage(loggedPatient.getUUID(), uri.toString());
+                        } else if (loggedDoctor != null) {
+                            // dbAdapterDoctor.updateProfileImage(loggedDoctor.getUUID(), uri.toString());
+                        }
                     }
                 });
             }
@@ -394,6 +414,4 @@ public class MyAccountFragment extends Fragment {
                     .into(profileImageView);
         }
     }
-
-
 }

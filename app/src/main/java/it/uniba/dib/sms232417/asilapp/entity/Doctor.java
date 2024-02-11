@@ -29,9 +29,7 @@ public class Doctor implements Parcelable, Serializable {
         this.dataNascita = dataNascita;
         this.regione = regione;
         this.specializzazione = specializzazione;
-
         this.numeroDiRegistrazioneMedica = numeroDiRegistrazioneMedica;
-
         this.myPatientsUUID = new ArrayList<>();
     }
 

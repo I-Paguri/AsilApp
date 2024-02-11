@@ -59,6 +59,7 @@ public class RegisterFragment extends Fragment {
 
     String strDataNascita;
     String regione;
+    private String profileImageUrl;
 
     @Nullable
     @Override
@@ -209,7 +210,7 @@ public class RegisterFragment extends Fragment {
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
         dbAdapter = new DatabaseAdapterPatient(getContext());
-        dbAdapter.onRegister(nome, cognome, email, dataNascita, regione, password, new OnPatientDataCallback() {
+        dbAdapter.onRegister(nome, cognome, email, dataNascita, regione, profileImageUrl, password, new OnPatientDataCallback() {
             @Override
             public void onCallback(Patient patient) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

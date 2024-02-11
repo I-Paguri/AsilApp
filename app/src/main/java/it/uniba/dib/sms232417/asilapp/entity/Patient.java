@@ -22,18 +22,20 @@ public class Patient implements Parcelable, Serializable {
     private String dataNascita;
     private String regione;
     private List<Treatment> treatments;
+
+    private String profileImageUrl;
     private Doctor doctor;
 
     public Patient() {
     }
 
-    public Patient(String UUID, String nome, String cognome, String email, String dataNascita, String regione){
+    public Patient(String UUID, String nome, String cognome, String email, String dataNascita, String regione, String profileImageUrl) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.dataNascita = dataNascita;
         this.regione = regione;
-
+        this.profileImageUrl = profileImageUrl;
         this.UUID = UUID;
 
     }
@@ -151,4 +153,6 @@ public class Patient implements Parcelable, Serializable {
         dest.writeString(dataNascita);
         dest.writeString(regione);
     }
+
+
 }

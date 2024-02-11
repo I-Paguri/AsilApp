@@ -18,6 +18,7 @@ import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 
 public class DatabaseAdapterPatient {
@@ -54,7 +55,8 @@ public class DatabaseAdapterPatient {
                                                 datiUtente.getString("cognome"),
                                                 datiUtente.getString("email"),
                                                 datiUtente.getString("dataNascita"),
-                                                datiUtente.getString("regione"));
+                                                datiUtente.getString("regione"),
+                                                datiUtente.getString("profileImageUrl"));
                                         callback.onCallback(resultPatient);
                                     } else {
                                         callback.onCallbackError(new Exception(), context.getString(R.string.error_login_section_doctor));
@@ -73,7 +75,7 @@ public class DatabaseAdapterPatient {
                 });
     }
 
-    public void onRegister(String nome, String cognome, String email, String dataNascita, String regione, String password, OnPatientDataCallback callback) {
+    public void onRegister(String nome, String cognome, String email, String dataNascita, String regione, String profileImageUrl, String password, OnPatientDataCallback callback) {
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -84,7 +86,8 @@ public class DatabaseAdapterPatient {
                         db = FirebaseFirestore.getInstance();
                         Log.d("REGISTER", "Registrazione effettuata con successo");
 
-                        patient = new Patient(utente.getUid(), nome, cognome, email, dataNascita, regione);
+
+                        patient = new Patient(utente.getUid(), nome, cognome, email, dataNascita, regione, profileImageUrl);
 
                         db.collection("patient")
                                 .document(utente.getUid())
@@ -203,6 +206,7 @@ public class DatabaseAdapterPatient {
                     builder.setPositiveButton("OK", null);
                 });
     }
+
     public void setFlagContainer(boolean flag, String token){
         db.collection("qr_code_container")
                 .document(token)
@@ -217,4 +221,34 @@ public class DatabaseAdapterPatient {
                     builder.setPositiveButton("OK", null);
                 });
     }
+
+    public void updateProfileImage(String userUUID, String imageUrl) {
+        db.collection("patient")
+                .document(userUUID)
+                .update("profileImageUrl", imageUrl)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Profile image successfully updated!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error updating profile image", e);
+                });
+    }
+
+    public void getProfileImage(String userUUID, OnProfileImageCallback callback) {
+        db.collection("patient")
+                .document(userUUID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String profileImageUrl = documentSnapshot.getString("profileImageUrl");
+                        callback.onCallback(profileImageUrl);
+                    } else {
+                        callback.onCallbackError(new Exception("No profile image found for this user."));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallbackError(e);
+                });
+    }
+
 }
