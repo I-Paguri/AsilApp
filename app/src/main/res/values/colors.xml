@@ -1,5 +1,6 @@
 <resources>
     <color name="seed">#00313f</color>
+    <color name="lib_material_color">?attr/colorPrimary</color>
     <color name="md_theme_light_primary">#006781</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_primaryContainer">#B9EAFF</color>

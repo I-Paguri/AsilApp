@@ -24,6 +24,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 
@@ -44,6 +45,8 @@ public class ExpensesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Toolbar toolbar;
 
     public ExpensesFragment() {
         // Required empty public constructor
@@ -90,7 +93,21 @@ public class ExpensesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_expenses, container, false);
 
+        toolbar = requireActivity().findViewById(R.id.toolbar);
 
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        // Show home button
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+
+        BadgeDrawable badgeDrawable = BadgeDrawable.create(requireContext());
+        badgeDrawable.setNumber(10);
+
+
+        // Set toolbar title
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Spese");
+        // Change toolbar title text color
+        toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 
         MaterialCardView cardViewProducts = view.findViewById(R.id.cardViewProducts);
         cardViewProducts.setOnClickListener(new View.OnClickListener() {
@@ -165,5 +182,6 @@ public class ExpensesFragment extends Fragment {
         progressBar.setProgress(75); // Imposta il progresso al 75%
 
     }
+
 
 }
