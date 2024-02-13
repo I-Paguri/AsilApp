@@ -86,6 +86,13 @@
     <string name="mental_health_tips">L\'importanza del benessere mentale</string>
     <string name="healthy_food_tips">L\'importanza del cibo salutare</string>
 
+    <string-array name="categories">
+        <item>Esami</item>
+        <item>Farmaci</item>
+        <item>Trattamenti</item>
+        <item>Terapie</item>
+    </string-array>
+
     <string-array name="medicines_list">
         <item>Paracetamolo</item>
         <item>Aspirina</item>

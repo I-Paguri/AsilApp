@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Categories"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Seleziona Categoria"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startIconContentDescription="Goal">
+
+    <AutoCompleteTextView
+        android:id="@+id/Categories_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:labelFor="@id/Categories_list">
+
+    </AutoCompleteTextView>
+</com.google.android.material.textfield.TextInputLayout>

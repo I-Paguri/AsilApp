@@ -19,6 +19,8 @@ public class OperationItem {
     private String quantity;
     private String category;
 
+    private boolean checked; // Aggiunto campo checked
+
     // Constructor, getters and setters...
 
 
@@ -28,6 +30,7 @@ public class OperationItem {
         this.operationDate = operationDate;
         this.quantity = quantity;
         this.category = category;
+        this.checked = false; // Inizializzato a false
 
 
     }
@@ -71,5 +74,19 @@ public class OperationItem {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    // Getter e setter per il campo checked
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
 }
+
 

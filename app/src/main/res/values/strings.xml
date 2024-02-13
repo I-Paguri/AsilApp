@@ -123,6 +123,13 @@
         <item>Centri Asilo</item>
     </string-array>
 
+    <string-array name="categories">
+        <item>Exam</item>
+        <item>Pharmacy</item>
+        <item>Treatment</item>
+        <item>Therapies</item>
+    </string-array>
+
     <string-array name="medicines_list">
         <item>Paracetamol</item>
         <item>Aspirin</item>
