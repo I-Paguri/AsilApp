@@ -1,15 +1,27 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
@@ -26,15 +38,18 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
     Doctor doctor;
     Context context;
 
+    StorageReference doctorStorageReference;
+
+
     public DatabaseAdapterDoctor(Context context) {
         super(context);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         this.context = context;
+        this.doctorStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
     public void onLogin(String email, String password, OnDoctorDataCallback callback) {
-        Log.d("LOGIN", "inizioMetodo");
         mAuth = FirebaseAuth.getInstance();
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -64,11 +79,13 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                                         Log.d("MyPatients", myPatients.toString());
                                     callback.onCallback(doctor);
                                 } else {
-                                    callback.onCallbackError(new Exception(), context.getString(R.string.error_login_section_patient));
+                                    callback.onCallbackError(new Exception(), "QR Code non valido");
+                                    Log.d("Login", "Login non effettuato");
                                 }
                             });
                 })
                 .addOnFailureListener(e -> {
+                    Log.d("Login", "Login non effettuato");
                     callback.onCallbackError(new Exception(), e.toString());
                 });
     }
@@ -188,6 +205,35 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                 .addOnFailureListener(e -> {
                     callback.onCallbackError(e);
                 });
+    }
+
+    public void uploadImage(Context context, Bitmap bitmap, String userUUID, OnProfileImageCallback callback) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference ref = doctorStorageReference.child("images/" + userUUID + "/" + UUID.randomUUID().toString());
+
+        UploadTask uploadTask = ref.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                callback.onCallbackError(exception);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // Get the download URL and pass it to the callback
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        callback.onCallback(uri.toString());
+                    }
+                });
+            }
+        });
     }
 
 }

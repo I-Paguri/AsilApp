@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -188,17 +189,32 @@ public class MyAccountFragment extends Fragment {
                 }
             });
 
+            // Ottieni l'URL dell'immagine del profilo dal database
             dbAdapterPatient.getProfileImage(loggedPatient.getUUID(), new OnProfileImageCallback() {
                 @Override
-                public void onCallback(String profileImageUrl) {
-                    // Aggiorna l'immagine del profilo con l'URL recuperato
-                    updateProfileImage(profileImageUrl);
+                public void onCallback(String imageUrl) {
+                    // Check if the profile image URL exists and is not empty before loading it
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(getContext())
+                                .load(imageUrl)
+                                .circleCrop()
+                                .into((ImageView) getView().findViewById(R.id.my_account));
+                    } else {
+                        // If the profile image URL does not exist or is empty, load the default profile image
+                        Glide.with(getContext())
+                                .load(R.drawable.default_profile_image)
+                                .circleCrop()
+                                .into((ImageView) getView().findViewById(R.id.my_account));
+                    }
                 }
 
                 @Override
                 public void onCallbackError(Exception e) {
-                    // Gestisci l'errore
-                    Toast.makeText(getContext(), "Error loading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // If there is an error getting the profile image URL, load the default profile image
+                    Glide.with(getContext())
+                            .load(R.drawable.default_profile_image)
+                            .circleCrop()
+                            .into((ImageView) getView().findViewById(R.id.my_account));
                 }
             });
 
@@ -220,17 +236,32 @@ public class MyAccountFragment extends Fragment {
                 }
             });
 
+            // Ottieni l'URL dell'immagine del profilo dal database
             dbAdapterDoctor.getProfileImage(loggedDoctor.getEmail(), new OnProfileImageCallback() {
                 @Override
-                public void onCallback(String profileImageUrl) {
-                    // Aggiorna l'immagine del profilo con l'URL recuperato
-                    updateProfileImage(profileImageUrl);
+                public void onCallback(String imageUrl) {
+                    // Check if the profile image URL exists and is not empty before loading it
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(getContext())
+                                .load(imageUrl)
+                                .circleCrop()
+                                .into((ImageView) getView().findViewById(R.id.my_account));
+                    } else {
+                        // If the profile image URL does not exist or is empty, load the default profile image
+                        Glide.with(getContext())
+                                .load(R.drawable.default_profile_image)
+                                .circleCrop()
+                                .into((ImageView) getView().findViewById(R.id.my_account));
+                    }
                 }
 
                 @Override
                 public void onCallbackError(Exception e) {
-                    // Gestisci l'errore
-                    Toast.makeText(getContext(), "Error loading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // If there is an error getting the profile image URL, load the default profile image
+                    Glide.with(getContext())
+                            .load(R.drawable.default_profile_image)
+                            .circleCrop()
+                            .into((ImageView) getView().findViewById(R.id.my_account));
                 }
             });
 
@@ -378,64 +409,48 @@ public class MyAccountFragment extends Fragment {
             Uri imageUri = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
-                uploadImage(bitmap);
+                if (loggedPatient != null) {
+                    dbAdapterPatient.uploadImage(getContext(), bitmap, loggedPatient.getUUID());
+                    dbAdapterPatient.updateProfileImage(loggedPatient.getUUID(), imageUri.toString());
+                    // Update the profile image in the ImageView immediately after upload
+                    Glide.with(getContext())
+                            .load(imageUri)
+                            .circleCrop()
+                            .into((ImageView) getView().findViewById(R.id.my_account));
+                } else if (loggedDoctor != null) {
+                    dbAdapterDoctor.uploadImage(getContext(), bitmap, loggedDoctor.getEmail(), new OnProfileImageCallback() {
+                        @Override
+                        public void onCallback(String imageUrl) {
+                            // Update the profile image in the database
+                            dbAdapterDoctor.updateProfileImage(loggedDoctor.getEmail(), imageUrl);
+
+                            // Update the profile image in the ImageView immediately after upload
+                            Glide.with(getContext())
+                                    .load(imageUrl)
+                                    .circleCrop()
+                                    .into((ImageView) getView().findViewById(R.id.my_account));
+
+                            // Update the profile image in the ImageView of PatientFragment
+                            // Assuming that PatientFragment is accessible from MyAccountFragment
+                            ImageView profileImageViewPatient = getActivity().findViewById(R.id.imgProfile);
+                            if (profileImageViewPatient != null) {
+                                Glide.with(getContext())
+                                        .load(imageUrl)
+                                        .circleCrop()
+                                        .into(profileImageViewPatient);
+                            }
+                        }
+
+                        @Override
+                        public void onCallbackError(Exception e) {
+                            // Handle the error
+                            Toast.makeText(getContext(), "Error uploading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private void uploadImage(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        String userUUID;
-        if (loggedPatient != null) {
-            userUUID = loggedPatient.getUUID();
-        } else if (loggedDoctor != null) {
-            userUUID = loggedDoctor.getEmail(); // Utilizza l'email del dottore come UUID univoco
-        } else {
-            throw new RuntimeException("No user is logged in");
-        }
-
-        StorageReference ref = storageReference.child("images/" + userUUID + "/" + UUID.randomUUID().toString());
-
-        UploadTask uploadTask = ref.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getContext(), "Upload failed", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        // Aggiorna l'URL dell'immagine del profilo nell'UI corrente
-                        updateProfileImage(uri.toString());
-
-                        // Aggiorna l'URL dell'immagine del profilo nel database
-                        if (loggedPatient != null) {
-                            dbAdapterPatient.updateProfileImage(loggedPatient.getUUID(), uri.toString());
-                        } else if (loggedDoctor != null) {
-                            dbAdapterDoctor.updateProfileImage(loggedDoctor.getEmail(), uri.toString());
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    // Metodo per aggiornare l'immagine del profilo nell'UI corrente
-    private void updateProfileImage(String imageUrl) {
-        if (getView() != null) {
-            ImageView profileImageView = getView().findViewById(R.id.my_account);
-            Glide.with(MyAccountFragment.this)
-                    .load(imageUrl)
-                    .circleCrop()
-                    .into(profileImageView);
         }
     }
 }

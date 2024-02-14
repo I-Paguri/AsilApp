@@ -69,6 +69,14 @@ public class Patient implements Parcelable, Serializable {
         return UUID;
     }
 
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public String getCognome() {
         return cognome;
     }

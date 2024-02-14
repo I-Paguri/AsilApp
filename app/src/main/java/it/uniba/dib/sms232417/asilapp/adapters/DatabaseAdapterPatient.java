@@ -1,16 +1,28 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -29,15 +41,17 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
     Patient resultPatient;
     Context context;
 
+    StorageReference patientStorageReference;
+
     public DatabaseAdapterPatient(Context context) {
         super(context);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         this.context = context;
+        this.patientStorageReference = FirebaseStorage.getInstance().getReference();
     }
 
     public void onLogin(String emailIns, String password, OnPatientDataCallback callback) {
-
         mAuth = FirebaseAuth.getInstance();
 
         mAuth.signInWithEmailAndPassword(emailIns, password)
@@ -52,13 +66,26 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                                 .get()
                                 .addOnSuccessListener(datiUtente -> {
                                     if (datiUtente.exists()) {
-                                        resultPatient = new Patient(utente.getUid(), datiUtente.getString("nome"),
-                                                datiUtente.getString("cognome"),
-                                                datiUtente.getString("email"),
-                                                datiUtente.getString("dataNascita"),
-                                                datiUtente.getString("regione"),
-                                                datiUtente.getString("profileImageUrl"));
-                                        callback.onCallback(resultPatient);
+                                        // Ottieni l'URL dell'immagine del profilo
+                                        getProfileImage(utente.getUid(), new OnProfileImageCallback() {
+                                            @Override
+                                            public void onCallback(String imageUrl) {
+                                                // Crea un nuovo oggetto Patient con l'URL dell'immagine del profilo
+                                                resultPatient = new Patient(utente.getUid(), datiUtente.getString("nome"),
+                                                        datiUtente.getString("cognome"),
+                                                        datiUtente.getString("email"),
+                                                        datiUtente.getString("dataNascita"),
+                                                        datiUtente.getString("regione"),
+                                                        imageUrl);
+                                                callback.onCallback(resultPatient);
+                                            }
+
+                                            @Override
+                                            public void onCallbackError(Exception e) {
+                                                // Gestisci l'errore
+                                                Log.e("Firestore", "Error getting profile image", e);
+                                            }
+                                        });
                                     } else {
                                         callback.onCallbackError(new Exception(), context.getString(R.string.error_login_section_doctor));
                                     }
@@ -67,12 +94,10 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                                     Log.d("Error", task1.toString());
                                     callback.onCallbackError(new Exception(), task1.toString());
                                 });
-
                     }
                 })
                 .addOnFailureListener(task -> {
                     callback.onCallbackError(new Exception(), task.toString());
-
                 });
     }
 
@@ -198,7 +223,7 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
 
      */
 
-    public void connectToContainer(String token, String patientUUID, boolean isConnect){
+    public void connectToContainer(String token, String patientUUID, boolean isConnect) {
 
         db.collection("qr_code_container")
                 .document(token)
@@ -214,7 +239,7 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 });
     }
 
-    public void setFlagContainer(boolean flag, String token){
+    public void setFlagContainer(boolean flag, String token) {
         db.collection("qr_code_container")
                 .document(token)
                 .update("isConnect", flag)
@@ -256,6 +281,35 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 .addOnFailureListener(e -> {
                     callback.onCallbackError(e);
                 });
+    }
+
+    public void uploadImage(Context context, Bitmap bitmap, String userUUID) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        StorageReference ref = patientStorageReference.child("images/" + userUUID + "/" + UUID.randomUUID().toString());
+
+        UploadTask uploadTask = ref.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(context, "Upload failed", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // Get the download URL
+                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Do something with the URL
+                    }
+                });
+            }
+        });
     }
 
 }

@@ -55,6 +55,14 @@ import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -121,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             if (itemId == R.id.navigation_my_account) {
                                 selectedFragment = new MyAccountFragment();
+
+
                             } else {
                                 if (itemId == R.id.navigation_measure) {
                                     checkPermission();

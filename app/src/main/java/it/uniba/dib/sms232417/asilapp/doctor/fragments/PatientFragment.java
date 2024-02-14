@@ -15,7 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.adapters.ViewPagerAdapter;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -30,6 +33,8 @@ public class PatientFragment extends Fragment {
     private Toolbar toolbar;
     private String patientUUID, patientName, patientAge, user;
     private ViewPagerAdapter adapter;
+
+    private DatabaseAdapterPatient dbAdapterPatient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +51,11 @@ public class PatientFragment extends Fragment {
 
         patientName = "Patient Name";
         patientAge = "Patient Age";
-        patientUUID = "";
+
+        String patientUUID = getArguments().getString("patientUUID"); // Ottieni l'UUID del paziente
+
+        // Inizializza dbAdapterPatient
+        dbAdapterPatient = new DatabaseAdapterPatient(getContext());
 
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
@@ -153,6 +162,35 @@ public class PatientFragment extends Fragment {
                 });
             }
         }
+
+        // Ottieni l'URL dell'immagine del profilo dal database
+        dbAdapterPatient.getProfileImage(patientUUID, new OnProfileImageCallback() {
+            @Override
+            public void onCallback(String imageUrl) {
+                // Check if the profile image URL exists and is not empty before loading it
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    Glide.with(getContext())
+                            .load(imageUrl)
+                            .circleCrop()
+                            .into((ImageView) getView().findViewById(R.id.imgProfile));
+                } else {
+                    // If the profile image URL does not exist or is empty, load the default profile image
+                    Glide.with(getContext())
+                            .load(R.drawable.default_profile_image)
+                            .circleCrop()
+                            .into((ImageView) getView().findViewById(R.id.imgProfile));
+                }
+            }
+
+            @Override
+            public void onCallbackError(Exception e) {
+                // If there is an error getting the profile image URL, load the default profile image
+                Glide.with(getContext())
+                        .load(R.drawable.default_profile_image)
+                        .circleCrop()
+                        .into((ImageView) getView().findViewById(R.id.imgProfile));
+            }
+        });
 
     }
 
