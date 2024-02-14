@@ -1,6 +1,8 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -82,24 +84,35 @@ public class DatabaseAdapterUser {
     }
 
     public void getTreatments(String patientUUID, OnTreatmentsCallback callback) {
+        Log.d("Firestore", "Getting treatments");
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            db.collection("patient")
+                    .document(patientUUID)
+                    .collection("treatments")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        Map<String, Treatment> treatments = new HashMap<>();
 
-        db.collection("patient")
-                .document(patientUUID)
-                .collection("treatments")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Map<String, Treatment> treatments = new HashMap<>();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            Treatment treatment = doc.toObject(Treatment.class);
+                            String treatmentId = doc.getId(); // Get the treatmentId
 
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        Treatment treatment = doc.toObject(Treatment.class);
-                        String treatmentId = doc.getId(); // Get the treatmentId
-
-                        treatments.put(treatmentId, treatment); // Add the treatmentId and Treatment object to the map
-                    }
-                    callback.onCallback(treatments); // Pass the map to the callback
-                })
-                .addOnFailureListener(e -> {
-                    callback.onCallbackFailed(e);
-                });
+                            treatments.put(treatmentId, treatment); // Add the treatmentId and Treatment object to the map
+                        }
+                        Log.d("Firestore", "Treatments: " + treatments.toString());
+                        callback.onCallback(treatments); // Pass the map to the callback
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("Firestore", "Error getting treatments", e);
+                        callback.onCallbackFailed(e);
+                    });
+        } else {
+            Log.d("Firestore", "No internet connection");
+            callback.onCallbackFailed(new Exception("No internet connection"));
+        }
     }
+
 }

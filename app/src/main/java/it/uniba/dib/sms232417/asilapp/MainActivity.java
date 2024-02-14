@@ -302,7 +302,15 @@ public class MainActivity extends AppCompatActivity {
                                 selectedFragment = new NoConnectionFragment();
                             } else {
                                 if (itemId == R.id.navigation_diary) {
-                                    selectedFragment = new NoConnectionFragment();
+                                    selectedFragment = new PatientFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("patientUUID", loggedPatient.getUUID());
+                                    bundle.putString("patientName", loggedPatient.getNome());
+                                    bundle.putString("patientAge", loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age,
+                                            loggedPatient.getAge(), loggedPatient.getAge()));
+                                    bundle.putString("user", "patient");
+
+                                    selectedFragment.setArguments(bundle);
                                 } else {
                                     if (itemId == R.id.navigation_my_account) {
                                         selectedFragment = new NoConnectionFragment();

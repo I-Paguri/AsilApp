@@ -94,8 +94,7 @@ public class TreatmentFragment extends Fragment {
 
         share.hide();
 
-        // Create an instance of DatabaseAdapterPatient
-        DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
+
 
         if (this.getArguments() != null) {
             patientUUID = this.getArguments().getString("patientUUID");
@@ -106,6 +105,7 @@ public class TreatmentFragment extends Fragment {
                 user = "";
             }
         }
+        /*
 
         if (user != null && user.equals("patient")) {
             int count = 0;
@@ -128,7 +128,7 @@ public class TreatmentFragment extends Fragment {
                                 FileInputStream fis2 = requireActivity().openFileInput("treatment" + i);
                                 ObjectInputStream ois2 = new ObjectInputStream(fis2);
                                 treatment = (Treatment) ois2.readObject();
-                                Log.d("TreatmentFragment_FILE", "Treatment: " + treatment.toString());
+                                Log.d("TreatmentFragment_FILE_READ", "Treatment: " + treatment.toString());
                             } catch (IOException | ClassNotFoundException e) {
                                 throw new RuntimeException(e);
                             }
@@ -150,6 +150,9 @@ public class TreatmentFragment extends Fragment {
         }
 
 
+         */
+        // Create an instance of DatabaseAdapterPatient
+        DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
             public void onCallback(Map<String, Treatment> treatments) {
@@ -169,7 +172,6 @@ public class TreatmentFragment extends Fragment {
                         Map.Entry<String, Treatment> entry = iterator.next();
                         String treatmentId = entry.getKey();
                         Treatment treatment = entry.getValue();
-
                         // Save treatments to file
                         if (user != null && user.equals("patient")) {
                             try {
@@ -186,14 +188,13 @@ public class TreatmentFragment extends Fragment {
 
                                 oos.close();
                                 fos.close();
-                                Log.d("TreatmentAdded", "Treatment added to file successfully");
+                                Log.d("TreatmentFragment_FILE_Write", "Treatment added to file successfully");
+                                Log.d("TreatmentFragment_FILE_Write", "Treatment: " + treatment.toString());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
-                        // Add the treatment to the parent layout
-                        // Check if it is the last treatment
-                        // if it is last treatment then a bottom margin of 85dp is added to the last treatment layout
+
                         addTreatmentCardView(treatmentId, treatment, !iterator.hasNext());
                         i++;
                     }
@@ -220,13 +221,50 @@ public class TreatmentFragment extends Fragment {
 
             @Override
             public void onCallbackFailed(Exception e) {
-                Log.e("Error", "Failed to get treatments", e);
-                LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View noTreatmentLayout = inflater.inflate(R.layout.no_treatments_found_layout, null);
-                // Add the inflated layout to the parent layout
-                LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
-                parentLayout.addView(noTreatmentLayout);
+                Log.d("TreatmentFragment", "Error: " + e.getMessage());
+                int count = 0;
+                File treatmentsFile = new File(requireContext().getFilesDir().getPath() + "/treatmentCount");
+                if (treatmentsFile.exists()) {
+                    try {
+                        FileInputStream fis = requireActivity().openFileInput(StringUtils.TREATMENT_COUNT);
+                        ObjectInputStream ois = new ObjectInputStream(fis);
+                        count = (int) ois.readObject();
+                        //Log.d("TreatmentFragment_FILE", "Count: " + count);
+
+                        int i;
+                        for (i = 1; i <= count; i++) {
+                            Treatment treatment;
+                            //Log.d("TreatmentFragment_FILE", "File path: " + requireContext().getFilesDir().getPath());
+                            //File treatmentFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/treatment" + i);
+                            File treatmentFile = new File(requireContext().getFilesDir() + "/treatment" + i);
+                            if (treatmentFile.exists()) {
+                                try {
+                                    FileInputStream fis2 = requireActivity().openFileInput("treatment" + i);
+                                    ObjectInputStream ois2 = new ObjectInputStream(fis2);
+                                    treatment = (Treatment) ois2.readObject();
+                                    addTreatmentCardView("treatment" + i, treatment, i == count);
+                                    Log.d("TreatmentFragment_FILE_READ", "Treatment: " + treatment.toString());
+                                } catch (IOException | ClassNotFoundException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            } else {
+                                Log.d("TreatmentFragment_FILE", "File not found");
+                            }
+                        }
+
+                        ois.close();
+                        fis.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    } catch (ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    Log.d("TreatmentFragment_FILE", "File not found");
+                }
+
             }
+
         });
 
 

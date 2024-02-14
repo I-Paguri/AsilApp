@@ -45,8 +45,10 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
 
     public DatabaseAdapterPatient(Context context) {
         super(context);
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        db.clearPersistence();
         this.context = context;
         this.patientStorageReference = FirebaseStorage.getInstance().getReference();
     }
