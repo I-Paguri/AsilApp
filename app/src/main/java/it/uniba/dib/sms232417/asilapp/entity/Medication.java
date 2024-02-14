@@ -27,6 +27,12 @@ public class Medication implements Parcelable {
     private ArrayList<String> intakesTime;
     private ArrayList<String> quantities;
 
+    private boolean isBought;
+
+    private int id;
+
+    private static int idContatore = 0; // make this static
+
     public Medication() {
 
     }
@@ -37,6 +43,9 @@ public class Medication implements Parcelable {
         this.howRegularly = howRegularly;
         this.selectedWeekdays = selectedWeekdays;
         this.selectedWeekdaysString = convertWeekdaysToString();
+        this.isBought = false;
+        this.id = idContatore++;
+
 
         // Default values
         this.intervalSelectedType = -1;
@@ -118,6 +127,19 @@ public class Medication implements Parcelable {
 
     public void setHowRegularly(Integer howRegularly) {
         this.howRegularly = howRegularly;
+    }
+
+    //get e set
+    public boolean getIsBought() {
+        return isBought;
+    }
+
+    public void setIsBought(boolean bought) {
+        isBought = bought;
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Exclude

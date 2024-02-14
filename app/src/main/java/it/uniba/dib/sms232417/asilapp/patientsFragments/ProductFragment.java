@@ -1,6 +1,8 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +10,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +42,7 @@ public class ProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
-        List<OperationItem> productItem = new ArrayList<>();
+        ArrayList<Medication> productItem = new ArrayList<>();
         // Ottieni l'istanza di FirebaseAuth
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -71,9 +77,14 @@ public class ProductFragment extends Fragment {
                             // Ottieni il nome del farmaco
                             String medicationName = medication.getMedicationName();
 
+
                             // Fai qualcosa con il nome del farmaco
-                            System.out.println("Medication:"+medicationName);
-                            productItem.add(new OperationItem(medicationName, 10, "data", "Alimentari", "01/01/2021"));
+                            System.out.println("Medication:" + medicationName);
+                            if (medication.getIsBought() == false) {
+
+                                productItem.add(medication);
+
+                            }
 
                         }
                     }
@@ -83,7 +94,7 @@ public class ProductFragment extends Fragment {
 
                     // Set up the RecyclerView
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                    ProductAdapter productAdapter = new ProductAdapter(productItem);
+                    ProductAdapter productAdapter = new ProductAdapter(productItem, getContext());
                     recyclerView.setAdapter(productAdapter);
                 }
 
@@ -99,4 +110,9 @@ public class ProductFragment extends Fragment {
 
         return view;
     }
+
+
+
+
 }
+
