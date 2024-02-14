@@ -19,7 +19,7 @@ import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientListDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 
-public class DatabaseAdapterDoctor {
+public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -27,6 +27,7 @@ public class DatabaseAdapterDoctor {
     Context context;
 
     public DatabaseAdapterDoctor(Context context) {
+        super(context);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         this.context = context;
@@ -95,6 +96,20 @@ public class DatabaseAdapterDoctor {
                         }
                     });
         }
+    }
+
+    public void deleteTreatment(String patientUUID, String treatmentId) {
+        db.collection("patient")
+                .document(patientUUID)
+                .collection("treatments")
+                .document(treatmentId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firestore", "Treatment successfully deleted!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error deleting treatment", e);
+                });
     }
 
     public void onLoginQrCode(String token, OnDoctorDataCallback callback) {

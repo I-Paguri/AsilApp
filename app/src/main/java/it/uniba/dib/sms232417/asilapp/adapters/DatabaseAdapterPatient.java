@@ -21,7 +21,7 @@ import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 
-public class DatabaseAdapterPatient {
+public class DatabaseAdapterPatient extends DatabaseAdapterUser {
 
     FirebaseAuth mAuth;
     FirebaseFirestore db;
@@ -30,6 +30,7 @@ public class DatabaseAdapterPatient {
     Context context;
 
     public DatabaseAdapterPatient(Context context) {
+        super(context);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         this.context = context;
@@ -106,6 +107,7 @@ public class DatabaseAdapterPatient {
         mAuth.signOut();
     }
 
+    /*
     public void addTreatment(String patientUUID, Treatment treatment, OnTreatmentsCallback onTreatmentsCallback) {
         Log.d("AddedNewTreatment", treatment.toString());
 
@@ -135,7 +137,9 @@ public class DatabaseAdapterPatient {
             }
         });
     }
+     */
 
+    /*
     private void getTreatmentCount(String patientUUID, OnCountCallback callback) {
         try {
             db.collection("patient")
@@ -152,8 +156,9 @@ public class DatabaseAdapterPatient {
             callback.onCallbackFailed(e);
         }
     }
+    */
 
-
+    /*
     public void getTreatments(String patientUUID, OnTreatmentsCallback callback) {
 
         db.collection("patient")
@@ -190,6 +195,8 @@ public class DatabaseAdapterPatient {
                     Log.w("Firestore", "Error deleting treatment", e);
                 });
     }
+
+     */
 
     public void connectToContainer(String token, String patientUUID, boolean isConnect){
 

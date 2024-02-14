@@ -47,6 +47,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
@@ -309,7 +310,7 @@ public class TreatmentFragment extends Fragment {
         } else {
 
             // Create an instance of DatabaseAdapterPatient
-            DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
+            DatabaseAdapterDoctor adapter = new DatabaseAdapterDoctor(requireContext());
             // Set an OnClickListener for the delete button
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
