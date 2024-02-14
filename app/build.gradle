@@ -121,6 +121,8 @@ dependencies {
     // Libreria per gestire la galleria e la fotocamera
     implementation 'com.github.dhaval2404:imagepicker:2.1'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 
     java {

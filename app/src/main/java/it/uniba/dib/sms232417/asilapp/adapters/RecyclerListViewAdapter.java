@@ -1,6 +1,9 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -19,6 +27,7 @@ public class RecyclerListViewAdapter extends RecyclerView.Adapter<RecyclerListVi
 
     private List<listItem> data;
     private OnItemClickListener listener;
+    private Context context;
 
     public interface OnItemClickListener {
         void onItemClick(int position);
@@ -41,14 +50,33 @@ public class RecyclerListViewAdapter extends RecyclerView.Adapter<RecyclerListVi
         listItem item = data.get(position);
         holder.title.setText(item.getTitle());
         holder.description.setText(item.getDescription());
-        holder.icon.setImageResource(item.getIconResId()); // Set the icon
+        // Load the image from the URL into the ImageView using Glide
+        Log.d("URL", item.getImageUrl());
+
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://asilapp-232417.appspot.com/images/vitomarcorubino.scuola@gmail.com/d5ef65fb-f08c-4916-be24-72f9b1927617");
+
+        // Call the getDownloadUrl() method on the StorageReference to get a Task<Uri>
+        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Get the download URL when the task completes
+                String downloadUrl = uri.toString();
+
+                // Use Glide to load the image from the download URL into the ImageView
+                Glide.with(holder.icon.getContext())
+                        .load(downloadUrl)
+                        .circleCrop()
+                        .into(holder.icon);
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return data.size();
     }
-
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -134,96 +134,6 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
         mAuth.signOut();
     }
 
-    /*
-    public void addTreatment(String patientUUID, Treatment treatment, OnTreatmentsCallback onTreatmentsCallback) {
-        Log.d("AddedNewTreatment", treatment.toString());
-
-        getTreatmentCount(patientUUID, new OnCountCallback() {
-            @Override
-            public void onCallback(int count) {
-                String treatmentId = "treatment" + (count + 1);
-                db.collection("patient")
-                        .document(patientUUID)
-                        .collection("treatments")
-                        .document(treatmentId)
-                        .set(treatment)
-                        .addOnSuccessListener(aVoid -> {
-                            Log.d("Firestore", "Treatment successfully written!");
-                            onTreatmentsCallback.onCallback(null);
-                        })
-                        .addOnFailureListener(e -> {
-                            Log.w("Firestore", "Error writing treatment", e);
-                            onTreatmentsCallback.onCallbackFailed(e);
-                        });
-            }
-
-            @Override
-            public void onCallbackFailed(Exception e) {
-                Log.w("Firestore", "Error getting treatment count", e);
-                onTreatmentsCallback.onCallbackFailed(e);
-            }
-        });
-    }
-     */
-
-    /*
-    private void getTreatmentCount(String patientUUID, OnCountCallback callback) {
-        try {
-            db.collection("patient")
-                    .document(patientUUID)
-                    .collection("treatments")
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        callback.onCallback(queryDocumentSnapshots.size());
-                    })
-                    .addOnFailureListener(e -> {
-                        callback.onCallbackFailed(e);
-                    });
-        } catch (Exception e) {
-            callback.onCallbackFailed(e);
-        }
-    }
-    */
-
-    /*
-    public void getTreatments(String patientUUID, OnTreatmentsCallback callback) {
-
-        db.collection("patient")
-                .document(patientUUID)
-                .collection("treatments")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    Map<String, Treatment> treatments = new HashMap<>();
-
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        Treatment treatment = doc.toObject(Treatment.class);
-                        String treatmentId = doc.getId(); // Get the treatmentId
-
-                        treatments.put(treatmentId, treatment); // Add the treatmentId and Treatment object to the map
-                    }
-                    callback.onCallback(treatments); // Pass the map to the callback
-                })
-                .addOnFailureListener(e -> {
-                    callback.onCallbackFailed(e);
-                });
-    }
-
-
-    public void deleteTreatment(String patientUUID, String treatmentId) {
-        db.collection("patient")
-                .document(patientUUID)
-                .collection("treatments")
-                .document(treatmentId)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("Firestore", "Treatment successfully deleted!");
-                })
-                .addOnFailureListener(e -> {
-                    Log.w("Firestore", "Error deleting treatment", e);
-                });
-    }
-
-     */
 
     public void connectToContainer(String token, String patientUUID, boolean isConnect) {
 
@@ -312,6 +222,29 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 });
             }
         });
+    }
+
+    public void getPatient(String patientUUID, OnPatientDataCallback callback) {
+        db.collection("patient")
+                .document(patientUUID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Patient patient = new Patient(documentSnapshot.getString("UUID"),
+                                documentSnapshot.getString("nome"),
+                                documentSnapshot.getString("cognome"),
+                                documentSnapshot.getString("email"),
+                                documentSnapshot.getString("dataNascita"),
+                                documentSnapshot.getString("regione"),
+                                documentSnapshot.getString("profileImageUrl"));
+                        callback.onCallback(patient);
+                    } else {
+                        callback.onCallbackError(new Exception(), "No patient found with this UUID.");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallbackError(e, "Error getting patient");
+                });
     }
 
 }

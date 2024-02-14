@@ -4,14 +4,14 @@ public class listItem {
 
     private String title;
     private String description;
-    private int iconResId; // New field
     private String uuid;
+    private String imageUrl;
 
-    public listItem(String title, String description, int iconResId, String uuid) {
+    public listItem(String title, String description, String imageUrl, String uuid) {
         this.title = title;
         this.description = description;
         this.uuid = uuid;
-        this.iconResId = iconResId; // Set the icon resource ID
+        this.imageUrl = imageUrl; // Set the icon resource ID
     }
 
     public String getUUID() {
@@ -38,11 +38,12 @@ public class listItem {
         this.description = description;
     }
 
-    public int getIconResId() {
-        return iconResId;
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setIconResId(int iconResId) {
-        this.iconResId = iconResId;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,9 +28,11 @@ import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.adapters.RecyclerListViewAdapter;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientListDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.listItem;
 
@@ -80,13 +84,21 @@ public class MyPatientsFragment extends Fragment {
                 public void onCallback(List<Patient> patientList) {
                     myPatientsList = patientList;
 
-                    int[] indexUUID = new int[myPatientsList.size()];
+                    DatabaseAdapterPatient dbAdapterPatient = new DatabaseAdapterPatient(getContext());
+
+
                     for (int i = 0; i < myPatientsList.size(); i++) {
+                        // Get list_image ImageView
+
+                        String imageUrl = myPatientsList.get(i).getProfileImageUrl();
+
                         list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(),
                                 myPatientsList.get(i).getAge() + " " + getResources().getQuantityString(R.plurals.age,
                                         myPatientsList.get(i).getAge(), myPatientsList.get(i).getAge()),
-                                R.drawable.my_account,
+                                imageUrl,
                                 myPatientsList.get(i).getUUID()));
+
+
                     }
 
                     adapter = new RecyclerListViewAdapter(list, position -> {
