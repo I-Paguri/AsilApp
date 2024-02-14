@@ -80,6 +80,9 @@ public class TreatmentFormNotesFragment extends Fragment {
 
                 View bottomNavView = requireActivity().findViewById(R.id.nav_view);
 
+                // WRITE TREATMENT TO FILE
+
+
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
 
