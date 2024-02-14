@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.LinkedList;
@@ -29,12 +26,10 @@ import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.adapters.RecyclerListViewAdapter;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientListDataCallback;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.listItem;
 
 public class MyPatientsFragment extends Fragment {
@@ -43,8 +38,6 @@ public class MyPatientsFragment extends Fragment {
     private RecyclerListViewAdapter adapter;
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
-
-    private DatabaseAdapterPatient dbAdapterPatient;
 
     Doctor doctor;
     List<Patient> myPatientsList;
@@ -67,9 +60,6 @@ public class MyPatientsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Inizializza dbAdapterPatient
-        dbAdapterPatient = new DatabaseAdapterPatient(getContext());
-
         List<listItem> list = new LinkedList<>();
 
         if (this.getArguments() != null) {
@@ -90,24 +80,40 @@ public class MyPatientsFragment extends Fragment {
                 public void onCallback(List<Patient> patientList) {
                     myPatientsList = patientList;
 
-                    for (Patient patient : myPatientsList) {
-                        dbAdapterPatient.getProfileImage(patient.getUUID(), new OnProfileImageCallback() {
-                            @Override
-                            public void onCallback(String imageUrl) {
-                                // Carica l'immagine nel ImageView
-                                ImageView profileImageView = getView().findViewById(R.id.imgProfile);
-                                Glide.with(getContext())
-                                        .load(imageUrl)
-                                        .into(profileImageView);
-                            }
-
-                            @Override
-                            public void onCallbackError(Exception e) {
-                                // Gestisci l'errore
-                                Log.e("Firestore", "Error getting profile image", e);
-                            }
-                        });
+                    int[] indexUUID = new int[myPatientsList.size()];
+                    for (int i = 0; i < myPatientsList.size(); i++) {
+                        list.add(new listItem(myPatientsList.get(i).getNome() + " " + myPatientsList.get(i).getCognome(),
+                                myPatientsList.get(i).getAge() + " " + getResources().getQuantityString(R.plurals.age,
+                                        myPatientsList.get(i).getAge(), myPatientsList.get(i).getAge()),
+                                R.drawable.my_account,
+                                myPatientsList.get(i).getUUID()));
                     }
+
+                    adapter = new RecyclerListViewAdapter(list, position -> {
+                        // Handle item click here
+                        listItem clickedItem = list.get(position);
+
+
+                        // Open PatientFragment and pass the patient's name as an argument
+                        PatientFragment patientFragment = new PatientFragment();
+
+                        bundle.putString("patientUUID", clickedItem.getUUID());
+                        bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
+                        bundle.putString("patientAge", clickedItem.getDescription());// assuming getSubtitle() gets the patient's age
+
+
+                        patientFragment.setArguments(bundle);
+
+                        // Replace current fragment with PatientFragment
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment_activity_main, patientFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+
+                    });
+                    recyclerView.setAdapter(adapter);
+
                 }
 
                 @Override
