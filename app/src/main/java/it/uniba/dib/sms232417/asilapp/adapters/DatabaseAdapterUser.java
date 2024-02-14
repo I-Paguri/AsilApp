@@ -64,7 +64,7 @@ public class DatabaseAdapterUser {
         });
     }
 
-    private void getTreatmentCount(String patientUUID, OnCountCallback callback) {
+    public void getTreatmentCount(String patientUUID, OnCountCallback callback) {
         try {
             db.collection("patient")
                     .document(patientUUID)

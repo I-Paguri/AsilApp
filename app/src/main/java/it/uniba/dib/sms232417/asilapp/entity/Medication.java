@@ -10,12 +10,13 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.Exclude;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
 
-public class Medication implements Parcelable {
+public class Medication implements Parcelable, Serializable {
     private String medicationName;
     private Integer howToTake;
     private Integer howRegularly;

@@ -40,8 +40,12 @@ import com.google.android.material.transition.MaterialContainerTransform;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -50,9 +54,12 @@ import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.MappedValues;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 
 public class TreatmentFragment extends Fragment {
@@ -60,7 +67,7 @@ public class TreatmentFragment extends Fragment {
     private String patientUUID;
     private String patientName;
     private String patientAge;
-    private String user;
+    private String user; // Type of user: "patient" or "doctor"
     private ExtendedFloatingActionButton fab;
     private FloatingActionButton share;
     private Map<String, Treatment> treatments;
@@ -100,6 +107,49 @@ public class TreatmentFragment extends Fragment {
             }
         }
 
+        if (user != null && user.equals("patient")) {
+            int count = 0;
+            File treatmentsFile = new File(requireContext().getFilesDir().getPath() + "/treatmentCount");
+            if (treatmentsFile.exists()) {
+                try {
+                    FileInputStream fis = requireActivity().openFileInput(StringUtils.TREATMENT_COUNT);
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    count = (int) ois.readObject();
+                    //Log.d("TreatmentFragment_FILE", "Count: " + count);
+
+                    int i;
+                    for (i = 1; i <= count; i++) {
+                        Treatment treatment;
+                        //Log.d("TreatmentFragment_FILE", "File path: " + requireContext().getFilesDir().getPath());
+                        //File treatmentFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/treatment" + i);
+                        File treatmentFile = new File(requireContext().getFilesDir() + "/treatment" + i);
+                        if (treatmentFile.exists()) {
+                            try {
+                                FileInputStream fis2 = requireActivity().openFileInput("treatment" + i);
+                                ObjectInputStream ois2 = new ObjectInputStream(fis2);
+                                treatment = (Treatment) ois2.readObject();
+                                Log.d("TreatmentFragment_FILE", "Treatment: " + treatment.toString());
+                            } catch (IOException | ClassNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            Log.d("TreatmentFragment_FILE", "File not found");
+                        }
+                    }
+
+                    ois.close();
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Log.d("TreatmentFragment_FILE", "File not found");
+            }
+        }
+
+
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
             @Override
             public void onCallback(Map<String, Treatment> treatments) {
@@ -113,21 +163,44 @@ public class TreatmentFragment extends Fragment {
                     parentLayout.addView(noTreatmentLayout);
                 } else {
                     Iterator<Map.Entry<String, Treatment>> iterator = treatments.entrySet().iterator();
+                    int i;
+                    i = 0;
                     while (iterator.hasNext()) {
                         Map.Entry<String, Treatment> entry = iterator.next();
                         String treatmentId = entry.getKey();
                         Treatment treatment = entry.getValue();
 
+                        // Save treatments to file
+                        if (user != null && user.equals("patient")) {
+                            try {
+                                Log.d("TreatmentCount", "Treatment count: " + (i + 1));
+                                // Write the treatment to a file with the name "treatment" + count
+                                FileOutputStream fos = requireActivity().openFileOutput(StringUtils.TREATMENT + (i + 1), Context.MODE_APPEND);
+                                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                                oos.writeObject(treatment);
+
+                                // Write the number of treatment to a file with the name "treatmentCount"
+                                FileOutputStream fosCount = requireActivity().openFileOutput(StringUtils.TREATMENT_COUNT, Context.MODE_PRIVATE);
+                                ObjectOutputStream oosCount = new ObjectOutputStream(fosCount);
+                                oosCount.writeObject((i + 1));
+
+                                oos.close();
+                                fos.close();
+                                Log.d("TreatmentAdded", "Treatment added to file successfully");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         // Add the treatment to the parent layout
                         // Check if it is the last treatment
                         // if it is last treatment then a bottom margin of 85dp is added to the last treatment layout
                         addTreatmentCardView(treatmentId, treatment, !iterator.hasNext());
+                        i++;
                     }
 
                     share.show();
 
                     // Set the OnClickListener for the share button here
-
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -559,7 +632,6 @@ public class TreatmentFragment extends Fragment {
                 // MEDICATION NAME
                 canvas.drawText("\u2022 " + medication.getMedicationName(), x, y, paintRegular);
                 y = y + 20;
-
 
 
                 paintRegular.setColor(getResources().getColor(R.color.md_theme_light_tertiary));

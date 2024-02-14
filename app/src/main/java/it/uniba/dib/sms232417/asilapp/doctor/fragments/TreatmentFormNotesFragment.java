@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,12 +17,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class TreatmentFormNotesFragment extends Fragment {
 
@@ -80,9 +86,6 @@ public class TreatmentFormNotesFragment extends Fragment {
 
                 View bottomNavView = requireActivity().findViewById(R.id.nav_view);
 
-                // WRITE TREATMENT TO FILE
-
-
                 // ADD TREATMENT TO DB
                 DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
 
@@ -95,6 +98,39 @@ public class TreatmentFormNotesFragment extends Fragment {
                         snackbar.setAnchorView(bottomNavView);
                         snackbar.show();
                         Log.d("TreatmentAdded", "Treatment added successfully");
+
+
+                        /*
+                        dbAdapter.getTreatmentCount(patientUUID, new OnCountCallback() {
+                            @Override
+                            public void onCallback(int count) {
+                                // APPEND TREATMENT TO FILE
+                                try {
+                                    Log.d("TreatmentCount", "Treatment count: " + count);
+                                    // Write the treatment to a file with the name "treatment" + count
+                                    FileOutputStream fos = requireActivity().openFileOutput(StringUtils.TREATMENT + count, Context.MODE_APPEND);
+                                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                                    oos.writeObject(treatment);
+
+                                    // Write the number of treatment to a file with the name "treatmentCount"
+                                    FileOutputStream fosCount = requireActivity().openFileOutput(StringUtils.TREATMENT_COUNT, Context.MODE_PRIVATE);
+                                    ObjectOutputStream oosCount = new ObjectOutputStream(fosCount);
+                                    oosCount.writeObject(count);
+
+                                    oos.close();
+                                    fos.close();
+                                    Log.d("TreatmentAdded", "Treatment added to file successfully");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onCallbackFailed(Exception e) {
+                                Log.d("TreatmentCount", "Error getting treatment count");
+                            }
+                        });
+                        */
                     }
 
                     @Override

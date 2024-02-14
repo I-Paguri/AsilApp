@@ -7,12 +7,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class Treatment implements Parcelable {
+public class Treatment implements Parcelable, Serializable {
     private String treatmentTarget;
     private Date startDate, endDate;
     private ArrayList<Medication> medications;
