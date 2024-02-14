@@ -7,23 +7,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-
-import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
@@ -33,12 +35,11 @@ import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorQrCodeFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.RegisterFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
+import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 import javax.crypto.SecretKey;
@@ -49,17 +50,46 @@ public class EntryActivity extends AppCompatActivity {
     DatabaseAdapterDoctor dbAdapterDoctor;
     private boolean doubleBackToExitPressedOnce = false;
 
+    androidx.appcompat.app.AlertDialog alertDialog;
     Context context;
-
-
+    Handler handler;
+    boolean tryAutomaticLogin;
+    boolean isDialogShow = false;
+    InternetCheckThread internetCheckThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                RelativeLayout relativeLayout = findViewById(R.id.noConnectionLayout);
+                if (msg.what == 0) {
+                    if(!isDialogShow) {
+                        showNoInternetDialog();
+                        isDialogShow = true;
+                    }
+                    tryAutomaticLogin = false;
+                }else if(msg.what == 1){
+                    deleteMsgError();
+                    if(!tryAutomaticLogin) {
+                        checkAutomaticLogin();
+                        tryAutomaticLogin = true;
+
+                    }
+                    isDialogShow = false;
+                }
+                return true;
+            }
+        });
+
+        internetCheckThread = new InternetCheckThread(this, handler);
+        internetCheckThread.start();
+
         setContentView(R.layout.entry_activity_layout);
 
-        checkAutomaticLogin();
-        replaceFragment(new LoginDecisionFragment());
+
 
 
     }
@@ -122,6 +152,7 @@ public class EntryActivity extends AppCompatActivity {
                                     relativeLayout.setVisibility(RelativeLayout.GONE);
                                     Intent intent = new Intent(EntryActivity.this, MainActivity.class);
                                     intent.putExtra("loggedPatient", (Parcelable) patient);
+                                    internetCheckThread.stopRunning();
                                     startActivity(intent);
                                     finish();
                                 }
@@ -129,7 +160,7 @@ public class EntryActivity extends AppCompatActivity {
                                 @Override
                                 public void onCallbackError(Exception e, String Message) {
                                     e.printStackTrace();
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(EntryActivity.this);
                                     builder.setTitle(R.string.error).setMessage(Message);
                                     builder.setPositiveButton(R.string.yes, null);
                                     builder.show();
@@ -186,6 +217,7 @@ public class EntryActivity extends AppCompatActivity {
                                     relativeLayout.setVisibility(RelativeLayout.GONE);
                                     Intent intent = new Intent(EntryActivity.this, MainActivity.class);
                                     intent.putExtra("loggedDoctor", (Parcelable) doctor);
+                                    internetCheckThread.stopRunning();
                                     startActivity(intent);
                                     finish();
 
@@ -204,11 +236,12 @@ public class EntryActivity extends AppCompatActivity {
 
                         }
                     }
-                } else {
-                    loading.setVisibility(RelativeLayout.GONE);
-                    frameLayout.setVisibility(FrameLayout.VISIBLE);
                 }
-        }
+            }else {
+                loading.setVisibility(RelativeLayout.GONE);
+                frameLayout.setVisibility(FrameLayout.VISIBLE);
+                replaceFragment(new LoginDecisionFragment());
+            }
     }
     public void checkPermission() {
         try {
@@ -281,5 +314,32 @@ public class EntryActivity extends AppCompatActivity {
             }
         }
 
+    }
+    private void showNoInternetDialog() {
+        showMsgError();
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(R.string.no_connection_title);
+        builder.setMessage(R.string.no_connection_explain);
+        builder.setPositiveButton(R.string.no_connection_button, (dialog, which) -> {
+            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+        });
+        builder.setNegativeButton(R.string.no_connection_button_cancel, (dialog, which) -> {
+            dialog.dismiss();
+        });
+        alertDialog= builder.show();
+    }
+
+    private void deleteMsgError() {
+        RelativeLayout relativeLayout = findViewById(R.id.noConnectionLayout);
+        relativeLayout.setVisibility(RelativeLayout.GONE);
+        if(alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
+    }
+    private void showMsgError() {
+        RelativeLayout relativeLayout = findViewById(R.id.noConnectionLayout);
+        TextView textView = findViewById(R.id.noConnectionEditText);
+        textView.setText(R.string.no_connection);
+        relativeLayout.setVisibility(RelativeLayout.VISIBLE);
     }
 }

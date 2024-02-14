@@ -225,4 +225,11 @@
 
     <string name="my_videos">I miei video</string>
     <string name="treatments">Terapie</string>
+
+    <string name="no_connection">Connettiti ad una rete</string>
+    <string name="no_connection_title">Nessuna Connessione</string>
+    <string name="no_connection_explain">Controlla la tua connessione e riprova</string>
+    <string name="no_connection_button">Riprova</string>
+    <string name="no_connection_button_cancel">Annulla</string>
+
 </resources>

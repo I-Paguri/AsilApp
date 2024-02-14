@@ -548,4 +548,11 @@
 
     <string name="my_videos">My videos</string>
     <string name="treatments">Treatments</string>
+
+    <string name="no_connection">Please connect to a network...</string>
+    <string name="no_connection_title">No Internet Connection</string>
+    <string name="no_connection_explain">Please check your internet connection and try again</string>
+    <string name="no_connection_button">Retry</string>
+    <string name="no_connection_button_cancel">Cancel</string>
+
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutNoTreatmentFound"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical"
+    tools:context=".doctor.fragments.TreatmentFragment">
+
+    <ImageView
+        android:id="@+id/imageViewNoTreatmentFound"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/treatment"
+        android:src="@drawable/no_connection_illustration" />
+
+    <TextView
+        android:id="@+id/noPatientsFoundTitle"
+        style="@style/SubtitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/no_connection"
+        android:textColor="@color/colorPrimary" />
+
+
+</LinearLayout>

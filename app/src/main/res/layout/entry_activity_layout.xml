@@ -5,7 +5,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/seed"
     android:padding="10dp">
+    <RelativeLayout
+        android:id="@+id/noConnectionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/noConnectionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp">
+            <com.google.android.material.textfield.TextInputEditText
 
+                android:id="@+id/noConnectionEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_message_error"
+                android:editable="false">
+
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+    </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/fragment_container_login"
