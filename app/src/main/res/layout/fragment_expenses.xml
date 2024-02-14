@@ -16,10 +16,10 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="16dp"
-        android:textSize="20sp"
-        android:textStyle="italic"
+        android:textSize="30sp"
+        android:padding="10dp"
         android:textColor="@color/black"
-        android:text="@string/last_month_expenses" />
+        android:text="Le mie Spese" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -60,19 +60,6 @@
     </androidx.cardview.widget.CardView>
 
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="7dp"
-        android:indeterminate="false"
-        android:max="100"
-        android:progress="50"
-        android:progressDrawable="@drawable/progress_bar"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"/>
-
     <LinearLayout
         android:id="@+id/linearLayoutCardView"
         android:layout_width="match_parent"
@@ -86,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:checkable="true"
@@ -106,7 +93,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
                     android:textSize="20sp"
-                    android:text="Ultime Operazioni" />
+                    android:text="Aggiungi Spesa" />
 
                 <TextView
                     style="@style/RegularText"
@@ -116,7 +103,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
-                    android:text="Dai un'occhiata alle ultime operazioni" />
+                    android:text="Inserisci ciò che hai speso" />
 
 
             </LinearLayout>
@@ -128,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:checkable="true"
@@ -170,7 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
             android:checkable="true"

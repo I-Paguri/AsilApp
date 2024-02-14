@@ -125,9 +125,9 @@ public class ExpensesFragment extends Fragment {
         cardViewOperations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LastOperationItemFragment lastOperationFragment = new LastOperationItemFragment();
+                AddExpensesFragment AddExpensesFragment = new AddExpensesFragment();
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, lastOperationFragment);
+                transaction.replace(R.id.nav_host_fragment_activity_main, AddExpensesFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
@@ -162,10 +162,7 @@ public class ExpensesFragment extends Fragment {
         // Imposta il valore di textViewBalance a 500 €
         textViewBalance.setText("500.00 € ");
 
-        //otteniamo il riferimento alla progress bar
-        ProgressBar progressBar = view.findViewById(R.id.progressBar);
-        // Imposta il valore iniziale della ProgressBar a 0
-        progressBar.setProgress(0);
+
 
         /* Non funziona animazione perchè
         arriva fino alla fine e non si riesce ad impostare
@@ -179,7 +176,6 @@ public class ExpensesFragment extends Fragment {
         // Imposta il valore della ProgressBar qui.
 
 
-        progressBar.setProgress(75); // Imposta il progresso al 75%
 
     }
 

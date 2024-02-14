@@ -31,8 +31,6 @@ import it.uniba.dib.sms232417.asilapp.adapters.ProductAdapter;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.placeholder.OperationItem;
-
 public class ProductFragment extends Fragment {
 
     private AutoCompleteTextView quantityInput;

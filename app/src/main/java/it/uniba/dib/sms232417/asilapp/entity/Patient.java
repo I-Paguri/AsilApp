@@ -11,8 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class Patient implements Parcelable, Serializable {
     private String UUID;
@@ -22,6 +24,9 @@ public class Patient implements Parcelable, Serializable {
     private String dataNascita;
     private String regione;
     private List<Treatment> treatments;
+
+    private List<Expenses> expensesList;
+
 
     private String profileImageUrl;
     private Doctor doctor;
@@ -37,6 +42,8 @@ public class Patient implements Parcelable, Serializable {
         this.regione = regione;
         this.profileImageUrl = profileImageUrl;
         this.UUID = UUID;
+        this.expensesList = new ArrayList<>();
+
 
     }
 
@@ -147,6 +154,18 @@ public class Patient implements Parcelable, Serializable {
                 '}';
     }
 
+    public void addExpense(Expenses expense) {
+        this.expensesList.add(expense);
+    }
+
+    public void removeExpense(Expenses expense) {
+        this.expensesList.remove(expense);
+    }
+
+    public List<Expenses> getExpenses() {
+        return this.expensesList;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -160,6 +179,23 @@ public class Patient implements Parcelable, Serializable {
         dest.writeString(email);
         dest.writeString(dataNascita);
         dest.writeString(regione);
+    }
+
+    public Map<Expenses.Category, Double> sumExpensesByCategory() {
+        Map<Expenses.Category, Double> sumByCategory = new HashMap<>();
+
+        for (Expenses expense : this.expensesList) {
+            Expenses.Category category = expense.getCategory();
+            double amount = expense.getAmount();
+
+            if (sumByCategory.containsKey(category)) {
+                sumByCategory.put(category, sumByCategory.get(category) + amount);
+            } else {
+                sumByCategory.put(category, amount);
+            }
+        }
+
+        return sumByCategory;
     }
 
 

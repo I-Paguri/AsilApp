@@ -89,8 +89,8 @@
     <string-array name="categories">
         <item>Esami</item>
         <item>Farmaci</item>
-        <item>Trattamenti</item>
         <item>Terapie</item>
+        <item>Altro</item>
     </string-array>
 
     <string-array name="medicines_list">
