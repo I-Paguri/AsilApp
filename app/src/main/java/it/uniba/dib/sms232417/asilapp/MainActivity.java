@@ -1,6 +1,7 @@
 package it.uniba.dib.sms232417.asilapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -26,11 +27,14 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentReference;
@@ -64,10 +68,13 @@ import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -98,14 +105,14 @@ public class MainActivity extends AppCompatActivity {
             public boolean handleMessage(@NonNull Message msg) {
                 Log.d("msg", String.valueOf(msg.what));
                 if (msg.what == 0) {
-                    if(!isDialogShow) {
+                    if (!isDialogShow) {
                         showNoInternetDialog();
                         isDialogShow = true;
                         menuNormal = false;
                     }
                     changeMenu(0);
 
-                }else if(msg.what == 1){
+                } else if (msg.what == 1) {
                     changeMenu(1);
                     isDialogShow = false;
                     menuNoConnection = false;
@@ -124,6 +131,14 @@ public class MainActivity extends AppCompatActivity {
         loggedDoctor = (Doctor) intent.getParcelableExtra("loggedDoctor");
         changeMenu(1);
 
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        updateBottomNavigationIcon("https://firebasestorage.googleapis.com/v0/b/asilapp-232417.appspot.com/o/images%2FkbHym7ohbDb80dhv94pzrtFevPX2%2F12e17c78-3ae2-40b9-9037-3eed21eab9d7?alt=media&token=0e6f4e70-eb14-47cd-94b4-a0be6402fb5c");
     }
 
     public void checkPermission() {
@@ -223,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .create()
                         .show();
-            }else if(currentFragment instanceof QRCodeAuth){
+            } else if (currentFragment instanceof QRCodeAuth) {
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -282,13 +297,13 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout.setVisibility(RelativeLayout.GONE);
 
          */
-        if(alertDialog != null && alertDialog.isShowing())
+        if (alertDialog != null && alertDialog.isShowing())
             alertDialog.dismiss();
     }
 
-    public void changeMenu(int status){
-        if(status == 0){
-            if(!menuNoConnection){
+    public void changeMenu(int status) {
+        if (status == 0) {
+            if (!menuNoConnection) {
                 Log.d("Passaggio a menu no connection", "Passaggio a menu no connection");
                 BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
                 bottomNavigationView.getMenu().clear();
@@ -358,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 menuNoConnection = true;
             }
-        }else {
+        } else {
             if (!menuNormal) {
                 deleteMsgError();
                 BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
@@ -490,7 +505,39 @@ public class MainActivity extends AppCompatActivity {
             menuNormal = true;
         }
     }
+
     public InternetCheckThread getInternetCheckThread() {
         return internetCheckThread;
     }
+
+    // Method to update the bottom navigation icon my account with the url profile image
+    public void updateBottomNavigationIcon(String url) {
+    BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+    MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.navigation_my_account);
+    final ImageView imageView = new ImageView(this);
+
+    url = "https://firebasestorage.googleapis.com/v0/b/asilapp-232417.appspot.com/o/images%2FkbHym7ohbDb80dhv94pzrtFevPX2%2F12e17c78-3ae2-40b9-9037-3eed21eab9d7?alt=media&token=0e6f4e70-eb14-47cd-94b4-a0be6402fb5c";
+
+
+    Picasso.get().load(url).into(new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            // Set the loaded bitmap to your ImageView
+            imageView.setImageBitmap(bitmap);
+            menuItem.setIcon(new BitmapDrawable(getResources(), bitmap));
+            Log.d("PICASSO", "Loaded");
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            Log.d("PICASSO", "Failed");
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.d("PICASSO", "Prepare Load");
+        }
+    });
+}
+
 }
