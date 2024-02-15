@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,11 +36,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -73,8 +76,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -130,16 +132,9 @@ public class MainActivity extends AppCompatActivity {
         loggedPatient = (Patient) intent.getParcelableExtra("loggedPatient");
         loggedDoctor = (Doctor) intent.getParcelableExtra("loggedDoctor");
         changeMenu(1);
-
+        updateIconProfileImage();
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        updateBottomNavigationIcon("https://firebasestorage.googleapis.com/v0/b/asilapp-232417.appspot.com/o/images%2FkbHym7ohbDb80dhv94pzrtFevPX2%2F12e17c78-3ae2-40b9-9037-3eed21eab9d7?alt=media&token=0e6f4e70-eb14-47cd-94b4-a0be6402fb5c");
-    }
 
     public void checkPermission() {
         try {
@@ -511,33 +506,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Method to update the bottom navigation icon my account with the url profile image
-    public void updateBottomNavigationIcon(String url) {
-    BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-    MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.navigation_my_account);
-    final ImageView imageView = new ImageView(this);
+    public void updateIconProfileImage() {
+        File file = new File(StringUtils.IMAGE_ICON);
+        if(file.exists()){
+            Bitmap bitmap = new BitmapDrawable(getResources(), StringUtils.IMAGE_ICON).getBitmap();
+            Drawable iconImage = new BitmapDrawable(getResources(), bitmap);
 
-    url = "https://firebasestorage.googleapis.com/v0/b/asilapp-232417.appspot.com/o/images%2FkbHym7ohbDb80dhv94pzrtFevPX2%2F12e17c78-3ae2-40b9-9037-3eed21eab9d7?alt=media&token=0e6f4e70-eb14-47cd-94b4-a0be6402fb5c";
+            BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+            Glide.with(this)
+                    .load(iconImage)
+                    .circleCrop()
+                    .into(new CustomTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            bottomNavigationView.getMenu().findItem(R.id.navigation_my_account).setIcon(resource);
+                        }
 
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
 
-    Picasso.get().load(url).into(new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            // Set the loaded bitmap to your ImageView
-            imageView.setImageBitmap(bitmap);
-            menuItem.setIcon(new BitmapDrawable(getResources(), bitmap));
-            Log.d("PICASSO", "Loaded");
+            bottomNavigationView.setItemIconTintList(null);
         }
-
-        @Override
-        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-            Log.d("PICASSO", "Failed");
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.d("PICASSO", "Prepare Load");
-        }
-    });
-}
-
+    }
 }

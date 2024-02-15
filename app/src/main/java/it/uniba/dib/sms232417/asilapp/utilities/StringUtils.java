@@ -12,4 +12,6 @@ public class StringUtils {
 
     public final static String FILE_PATH_TREATMENTS = "/data/data/it.uniba.dib.sms232417.asilapp/files/treatments";
 
+    public final static String IMAGE_ICON = "/data/data/it.uniba.dib.sms232417.asilapp/files/profile_image.jpg";
+
 }

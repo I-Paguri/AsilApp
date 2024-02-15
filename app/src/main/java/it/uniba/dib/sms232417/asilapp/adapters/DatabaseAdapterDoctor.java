@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
@@ -196,6 +197,9 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
+
+                        //String profileImageUrl = queryDocumentSnapshots.getDocuments().get(0).getString("profileImageUrl");
+                        //Log.d("MyAccountFragment", "Profile image URL: " + profileImageUrl);
                         String profileImageUrl = queryDocumentSnapshots.getDocuments().get(0).getString("profileImageUrl");
                         callback.onCallback(profileImageUrl);
                     } else {

@@ -31,6 +31,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.UUID;
@@ -241,6 +244,7 @@ public class MyAccountFragment extends Fragment {
             dbAdapterDoctor.getProfileImage(loggedDoctor.getEmail(), new OnProfileImageCallback() {
                 @Override
                 public void onCallback(String imageUrl) {
+                    Log.d("MyAccountFragment", "Profile image URL: " + imageUrl);
                     // Check if the profile image URL exists and is not empty before loading it
                     if (imageUrl != null && !imageUrl.isEmpty()) {
                         Glide.with(getContext())
@@ -423,6 +427,7 @@ public class MyAccountFragment extends Fragment {
                                     .load(imageUrl)
                                     .circleCrop()
                                     .into((ImageView) getView().findViewById(R.id.my_account));
+                            saveImageToInternalStorage(imageUrl);
                         }
 
                         @Override
@@ -431,10 +436,69 @@ public class MyAccountFragment extends Fragment {
                             Toast.makeText(getContext(), "Error uploading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
+                }else if (loggedDoctor != null) {
+                    dbAdapterDoctor.uploadImage(getContext(), bitmap, loggedDoctor.getEmail(), new OnProfileImageCallback() {
+                        @Override
+                        public void onCallback(String imageUrl) {
+                            // Update the profile image in the database
+                            dbAdapterDoctor.updateProfileImage(loggedDoctor.getEmail(), imageUrl);
+                            // Update the profile image in the ImageView immediately after upload
+
+                            Glide.with(getContext())
+                                    .load(imageUrl)
+                                    .circleCrop()
+                                    .into((ImageView) getView().findViewById(R.id.my_account));
+                            saveImageToInternalStorage(imageUrl);
+
+                        }
+
+                        @Override
+                        public void onCallbackError(Exception e) {
+                            // Handle the error
+                            Toast.makeText(getContext(), "Error uploading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+    public void saveImageToInternalStorage(String filename) {
+        Glide.with(getContext())
+                .asBitmap()
+                .load(filename)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        try {
+                            // Creare un file in una directory specifica
+                            File file = new File(StringUtils.IMAGE_ICON);
+                            if(file.exists()) {
+                                file.delete();
+                            }
+                            file.createNewFile();
+
+                            // Creare un FileOutputStream con il file
+                            FileOutputStream out = new FileOutputStream(file);
+
+                            // Comprimere il bitmap in un formato specifico e scrivere sul FileOutputStream
+                            resource.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+                            // Chiudere il FileOutputStream
+                            out.close();
+                            Log.d("MyAccountFragment", "Profile image saved to file: " + file.getAbsolutePath());
+                            ((MainActivity) requireActivity()).updateIconProfileImage();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        // Questo metodo viene chiamato quando l'immagine non è più necessaria
+                    }
+                });
     }
 }

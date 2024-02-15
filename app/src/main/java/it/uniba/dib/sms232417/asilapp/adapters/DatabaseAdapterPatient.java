@@ -184,7 +184,9 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
+
                         String profileImageUrl = documentSnapshot.getString("profileImageUrl");
+                        Log.d("MyAccountFragment", "Profile image URL: " + profileImageUrl);
                         callback.onCallback(profileImageUrl);
                     } else {
                         callback.onCallbackError(new Exception("No profile image found for this user."));
