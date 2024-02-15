@@ -27,6 +27,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 
+import java.util.Map;
+
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
@@ -60,11 +62,10 @@ public class EntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.entry_activity_layout);
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                RelativeLayout relativeLayout = findViewById(R.id.noConnectionLayout);
                 if (msg.what == 0) {
                     if(!isDialogShow) {
                         showNoInternetDialog();
@@ -84,10 +85,12 @@ public class EntryActivity extends AppCompatActivity {
             }
         });
 
-        internetCheckThread = new InternetCheckThread(this, handler);
-        internetCheckThread.start();
+        if(internetCheckThread == null || !internetCheckThread.isAlive()) {
+            internetCheckThread = new InternetCheckThread(this, handler);
+            internetCheckThread.start();
+        }
 
-        setContentView(R.layout.entry_activity_layout);
+
 
 
 
@@ -95,24 +98,21 @@ public class EntryActivity extends AppCompatActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if(!isFinishing() && !isDestroyed()) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.replace(R.id.fragment_container_login,fragment);
-        FrameLayout frameLayout = findViewById(R.id.fragment_container_login);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.replace(R.id.fragment_container_login, fragment);
 
-        if(frameLayout.getVisibility() == FrameLayout.VISIBLE)
-            frameLayout.setVisibility(FrameLayout.VISIBLE);
-
-
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
     }
 
     private void checkAutomaticLogin() {
-
+        Log.d("checkAutomaticLogin", "checkAutomaticLogin");
         final Patient[] loggedPatient = {null};
 
         RelativeLayout loading = findViewById(R.id.loading);
@@ -125,12 +125,20 @@ public class EntryActivity extends AppCompatActivity {
             Log.d("Visibility_auth", "GONE");
 
         SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
+        Map<String,?> keys = sharedPreferences.getAll();
+        if(keys.isEmpty()){
+
+            loading.setVisibility(RelativeLayout.GONE);
+            frameLayout.setVisibility(FrameLayout.VISIBLE);
+            replaceFragment(new LoginDecisionFragment());
+        }else {
+            Log.d("SharedPreferences", "not null");
             String email = sharedPreferences.getString("email", null);
             String password = sharedPreferences.getString("password", null);
             String iv = sharedPreferences.getString("iv", null);
             boolean isDoctor = sharedPreferences.getBoolean("isDoctor", false);
 
-            if(!isDoctor) {
+            if (!isDoctor) {
                 if (email != null) {
                     if (password != null) {
 
@@ -173,12 +181,14 @@ public class EntryActivity extends AppCompatActivity {
                     loading.setVisibility(RelativeLayout.GONE);
                     frameLayout.setVisibility(FrameLayout.VISIBLE);
                 }
-            }else
+            } else
                 checkAutomaticLoginDoctor();
+        }
     }
 
 
     private void checkAutomaticLoginDoctor() {
+        Log.d("checkAutomaticLoginDoctor", "checkAutomaticLoginDoctor");
         final Doctor[] loggedDoctor = {null};
         RelativeLayout loading = findViewById(R.id.loading);
         loading.setVisibility(RelativeLayout.VISIBLE);
@@ -186,7 +196,11 @@ public class EntryActivity extends AppCompatActivity {
         frameLayout.setVisibility(FrameLayout.GONE);
 
         SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
-
+        if(sharedPreferences == null){
+            loading.setVisibility(RelativeLayout.GONE);
+            frameLayout.setVisibility(FrameLayout.VISIBLE);
+            replaceFragment(new LoginDecisionFragment());
+        }else {
 
             String email = sharedPreferences.getString("email", null);
             String password = sharedPreferences.getString("password", null);
@@ -237,11 +251,8 @@ public class EntryActivity extends AppCompatActivity {
                         }
                     }
                 }
-            }else {
-                loading.setVisibility(RelativeLayout.GONE);
-                frameLayout.setVisibility(FrameLayout.VISIBLE);
-                replaceFragment(new LoginDecisionFragment());
             }
+        }
     }
     public void checkPermission() {
         try {
@@ -316,17 +327,19 @@ public class EntryActivity extends AppCompatActivity {
 
     }
     private void showNoInternetDialog() {
-        showMsgError();
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle(R.string.no_connection_title);
-        builder.setMessage(R.string.no_connection_explain);
-        builder.setPositiveButton(R.string.no_connection_button, (dialog, which) -> {
-            startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-        });
-        builder.setNegativeButton(R.string.no_connection_button_cancel, (dialog, which) -> {
-            dialog.dismiss();
-        });
-        alertDialog= builder.show();
+        if(!isFinishing() && !isDestroyed()) {
+            showMsgError();
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+            builder.setTitle(R.string.no_connection_title);
+            builder.setMessage(R.string.no_connection_explain);
+            builder.setPositiveButton(R.string.no_connection_button, (dialog, which) -> {
+                startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+            });
+            builder.setNegativeButton(R.string.no_connection_button_cancel, (dialog, which) -> {
+                dialog.dismiss();
+            });
+            alertDialog = builder.show();
+        }
     }
 
     private void deleteMsgError() {

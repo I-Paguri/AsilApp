@@ -72,6 +72,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    InternetCheckThread internetCheckThread;
     AlertDialog alertDialog;
     Fragment selectedFragment = null;
     private Handler handler;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        InternetCheckThread internetCheckThread = new InternetCheckThread(this, handler);
+        internetCheckThread = new InternetCheckThread(this, handler);
         internetCheckThread.start();
 
         setContentView(R.layout.activity_main);
@@ -488,5 +489,8 @@ public class MainActivity extends AppCompatActivity {
             }
             menuNormal = true;
         }
+    }
+    public InternetCheckThread getInternetCheckThread() {
+        return internetCheckThread;
     }
 }

@@ -124,6 +124,7 @@ public class MyAccountFragment extends Fragment {
                 if (loggedDoctor != null)
                     try {
                         onLogout(v, loggedDoctor.getEmail());
+
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -298,6 +299,8 @@ public class MyAccountFragment extends Fragment {
             dbAdapterDoctor.onLogout();
         }
 
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.getInternetCheckThread().stopRunning();
         Intent esci = new Intent(getContext(), EntryActivity.class);
         startActivity(esci);
         requireActivity().finish();
