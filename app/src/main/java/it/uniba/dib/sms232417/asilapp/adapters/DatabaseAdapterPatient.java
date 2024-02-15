@@ -195,7 +195,7 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 });
     }
 
-    public void uploadImage(Context context, Bitmap bitmap, String userUUID) {
+    public void uploadImage(Context context, Bitmap bitmap, String userUUID, OnProfileImageCallback callback) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -218,6 +218,8 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                     @Override
                     public void onSuccess(Uri uri) {
                         // Do something with the URL
+                        String imageUrl = uri.toString();
+                        callback.onCallback(imageUrl);
                     }
                 });
             }

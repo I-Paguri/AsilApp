@@ -386,14 +386,14 @@ public class MyAccountFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        // Gestire il clic su "Scatta fotografia"
+                        // Handle click on "Take Photo"
                         ImagePicker.with(MyAccountFragment.this)
                                 .cameraOnly()
                                 .cropSquare()
                                 .start();
                         break;
                     case 1:
-                        // Gestire il clic su "Seleziona dalla galleria"
+                        // Handle click on "Choose from Gallery"
                         ImagePicker.with(MyAccountFragment.this)
                                 .galleryOnly()
                                 .cropSquare()
@@ -413,35 +413,16 @@ public class MyAccountFragment extends Fragment {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
                 if (loggedPatient != null) {
-                    dbAdapterPatient.uploadImage(getContext(), bitmap, loggedPatient.getUUID());
-                    dbAdapterPatient.updateProfileImage(loggedPatient.getUUID(), imageUri.toString());
-                    // Update the profile image in the ImageView immediately after upload
-                    Glide.with(getContext())
-                            .load(imageUri)
-                            .circleCrop()
-                            .into((ImageView) getView().findViewById(R.id.my_account));
-                } else if (loggedDoctor != null) {
-                    dbAdapterDoctor.uploadImage(getContext(), bitmap, loggedDoctor.getEmail(), new OnProfileImageCallback() {
+                    dbAdapterPatient.uploadImage(getContext(), bitmap, loggedPatient.getUUID(), new OnProfileImageCallback() {
                         @Override
                         public void onCallback(String imageUrl) {
                             // Update the profile image in the database
-                            dbAdapterDoctor.updateProfileImage(loggedDoctor.getEmail(), imageUrl);
-
+                            dbAdapterPatient.updateProfileImage(loggedPatient.getUUID(), imageUrl);
                             // Update the profile image in the ImageView immediately after upload
                             Glide.with(getContext())
                                     .load(imageUrl)
                                     .circleCrop()
                                     .into((ImageView) getView().findViewById(R.id.my_account));
-
-                            // Update the profile image in the ImageView of PatientFragment
-                            // Assuming that PatientFragment is accessible from MyAccountFragment
-                            ImageView profileImageViewPatient = getActivity().findViewById(R.id.imgProfile);
-                            if (profileImageViewPatient != null) {
-                                Glide.with(getContext())
-                                        .load(imageUrl)
-                                        .circleCrop()
-                                        .into(profileImageViewPatient);
-                            }
                         }
 
                         @Override

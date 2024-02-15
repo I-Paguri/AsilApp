@@ -54,7 +54,7 @@ public class RecyclerListViewAdapter extends RecyclerView.Adapter<RecyclerListVi
         Log.d("URL", item.getImageUrl());
 
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://asilapp-232417.appspot.com/images/vitomarcorubino.scuola@gmail.com/d5ef65fb-f08c-4916-be24-72f9b1927617");
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(item.getImageUrl());
 
         // Call the getDownloadUrl() method on the StorageReference to get a Task<Uri>
         storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
