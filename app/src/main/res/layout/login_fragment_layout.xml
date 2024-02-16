@@ -73,7 +73,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:text="LOGIN"
-            app:icon="@drawable/my_account" />
+            app:icon="@drawable/person_patient" />
 
     </LinearLayout>
 

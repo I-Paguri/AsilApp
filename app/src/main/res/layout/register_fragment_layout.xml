@@ -108,7 +108,7 @@
                 android:id="@+id/date_of_birth"
                 style="@style/CustomMaterialButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="64dp"
                 android:text="@string/birth_date"
                 android:textAllCaps="false"
                 android:layout_below="@+id/txtPasswordConf_inputlayout"
