@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -63,6 +65,15 @@ public class EntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.entry_activity_layout);
+
+        ImageView entryLogo = findViewById(R.id.entryLogo);
+        // Check if device language is italian
+        if(getResources().getConfiguration().locale.getLanguage().equals("it")) {
+            entryLogo.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.entry_logo_it, null));
+        } else {
+            entryLogo.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.entry_logo, null));
+        }
+
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {

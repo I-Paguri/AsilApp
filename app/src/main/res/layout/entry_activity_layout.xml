@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/seed"
     android:padding="10dp">
     <RelativeLayout
@@ -44,18 +43,18 @@
         android:layout_centerInParent="true"
         android:visibility="gone">
         <ImageView
-            android:id="@+id/ivLogo"
+            android:id="@+id/entryLogo"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_gravity="center"
-            android:src="@drawable/logo_trial"
+            android:src="@drawable/entry_logo_it"
             />
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_below="@+id/ivLogo"
+            android:layout_below="@+id/entryLogo"
             android:indeterminateTint="@color/beige" />
 
     </RelativeLayout>
