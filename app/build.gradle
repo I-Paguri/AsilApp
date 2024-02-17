@@ -121,9 +121,11 @@ dependencies {
     // Libreria per gestire la galleria e la fotocamera
     implementation 'com.github.dhaval2404:imagepicker:2.1'
 
+    // Libreria per gestire le immagini
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-
+    // Libreria per mostrare grafici Gauge per i dati dei sensori
+    implementation 'com.github.Gruzer:simple-gauge-android:0.3.1'
 
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
