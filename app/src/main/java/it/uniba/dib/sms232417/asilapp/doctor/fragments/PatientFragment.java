@@ -129,7 +129,7 @@ public class PatientFragment extends Fragment {
                             tab.setText(R.string.measurements);
                             break;
                         case 1:
-                            tab.setText(R.string.treatment);
+                            tab.setText(R.string.treatments);
                             break;
                     }
                 }
