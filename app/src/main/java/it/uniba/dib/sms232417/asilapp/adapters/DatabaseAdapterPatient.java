@@ -11,8 +11,11 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,17 +23,23 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Expenses;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnTotalExpensesCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 
 public class DatabaseAdapterPatient extends DatabaseAdapterUser {
@@ -248,6 +257,92 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 })
                 .addOnFailureListener(e -> {
                     callback.onCallbackError(e, "Error getting patient");
+                });
+    }
+    public void addExpense(String patientUUID, Expenses newExpense) {
+        // Convert the Expenses object into a Map that can be stored in Firestore
+        Map<String, Object> expenseMap = new HashMap<>();
+        expenseMap.put("Category", newExpense.getCategory().toString());
+        expenseMap.put("amount", newExpense.getAmount());
+        expenseMap.put("date", newExpense.getDate());
+
+        // Get the patient's document
+        DocumentReference patientDocument = db.collection("patient").document(patientUUID);
+
+        // Retrieve the current list of expenses, add the new expense, and update the document
+        patientDocument.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    List<Map<String, Object>> expensesList = (List<Map<String, Object>>) document.get("expenses");
+                    if (expensesList == null) {
+                        expensesList = new ArrayList<>();
+                    }
+                    expensesList.add(expenseMap);
+                    patientDocument.update("expenses", expensesList)
+                            .addOnSuccessListener(aVoid -> Log.d("Firestore", "Expense successfully added!"))
+                            .addOnFailureListener(e -> Log.w("Firestore", "Error adding expense", e));
+                } else {
+                    Log.d("Firestore", "No such document");
+                }
+            } else {
+                Log.d("Firestore", "get failed with ", task.getException());
+            }
+        });
+    }
+
+    public void getExpensesList(String patientUUID, OnExpensesListCallback callback) {
+        db.collection("patient")
+                .document(patientUUID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        List<Map<String, Object>> firestoreExpensesList = (List<Map<String, Object>>) documentSnapshot.get("expenses");
+                        List<Expenses> expensesList = new ArrayList<>();
+                        for (Map<String, Object> expenseMap : firestoreExpensesList) {
+                            Expenses.Category category = Expenses.Category.valueOf((String) expenseMap.get("Category"));
+                            double amount = (double) expenseMap.get("amount");
+                            // Convert the Timestamp to a Date
+                            Timestamp timestamp = (Timestamp) expenseMap.get("date");
+                            Date date = timestamp.toDate();
+                            expensesList.add(new Expenses(category, amount, date));
+                        }
+                        callback.onCallback(expensesList);
+                    } else {
+                        callback.onCallbackError(new Exception("No patient found with this UUID."));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallbackError(e);
+                });
+    }
+
+    public void getSumExpenses(String patientUUID, OnTotalExpensesCallback callback) {
+        db.collection("patient")
+                .document(patientUUID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        List<Map<String, Object>> firestoreExpensesList = (List<Map<String, Object>>) documentSnapshot.get("expensesList");
+                        List<Expenses> expensesList = new ArrayList<>();
+                        for (Map<String, Object> expenseMap : firestoreExpensesList) {
+                            expensesList.add(Expenses.fromMap(expenseMap));
+                            Log.d("Firestore", "Expense: " + expenseMap);
+                        }
+
+                        double totalExpenses = 0.0;
+                        for (Expenses expense : expensesList) {
+                            totalExpenses += expense.getAmount();
+                        }
+
+                        callback.onCallback(totalExpenses);
+                    } else {
+                        callback.onCallbackError(new Exception("No patient found with this UUID."));
+                        Log.e("Firestore", "No patient found with this UUID.");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallbackError(e);
                 });
     }
 

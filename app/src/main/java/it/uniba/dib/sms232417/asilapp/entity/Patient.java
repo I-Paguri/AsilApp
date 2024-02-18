@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Calendar;
+
 
 public class Patient implements Parcelable, Serializable {
     private String UUID;
@@ -25,7 +27,7 @@ public class Patient implements Parcelable, Serializable {
     private String regione;
     private List<Treatment> treatments;
 
-    private List<Expenses> expensesList;
+    private List<Expenses> expenses;
 
 
     private String profileImageUrl;
@@ -42,7 +44,7 @@ public class Patient implements Parcelable, Serializable {
         this.regione = regione;
         this.profileImageUrl = profileImageUrl;
         this.UUID = UUID;
-        this.expensesList = new ArrayList<>();
+        this.expenses = new ArrayList<>();
 
 
     }
@@ -155,15 +157,19 @@ public class Patient implements Parcelable, Serializable {
     }
 
     public void addExpense(Expenses expense) {
-        this.expensesList.add(expense);
+        this.expenses.add(expense);
     }
 
     public void removeExpense(Expenses expense) {
-        this.expensesList.remove(expense);
+        this.expenses.remove(expense);
+    }
+
+    public void setExpenses(List<Expenses> expensesList) {
+        this.expenses = expensesList;
     }
 
     public List<Expenses> getExpenses() {
-        return this.expensesList;
+        return this.expenses;
     }
 
     @Override
@@ -184,7 +190,7 @@ public class Patient implements Parcelable, Serializable {
     public Map<Expenses.Category, Double> sumExpensesByCategory() {
         Map<Expenses.Category, Double> sumByCategory = new HashMap<>();
 
-        for (Expenses expense : this.expensesList) {
+        for (Expenses expense : this.expenses) {
             Expenses.Category category = expense.getCategory();
             double amount = expense.getAmount();
 
@@ -196,6 +202,31 @@ public class Patient implements Parcelable, Serializable {
         }
 
         return sumByCategory;
+    }
+
+    public double sumExpenses() {
+        double totalExpenses = 0.0;
+
+        for (Expenses expense : this.expenses) {
+            totalExpenses += expense.getAmount();
+        }
+
+        return totalExpenses;
+    }
+
+
+    public double sumExpensesLastMonth() {
+        double totalExpenses = 0.0;
+        Calendar oneMonthAgo = Calendar.getInstance();
+        oneMonthAgo.add(Calendar.MONTH, -1);
+
+        for (Expenses expense : this.expenses) {
+            if (expense.getDate().after(oneMonthAgo.getTime())) {
+                totalExpenses += expense.getAmount();
+            }
+        }
+
+        return totalExpenses;
     }
 
 

@@ -20,11 +20,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Expenses;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -178,12 +184,37 @@ public class AddExpensesFragment extends Fragment {
                     Toast.makeText(getActivity(), "Per favore, inserisci una data valida", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
 
                 // Stampa le informazioni nel log
-                Log.d("Info", "Categoria: " + category + ", Spesa: " + amount + ", Data: " + date);
-
-                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
+                Log.d("Info", "Categoria: " + categoryEnum + ", Spesa: " + amount + ", Data: " + date);
                 Expenses expense = new Expenses(categoryEnum, amount, date);
+
+                // Get the instance of FirebaseAuth
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+
+// Get the currently logged in user
+                FirebaseUser currentUser = auth.getCurrentUser();
+
+                if (currentUser != null) {
+                    // Get the UUID of the currently logged in user
+                    String patientUUID = currentUser.getUid();
+
+                    // Create an instance of DatabaseAdapterPatient
+                    DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(getContext());
+
+                    // Call the addExpense method
+                    adapter.addExpense(patientUUID, expense);
+                    Log.d("Firestore", "Expense added successfully");
+
+// With this code
+                    adapter.addExpense(patientUUID, expense);
+                    Log.d("Firestore", "Expense added successfully");
+
+                } else {
+                    // Show an error message
+                    Toast.makeText(getActivity(), "Errore: utente non trovato", Toast.LENGTH_SHORT).show();
+                }
 
                 //Mostro un messaggio di successo
                 Toast.makeText(getActivity(), "Spesa aggiunta con successo", Toast.LENGTH_SHORT).show();
@@ -195,6 +226,13 @@ public class AddExpensesFragment extends Fragment {
             }
         });
 
+
         return view;
     }
 }
+
+
+
+
+
+

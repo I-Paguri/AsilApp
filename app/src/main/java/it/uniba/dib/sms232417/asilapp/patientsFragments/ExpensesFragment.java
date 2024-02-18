@@ -1,9 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,23 +9,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.ProductFragment;
 
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.entity.Expenses;
+import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnTotalExpensesCallback;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -158,12 +157,47 @@ public class ExpensesFragment extends Fragment {
 
         // Ottieni il riferimento a textViewBalance
         TextView textViewBalance = view.findViewById(R.id.textViewBalance);
-
-        // Imposta il valore di textViewBalance a 500 €
-        textViewBalance.setText("500.00 € ");
+        textViewBalance.setText(" €");
 
 
+        // Get the current logged-in user
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        if (currentUser != null) {
+            // The user is signed in
+
+            // Get the user's UUID
+            String patientUUID = currentUser.getUid();
+
+            // Create an instance of DatabaseAdapterPatient
+            DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(getContext());
+
+            // Call the getSumExpenses method
+            adapter.getExpensesList(patientUUID,  new OnExpensesListCallback() {
+                @Override
+                public void onCallback(List<Expenses> expensesList) {
+                    // This method is called when the total expenses are successfully retrieved.
+                    // You can update your UI here.
+                    double totalExpenses = 0;
+                    for (Expenses expense : expensesList) {
+                        totalExpenses += expense.getAmount();
+                    }
+                    Log.d("Expenses", "Total expenses: " + totalExpenses);
+                    textViewBalance.setText(String.valueOf(totalExpenses) + " €");
+
+                }
+
+                @Override
+                public void onCallbackError(Exception e) {
+                    // This method is called when there is an error retrieving the total expenses.
+                    // You can handle the error here.
+                    Log.e("Expenses", "Error getting total expenses", e);
+                }
+            });
+        } else {
+            // No user is signed in
+            Log.d("Expenses", "No user is signed in");
+        }
         /* Non funziona animazione perchè
         arriva fino alla fine e non si riesce ad impostare
         valore finale
@@ -175,9 +209,8 @@ public class ExpensesFragment extends Fragment {
          */
         // Imposta il valore della ProgressBar qui.
 
-
-
     }
 
-
 }
+
+
