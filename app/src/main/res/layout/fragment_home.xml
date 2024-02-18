@@ -12,6 +12,7 @@
 
 
         <TextView
+            android:id="@+id/txtGreeting"
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +50,9 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/my_patients_illustration"
+                    android:layout_height="180dp"
+                    android:src="@drawable/doctors2_illustration"
+                    android:layout_gravity="center_horizontal"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/my_patients" />
@@ -68,7 +70,7 @@
                     style="@style/RegularText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Patients are the best"
+                    android:text="@string/my_patients_descr"
                     android:layout_marginTop="8dp"
                     android:layout_marginLeft="@dimen/text_margin"
                     android:layout_marginRight="@dimen/text_margin"
@@ -94,8 +96,9 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/healthcare_illustration"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/videos_illustration"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
                     android:contentDescription="Healthcare" />
@@ -107,13 +110,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="@string/healthcare" />
+                    android:text="@string/recommended_videos" />
 
                 <TextView
                     style="@style/RegularText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My videos"
+                    android:text="@string/videos_descr"
                     android:layout_marginTop="8dp"
                     android:layout_marginLeft="@dimen/text_margin"
                     android:layout_marginRight="@dimen/text_margin"
@@ -132,7 +135,8 @@
             android:layout_width="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -141,7 +145,7 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="180dp"
                     android:src="@drawable/maps_illustration"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
@@ -155,13 +159,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="Servizi vicini" />
+                    android:text="@string/nearby_facilities" />
 
                 <TextView
                     style="@style/RegularText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Trova i servizi nelle vicinanze"
+                    android:text="@string/nearby_facilities_descr"
                     android:layout_marginTop="8dp"
                     android:layout_marginLeft="@dimen/text_margin"
                     android:layout_marginRight="@dimen/text_margin"

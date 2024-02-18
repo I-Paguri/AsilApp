@@ -232,4 +232,15 @@
     <string name="no_connection_button">Riprova</string>
     <string name="no_connection_button_cancel">Annulla</string>
 
+    <string name="my_patients_descr">Guarda la tua lista di pazienti. Monitora i loro parametri vitali e prescrivi terapie.</string>
+    <string name="recommended_videos">Video di salute consigliati</string>
+    <string name="videos_descr">Guarda i video di salute e benessere consigliati.</string>
+
+    <string name="nearby_facilities">Servizi vicini</string>
+    <string name="nearby_facilities_descr">Trova i servizi intorno a te, come ambulatori e farmacie.</string>
+
+    <string name="good_afternoon">Buon pomeriggio</string>
+    <string name="good_evening">Buonasera</string>
+    <string name="doctor_abbreviation">Dott.</string>
+    <string name="user">Utente</string>
 </resources>

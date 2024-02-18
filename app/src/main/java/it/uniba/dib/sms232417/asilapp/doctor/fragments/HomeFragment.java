@@ -35,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.Calendar;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
@@ -48,9 +49,10 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private BottomNavigationView bottomNavigationView;
-    private TextView txtusername;
+    private TextView txtusername, txtGreeting;
     Bundle bundlePatient;
     Bundle bundleDoctor;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -74,6 +76,23 @@ public class HomeFragment extends Fragment {
         // This is called immediately after onCreateView() has returned, and fragment's view hierarchy has been instantiated.
         // You can use this method to do final initialization once these pieces are in place, such as retrieving views or restoring state.
         // Ottengo un riferimento alla cardView dei pazienti
+
+        txtGreeting = view.findViewById(R.id.txtGreeting);
+
+
+
+        int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+        if (currentHour < 12) {
+            txtGreeting.setText(getResources().getString(R.string.good_morning));
+        } else {
+            if (currentHour < 18) {
+                txtGreeting.setText(getResources().getString(R.string.good_afternoon));
+            } else {
+                txtGreeting.setText(getResources().getString(R.string.good_evening));
+            }
+        }
+
         txtusername = view.findViewById(R.id.txtUser_Name);
         Patient loggedPatient = checkPatientLogged();
         Doctor loggedDoctor = checkDoctorLogged();
@@ -81,12 +100,12 @@ public class HomeFragment extends Fragment {
             txtusername.setText(loggedPatient.getNome());
             bundlePatient = new Bundle();
             bundlePatient.putParcelable("patient", loggedPatient);
-        } else if(loggedDoctor != null){
-            txtusername.setText("Dottor "+loggedDoctor.getNome());
+        } else if (loggedDoctor != null) {
+            txtusername.setText(getResources().getString(R.string.doctor_abbreviation) + " " + loggedDoctor.getNome());
             bundleDoctor = new Bundle();
             bundleDoctor.putParcelable("doctor", loggedDoctor);
-        }else{
-            txtusername.setText("Utente");
+        } else {
+            txtusername.setText(getResources().getString(R.string.user));
         }
 
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
@@ -149,7 +168,7 @@ public class HomeFragment extends Fragment {
             //bottomNavigationView.setSelectedItemId(R.id.navigation_healthcare);
         });
 
-           // Imposto il listener per la cardViewMaps
+        // Imposto il listener per la cardViewMaps
         cardViewMaps.setOnClickListener(v -> {
             // Quando viene cliccata la cardViewMaps, viene aperto il MapsFragment
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -186,10 +205,11 @@ public class HomeFragment extends Fragment {
         // This is called when the fragment is no longer attached to its activity.
         // This is where you can clean up any references to the activity.
     }
-    public Patient checkPatientLogged(){
+
+    public Patient checkPatientLogged() {
         Patient loggedPatient;
         File loggedPatientFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedPatient");
-        if(loggedPatientFile.exists()){
+        if (loggedPatientFile.exists()) {
             try {
                 FileInputStream fis = requireActivity().openFileInput(StringUtils.PATIENT_LOGGED);
                 ObjectInputStream ois = new ObjectInputStream(fis);
@@ -202,15 +222,15 @@ public class HomeFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             return loggedPatient;
-        }else
+        } else
             return null;
 
     }
 
-    public Doctor checkDoctorLogged(){
+    public Doctor checkDoctorLogged() {
         Doctor loggedDoctor;
         File loggedDoctorFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/loggedDoctor");
-        if(loggedDoctorFile.exists()){
+        if (loggedDoctorFile.exists()) {
             Log.d("FILE", "File esiste");
             try {
                 FileInputStream fis = requireActivity().openFileInput(loggedDoctorFile.getName());
@@ -224,8 +244,8 @@ public class HomeFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             return loggedDoctor;
-    }else
-        return null;
+        } else
+            return null;
     }
 
 }

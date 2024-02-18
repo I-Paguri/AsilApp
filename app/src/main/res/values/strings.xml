@@ -554,5 +554,14 @@
     <string name="no_connection_explain">Please check your internet connection and try again</string>
     <string name="no_connection_button">Retry</string>
     <string name="no_connection_button_cancel">Cancel</string>
+    <string name="my_patients_descr">See your list of patients. Check their vital signs and prescribe therapies.</string>
+    <string name="recommended_videos">Recommended health videos</string>
+    <string name="videos_descr">Watch the recommended health and wellness videos.</string>
+    <string name="nearby_facilities">Nearby facilities</string>
+    <string name="nearby_facilities_descr">Find the facilities around you, such as clinics and pharmacies.</string>
 
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="doctor_abbreviation">Dr.</string>
+    <string name="user">User</string>
 </resources>
