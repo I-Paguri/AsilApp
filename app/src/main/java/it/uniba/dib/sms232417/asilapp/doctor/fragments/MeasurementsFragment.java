@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -11,12 +12,15 @@ import android.view.ViewGroup;
 
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.Range;
+import com.mackhartley.roundedprogressbar.ProgressTextFormatter;
+import com.mackhartley.roundedprogressbar.RoundedProgressBar;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
 
 public class MeasurementsFragment extends Fragment {
     private ArcGauge heartRateArchGauge, pressureArchGauge, lightArchGauge;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,7 +66,7 @@ public class MeasurementsFragment extends Fragment {
         lightArchGauge.addRange(range2);
         lightArchGauge.addRange(range3);
 
-        //set min max and current value
+        //set min max and current temperature
         heartRateArchGauge.setMinValue(40.0);
         heartRateArchGauge.setMaxValue(200.0);
         heartRateArchGauge.setValue(80.0);
@@ -74,6 +78,44 @@ public class MeasurementsFragment extends Fragment {
         lightArchGauge.setMinValue(0.0);
         lightArchGauge.setMaxValue(100.0);
         lightArchGauge.setValue(150.0);
+
+
+        RoundedProgressBar thermometer = view.findViewById(R.id.thermometer);
+
+        // Define the temperature outside the ProgressTextFormatter
+        float temperature = 36; // the temperature you want to map
+
+        thermometer.setProgressTextFormatter(new ProgressTextFormatter() {
+            @NonNull
+            @Override
+            public String getProgressText(float v) {
+                // Return the temperature as the progress text
+                return (int) temperature + " °C";
+            }
+
+            @NonNull
+            @Override
+            public String getMinWidthString() {
+                return "100 °C";
+            }
+        });
+
+        // Calculate the progress percentage based on the temperature
+        // The temperature range is 34 - 42
+        // The progress percentage range is 0 - 100
+
+        int minTemperature = 34;
+        int maxTemperature = 42;
+        float progressPercentage = (temperature - minTemperature) * 100 / (maxTemperature - minTemperature);
+
+        // Ensure progressPercentage is within [0, 100]
+        progressPercentage = Math.max(0, Math.min(100, progressPercentage));
+
+        thermometer.setProgressPercentage(progressPercentage, true);
+
+
+
+
     }
 
 

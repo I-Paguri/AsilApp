@@ -127,6 +127,11 @@ dependencies {
     // Libreria per mostrare grafici Gauge per i dati dei sensori
     implementation 'com.github.Gruzer:simple-gauge-android:0.3.1'
 
+    implementation 'com.github.hadiidbouk:ChartProgressBar-Android:2.0.6'
+
+    // Libreria per Rounded Progress Bar
+    implementation 'com.github.MackHartley:RoundedProgressBar:3.0.0'
+
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
