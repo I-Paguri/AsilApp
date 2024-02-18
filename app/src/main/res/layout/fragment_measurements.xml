@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="Heart rate" />
+                        android:text="@string/heart_rate" />
 
                     <TextView
                         style="@style/RegularText"
@@ -60,7 +60,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginRight="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="My pressure" />
+                        android:text="@string/heart_rate_desc" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="Pressure" />
+                        android:text="@string/blood_pressure" />
 
                     <TextView
                         style="@style/RegularText"
@@ -107,7 +107,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="My pressure" />
+                        android:text="@string/blood_pressure_desc" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -118,7 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewTemperature"
@@ -165,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="Temperature" />
+                        android:text="@string/temperature" />
 
                     <TextView
                         style="@style/RegularText"
@@ -175,7 +176,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginRight="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="My pressure" />
+                        android:text="@string/temperature_desc" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -213,7 +214,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="Light" />
+                        android:text="@string/blood_glucose" />
 
                     <TextView
                         style="@style/RegularText"
@@ -223,7 +224,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="My pressure" />
+                        android:text="@string/blood_glucose_desc" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
