@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,17 @@ import android.view.ViewGroup;
 
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.Range;
+import com.google.android.material.card.MaterialCardView;
 import com.mackhartley.roundedprogressbar.ProgressTextFormatter;
 import com.mackhartley.roundedprogressbar.RoundedProgressBar;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.AnalysesExpensesFragment;
 
 
 public class MeasurementsFragment extends Fragment {
     private ArcGauge heartRateArchGauge, pressureArchGauge, lightArchGauge;
+    private MaterialCardView cardViewHeartRate, cardViewPressure, cardViewTemperature, cardViewLight;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -114,7 +118,17 @@ public class MeasurementsFragment extends Fragment {
         thermometer.setProgressPercentage(progressPercentage, true);
 
 
-
+        cardViewHeartRate = view.findViewById(R.id.cardViewHeartRate);
+        cardViewHeartRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MeasurementsTrendFragment measurementsTrendFragment = new MeasurementsTrendFragment();
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, measurementsTrendFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
     }
 
