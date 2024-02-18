@@ -22,13 +22,16 @@
                 android:id="@+id/cardViewHeartRate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:checkable="true"
                 android:clickable="false"
-                android:focusable="true">
+                android:focusable="true"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -66,13 +69,16 @@
                 android:id="@+id/cardViewHeartPressure"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:checkable="true"
                 android:clickable="false"
-                android:focusable="true">
+                android:focusable="true"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,13 +124,16 @@
                 android:id="@+id/cardViewTemperature"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:checkable="true"
                 android:clickable="false"
-                android:focusable="true">
+                android:focusable="true"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,13 +184,16 @@
                 android:id="@+id/cardViewHeartLight"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:checkable="true"
                 android:clickable="false"
-                android:focusable="true">
+                android:focusable="true"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
