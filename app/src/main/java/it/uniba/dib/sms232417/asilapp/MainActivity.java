@@ -274,6 +274,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNoInternetDialog() {
+        ImageView imageView = findViewById(R.id.wifi_off);
+        imageView.setVisibility(ImageView.VISIBLE);
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle(R.string.no_connection_title);
         builder.setMessage(R.string.no_connection_explain);
@@ -294,6 +296,8 @@ public class MainActivity extends AppCompatActivity {
          */
         if (alertDialog != null && alertDialog.isShowing())
             alertDialog.dismiss();
+        ImageView imageView = findViewById(R.id.wifi_off);
+        imageView.setVisibility(ImageView.GONE);
     }
 
     public void changeMenu(int status) {
