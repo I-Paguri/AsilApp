@@ -249,6 +249,7 @@
     <string name="blood_pressure">Pressione sanguigna</string>
     <string name="temperature">Temperatura</string>
     <string name="blood_glucose"> Glucosio nel sangue </string>
+    <string name="trend">Trend</string>
 
     <string name="blood_pressure_desc">Misurato in mmHg, i valori norma sono 80/120.</string>
     <string name="temperature_desc">Misurato in °C, i valori norma sono tra 36 e 37.</string>

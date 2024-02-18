@@ -17,7 +17,7 @@
             style="@style/TitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trend"
+            android:text="@string/trend"
             android:layout_marginTop="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"/>
@@ -27,7 +27,7 @@
             style="@style/SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Temperatura"
+            android:text="@string/heart_rate"
             android:layout_marginLeft="17dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"/>

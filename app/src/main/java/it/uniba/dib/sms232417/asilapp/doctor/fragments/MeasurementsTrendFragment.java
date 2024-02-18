@@ -58,7 +58,7 @@ public class MeasurementsTrendFragment extends Fragment {
             entries.add(new Entry(i, value));
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Heart rate");
+        LineDataSet dataSet = new LineDataSet(entries, getResources().getString(R.string.heart_rate));
         dataSet.setLineWidth(3f);
         dataSet.setCircleRadius(4f);
         dataSet.setDrawCircleHole(false);
