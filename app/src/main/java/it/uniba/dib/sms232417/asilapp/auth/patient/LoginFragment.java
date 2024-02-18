@@ -18,10 +18,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import javax.crypto.SecretKey;
@@ -38,6 +40,7 @@ import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 public class LoginFragment extends Fragment {
 
     DatabaseAdapterPatient dbAdapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -78,6 +81,7 @@ public class LoginFragment extends Fragment {
                 onRegister(v);
             }
         });
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,19 +93,19 @@ public class LoginFragment extends Fragment {
                     imm.hideSoftInputFromWindow(focusedView.getWindowToken(), 0);
                 }
                 if (email.toString().isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                            .setTitle("Error")
                             .setMessage(R.string.empty_fields_email)
-                            .create();
-                    builder.setPositiveButton("Ok", null);
-                    builder.show();
+                            .setPositiveButton("Ok", null)
+                            .create()
+                            .show();
                 } else if (password.toString().isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                            .setTitle("Error")
                             .setMessage(R.string.empty_fields_password)
-                            .create();
-                    builder.setPositiveButton("Ok", null);
-                    builder.show();
+                            .setPositiveButton("Ok", null)
+                            .create()
+                            .show();
                 } else {
                     ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
                     progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -109,53 +113,56 @@ public class LoginFragment extends Fragment {
                     dbAdapter.onLogin(email, password, new OnPatientDataCallback() {
                         @Override
                         public void onCallback(Patient patient) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle(R.string.save_password)
+                            new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                                    .setTitle(R.string.save_password)
                                     .setMessage(R.string.save_password_explain)
-                                    .create();
-                            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                                //Save password
-                                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("email", patient.getEmail());
-                                editor.putBoolean("isDoctor",false);
-                                //Encrypt password con chiave simmetrica e salva su file
-                                byte[] encryptedPassword = new byte[0];
-                                byte[] iv = new byte[0];
-                                try {
-                                    CryptoUtil.generateandSaveSecretKey(patient.getEmail());
-                                    SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
-                                    Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
-                                    encryptedPassword = encryptionResult.first;
-                                    iv = encryptionResult.second;
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
-                                editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
-                                editor.apply();
+                                    .setNegativeButton(R.string.no, (dialog, which) -> {
+                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        intent.putExtra("loggedPatient", (Parcelable) patient);
+                                        startActivity(intent);
+                                        progressBar.setVisibility(ProgressBar.GONE);
+                                        requireActivity().finish();
+                                    })
+                                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                                        //Save password
+                                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("email", patient.getEmail());
+                                        editor.putBoolean("isDoctor", false);
+                                        //Encrypt password con chiave simmetrica e salva su file
+                                        byte[] encryptedPassword = new byte[0];
+                                        byte[] iv = new byte[0];
+                                        try {
+                                            CryptoUtil.generateandSaveSecretKey(patient.getEmail());
+                                            SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
+                                            Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
+                                            encryptedPassword = encryptionResult.first;
+                                            iv = encryptionResult.second;
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                        editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
+                                        editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
+                                        editor.apply();
 
-                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                intent.putExtra("loggedPatient", (Parcelable) patient);
-                                startActivity(intent);
-                                progressBar.setVisibility(ProgressBar.GONE);
-                                requireActivity().finish();
-                            });
-                            builder.setNegativeButton(R.string.no, (dialog, which) -> {
-                                Intent intent = new Intent(getContext(), MainActivity.class);
-                                intent.putExtra("loggedPatient", (Parcelable) patient);
-                                startActivity(intent);
-                                progressBar.setVisibility(ProgressBar.GONE);
-                                requireActivity().finish();
-                            });
-                            builder.show();
+                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        intent.putExtra("loggedPatient", (Parcelable) patient);
+                                        startActivity(intent);
+                                        progressBar.setVisibility(ProgressBar.GONE);
+                                        requireActivity().finish();
+                                    })
+                                    .create()
+                                    .show();
                         }
+
                         @Override
                         public void onCallbackError(Exception exception, String message) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle(R.string.error).setMessage(message);
-                            builder.setPositiveButton(R.string.yes, null);
-                            builder.show();
+                            new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                                    .setTitle(R.string.error)
+                                    .setMessage(message)
+                                    .setPositiveButton(R.string.yes, null)
+                                    .create()
+                                    .show();
 
                             progressBar.setVisibility(ProgressBar.GONE);
                         }

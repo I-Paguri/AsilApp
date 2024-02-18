@@ -26,6 +26,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -81,37 +82,37 @@ public class RegisterFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), R.layout.dropdown_item_region, countries);
         region.setAdapter(adapter);
         btnDataNascita.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        builder.setTitleText("Select a Date");
+                                              @Override
+                                              public void onClick(View v) {
+                                                  MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                                                  builder.setTitleText("Select a Date");
 
-                        Calendar calendarStart = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                        calendarStart.set(1940, 0, 1);
-                        long minDate = calendarStart.getTimeInMillis();
-                        Calendar calendarEnd = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                        calendarEnd.set(2006, 0, 1);
-                        long maxDate = calendarEnd.getTimeInMillis();
-                        builder.setCalendarConstraints(new CalendarConstraints.Builder().setStart(minDate).setEnd(maxDate).build());
+                                                  Calendar calendarStart = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                                                  calendarStart.set(1940, 0, 1);
+                                                  long minDate = calendarStart.getTimeInMillis();
+                                                  Calendar calendarEnd = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                                                  calendarEnd.set(2006, 0, 1);
+                                                  long maxDate = calendarEnd.getTimeInMillis();
+                                                  builder.setCalendarConstraints(new CalendarConstraints.Builder().setStart(minDate).setEnd(maxDate).build());
 
-                        MaterialDatePicker<Long> materialDatePicker = builder.build();
-                        materialDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                        materialDatePicker.addOnPositiveButtonClickListener(selection ->  {
-                            Date selectedDate = new Date(selection);
-                            SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-                            String date = format.format(selectedDate);
-                            btnDataNascita.setText(date);
-                            strDataNascita = date;
+                                                  MaterialDatePicker<Long> materialDatePicker = builder.build();
+                                                  materialDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                                                  materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+                                                      Date selectedDate = new Date(selection);
+                                                      SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                                                      String date = format.format(selectedDate);
+                                                      btnDataNascita.setText(date);
+                                                      strDataNascita = date;
 
-                        });
-                        materialDatePicker.addOnNegativeButtonClickListener(
-                                dialog -> {
-                                    btnDataNascita.setText(R.string.birth_date);
-                                    strDataNascita = "";
-                                }
-                        );
-                    }
-                }
+                                                  });
+                                                  materialDatePicker.addOnNegativeButtonClickListener(
+                                                          dialog -> {
+                                                              btnDataNascita.setText(R.string.birth_date);
+                                                              strDataNascita = "";
+                                                          }
+                                                  );
+                                              }
+                                          }
         );
         region.setOnItemClickListener((parent, view1, position, id) -> {
             String selected = (String) parent.getItemAtPosition(position);
@@ -142,59 +143,58 @@ public class RegisterFragment extends Fragment {
                 String cognome = ((TextInputEditText) getView().findViewById(R.id.txtSurname)).getText().toString();
 
 
-                if(email.isEmpty()){
+                if (email.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_email)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
-                }else if(password.isEmpty()){
+                } else if (password.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_password)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
-                }else if(nome.isEmpty()){
+                } else if (nome.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_nome)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
-                }else if(cognome.isEmpty()){
+                } else if (cognome.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_cognome)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
-                }else if(strDataNascita.toString().isEmpty()){
+                } else if (strDataNascita.toString().isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_data)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
-                }else if(regione.isEmpty()){
+                } else if (regione.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_region)
                             .create();
                     builder.show();
-                }else if(!password.equals(confermaPassword)){
+                } else if (!password.equals(confermaPassword)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.password_not_match)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
-                }else
-                    onRegisterUsers(v,email,password,nome,cognome, strDataNascita, regione);
+                } else
+                    onRegisterUsers(v, email, password, nome, cognome, strDataNascita, regione);
             }
         });
-
 
 
     }
@@ -203,9 +203,8 @@ public class RegisterFragment extends Fragment {
         ((EntryActivity) getActivity()).replaceFragment(new LoginFragment());
     }
 
-    public void onRegisterUsers(View v, String email, String password, String nome, String cognome,String dataNascita, String regione) {
 
-
+    public void onRegisterUsers(View v, String email, String password, String nome, String cognome, String dataNascita, String regione) {
         ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
@@ -213,55 +212,55 @@ public class RegisterFragment extends Fragment {
         dbAdapter.onRegister(nome, cognome, email, dataNascita, regione, profileImageUrl, password, new OnPatientDataCallback() {
             @Override
             public void onCallback(Patient patient) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
-                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                        .setTitle(R.string.save_password)
+                        .setMessage(R.string.save_password_explain)
+                        .setNegativeButton(R.string.no, (dialog, which) -> {
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            intent.putExtra("loggedPatient", (Parcelable) patient);
+                            startActivity(intent);
+                            requireActivity().finish();
+                        })
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            SharedPreferences.Editor editor = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE).edit();
+                            editor.putString("email", patient.getEmail());
+                            editor.putBoolean("isDoctor", false);
+                            //Encrypt password con chiave simmetrica e salva su file
+                            byte[] encryptedPassword = new byte[0];
+                            byte[] iv = new byte[0];
+                            try {
+                                CryptoUtil.generateandSaveSecretKey(patient.getEmail());
+                                SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
+                                Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
+                                encryptedPassword = encryptionResult.first;
+                                iv = encryptionResult.second;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                    SharedPreferences.Editor editor = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE).edit();
-                    editor.putString("email", patient.getEmail());
-                    editor.putBoolean("isDoctor",false);
-                    //Encrypt password con chiave simmetrica e salva su file
-                    byte[] encryptedPassword = new byte[0];
-                    byte[] iv = new byte[0];
-                    try {
-                        CryptoUtil.generateandSaveSecretKey(patient.getEmail());
-                        SecretKey secretKey = CryptoUtil.loadSecretKey(patient.getEmail());
-                        Pair<byte[], byte[]> encryptionResult = CryptoUtil.encryptWithKey(secretKey, password.getBytes());
-                        encryptedPassword = encryptionResult.first;
-                        iv = encryptionResult.second;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                            editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
+                            editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
+                            editor.commit();
 
-                    editor.putString("password", Base64.encodeToString(encryptedPassword, Base64.DEFAULT));
-                    editor.putString("iv", Base64.encodeToString(iv, Base64.DEFAULT));
-                    editor.commit();
-
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.putExtra("loggedPatient", (Parcelable) patient);
-                    startActivity(intent);
-                    progressBar.setVisibility(ProgressBar.INVISIBLE);
-                    requireActivity().finish();
-                });
-
-                builder.setNegativeButton(R.string.no, (dialog, which) -> {
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.putExtra("loggedPatient", (Parcelable) patient);
-                    startActivity(intent);
-                    requireActivity().finish();
-                });
-                builder.show();
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            intent.putExtra("loggedPatient", (Parcelable) patient);
+                            startActivity(intent);
+                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                            requireActivity().finish();
+                        })
+                        .create()
+                        .show();
             }
-
 
             @Override
             public void onCallbackError(Exception e, String message) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(R.string.error).setMessage(message);
-                builder.setPositiveButton(R.string.yes, null);
-                builder.show();
+                new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
+                        .setTitle(R.string.error)
+                        .setMessage(message)
+                        .setPositiveButton(R.string.yes, null)
+                        .create()
+                        .show();
                 progressBar.setVisibility(ProgressBar.INVISIBLE);
-
             }
         });
     }
