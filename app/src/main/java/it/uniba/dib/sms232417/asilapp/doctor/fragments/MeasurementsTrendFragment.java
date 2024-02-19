@@ -69,25 +69,28 @@ public class MeasurementsTrendFragment extends Fragment {
         }
 
         TextView txtMeasurementType = view.findViewById(R.id.txtMeasurementType);
+        String formattedMeasurementType = "";
         if (!measureType.isEmpty()) {
             switch (measureType) {
                 case "heartRate":
-                    txtMeasurementType.setText(getResources().getString(R.string.heart_rate));
+                    formattedMeasurementType = getResources().getString(R.string.heart_rate);
                     break;
                 case "bloodPressure":
-                    txtMeasurementType.setText(getResources().getString(R.string.blood_pressure));
+                    formattedMeasurementType = getResources().getString(R.string.blood_pressure);
                     break;
                 case "temperature":
-                    txtMeasurementType.setText(getResources().getString(R.string.temperature));
+                    formattedMeasurementType = getResources().getString(R.string.temperature);
                     break;
                 case "glycemia":
-                    txtMeasurementType.setText(getResources().getString(R.string.glycemia));
+                    formattedMeasurementType = getResources().getString(R.string.glycemia);
                     break;
                 default:
                     txtMeasurementType.setText("");
                     break;
             }
         }
+
+        txtMeasurementType.setText(formattedMeasurementType);
 
         Typeface ember_regular = ResourcesCompat.getFont(getContext(), R.font.ember_regular);
 
@@ -104,7 +107,7 @@ public class MeasurementsTrendFragment extends Fragment {
             entries.add(new Entry(i, value));
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, getResources().getString(R.string.heart_rate));
+        LineDataSet dataSet = new LineDataSet(entries, formattedMeasurementType);
         dataSet.setLineWidth(3f);
         dataSet.setCircleRadius(4f);
         dataSet.setDrawCircleHole(false);
