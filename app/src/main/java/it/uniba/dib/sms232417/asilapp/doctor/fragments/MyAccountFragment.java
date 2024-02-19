@@ -177,12 +177,10 @@ public class MyAccountFragment extends Fragment {
             TextView txtAge = getView().findViewById(R.id.txtAge);
             ImageView imgFlag = getView().findViewById(R.id.flag);
 
-            // TextView txtage = getView().findViewById(R.id.txt_age);
             txtName.setText(loggedPatient.getNome());
             txtSurname.setText(loggedPatient.getCognome());
             txtRegion.setText(loggedPatient.getRegione());
             String dataNascita = loggedPatient.getDataNascita();
-            //txtAge.setText(loggedPatient.getAge() + " " getResources().getQuantityString(R.plurals.age, loggedPatient.getAge(), loggedPatient.getAge()));
 
             txtBirthday.setText(dataNascita);
             txtEmail.setText(loggedPatient.getEmail());

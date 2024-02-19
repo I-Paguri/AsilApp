@@ -268,4 +268,7 @@
 
     <string name="my_expenses">Le mie spese</string>
 
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
 </resources>

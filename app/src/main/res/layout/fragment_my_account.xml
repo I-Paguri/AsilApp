@@ -153,13 +153,13 @@
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/email"/>
 
+
             <TextView
                 android:id="@+id/txtEmail"
                 android:layout_gravity="center"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/seed"
                 android:text="email"/>
 
 

@@ -5,50 +5,32 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
@@ -59,11 +41,10 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.PatientFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.PatientViewFragment;
 import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
 import it.uniba.dib.sms232417.asilapp.thread_connection.NoConnectionFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
@@ -76,7 +57,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -140,12 +120,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
                     builder.setTitle(R.string.attention);
                     builder.setMessage(R.string.explain_permission_camera);
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
+                            requestPermissions(new String[]{android.Manifest.permission.CAMERA}, 101);
                         }
                     });
                     builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -156,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                     builder.show();
 
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
                     builder.setTitle(R.string.attention);
                     builder.setMessage(R.string.explain_permission_camera);
                     builder.setPositiveButton("OK", null);
@@ -179,16 +159,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+/*
     @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 101 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
+
             selectedFragment = new MeasureFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+
+
+        }
+    }
+*/
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("MainActivity", "Permissions:"+String.valueOf(requestCode));
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+
+        if (fragment instanceof TreatmentFragment) {
+            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -512,7 +510,7 @@ public class MainActivity extends AppCompatActivity {
     // Method to update the bottom navigation icon my account with the url profile image
     public void updateIconProfileImage() {
         File file = new File(StringUtils.IMAGE_ICON);
-        if(file.exists()){
+        if (file.exists()) {
             Bitmap bitmap = new BitmapDrawable(getResources(), StringUtils.IMAGE_ICON).getBitmap();
             Drawable iconImage = new BitmapDrawable(getResources(), bitmap);
 

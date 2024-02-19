@@ -589,4 +589,7 @@
     <string name="error_uploading_image">Error uploading image</string>
     <string name="my_expenses">My expenses</string>
 
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
 </resources>

@@ -164,7 +164,7 @@ public class TreatmentFragment extends Fragment {
                                 createAndSharePdf(treatments);
                             } else {
                                 // If the application does not have the permissions, request them from the user
-                                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
+                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
                             }
                         }
                     });
@@ -747,9 +747,14 @@ public class TreatmentFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("PermissionGranted", "PERMESSI1");
         if (requestCode == 101) {
+            Log.d("PermissionGranted", "PERMESSI2");
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 // If the permissions are granted, call the createAndSharePdf method
+                Log.d("PermissionGranted0", "PERMESSI ACCETTATI");
                 createAndSharePdf(treatments);
             } else {
                 // If the permissions are denied, show a message to the user explaining why the permissions are needed
