@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
         if (currentFragment instanceof HealthcareFragment || currentFragment instanceof MyPatientsFragment
-                || currentFragment instanceof MyAccountFragment || currentFragment instanceof MeasureFragment) {
+                || currentFragment instanceof MyAccountFragment || currentFragment instanceof MeasureFragment || (currentFragment instanceof PatientFragment && loggedPatient != null)) {
             // If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
