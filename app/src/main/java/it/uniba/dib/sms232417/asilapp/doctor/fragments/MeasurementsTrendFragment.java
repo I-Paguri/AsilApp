@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -67,11 +68,26 @@ public class MeasurementsTrendFragment extends Fragment {
             measureType = this.getArguments().getString("measureType");
         }
 
-        Log.d("Bundle_MeasurementsTrendFragment", "patientUUID: " + patientUUID);
-        Log.d("Bundle_MeasurementsTrendFragment", "patientName: " + patientName);
-        Log.d("Bundle_MeasurementsTrendFragment", "patientAge: " + patientAge);
-        Log.d("Bundle_MeasurementsTrendFragment", "user: " + user);
-        Log.d("Bundle_MeasurementsTrendFragment", "measureType: " + measureType);
+        TextView txtMeasurementType = view.findViewById(R.id.txtMeasurementType);
+        if (!measureType.isEmpty()) {
+            switch (measureType) {
+                case "heartRate":
+                    txtMeasurementType.setText(getResources().getString(R.string.heart_rate));
+                    break;
+                case "bloodPressure":
+                    txtMeasurementType.setText(getResources().getString(R.string.blood_pressure));
+                    break;
+                case "temperature":
+                    txtMeasurementType.setText(getResources().getString(R.string.temperature));
+                    break;
+                case "glycemia":
+                    txtMeasurementType.setText(getResources().getString(R.string.glycemia));
+                    break;
+                default:
+                    txtMeasurementType.setText("");
+                    break;
+            }
+        }
 
         Typeface ember_regular = ResourcesCompat.getFont(getContext(), R.font.ember_regular);
 
