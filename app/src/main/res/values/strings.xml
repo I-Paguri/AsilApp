@@ -577,4 +577,6 @@
     <string name="blood_glucose_desc">mg/dL as unit</string>
     <string name="systolic_pressure">Systolic pressure</string>
     <string name="diastolic_pressure">Diastolic pressure</string>
+
+    <string name="filter_by_facility">Filter by facility</string>
 </resources>
