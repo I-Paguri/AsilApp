@@ -266,4 +266,6 @@
     <string name="add_profile_picture">Aggiungi immagine del profilo</string>
     <string name="error_uploading_image">Errore nel caricamento dell\'immagine</string>
 
+    <string name="my_expenses">Le mie spese</string>
+
 </resources>

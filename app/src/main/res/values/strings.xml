@@ -587,5 +587,6 @@
     <string name="edit_profile_picture">Edit profile picture</string>
     <string name="add_profile_picture">Add profile picture</string>
     <string name="error_uploading_image">Error uploading image</string>
+    <string name="my_expenses">My expenses</string>
 
 </resources>
