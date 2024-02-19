@@ -579,4 +579,13 @@
     <string name="diastolic_pressure">Diastolic pressure</string>
 
     <string name="filter_by_facility">Filter by facility</string>
+
+    <string name="logout_successful">Logout successful</string>
+    <string name="choose_an_option">Choose an option</string>
+    <string name="take_photo">Take photo</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="edit_profile_picture">Edit profile picture</string>
+    <string name="add_profile_picture">Add profile picture</string>
+    <string name="error_uploading_image">Error uploading image</string>
+
 </resources>

@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -35,6 +34,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -269,7 +269,6 @@ public class MyAccountFragment extends Fragment {
             dbAdapterDoctor.getProfileImage(loggedDoctor.getEmail(), new OnProfileImageCallback() {
                 @Override
                 public void onCallback(String imageUrl) {
-                    Log.d("MyAccountFragment", "Profile image URL: " + imageUrl);
                     // Check if the profile image URL exists and is not empty before loading it
                     if (imageUrl != null && !imageUrl.isEmpty()) {
                         Glide.with(getContext())
@@ -309,7 +308,7 @@ public class MyAccountFragment extends Fragment {
 
 
         Toast.makeText(getContext(),
-                "Logout effettuato",
+                getResources().getString(R.string.logout_successful),
                 Toast.LENGTH_SHORT).show();
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -336,9 +335,9 @@ public class MyAccountFragment extends Fragment {
     }
 
     private void showImagePickerDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Choose an option")
-                .setItems(new CharSequence[]{"Take Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(getResources().getString(R.string.choose_an_option))
+                .setItems(new CharSequence[]{getResources().getString(R.string.take_photo), getResources().getString(R.string.choose_from_gallery)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -402,14 +401,14 @@ public class MyAccountFragment extends Fragment {
     }
 
     public void handleAddProfilePicClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         boolean isProfilePicExists = false;
         if (isProfilePicExists) {
-            builder.setTitle("Modifica immagine di profilo");
+            builder.setTitle(getResources().getString(R.string.edit_profile_picture));
         } else {
-            builder.setTitle("Aggiungi una foto profilo");
+            builder.setTitle(getResources().getString(R.string.add_profile_picture));
         }
-        String[] options = {"Scatta fotografia", "Seleziona dalla galleria"};
+        String[] options = {getResources().getString(R.string.take_photo), getResources().getString(R.string.choose_from_gallery)};
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -458,7 +457,7 @@ public class MyAccountFragment extends Fragment {
                         @Override
                         public void onCallbackError(Exception e) {
                             // Handle the error
-                            Toast.makeText(getContext(), "Error uploading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error_uploading_image) + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else if (loggedDoctor != null) {
@@ -480,7 +479,7 @@ public class MyAccountFragment extends Fragment {
                         @Override
                         public void onCallbackError(Exception e) {
                             // Handle the error
-                            Toast.makeText(getContext(), "Error uploading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.error_uploading_image) + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 

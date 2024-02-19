@@ -258,4 +258,12 @@
     <string name="diastolic_pressure">Pressione diastolica</string>
     <string name="filter_by_facility">Filtra per servizio</string>
 
+    <string name="logout_successful">Logout effettuato con successo</string>
+    <string name="choose_an_option">Scegli un\'opzione</string>
+    <string name="take_photo">Scatta una foto</string>
+    <string name="choose_from_gallery">Scegli dalla galleria</string>
+    <string name="edit_profile_picture">Modifica immagine del profilo</string>
+    <string name="add_profile_picture">Aggiungi immagine del profilo</string>
+    <string name="error_uploading_image">Errore nel caricamento dell\'immagine</string>
+
 </resources>
