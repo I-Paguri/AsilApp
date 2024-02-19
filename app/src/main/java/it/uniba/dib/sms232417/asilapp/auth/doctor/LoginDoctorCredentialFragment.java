@@ -1,6 +1,5 @@
 package it.uniba.dib.sms232417.asilapp.auth.doctor;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import javax.crypto.SecretKey;
@@ -71,14 +71,14 @@ public class LoginDoctorCredentialFragment extends Fragment {
                 String password = ((TextInputEditText) getView().findViewById(R.id.txtPassword)).getText().toString();
 
                 if (email.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_email)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (password.isEmpty()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
                     builder.setTitle("Error")
                             .setMessage(R.string.empty_fields_password)
                             .create();
@@ -108,7 +108,7 @@ public class LoginDoctorCredentialFragment extends Fragment {
         dbAdapter.onLogin(email, password, new OnDoctorDataCallback() {
             @Override
             public void onCallback(Doctor doctor) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
                 builder.setTitle(R.string.save_password).setMessage(R.string.save_password_explain);
                 builder.setPositiveButton(R.string.yes, (dialog, which) -> {
 
@@ -151,7 +151,7 @@ public class LoginDoctorCredentialFragment extends Fragment {
 
             @Override
             public void onCallbackError(Exception e, String message) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
                 builder.setTitle(R.string.error).setMessage(message);
                 builder.setPositiveButton(R.string.yes, null);
                 builder.show();
