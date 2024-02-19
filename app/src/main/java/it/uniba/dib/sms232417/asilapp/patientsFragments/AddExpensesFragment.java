@@ -1,6 +1,8 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
@@ -87,6 +90,7 @@ public class AddExpensesFragment extends Fragment {
 
         Button button = view.findViewById(R.id.add_button);
 
+
         // Trova l'AutoCompleteTextView per la categoria
         AutoCompleteTextView categoryInput = view.findViewById(R.id.categories);
 
@@ -123,10 +127,13 @@ public class AddExpensesFragment extends Fragment {
             }
         });
 
+
         // Imposta un OnClickListener per il pulsante
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 // Ottieni il testo dalle viste di input
                 String category = categoryInput.getText().toString();
                 String amountString = amountInput.getText().toString();
@@ -162,67 +169,86 @@ public class AddExpensesFragment extends Fragment {
                     dateLayout.setError(null);
                 }
 
-                // Converte la stringa in un double
-                double amount;
-                try {
-                    amount = Double.parseDouble(amountString);
-                } catch (NumberFormatException e) {
-                    // Mostra un messaggio di errore
-                    Toast.makeText(getActivity(), "Per favore, inserisci un importo valido", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                // Crea un AlertDialog con un layout personalizzato
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                LayoutInflater inflater = getActivity().getLayoutInflater();
 
-                // Crea un oggetto SimpleDateFormat per il formato della data
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                View view = inflater.inflate(R.layout.dialog_layout, null);
 
-                // Converte la stringa in un oggetto Date
-                Date date;
-                try {
-                    date = format.parse(dateString);
-                } catch (ParseException e) {
-                    // Mostra un messaggio di errore
-                    Toast.makeText(getActivity(), "Per favore, inserisci una data valida", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
+                TextView title = view.findViewById(R.id.dialog_title);
+                TextView message = view.findViewById(R.id.dialog_message);
 
-                // Stampa le informazioni nel log
-                Log.d("Info", "Categoria: " + categoryEnum + ", Spesa: " + amount + ", Data: " + date);
-                Expenses expense = new Expenses(categoryEnum, amount, date);
+                builder.setView(view)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // L'utente ha confermato, quindi aggiungi la spesa
 
-                // Get the instance of FirebaseAuth
-                FirebaseAuth auth = FirebaseAuth.getInstance();
+                                // Converte la stringa in un double
+                                double amount;
+                                try {
+                                    amount = Double.parseDouble(amountString);
+                                } catch (NumberFormatException e) {
+                                    // Mostra un messaggio di errore
+                                    Toast.makeText(getActivity(), "Per favore, inserisci un importo valido", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
 
-// Get the currently logged in user
-                FirebaseUser currentUser = auth.getCurrentUser();
+                                // Crea un oggetto SimpleDateFormat per il formato della data
+                                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
-                if (currentUser != null) {
-                    // Get the UUID of the currently logged in user
-                    String patientUUID = currentUser.getUid();
+                                // Converte la stringa in un oggetto Date
+                                Date date;
+                                try {
+                                    date = format.parse(dateString);
+                                } catch (ParseException e) {
+                                    // Mostra un messaggio di errore
+                                    Toast.makeText(getActivity(), "Per favore, inserisci una data valida", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
 
-                    // Create an instance of DatabaseAdapterPatient
-                    DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(getContext());
+                                // Stampa le informazioni nel log
+                                Log.d("Info", "Categoria: " + categoryEnum + ", Spesa: " + amount + ", Data: " + date);
+                                Expenses expense = new Expenses(categoryEnum, amount, date);
 
-                    // Call the addExpense method
-                    adapter.addExpense(patientUUID, expense);
-                    Log.d("Firestore", "Expense added successfully");
+                                // Get the instance of FirebaseAuth
+                                FirebaseAuth auth = FirebaseAuth.getInstance();
 
-// With this code
-                    adapter.addExpense(patientUUID, expense);
-                    Log.d("Firestore", "Expense added successfully");
+                                // Get the currently logged in user
+                                FirebaseUser currentUser = auth.getCurrentUser();
 
-                } else {
-                    // Show an error message
-                    Toast.makeText(getActivity(), "Errore: utente non trovato", Toast.LENGTH_SHORT).show();
-                }
+                                if (currentUser != null) {
+                                    // Get the UUID of the currently logged in user
+                                    String patientUUID = currentUser.getUid();
 
-                //Mostro un messaggio di successo
-                Toast.makeText(getActivity(), "Spesa aggiunta con successo", Toast.LENGTH_SHORT).show();
+                                    // Create an instance of DatabaseAdapterPatient
+                                    DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(getContext());
 
-                // Svuota i campi di input
-                categoryInput.setText("");
-                amountInput.setText("");
-                dateInput.setText("");
+                                    // Call the addExpense method
+                                    adapter.addExpense(patientUUID, expense);
+                                    Log.d("Firestore", "Expense added successfully");
+
+                                    // With this code
+                                    adapter.addExpense(patientUUID, expense);
+                                    Log.d("Firestore", "Expense added successfully");
+
+                                } else {
+                                    // Show an error message
+                                    Toast.makeText(getActivity(), "Errore: utente non trovato", Toast.LENGTH_SHORT).show();
+                                }
+
+                                //Mostro un messaggio di successo
+                                Toast.makeText(getActivity(), "Spesa aggiunta con successo", Toast.LENGTH_SHORT).show();
+
+                                // Svuota i campi di input
+                                categoryInput.setText("");
+                                amountInput.setText("");
+                                dateInput.setText("");
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null);
+
+                builder.create().show();
             }
         });
 

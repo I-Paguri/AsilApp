@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,17 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.data.PieDataSet;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mancj.slimchart.SlimChart;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.entity.Expenses;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,8 +99,129 @@ public class AnalysesExpensesFragment extends Fragment {
             TextView paragraph3 = view.findViewById(R.id.resocontoSpesaTrattamenti);
             TextView paragraph4 = view.findViewById(R.id.resocontoSpesaEsami);
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            // The user is signed in
+
+            // Get the user's UUID
+            String patientUUID = currentUser.getUid();
+
+            // Create an instance of DatabaseAdapterPatient
+            DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(getContext());
+
+            // Call the getSumExpenses method
+            adapter.getExpensesList(patientUUID,  new OnExpensesListCallback() {
+                @Override
+                public void onCallback(List<Expenses> expensesList) {
+                    // This method is called when the total expenses are successfully retrieved.
+                    // You can update your UI here.
+
+                    //controllo che la lista non sia vuota:
+                    if (!expensesList.isEmpty()) {
 
 
+                        double sumFarmaci = getExpensesByCategory(expensesList, Expenses.Category.FARMACI);
+                        double sumTerapie = getExpensesByCategory(expensesList, Expenses.Category.TERAPIE);
+                        double sumAltro= getExpensesByCategory(expensesList, Expenses.Category.ALTRO);
+                        double sumEsami = getExpensesByCategory(expensesList, Expenses.Category.ESAMI);
+
+                        double totalSum = sumFarmaci + sumTerapie + sumAltro + sumEsami;
+                        //Creazione grafico a torta
+                        List<PieEntry> entries = new ArrayList<>();
+                        entries.add(new PieEntry((float) sumFarmaci, "Spese Farmaci"));
+                        entries.add(new PieEntry((float) sumTerapie, "Spese Terapie"));
+                        entries.add(new PieEntry((float) sumAltro, "Altre spese"));
+                        entries.add(new PieEntry((float) sumEsami, "Spese Esami"));
+                        //definisco il dataset del grafico a torta
+                        PieDataSet set = new PieDataSet(entries, "");
+
+                        // Definisci i colori del grafico a torta
+                        int color1 = Color.parseColor("#D8E2FF");
+                        int color2 = Color.parseColor("#9CCAFF");
+                        int color3 = Color.parseColor("#003256");
+                        int color4 = Color.parseColor("#0062A1");
+
+                        //Imposta i colori delle fette del grafico a torta
+                        set.setColors(new int[] {color1, color2, color3, color4});
+
+
+                        PieData data = new PieData(set);
+                        data.setDrawValues(false);
+                        pieChart.setData(data);
+                        pieChart.setDrawEntryLabels(false);
+
+                        //convert totalSum to string
+                        String totalSumString = String.valueOf(totalSum);
+
+                        pieChart.setCenterText("Totale: " + totalSumString);
+
+
+
+                        // Get the data from the PieChart
+                        PieData pieData = pieChart.getData();
+                        if (pieData != null) {
+                            PieDataSet pieDataSet = (PieDataSet) pieData.getDataSet();
+                            if (pieDataSet != null) {
+                                entries = pieDataSet.getEntriesForXValue(0f);
+                                // Set the text of each TextView based on the data of the PieChart
+                                if (entries.size() >= 0) {
+                                    paragraph1.setText(formatEntry(entries.get(0)));
+                                    paragraph2.setText(formatEntry(entries.get(1)));
+                                    paragraph3.setText(formatEntry(entries.get(2)));
+                                    paragraph4.setText(formatEntry(entries.get(3)));
+                                }
+                            }
+                        }
+
+                        // Aggiungi un listener per i valori selezionati
+                        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+                            @Override
+                            public void onValueSelected(Entry e, Highlight h) {
+                                // Ottieni l'etichetta dell'elemento selezionato
+                                String label = ((PieEntry) e).getLabel();
+
+                                // Visualizza l'etichetta al centro del grafico a torta
+                                pieChart.setCenterText(label);
+                            }
+
+
+                            @Override
+                            public void onNothingSelected() {
+                                pieChart.setCenterText("Totale: " + totalSum);
+                            }
+
+                        });
+
+                    }else {
+                        // La lista è vuota
+                        Log.d("Expenses", "La lista è vuota");
+                        pieChart.setNoDataText("Non hai nessuna spesa");
+
+
+                    }
+
+
+
+
+
+
+                }
+
+                @Override
+                public void onCallbackError(Exception e) {
+                    // This method is called when there is an error retrieving the total expenses.
+                    // You can handle the error here.
+                    Log.e("Expenses", "Error getting total expenses", e);
+                }
+            });
+        } else {
+            // No user is signed in
+            Log.d("Expenses", "No user is signed in");
+        }
+
+
+/*
         // Creazione grafico a torta
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(50, "Spese Farmaci"));
@@ -107,8 +234,12 @@ public class AnalysesExpensesFragment extends Fragment {
             totalSum[0] += entry.getValue();
         }
 
+
+
       //definisco il dataset del grafico a torta
         PieDataSet set = new PieDataSet(entries, "");
+
+
         // Definisci i colori del grafico a torta
         int color1 = Color.parseColor("#D8E2FF");
         int color2 = Color.parseColor("#9CCAFF");
@@ -125,6 +256,7 @@ public class AnalysesExpensesFragment extends Fragment {
         pieChart.setDrawEntryLabels(false);
 
         pieChart.setCenterText("Totale: " + Float.toString(totalSum[0]));
+
 
 
         // Get the data from the PieChart
@@ -157,10 +289,11 @@ public class AnalysesExpensesFragment extends Fragment {
 
             @Override
             public void onNothingSelected() {
-                pieChart.setCenterText("Totale: " + totalSum[0]);
+                pieChart.setCenterText("Totale: " + totalSum);
             }
 
         });
+       */
         // Imposta il grafico a torta come un "Ring Chart"
         pieChart.setHoleRadius(70f); // 70% del raggio
         pieChart.setTransparentCircleRadius(80f); // 80% del raggio
@@ -185,6 +318,16 @@ public class AnalysesExpensesFragment extends Fragment {
         return "Le tue " + entry.getLabel() + " sono state: " + entry.getValue() +" €";
     }
 
-
+    public double getExpensesByCategory(List<Expenses> expensesList, Expenses.Category category) {
+        double sum = 0;
+        for (Expenses expense : expensesList) {
+            if (expense.getCategory() == category) {
+                sum += expense.getAmount(); // assuming there's a method getAmount() in Expenses class
+            }
+        }
+        return sum;
+    }
 }
+
+
 

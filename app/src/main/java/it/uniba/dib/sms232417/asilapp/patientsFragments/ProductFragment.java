@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -62,6 +63,7 @@ public class ProductFragment extends Fragment {
                     // Questo blocco di codice viene eseguito quando i trattamenti sono stati recuperati con successo
                     // 'treatments' è una mappa che associa gli ID dei trattamenti agli oggetti Treatment
 
+
                     // Ad esempio, per stampare tutti i trattamenti:
                     for (Map.Entry<String, Treatment> entry : treatments.entrySet()) {
                         String treatmentId = entry.getKey();
@@ -70,30 +72,42 @@ public class ProductFragment extends Fragment {
                         // Ottieni la lista di Medication
                         ArrayList<Medication> medications = treatment.getMedications();
 
-                        // Itera attraverso la lista di Medication
-                        for (Medication medication : medications) {
-                            // Ottieni il nome del farmaco
-                            String medicationName = medication.getMedicationName();
+                        if (!medications.isEmpty()) {
+
+                            ImageView emptyListImage = view.findViewById(R.id.emptyMedicationImage);
+                            emptyListImage.setVisibility(View.GONE);
+
+                            // Itera attraverso la lista di Medication
+                            for (Medication medication : medications) {
+                                // Ottieni il nome del farmaco
+                                String medicationName = medication.getMedicationName();
 
 
-                            // Fai qualcosa con il nome del farmaco
-                            System.out.println("Medication:" + medicationName);
-                            if (medication.getIsBought() == false) {
+                                // Fai qualcosa con il nome del farmaco
+                                System.out.println("Medication:" + medicationName);
+                                if (medication.getIsBought() == false) {
 
-                                productItem.add(medication);
+                                    productItem.add(medication);
+
+                                }
 
                             }
 
+
+                            RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+
+
+                            // Set up the RecyclerView
+                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                            ProductAdapter productAdapter = new ProductAdapter(productItem, getContext());
+                            recyclerView.setAdapter(productAdapter);
+                        } else {
+                            // Se la lista è vuota, mostra l'ImageView
+                            ImageView emptyListImage = view.findViewById(R.id.emptyMedicationImage);
+                            emptyListImage.setVisibility(View.VISIBLE);
                         }
                     }
 
-                    RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-
-
-                    // Set up the RecyclerView
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                    ProductAdapter productAdapter = new ProductAdapter(productItem, getContext());
-                    recyclerView.setAdapter(productAdapter);
                 }
 
                 @Override

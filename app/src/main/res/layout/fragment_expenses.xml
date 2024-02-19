@@ -139,7 +139,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
-                    android:text="Prodotti Acquistati" />
+                    android:text="Farmaci da acquistare" />
 
                 <TextView
                     style="@style/RegularText"
@@ -149,7 +149,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
-                    android:text="Visualizza i tuoi prodotti" />
+                    android:text="Visualizza i farmaci che devi comprare" />
 
 
             </LinearLayout>
