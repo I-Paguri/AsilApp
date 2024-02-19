@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,11 @@ import it.uniba.dib.sms232417.asilapp.patientsFragments.AnalysesExpensesFragment
 
 
 public class MeasurementsFragment extends Fragment {
+
+    private String patientUUID;
+    private String patientName;
+    private String patientAge;
+    private String user; // Type of user: "patient" or "doctor"
     private ArcGauge heartRateArchGauge, pressureArchGauge, lightArchGauge;
     private MaterialCardView cardViewHeartRate, cardViewPressure, cardViewTemperature, cardViewLight;
 
@@ -35,6 +41,21 @@ public class MeasurementsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        patientUUID = "";
+        patientName = "";
+        patientAge = "";
+        user = ""; // Type of user: "patient" or "doctor"
+
+        if (this.getArguments() != null) {
+            patientUUID = this.getArguments().getString("patientUUID");
+            patientName = this.getArguments().getString("patientName");
+            patientAge = this.getArguments().getString("patientAge");
+            user = this.getArguments().getString("user");
+            if (user == null) {
+                user = "";
+            }
+        }
 
         //get the gauge view
         heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);

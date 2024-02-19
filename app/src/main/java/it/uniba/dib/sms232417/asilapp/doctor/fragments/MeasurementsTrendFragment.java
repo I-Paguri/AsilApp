@@ -33,7 +33,6 @@ import it.uniba.dib.sms232417.asilapp.R;
 
 public class MeasurementsTrendFragment extends Fragment {
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

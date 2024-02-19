@@ -105,52 +105,7 @@ public class TreatmentFragment extends Fragment {
                 user = "";
             }
         }
-        /*
 
-        if (user != null && user.equals("patient")) {
-            int count = 0;
-            File treatmentsFile = new File(requireContext().getFilesDir().getPath() + "/treatmentCount");
-            if (treatmentsFile.exists()) {
-                try {
-                    FileInputStream fis = requireActivity().openFileInput(StringUtils.TREATMENT_COUNT);
-                    ObjectInputStream ois = new ObjectInputStream(fis);
-                    count = (int) ois.readObject();
-                    //Log.d("TreatmentFragment_FILE", "Count: " + count);
-
-                    int i;
-                    for (i = 1; i <= count; i++) {
-                        Treatment treatment;
-                        //Log.d("TreatmentFragment_FILE", "File path: " + requireContext().getFilesDir().getPath());
-                        //File treatmentFile = new File("/data/data/it.uniba.dib.sms232417.asilapp/files/treatment" + i);
-                        File treatmentFile = new File(requireContext().getFilesDir() + "/treatment" + i);
-                        if (treatmentFile.exists()) {
-                            try {
-                                FileInputStream fis2 = requireActivity().openFileInput("treatment" + i);
-                                ObjectInputStream ois2 = new ObjectInputStream(fis2);
-                                treatment = (Treatment) ois2.readObject();
-                                Log.d("TreatmentFragment_FILE_READ", "Treatment: " + treatment.toString());
-                            } catch (IOException | ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        } else {
-                            Log.d("TreatmentFragment_FILE", "File not found");
-                        }
-                    }
-
-                    ois.close();
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                Log.d("TreatmentFragment_FILE", "File not found");
-            }
-        }
-
-
-         */
         // Create an instance of DatabaseAdapterPatient
         DatabaseAdapterPatient adapter = new DatabaseAdapterPatient(requireContext());
         adapter.getTreatments(patientUUID, new OnTreatmentsCallback() {
@@ -175,7 +130,6 @@ public class TreatmentFragment extends Fragment {
                         // Save treatments to file
                         if (user != null && user.equals("patient")) {
                             try {
-                                Log.d("TreatmentCount", "Treatment count: " + (i + 1));
                                 // Write the treatment to a file with the name "treatment" + count
                                 FileOutputStream fos = requireActivity().openFileOutput(StringUtils.TREATMENT + (i + 1), Context.MODE_APPEND);
                                 ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -188,8 +142,6 @@ public class TreatmentFragment extends Fragment {
 
                                 oos.close();
                                 fos.close();
-                                Log.d("TreatmentFragment_FILE_Write", "Treatment added to file successfully");
-                                Log.d("TreatmentFragment_FILE_Write", "Treatment: " + treatment.toString());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -221,7 +173,7 @@ public class TreatmentFragment extends Fragment {
 
             @Override
             public void onCallbackFailed(Exception e) {
-                Log.d("TreatmentFragment", "Error: " + e.getMessage());
+
                 int count = 0;
                 File treatmentsFile = new File(requireContext().getFilesDir().getPath() + "/treatmentCount");
                 if (treatmentsFile.exists()) {

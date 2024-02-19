@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasurementsFragment;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasurementsTrendFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -23,11 +24,12 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new MeasurementsFragment();
+                MeasurementsFragment measurementsFragment = new MeasurementsFragment();
+                measurementsFragment.setArguments(bundle);
+                return measurementsFragment;
             case 1:
                 TreatmentFragment treatmentFragment = new TreatmentFragment();
                 treatmentFragment.setArguments(bundle);
-                Log.d("SonoQui", bundle.toString());
                 return treatmentFragment;
             default:
                 return null;
