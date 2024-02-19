@@ -139,11 +139,20 @@ public class MeasurementsFragment extends Fragment {
         thermometer.setProgressPercentage(progressPercentage, true);
 
 
+        Bundle bundle = new Bundle();
+        bundle.putString("patientUUID", patientUUID);
+        bundle.putString("patientName", patientName);
+        bundle.putString("patientAge", patientAge);
+        bundle.putString("user", user);
+
         cardViewHeartRate = view.findViewById(R.id.cardViewHeartRate);
         cardViewHeartRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                bundle.putString("measureType", "heartRate");
+
                 MeasurementsTrendFragment measurementsTrendFragment = new MeasurementsTrendFragment();
+                measurementsTrendFragment.setArguments(bundle);
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, measurementsTrendFragment);
                 transaction.addToBackStack(null);

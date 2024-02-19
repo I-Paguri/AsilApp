@@ -32,6 +32,11 @@ import java.util.Random;
 import it.uniba.dib.sms232417.asilapp.R;
 
 public class MeasurementsTrendFragment extends Fragment {
+    private String patientUUID;
+    private String patientName;
+    private String patientAge;
+    private String measureType;
+    private String user; // Type of user: "patient" or "doctor"
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +49,30 @@ public class MeasurementsTrendFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        patientUUID = "";
+        patientName = "";
+        patientAge = "";
+        user = ""; // Type of user: "patient" or "doctor"
+        measureType = ""; // Type of measure: "heartRate", "bloodPressure", "temperature", "glycemia"
+
+        if (this.getArguments() != null) {
+            patientUUID = this.getArguments().getString("patientUUID");
+            patientName = this.getArguments().getString("patientName");
+            patientAge = this.getArguments().getString("patientAge");
+            user = this.getArguments().getString("user");
+            if (user == null) {
+                user = "";
+            }
+            measureType = this.getArguments().getString("measureType");
+        }
+
+        Log.d("Bundle_MeasurementsTrendFragment", "patientUUID: " + patientUUID);
+        Log.d("Bundle_MeasurementsTrendFragment", "patientName: " + patientName);
+        Log.d("Bundle_MeasurementsTrendFragment", "patientAge: " + patientAge);
+        Log.d("Bundle_MeasurementsTrendFragment", "user: " + user);
+        Log.d("Bundle_MeasurementsTrendFragment", "measureType: " + measureType);
+
         Typeface ember_regular = ResourcesCompat.getFont(getContext(), R.font.ember_regular);
 
         LineChart lineChart = view.findViewById(R.id.lineChart);
