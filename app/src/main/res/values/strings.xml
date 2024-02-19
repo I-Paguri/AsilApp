@@ -575,4 +575,6 @@
     <string name="blood_pressure_desc">mmHg as unit</string>
     <string name="temperature_desc">°C as unit</string>
     <string name="blood_glucose_desc">mg/dL as unit</string>
+    <string name="systolic_pressure">Systolic pressure</string>
+    <string name="diastolic_pressure">Diastolic pressure</string>
 </resources>

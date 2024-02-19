@@ -38,6 +38,7 @@ public class MeasurementsTrendFragment extends Fragment {
     private String patientAge;
     private String measureType;
     private String user; // Type of user: "patient" or "doctor"
+    private int numberOfMeasures;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,25 +99,71 @@ public class MeasurementsTrendFragment extends Fragment {
         //lineChart.setBackgroundColor(getResources().getColor(R.color.md_theme_light_surface));
         lineChart.setDescription(null);
 
+        numberOfMeasures = 8;
 
-        // Generate random data
-        Random random = new Random();
-        List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            float value = 50 + random.nextFloat() * (120 - 50);
-            entries.add(new Entry(i, value));
+        if (!measureType.equals("bloodPressure")) {
+            // Single line chart for heart rate, temperature and glycemia
+
+            // Generate random data
+            Random random = new Random();
+            List<Entry> entries = new ArrayList<>();
+            for (int i = 0; i < numberOfMeasures; i++) {
+                float value = 50 + random.nextFloat() * (120 - 50);
+                entries.add(new Entry(i, value));
+            }
+
+            LineDataSet dataSet = new LineDataSet(entries, formattedMeasurementType);
+            dataSet.setLineWidth(3f);
+            dataSet.setCircleRadius(4f);
+            dataSet.setDrawCircleHole(false);
+            dataSet.setColor(getResources().getColor(R.color.md_theme_light_primary));
+            dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            dataSet.setValueTextSize(10f);
+            dataSet.setValueTypeface(ember_regular);
+            LineData lineData = new LineData(dataSet);
+            lineChart.setData(lineData);
+        } else {
+
+            // Generate random data for minimum pressure
+            Random randomMin = new Random();
+            List<Entry> entriesMin = new ArrayList<>();
+            for (int i = 0; i < numberOfMeasures; i++) {
+                float value = 50 + randomMin.nextFloat() * (80 - 50);
+                entriesMin.add(new Entry(i, value));
+            }
+
+            // Generate random data for maximum pressure
+            Random randomMax = new Random();
+            List<Entry> entriesMax = new ArrayList<>();
+            for (int i = 0; i < numberOfMeasures; i++) {
+                float value = 80 + randomMax.nextFloat() * (120 - 80);
+                entriesMax.add(new Entry(i, value));
+            }
+
+            // Create LineDataSet for minimum pressure
+            LineDataSet dataSetMin = new LineDataSet(entriesMin, getResources().getString(R.string.diastolic_pressure) + " (mmHg)");
+            dataSetMin.setLineWidth(3f);
+            dataSetMin.setCircleRadius(4f);
+            dataSetMin.setDrawCircleHole(false);
+            dataSetMin.setColor(getResources().getColor(R.color.md_theme_light_primary));
+            dataSetMin.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            dataSetMin.setValueTextSize(10f);
+            dataSetMin.setValueTypeface(ember_regular);
+
+            // Create LineDataSet for maximum pressure
+            LineDataSet dataSetMax = new LineDataSet(entriesMax, getResources().getString(R.string.systolic_pressure) + " (mmHg)");
+            dataSetMax.setLineWidth(3f);
+            dataSetMax.setCircleRadius(4f);
+            dataSetMax.setDrawCircleHole(false);
+            dataSetMax.setColor(getResources().getColor(R.color.pastel_red));
+            dataSetMax.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            dataSetMax.setValueTextSize(10f);
+            dataSetMax.setValueTypeface(ember_regular);
+
+            // Add both data sets to LineData
+            LineData lineData = new LineData(dataSetMin, dataSetMax);
+            lineChart.setData(lineData);
         }
-
-        LineDataSet dataSet = new LineDataSet(entries, formattedMeasurementType);
-        dataSet.setLineWidth(3f);
-        dataSet.setCircleRadius(4f);
-        dataSet.setDrawCircleHole(false);
-        dataSet.setColor(getResources().getColor(R.color.md_theme_light_primary));
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        dataSet.setValueTextSize(10f);
-        dataSet.setValueTypeface(ember_regular);
-        LineData lineData = new LineData(dataSet);
-        lineChart.setData(lineData);
 
         // Format x-axis to display specific days
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
@@ -124,24 +171,26 @@ public class MeasurementsTrendFragment extends Fragment {
 
         // Create a list of 10 days
         List<Date> days = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < numberOfMeasures; i++) {
             days.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         // Convert days to string
-        String[] daysString = new String[days.size() + 1];
+        String[] daysString = new String[days.size()];
         int i;
         for (i = 0; i < days.size(); i++) {
             daysString[i] = sdf.format(days.get(i));
         }
 
-        daysString[i] = sdf.format(days.get(i-1));
-
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return daysString[(int) value];
+                int index = (int) value;
+                if (index < 0 || index >= daysString.length) {
+                    return ""; // return default value
+                }
+                return daysString[index];
             }
         };
 
