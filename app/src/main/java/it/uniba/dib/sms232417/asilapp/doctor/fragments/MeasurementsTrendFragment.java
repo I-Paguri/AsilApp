@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -70,18 +72,29 @@ public class MeasurementsTrendFragment extends Fragment {
         lineChart.setData(lineData);
 
         // Format x-axis to display specific days
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        String[] days = new String[10];
+
+        // Create a list of 10 days
+        List<Date> days = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            days[i] = sdf.format(calendar.getTime());
+            days.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
+
+        // Convert days to string
+        String[] daysString = new String[days.size() + 1];
+        int i;
+        for (i = 0; i < days.size(); i++) {
+            daysString[i] = sdf.format(days.get(i));
+        }
+
+        daysString[i] = sdf.format(days.get(i-1));
 
         ValueFormatter formatter = new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return days[(int) value];
+                return daysString[(int) value];
             }
         };
 
