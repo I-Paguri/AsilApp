@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,25 +29,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.blongho.country_data.World;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.UUID;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
@@ -177,12 +172,29 @@ public class MyAccountFragment extends Fragment {
             TextView txtName = getView().findViewById(R.id.txt_name);
             TextView txtSurname = getView().findViewById(R.id.txt_surname);
             TextView txtRegion = getView().findViewById(R.id.txt_region);
+            TextView txtBirthday = getView().findViewById(R.id.txtBirthday);
+            TextView txtEmail = getView().findViewById(R.id.txtEmail);
+            TextView txtAge = getView().findViewById(R.id.txtAge);
+            ImageView imgFlag = getView().findViewById(R.id.flag);
 
             // TextView txtage = getView().findViewById(R.id.txt_age);
             txtName.setText(loggedPatient.getNome());
             txtSurname.setText(loggedPatient.getCognome());
             txtRegion.setText(loggedPatient.getRegione());
             String dataNascita = loggedPatient.getDataNascita();
+            //txtAge.setText(loggedPatient.getAge() + " " getResources().getQuantityString(R.plurals.age, loggedPatient.getAge(), loggedPatient.getAge()));
+
+            txtBirthday.setText(dataNascita);
+            txtEmail.setText(loggedPatient.getEmail());
+
+            txtAge.setText("(" + loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age, loggedPatient.getAge(), loggedPatient.getAge()) + ")");
+
+            // Set flag icon
+            World.init(requireContext());
+            final int flag= World.getFlagOf(loggedPatient.getRegione().toLowerCase());
+            imgFlag.setImageResource(flag);
+
+
 
             // Gestione del click sull'immagine di profilo
             ImageView addProfilePic = getView().findViewById(R.id.add_profile_pic);
@@ -226,10 +238,23 @@ public class MyAccountFragment extends Fragment {
             TextView txtName = getView().findViewById(R.id.txt_name);
             TextView txtSurname = getView().findViewById(R.id.txt_surname);
             TextView txtRegion = getView().findViewById(R.id.txt_region);
+            ImageView imgFlag = getView().findViewById(R.id.flag);
+            TextView txtEmail = getView().findViewById(R.id.txtEmail);
+            TextView txtBirthday = getView().findViewById(R.id.txtBirthday);
+            TextView txtAge = getView().findViewById(R.id.txtAge);
+
 
             txtName.setText(loggedDoctor.getNome());
             txtSurname.setText(loggedDoctor.getCognome());
+            txtEmail.setText(loggedDoctor.getEmail());
             txtRegion.setText(loggedDoctor.getRegione());
+            txtBirthday.setText(loggedDoctor.getDataNascita());
+            txtAge.setText("(" + loggedDoctor.getAge() + " " + getResources().getQuantityString(R.plurals.age, loggedDoctor.getAge(), loggedDoctor.getAge()) + ")");
+
+            World.init(requireContext());
+            final int flag= World.getFlagOf(loggedDoctor.getRegione().toLowerCase());
+
+            imgFlag.setImageResource(flag);
 
             // Gestione del click sull'immagine di profilo
             ImageView addProfilePic = getView().findViewById(R.id.add_profile_pic);
@@ -436,7 +461,7 @@ public class MyAccountFragment extends Fragment {
                             Toast.makeText(getContext(), "Error uploading profile image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-                }else if (loggedDoctor != null) {
+                } else if (loggedDoctor != null) {
                     dbAdapterDoctor.uploadImage(getContext(), bitmap, loggedDoctor.getEmail(), new OnProfileImageCallback() {
                         @Override
                         public void onCallback(String imageUrl) {
@@ -465,6 +490,7 @@ public class MyAccountFragment extends Fragment {
             }
         }
     }
+
     public void saveImageToInternalStorage(String filename) {
         Glide.with(getContext())
                 .asBitmap()
@@ -475,7 +501,7 @@ public class MyAccountFragment extends Fragment {
                         try {
                             // Creare un file in una directory specifica
                             File file = new File(StringUtils.IMAGE_ICON);
-                            if(file.exists()) {
+                            if (file.exists()) {
                                 file.delete();
                             }
                             file.createNewFile();

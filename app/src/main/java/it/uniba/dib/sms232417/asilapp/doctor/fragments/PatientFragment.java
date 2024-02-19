@@ -3,7 +3,6 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,7 +94,7 @@ public class PatientFragment extends Fragment {
 
         textName.setText(patientName);
 
-        TextView textAge = view.findViewById(R.id.txtAge);
+        TextView textAge = view.findViewById(R.id.txtBirthday);
         textAge.setText(patientAge);
 
         ImageView imagePatient = view.findViewById(R.id.imgProfile);

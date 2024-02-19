@@ -6,8 +6,13 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Doctor implements Parcelable, Serializable {
     private String nome;
@@ -89,6 +94,35 @@ public class Doctor implements Parcelable, Serializable {
         return dataNascita;
     }
 
+    public int getAge() {
+        String birthdayString = this.getDataNascita();
+        try {
+            // Parse the birthday string into a Date object
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+
+            Date birthDate = sdf.parse(birthdayString);
+
+            // Get the current date
+            Calendar today = Calendar.getInstance();
+
+            // Convert the birth date into a Calendar object
+            Calendar birthDay = Calendar.getInstance();
+            birthDay.setTimeInMillis(birthDate.getTime());
+
+            // Calculate the age
+            int age = today.get(Calendar.YEAR) - birthDay.get(Calendar.YEAR);
+
+            // If the birthday has not occurred this year, subtract one from the age
+            if (today.get(Calendar.DAY_OF_YEAR) < birthDay.get(Calendar.DAY_OF_YEAR)) {
+                age--;
+            }
+            return age;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public String getRegione() {
         return regione;
     }
@@ -118,11 +152,5 @@ public class Doctor implements Parcelable, Serializable {
         dest.writeString(numeroDiRegistrazioneMedica);
         dest.writeStringList(myPatientsUUID);
     }
-    /*
 
-    public void addTreatment(Treatment treatment, Patient patient) {
-        String UUID = patient.getUUID();
-
-    }
-    */
 }
