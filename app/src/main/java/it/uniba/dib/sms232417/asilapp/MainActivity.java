@@ -59,6 +59,7 @@ import android.graphics.drawable.Drawable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.firebase.inappmessaging.FirebaseInAppMessaging;
 import com.xcode.onboarding.MaterialOnBoarding;
 import com.xcode.onboarding.OnBoardingPage;
 import com.xcode.onboarding.OnFinishLastPage;
@@ -86,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-
 
         handler = new Handler(new Handler.Callback() {
             @Override

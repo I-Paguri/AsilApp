@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import java.io.FileOutputStream;
@@ -98,39 +99,6 @@ public class TreatmentFormNotesFragment extends Fragment {
                         snackbar.setAnchorView(bottomNavView);
                         snackbar.show();
                         Log.d("TreatmentAdded", "Treatment added successfully");
-
-
-                        /*
-                        dbAdapter.getTreatmentCount(patientUUID, new OnCountCallback() {
-                            @Override
-                            public void onCallback(int count) {
-                                // APPEND TREATMENT TO FILE
-                                try {
-                                    Log.d("TreatmentCount", "Treatment count: " + count);
-                                    // Write the treatment to a file with the name "treatment" + count
-                                    FileOutputStream fos = requireActivity().openFileOutput(StringUtils.TREATMENT + count, Context.MODE_APPEND);
-                                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-                                    oos.writeObject(treatment);
-
-                                    // Write the number of treatment to a file with the name "treatmentCount"
-                                    FileOutputStream fosCount = requireActivity().openFileOutput(StringUtils.TREATMENT_COUNT, Context.MODE_PRIVATE);
-                                    ObjectOutputStream oosCount = new ObjectOutputStream(fosCount);
-                                    oosCount.writeObject(count);
-
-                                    oos.close();
-                                    fos.close();
-                                    Log.d("TreatmentAdded", "Treatment added to file successfully");
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onCallbackFailed(Exception e) {
-                                Log.d("TreatmentCount", "Error getting treatment count");
-                            }
-                        });
-                        */
                     }
 
                     @Override
