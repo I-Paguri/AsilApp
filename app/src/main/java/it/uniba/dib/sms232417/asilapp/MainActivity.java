@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,11 +19,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -35,6 +34,12 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.uniba.dib.sms232417.asilapp.SendNotificationPack.APIService;
+import it.uniba.dib.sms232417.asilapp.SendNotificationPack.Client;
+import it.uniba.dib.sms232417.asilapp.SendNotificationPack.Data;
+import it.uniba.dib.sms232417.asilapp.SendNotificationPack.MyResponse;
+import it.uniba.dib.sms232417.asilapp.SendNotificationPack.NotificationSender;
+import it.uniba.dib.sms232417.asilapp.SendNotificationPack.Token;
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
@@ -51,6 +56,9 @@ import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
 import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
 import it.uniba.dib.sms232417.asilapp.thread_connection.NoConnectionFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -59,11 +67,17 @@ import android.graphics.drawable.Drawable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.firebase.inappmessaging.FirebaseInAppMessaging;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.xcode.onboarding.MaterialOnBoarding;
 import com.xcode.onboarding.OnBoardingPage;
 import com.xcode.onboarding.OnFinishLastPage;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
     Doctor loggedDoctor;
     private boolean doubleBackToExitPressedOnce = false;
     private TreatmentFormMedicationsFragment treatmentFormMedicationsFragment;
+
+    private APIService apiService;
 
     public static Context getContext() {
         return getContext();
@@ -166,6 +182,50 @@ public class MainActivity extends AppCompatActivity {
 
         changeMenu(1);
         updateIconProfileImage();
+
+        apiService = Client.getClient("https://asilapp-232417-default-rtdb.firebaseio.com/").create(APIService.class);
+
+        FirebaseDatabase.getInstance().getReference().child("Tokens").child("uuid").child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String usertoken=dataSnapshot.getValue(String.class);
+                sendNotifications(usertoken, "titolo", "messaggio");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        UpdateToken();
+    }
+
+    private void UpdateToken(){
+        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        String refreshToken= FirebaseInstanceId.getInstance().getToken();
+        Token token= new Token(refreshToken);
+        // QUESTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+    }
+
+    public void sendNotifications(String usertoken, String title, String message) {
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotifcation(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().success != 1) {
+                        Toast.makeText(MainActivity.this, "Failed ", Toast.LENGTH_LONG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+            }
+        });
     }
 
 
@@ -210,25 +270,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-/*
-    @SuppressLint("MissingSuperCall")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 101 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
-
-            selectedFragment = new MeasureFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-
-        }
-    }
-*/
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -316,12 +357,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void showNoInternetDialog() {
