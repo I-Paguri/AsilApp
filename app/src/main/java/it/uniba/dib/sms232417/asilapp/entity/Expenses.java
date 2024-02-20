@@ -7,6 +7,9 @@ import java.util.Map;
 
 public class Expenses {
 
+    public Expenses() {
+    }
+
     public enum Category {
         FARMACI,
         TERAPIE,
