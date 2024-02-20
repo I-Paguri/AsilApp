@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +32,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
@@ -56,6 +59,9 @@ import android.graphics.drawable.Drawable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.xcode.onboarding.MaterialOnBoarding;
+import com.xcode.onboarding.OnBoardingPage;
+import com.xcode.onboarding.OnFinishLastPage;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -80,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -110,6 +118,50 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loggedPatient = (Patient) intent.getParcelableExtra("loggedPatient");
         loggedDoctor = (Doctor) intent.getParcelableExtra("loggedDoctor");
+
+        ArrayList<OnBoardingPage> pages = new ArrayList<>();
+
+
+        // Onboarding
+        if (loggedPatient != null) {
+            pages.add(new OnBoardingPage(R.drawable.patient_illustration,"PAZIENTE","Description for page 1 goes here...."));
+            pages.add(new OnBoardingPage(R.drawable.doctors2_illustration,"Title for page 2 goes here....","Description for page 2 goes here...."));
+            pages.add(new OnBoardingPage(R.drawable.videos_illustration,"Title for page 3 goes here....","Description for page 3 goes here...."));
+
+            MaterialOnBoarding.setupOnBoarding(this, pages, new OnFinishLastPage() {
+                @Override
+                public void onNext() {
+                    // Do whatever you want to do when the next button is clicked
+
+                }
+
+                public void finishOnBoarding() {
+                    // Do whatever you want to do when the onboarding is finished
+                }
+            });
+
+        }
+
+        if (loggedDoctor != null) {
+            pages.add(new OnBoardingPage(R.drawable.patient_illustration, "DOTTORE","Description for page 1 goes here...."));
+            pages.add(new OnBoardingPage(R.drawable.doctors2_illustration,"Title for page 2 goes here....","Description for page 2 goes here...."));
+            pages.add(new OnBoardingPage(R.drawable.videos_illustration,"Title for page 3 goes here....","Description for page 3 goes here...."));
+
+            MaterialOnBoarding.setupOnBoarding(this, pages, new OnFinishLastPage() {
+                @Override
+                public void onNext() {
+                    // Do whatever you want to do when the next button is clicked
+
+                }
+
+                public void finishOnBoarding() {
+                    // Do whatever you want to do when the onboarding is finished
+                }
+            });
+
+        }
+
+
         changeMenu(1);
         updateIconProfileImage();
     }
@@ -531,4 +583,28 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemIconTintList(null);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        // if shared preferences file exists
+        if (sharedPreferences.getAll().isEmpty()) {
+            File loggedPatientFile = new File(StringUtils.FILE_PATH_PATIENT_LOGGED);
+            File loggedDoctorFile = new File(StringUtils.FILE_PATH_DOCTOR_LOGGED);
+            Log.d("automaticLogin", "is empty");
+            if (loggedPatientFile.exists()) {
+                loggedPatientFile.delete();
+            }
+            if (loggedDoctorFile.exists()) {
+                loggedDoctorFile.delete();
+            }
+        }
+
+        super.onDestroy();
+    }
+
 }

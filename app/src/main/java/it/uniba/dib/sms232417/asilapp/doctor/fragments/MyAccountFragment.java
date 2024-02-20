@@ -311,8 +311,9 @@ public class MyAccountFragment extends Fragment {
         Toast.makeText(getContext(),
                 getResources().getString(R.string.logout_successful),
                 Toast.LENGTH_SHORT).show();
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NAME_FILE, requireActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(StringUtils.AUTOMATIC_LOGIN, requireActivity().MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editor.clear();
         editor.apply();
         CryptoUtil.deleteKey(email);
