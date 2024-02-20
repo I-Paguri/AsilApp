@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:text="@string/recommended_videos" />
+                    android:text="@string/recommended_health_videos" />
 
                 <TextView
                     style="@style/RegularText"

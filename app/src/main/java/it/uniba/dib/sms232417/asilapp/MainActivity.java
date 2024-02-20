@@ -124,9 +124,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Onboarding
         if (loggedPatient != null) {
-            pages.add(new OnBoardingPage(R.drawable.patient_illustration,"PAZIENTE","Description for page 1 goes here...."));
-            pages.add(new OnBoardingPage(R.drawable.doctors2_illustration,"Title for page 2 goes here....","Description for page 2 goes here...."));
-            pages.add(new OnBoardingPage(R.drawable.videos_illustration,"Title for page 3 goes here....","Description for page 3 goes here...."));
+            pages.add(new OnBoardingPage(R.drawable.measure_illustration,getResources().getString(R.string.streamlined_healthcare), getResources().getString(R.string.streamlined_healthcare_descr)));
+            pages.add(new OnBoardingPage(R.drawable.diary_illustration,getResources().getString(R.string.your_digital_health_diary), getResources().getString(R.string.your_digital_health_diary_descr)));
+            pages.add(new OnBoardingPage(R.drawable.maps3_illustration,getResources().getString(R.string.whats_nearby), getResources().getString(R.string.whats_nearby_descr)));
+            pages.add(new OnBoardingPage(R.drawable.wallet_illustration,getResources().getString(R.string.wallet), getResources().getString(R.string.wallet_descr)));
+            pages.add(new OnBoardingPage(R.drawable.videos_illustration,getResources().getString(R.string.recommended_videos), getResources().getString(R.string.recommended_videos_descr)));
+
 
             MaterialOnBoarding.setupOnBoarding(this, pages, new OnFinishLastPage() {
                 @Override
@@ -143,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (loggedDoctor != null) {
-            pages.add(new OnBoardingPage(R.drawable.patient_illustration, "DOTTORE","Description for page 1 goes here...."));
-            pages.add(new OnBoardingPage(R.drawable.doctors2_illustration,"Title for page 2 goes here....","Description for page 2 goes here...."));
-            pages.add(new OnBoardingPage(R.drawable.videos_illustration,"Title for page 3 goes here....","Description for page 3 goes here...."));
+            pages.add(new OnBoardingPage(R.drawable.monitoring_illustration, getResources().getString(R.string.vital_sign_at_your_fingertips), getResources().getString(R.string.vital_sign_at_your_fingertips_descr)));
+            pages.add(new OnBoardingPage(R.drawable.writing_illustration,getResources().getString(R.string.digital_treatments), getResources().getString(R.string.digital_treatments_descr)));
+            pages.add(new OnBoardingPage(R.drawable.videos_illustration,getResources().getString(R.string.recommended_videos), getResources().getString(R.string.recommended_videos_descr)));
 
             MaterialOnBoarding.setupOnBoarding(this, pages, new OnFinishLastPage() {
                 @Override

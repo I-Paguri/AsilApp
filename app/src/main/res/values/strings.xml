@@ -555,7 +555,7 @@
     <string name="no_connection_button">Retry</string>
     <string name="no_connection_button_cancel">Cancel</string>
     <string name="my_patients_descr">See your list of patients. Check their vital signs and prescribe therapies.</string>
-    <string name="recommended_videos">Recommended health videos</string>
+    <string name="recommended_health_videos">Recommended health videos</string>
     <string name="videos_descr">Watch the recommended health and wellness videos.</string>
     <string name="nearby_facilities">Nearby facilities</string>
     <string name="nearby_facilities_descr">Find the facilities around you, such as clinics and pharmacies.</string>
@@ -593,5 +593,25 @@
     <string name="password">Password</string>
     <string name="permissions_denied_storage"> Permissions denied to access storage </string>
 
+    <string name="vital_sign_at_your_fingertips">Vital signs at your fingertips</string>
+    <string name="vital_sign_at_your_fingertips_descr">Check on your patients vital signs whenever you need and everywhere you are.</string>
+
+    <string name="digital_treatments">Digital treatments</string>
+    <string name="digital_treatments_descr">Prescribe treatments that will be integrated into your patient\'s digital health diary.</string>
+
+    <string name="recommended_videos">Recommended videos</string>
+    <string name="recommended_videos_descr">Give a look at the section of recommended videos on health and wellness</string>
+
+    <string name="streamlined_healthcare">Streamlined healthcare</string>
+    <string name="streamlined_healthcare_descr">Access the measurement kit and measure the vital signs that will be sent to your doctor.</string>
+
+    <string name="your_digital_health_diary">Your health diary, now digital</string>
+    <string name="your_digital_health_diary_descr">Look up to the vital signs measured over time and the treatments prescribed by your doctor.</string>
+
+    <string name="whats_nearby">Want to see what\'s nearby?</string>
+    <string name="whats_nearby_descr">AsilApp shows you nearby facilities, such as pharmacies and clinics.</string>
+
+    <string name="wallet">Your healthcare payments in the app</string>
+    <string name="wallet_descr">Keep track of purchased medications and incurred expenses.</string>
 
 </resources>

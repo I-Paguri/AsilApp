@@ -233,7 +233,7 @@
     <string name="no_connection_button_cancel">Annulla</string>
 
     <string name="my_patients_descr">Guarda la tua lista di pazienti. Monitora i loro parametri vitali e prescrivi terapie.</string>
-    <string name="recommended_videos">Video di salute consigliati</string>
+    <string name="recommended_health_videos">Video di salute consigliati</string>
     <string name="videos_descr">Guarda i video di salute e benessere consigliati.</string>
 
     <string name="nearby_facilities">Servizi vicini</string>
@@ -271,4 +271,27 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="permissions_denied_storage"> Permessi negati per accedere allo storage </string>
+
+    <string name="vital_sign_at_your_fingertips">Parametri vitali a portata di click</string>
+    <string name="vital_sign_at_your_fingertips_descr">Monitora i parametri vitali dei tuoi pazienti, ovunque ed in qualsiasi momento.</string>
+
+    <string name="digital_treatments">Terapie digitali</string>
+    <string name="digital_treatments_descr">Prescrivi terapie che saranno integrate nel diario digitale di salute del tuo paziente.</string>
+
+    <string name="recommended_videos">Video consigliati</string>
+    <string name="recommended_videos_descr">Dai un\'occhiata alla sezione di video consigliati su salute e benessere.</string>
+
+
+    <string name="streamlined_healthcare">Un sistema sanitario alleggerito!</string>
+    <string name="streamlined_healthcare_descr">Accedi al tuo kit di misurazione e registra i parametri vitali che saranno visibili anche al tuo dottore.</string>
+
+    <string name="your_digital_health_diary">Il tuo diario di salute, ora digitale</string>
+    <string name="your_digital_health_diary_descr">Consulta i parametri vitali misurati nel tempo e le terapie prescritte dal tuo dottore.</string>
+
+    <string name="whats_nearby">Guardati intorno!</string>
+    <string name="whats_nearby_descr">AsilApp ti mostra i servizi vicini a te, come farmacie e ambulatori.</string>
+
+    <string name="wallet">Le tue spese sanitarie in app</string>
+    <string name="wallet_descr">Tieni traccia dei farmaci acquistati e delle spese sostenute.</string>
+
 </resources>
