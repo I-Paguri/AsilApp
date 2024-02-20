@@ -1,9 +1,11 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -19,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -189,9 +193,8 @@ public class MyAccountFragment extends Fragment {
 
             // Set flag icon
             World.init(requireContext());
-            final int flag= World.getFlagOf(loggedPatient.getRegione().toLowerCase());
+            final int flag = World.getFlagOf(loggedPatient.getRegione().toLowerCase());
             imgFlag.setImageResource(flag);
-
 
 
             // Gestione del click sull'immagine di profilo
@@ -250,7 +253,7 @@ public class MyAccountFragment extends Fragment {
             txtAge.setText("(" + loggedDoctor.getAge() + " " + getResources().getQuantityString(R.plurals.age, loggedDoctor.getAge(), loggedDoctor.getAge()) + ")");
 
             World.init(requireContext());
-            final int flag= World.getFlagOf(loggedDoctor.getRegione().toLowerCase());
+            final int flag = World.getFlagOf(loggedDoctor.getRegione().toLowerCase());
 
             imgFlag.setImageResource(flag);
 
@@ -420,15 +423,38 @@ public class MyAccountFragment extends Fragment {
                         break;
                     case 1:
                         // Handle click on "Choose from Gallery"
-                        ImagePicker.with(MyAccountFragment.this)
-                                .galleryOnly()
-                                .cropSquare()
-                                .start();
+                        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            // Permission is not granted, request for permission
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
+                        } else {
+                            // Permission has already been granted
+                            ImagePicker.with(MyAccountFragment.this)
+                                    .galleryOnly()
+                                    .cropSquare()
+                                    .start();
+                        }
                         break;
                 }
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 101) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted, continue with opening the gallery
+                ImagePicker.with(MyAccountFragment.this)
+                        .galleryOnly()
+                        .cropSquare()
+                        .start();
+            } else {
+                // Permission was denied, show a message to the user
+                Toast.makeText(requireContext(), getResources().getString(R.string.permissions_denied_storage), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override

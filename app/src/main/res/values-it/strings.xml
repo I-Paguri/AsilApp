@@ -270,5 +270,5 @@
 
     <string name="email">Email</string>
     <string name="password">Password</string>
-
+    <string name="permissions_denied_storage"> Permessi negati per accedere allo storage </string>
 </resources>
