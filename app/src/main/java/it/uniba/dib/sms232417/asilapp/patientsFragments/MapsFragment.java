@@ -76,6 +76,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private ManageJson manageJson = new ManageJson();
     private GoogleMap mMap;
 
+    private String markerTitle;
+
     // HashMap per memorizzare i dati della risposta JSON
     Map<String, Map<String, String>> markerData = new HashMap<>();
 
@@ -182,6 +184,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                            // imposto regolamento e bottone visibile
                             resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView);
                             recensioneButton.setVisibility(View.VISIBLE);
+                            markerTitle = markerTitle = marker.getTitle();
                             return false;
                         });
 
@@ -190,7 +193,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                         //listener per il bottone recensione
                         clickRecensioneButton(recensioneButton);
-
 
 
                     }
@@ -553,7 +555,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
            // addressTextView.setVisibility(View.VISIBLE);
             descriptionTextView.setVisibility(View.VISIBLE);
 
-
     }
 
     public void clickRecensioneButton(Button recensioneButton) {
@@ -563,6 +564,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             FragmentManager fragmentManager = getParentFragmentManager();
             MaterialRating feedBackDialog = new MaterialRating();
             feedBackDialog.show(fragmentManager, "rating");
+
+            feedBackDialog.setOnRatingSentListener(rating -> {
+                // Gestisci il rating qui
+                Log.d("MapsFragment", "Rating ricevuto: " + rating);
+                Log.d("MapsFragment", "Centro Asilo: " + markerTitle);
+            });
         });
     }
 

@@ -20,9 +20,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import it.uniba.dib.sms232417.asilapp.R;
 
-/**
- * Created by VimalCvs on 02/11/2020.
- */
+
 
 public class MaterialFeedback extends DialogFragment {
 

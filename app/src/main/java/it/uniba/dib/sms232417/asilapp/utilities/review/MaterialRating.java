@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +19,19 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnRatingSentListener;
 import it.uniba.dib.sms232417.asilapp.utilities.review.DialogManager;
 
-/**
- * Created by VimalCvs on 02/11/2020.
- */
+
 
 public class MaterialRating extends DialogFragment implements RatingBar.OnRatingBarChangeListener {
 
     public static final String KEY = "fragment_rate";
     private View theDialogView;
+    private float userRating; // Variabile per memorizzare il rating dell'utente
+
+
+    private OnRatingSentListener listener;
 
     @NonNull
     @Override
@@ -52,7 +56,22 @@ public class MaterialRating extends DialogFragment implements RatingBar.OnRating
         bt_maybeLater.setOnClickListener(cancelButton -> dismiss());
 
         Button bt_ratingSend = view.findViewById(R.id.bt_ratingSend);
-        bt_ratingSend.setOnClickListener(send -> Toast.makeText( getActivity(), "Please select 5 star rating!", Toast.LENGTH_SHORT).show());
+        bt_ratingSend.setOnClickListener(send ->{
+           // Toast.makeText( getActivity(), "Please select 5 star rating!", Toast.LENGTH_SHORT).show()
+
+            if (userRating == 0) {
+                Toast.makeText(getActivity(), "Seleziona una valutazione!", Toast.LENGTH_SHORT).show();
+                return;
+            }else {
+                Log.d("MaterialRating", "Valutazione inviata dall'utente: " + userRating);
+
+                if (listener != null) {
+                    listener.onRatingSent(userRating);
+                }
+
+                dismiss();
+            }
+        });
 
         RatingBar bt_ratingBar = view.findViewById(R.id.bt_ratingBar);
         bt_ratingBar.setOnRatingBarChangeListener(this);
@@ -63,9 +82,17 @@ public class MaterialRating extends DialogFragment implements RatingBar.OnRating
     @Override
     public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
 
-            DialogManager.showMaterialFeedback(getActivity(), v,"null");
-            dismiss();
+        Log.d("MaterialRating", "Valutazione inserita dall'utente: " + v);
+        userRating = v; // Salva il rating dell'utente
+
+
+
 
         }
+
+    public void setOnRatingSentListener(OnRatingSentListener listener) {
+        this.listener = listener;
+    }
+
 
 }

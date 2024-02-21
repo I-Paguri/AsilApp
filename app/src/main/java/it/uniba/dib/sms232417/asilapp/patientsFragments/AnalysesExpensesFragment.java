@@ -254,14 +254,14 @@ public class AnalysesExpensesFragment extends Fragment {
                     arcGaugeMonth.setMaxValue(500);
 
                     // Imposta il valore corrente dell'ArcGauge
-                    arcGaugeMonth.setValue((float) lastMonthExpenses);
+                    arcGaugeMonth.setValue(lastMonthExpenses);
 
                     // Imposta il valore minimo e massimo dell'ArcGauge
                     arcGaugeWeek.setMinValue(0);
                     arcGaugeWeek.setMaxValue(100);
 
                     // Imposta il valore corrente dell'ArcGauge
-                    arcGaugeWeek.setValue((float) lastWeekExpenses);
+                    arcGaugeWeek.setValue(lastWeekExpenses);
 
 
 
