@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Aggiungi spesa"
+        android:text="@string/add_expense"
         android:textSize="30sp"
         android:padding="10dp"
         android:layout_marginTop="16dp"/>
@@ -30,7 +30,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="Categoria">
+            android:hint="@string/category">
 
             <AutoCompleteTextView
                 android:id="@+id/categories"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:hint="Soldi spesi">
+            android:hint="@string/money_spent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/amount_autocomplete"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:hint="Data spesa">
+            android:hint="@string/date_spent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dateInput"
@@ -97,6 +97,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:text="Add"/>
+        android:text="@string/add"/>
+
+    <ImageView
+        android:id="@+id/coins_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/coins"/>
 
 </LinearLayout>

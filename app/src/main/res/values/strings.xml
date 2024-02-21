@@ -21,9 +21,14 @@
     <string name="last_measurement">Last measurement</string>
 
     <string name="expenses">Expenses</string>
+    <string name="category">Category</string>
+    <string name="money_spent">Money spent</string>
+    <string name="date_spent">Date spent</string>
+    <string name="add_expense">Add expense</string>
 
     <string name="history">History</string>
     <string name="treatment">Treatment</string>
+    <string name="add">Add</string>
 
     <string name="new_treatment">New treatment</string>
     <string name="decision_account" translatable="false">Who are you?</string>
