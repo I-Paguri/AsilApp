@@ -216,6 +216,7 @@ public class MyAccountFragment extends Fragment {
                                 .load(imageUrl)
                                 .circleCrop()
                                 .into((ImageView) getView().findViewById(R.id.my_account));
+                        saveImageToInternalStorage(imageUrl);
                     } else {
                         // If the profile image URL does not exist or is empty, load the default profile image
                         Glide.with(getContext())
@@ -276,6 +277,7 @@ public class MyAccountFragment extends Fragment {
                                 .load(imageUrl)
                                 .circleCrop()
                                 .into((ImageView) getView().findViewById(R.id.my_account));
+                        saveImageToInternalStorage(imageUrl);
                     } else {
                         // If the profile image URL does not exist or is empty, load the default profile image
                         Glide.with(getContext())
