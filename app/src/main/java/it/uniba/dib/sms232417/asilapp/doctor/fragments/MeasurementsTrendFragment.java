@@ -31,6 +31,9 @@ import java.util.Locale;
 import java.util.Random;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterUser;
+import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
 
 public class MeasurementsTrendFragment extends Fragment {
     private String patientUUID;
@@ -51,6 +54,22 @@ public class MeasurementsTrendFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        /*
+        DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
+
+        dbAdapterUser.getAsylumHouses(new OnAsylumHouseDataCallback() {
+            @Override
+            public void onCallback(List<AsylumHouse> asylumHouses) {
+                Log.d("AsylumHouse", "[0]:" + asylumHouses.get(0).getName());
+            }
+
+            @Override
+            public void onCallbackFailed(Exception e) {
+                Log.d("AsylumHouse", "Error getting asylum houses", e);
+            }
+        });
+        */
 
         patientUUID = "";
         patientName = "";

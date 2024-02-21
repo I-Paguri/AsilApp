@@ -9,15 +9,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
@@ -115,4 +119,44 @@ public class DatabaseAdapterUser {
         }
     }
 
+
+
+    /*
+     public void getDoctorPatients(List<String> patientUUID, OnPatientListDataCallback callback) {
+        db = FirebaseFirestore.getInstance();
+
+        for (String uuid : patientUUID) {
+            db.collection("patient")
+                    .whereIn("uuid", Collections.singletonList(uuid))
+                    .orderBy("nome", Query.Direction.ASCENDING)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            List<Patient> patients = queryDocumentSnapshots.toObjects(Patient.class);
+
+                            callback.onCallback(patients);
+                        } else {
+                            Log.d("PATIENT", "Error");
+                            callback.onCallbackError(new Exception(), "Errore caricamento pazienti");
+                        }
+                    });
+        }
+    }
+     */
+
+    public void getAsylumHouses(OnAsylumHouseDataCallback callback) {
+        db.collection("asylumHouse")
+                .orderBy("name", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<AsylumHouse> asylumHouses = queryDocumentSnapshots.toObjects(AsylumHouse.class);
+
+                        callback.onCallback(asylumHouses);
+                    } else {
+                        Log.d("ASYLUMHOUSE", "Error");
+                        callback.onCallbackFailed(new Exception("Error getting asylum houses"));
+                    }
+                });
+    }
 }
