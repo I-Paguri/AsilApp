@@ -61,47 +61,6 @@ public class MeasurementsTrendFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        /*
-        DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
-
-        dbAdapterUser.getAsylumHouses(new OnAsylumHouseDataCallback() {
-            @Override
-            public void onCallback(List<AsylumHouse> asylumHouses) {
-                int i;
-                for (i = 0; i < asylumHouses.size(); i++) {
-                    AsylumHouse asylumHouse = asylumHouses.get(i);
-                    Log.d("AsylumHouse", asylumHouse.toString());
-                }
-            }
-
-            @Override
-            public void onCallbackFailed(Exception e) {
-                Log.d("AsylumHouse", "Error getting asylum houses", e);
-            }
-        });
-      
-         */
-
-
-
-        /*
-        String asylumHouseUUID = "95QYkAqjK8Q4wjQ9gO32";
-        double rating = 2;
-        dbAdapterUser.addRating(asylumHouseUUID, rating, new OnAsylumHouseRatingCallback() {
-            @Override
-            public void onCallback(double rating) {
-                Log.d("Rating", "New rating: " + rating);
-            }
-
-            @Override
-            public void onCallbackFailed(Exception e) {
-                Log.d("Rating", "Error adding rating", e);
-            }
-        });
-        */
-
-
         patientUUID = "";
         patientName = "";
         patientAge = "";
