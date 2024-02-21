@@ -22,6 +22,7 @@ import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseRatingCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
@@ -119,31 +120,6 @@ public class DatabaseAdapterUser {
         }
     }
 
-
-
-    /*
-     public void getDoctorPatients(List<String> patientUUID, OnPatientListDataCallback callback) {
-        db = FirebaseFirestore.getInstance();
-
-        for (String uuid : patientUUID) {
-            db.collection("patient")
-                    .whereIn("uuid", Collections.singletonList(uuid))
-                    .orderBy("nome", Query.Direction.ASCENDING)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            List<Patient> patients = queryDocumentSnapshots.toObjects(Patient.class);
-
-                            callback.onCallback(patients);
-                        } else {
-                            Log.d("PATIENT", "Error");
-                            callback.onCallbackError(new Exception(), "Errore caricamento pazienti");
-                        }
-                    });
-        }
-    }
-     */
-
     public void getAsylumHouses(OnAsylumHouseDataCallback callback) {
         db.collection("asylumHouse")
                 .orderBy("name", Query.Direction.ASCENDING)
@@ -157,6 +133,42 @@ public class DatabaseAdapterUser {
                         Log.d("ASYLUMHOUSE", "Error");
                         callback.onCallbackFailed(new Exception("Error getting asylum houses"));
                     }
+                });
+    }
+
+    public void addRating(String asylumHouseUUID, double rating, OnAsylumHouseRatingCallback callback) {
+        db.collection("asylumHouse")
+                .document(asylumHouseUUID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    AsylumHouse asylumHouse = documentSnapshot.toObject(AsylumHouse.class);
+                    if (asylumHouse != null) {
+                        double ratingAverage = asylumHouse.getRatingAverage();
+                        int numberOfReviews = asylumHouse.getNumberOfReviews();
+
+                        double newRatingAverage = (ratingAverage * numberOfReviews + rating) / (numberOfReviews + 1);
+                        int newNumberOfReviews = numberOfReviews + 1;
+
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("ratingAverage", newRatingAverage);
+                        data.put("numberOfReviews", newNumberOfReviews);
+
+                        db.collection("asylumHouse")
+                                .document(asylumHouseUUID)
+                                .update(data)
+                                .addOnSuccessListener(aVoid -> {
+                                    Log.d("Firestore", "Rating successfully written!");
+                                    callback.onCallback(newRatingAverage);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Log.w("Firestore", "Error writing rating", e);
+                                    callback.onCallbackFailed(e);
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.w("Firestore", "Error getting asylum house", e);
+                    callback.onCallbackFailed(e);
                 });
     }
 }

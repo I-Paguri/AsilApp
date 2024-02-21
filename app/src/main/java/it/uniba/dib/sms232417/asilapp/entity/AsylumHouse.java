@@ -13,12 +13,12 @@ public class AsylumHouse implements Parcelable, Serializable {
     private String address;
     private ArrayList<String> rules;
     private int numberOfReviews;
-    private float ratingAverage;
+    private double ratingAverage;
 
     public AsylumHouse() {
     }
 
-    public AsylumHouse(String UUID, String name, GeoPoint coordinates, String address, ArrayList<String> rules, int numberOfReviews, float ratingAverage) {
+    public AsylumHouse(String UUID, String name, GeoPoint coordinates, String address, ArrayList<String> rules, int numberOfReviews, double ratingAverage) {
         this.UUID = UUID;
         this.name = name;
         this.coordinates = coordinates;
@@ -47,7 +47,7 @@ public class AsylumHouse implements Parcelable, Serializable {
         address = in.readString();
         rules = in.createStringArrayList();
         numberOfReviews = in.readInt();
-        ratingAverage = in.readFloat();
+        ratingAverage = in.readDouble();
     }
 
     public static final Creator<AsylumHouse> CREATOR = new Creator<AsylumHouse>() {
@@ -78,7 +78,7 @@ public class AsylumHouse implements Parcelable, Serializable {
         dest.writeString(address);
         dest.writeStringList(rules);
         dest.writeInt(numberOfReviews);
-        dest.writeFloat(ratingAverage);
+        dest.writeDouble(ratingAverage);
     }
 
     public String getUUID() {
@@ -125,6 +125,14 @@ public class AsylumHouse implements Parcelable, Serializable {
         this.rules.add(rule);
     }
 
+    public String getRulesToString() {
+        StringBuilder rulesString = new StringBuilder();
+        for (String rule : rules) {
+            rulesString.append(rule).append("\n");
+        }
+        return rulesString.toString();
+    }
+
     public void removeRule(String rule) {
         this.rules.remove(rule);
     }
@@ -137,11 +145,28 @@ public class AsylumHouse implements Parcelable, Serializable {
         this.numberOfReviews = numberOfReviews;
     }
 
-    public float getRatingAverage() {
+    public double getRatingAverage() {
         return ratingAverage;
     }
 
-    public void setRatingAverage(float ratingAverage) {
+    public void setRatingAverage(double ratingAverage) {
         this.ratingAverage = ratingAverage;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder asylumHouse = new StringBuilder();
+
+        asylumHouse.append("");
+        asylumHouse.append("UUID: ").append(UUID).append("\n");
+        asylumHouse.append("Name: ").append(name).append("\n");
+        asylumHouse.append("Coordinates: ").append(coordinates).append("\n");
+        asylumHouse.append("Address: ").append(address).append("\n");
+        asylumHouse.append("Rules: ").append(getRulesToString());
+        asylumHouse.append("Number of reviews: ").append(numberOfReviews).append("\n");
+        asylumHouse.append("Rating average: ").append(ratingAverage).append("\n");
+
+        return asylumHouse.toString();
     }
 }

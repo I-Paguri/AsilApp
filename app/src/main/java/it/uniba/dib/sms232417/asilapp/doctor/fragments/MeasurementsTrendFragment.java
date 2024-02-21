@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -22,6 +23,9 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +38,8 @@ import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterUser;
 import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseRatingCallback;
+import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class MeasurementsTrendFragment extends Fragment {
     private String patientUUID;
@@ -54,14 +60,19 @@ public class MeasurementsTrendFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
+
         /*
         DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
 
         dbAdapterUser.getAsylumHouses(new OnAsylumHouseDataCallback() {
             @Override
             public void onCallback(List<AsylumHouse> asylumHouses) {
-                Log.d("AsylumHouse", "[0]:" + asylumHouses.get(0).getName());
+                int i;
+                for (i = 0; i < asylumHouses.size(); i++) {
+                    AsylumHouse asylumHouse = asylumHouses.get(i);
+                    Log.d("AsylumHouse", asylumHouse.toString());
+                }
             }
 
             @Override
@@ -69,7 +80,27 @@ public class MeasurementsTrendFragment extends Fragment {
                 Log.d("AsylumHouse", "Error getting asylum houses", e);
             }
         });
+      
+         */
+
+
+
+        /*
+        String asylumHouseUUID = "95QYkAqjK8Q4wjQ9gO32";
+        double rating = 2;
+        dbAdapterUser.addRating(asylumHouseUUID, rating, new OnAsylumHouseRatingCallback() {
+            @Override
+            public void onCallback(double rating) {
+                Log.d("Rating", "New rating: " + rating);
+            }
+
+            @Override
+            public void onCallbackFailed(Exception e) {
+                Log.d("Rating", "Error adding rating", e);
+            }
+        });
         */
+
 
         patientUUID = "";
         patientName = "";
