@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.adapters;
 import static it.uniba.dib.sms232417.asilapp.MainActivity.getContext;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.text.InputType;
 import android.util.Log;
@@ -11,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -20,14 +23,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Expenses;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
@@ -85,62 +95,171 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
 
     private void handleCheckboxChecked(ProductViewHolder holder, int position) {
-        // Crea un AlertDialog con un AutoCompleteTextView
         AlertDialog.Builder builder = new AlertDialog.Builder(holder.productCheckbox.getContext());
-        builder.setTitle("Inserisci un valore");
+        builder.setTitle("Inserisci i dettagli");
 
-        final AutoCompleteTextView input = new AutoCompleteTextView(holder.productCheckbox.getContext());
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
+        // Inflate the custom layout
+        LayoutInflater inflater = (LayoutInflater) holder.productCheckbox.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View dialogView = inflater.inflate(R.layout.dialog_product_adapter, null);
 
-        // Aggiungi un bottone per confermare
-        builder.setPositiveButton("Conferma", (dialog, which) -> {
-            String value = input.getText().toString();
-            // Fai qualcosa con il valore inserito dall'utente
+        // Get references to the input fields
+        final TextInputEditText amountInput = dialogView.findViewById(R.id.amount_autocomplete);
+        final TextInputEditText dateInput = dialogView.findViewById(R.id.dateInput);
 
-            // Crea un secondo AlertDialog per chiedere la categoria
-            AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(holder.productCheckbox.getContext());
-            categoryBuilder.setTitle("Inserisci una categoria");
 
-            // Inflate the dialog_for_product.xml layout and get the reference to the AutoCompleteTextView
-            LayoutInflater inflater = (LayoutInflater) holder.productCheckbox.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);                    View dialogView = inflater.inflate(R.layout.dialog_for_product, null);
-            final AutoCompleteTextView categoryInput = dialogView.findViewById(R.id.Categories_list);
 
-            String[] categories = holder.productCheckbox.getContext().getResources().getStringArray(R.array.categories);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(holder.productCheckbox.getContext(), android.R.layout.simple_dropdown_item_1line, categories);
-            categoryInput.setAdapter(adapter);
-            categoryBuilder.setView(dialogView);
+        // Set up the category AutoCompleteTextView with an ArrayAdapter
+        String[] categories = holder.productCheckbox.getContext().getResources().getStringArray(R.array.categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(holder.productCheckbox.getContext(), android.R.layout.simple_dropdown_item_1line, categories);
 
-            // Aggiungi un bottone per confermare la categoria
-            categoryBuilder.setPositiveButton("Conferma", (categoryDialog, categoryWhich) -> {
-                String category = categoryInput.getText().toString();
-                // Fai qualcosa con la categoria inserita dall'utente
 
-                // Rimuovi l'elemento dalla lista di prodotti
+        // Set up the dateInput field to show a DatePickerDialog when clicked
+        dateInput.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                 BoughtProduct(medications.get(position).getId(), context);
-
-                 medications.remove(position);
-
-                // Notifica all'adapter che i dati sono cambiati
-                notifyDataSetChanged();
-            });
-
-            categoryBuilder.setNegativeButton("Annulla", (categoryDialog, categoryWhich) -> {
-                categoryDialog.cancel();
-                holder.productCheckbox.setChecked(false);
-            });
-
-            categoryBuilder.show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(holder.productCheckbox.getContext(),
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        // Format the date and set it as the text of dateInput
+                        String date = dayOfMonth + "-" + (monthOfYear + 1) + "-" + year1;
+                        dateInput.setText(date);
+                    }, year, month, day);
+            datePickerDialog.show();
         });
 
+        builder.setView(dialogView);
+
+// Set up the buttons
+        builder.setPositiveButton("Conferma", null);
+        builder.setNegativeButton("Annulla", (dialog, which) -> {
+            dialog.cancel();
+            holder.productCheckbox.setChecked(false);
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+
+                try {
+                    // Il tuo codice esistente va qui
+            String category = "FARMACI";
+            String amount = amountInput.getText().toString();
+            String date = dateInput.getText().toString();
+
+
+
+            // Get references to the TextInputLayouts
+            TextInputLayout amountLayout = dialogView.findViewById(R.id.amount_layout);
+            TextInputLayout dateLayout = dialogView.findViewById(R.id.date_layout);
+
+            // Validate the amount field
+            if (amount.isEmpty()) {
+                // Show an error message
+                amountLayout.setError("Questo campo è obbligatorio");
+                return;
+            } else {
+                amountLayout.setError(null);
+            }
+
+            // Validate the date field
+            if (date.isEmpty()) {
+                // Show an error message
+                dateLayout.setError("Questo campo è obbligatorio");
+                return;
+            } else {
+                dateLayout.setError(null);
+            }
+
+
+
+
+            // Create an instance of DatabaseAdapterPatient
+            DatabaseAdapterPatient adapter2 = new DatabaseAdapterPatient(holder.productCheckbox.getContext());
+
+            // Get the instance of FirebaseAuth
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+
+            // Get the currently logged in user
+            FirebaseUser currentUser = auth.getCurrentUser();
+
+            if (currentUser != null) {
+                // Get the UUID of the currently logged in user
+                String patientUUID = currentUser.getUid();
+
+                // Convert the amount to a double
+                double amountDouble;
+                try {
+                    amountDouble = Double.parseDouble(amount);
+                } catch (NumberFormatException e) {
+                    // Show an error message
+                    Toast.makeText(holder.productCheckbox.getContext(), "Per favore, inserisci un importo valido", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Convert the date to a Date object
+                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                Date dateObject;
+                try {
+                    dateObject = format.parse(date);
+                } catch (ParseException e) {
+                    // Show an error message
+                    Toast.makeText(holder.productCheckbox.getContext(), "Per favore, inserisci una data valida", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Create an Expenses object
+                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
+                Expenses expense = new Expenses(categoryEnum, amountDouble, dateObject);
+
+                // Call the addExpense method
+                adapter2.addExpense(patientUUID, expense);
+                Log.d("Firestore", "Expense added successfully");
+
+                // Remove the item from the product list
+                BoughtProduct(medications.get(position).getId(), context);
+                medications.remove(position);
+
+                Toast.makeText(holder.productCheckbox.getContext(), "Prodotto acquistato con successo", Toast.LENGTH_SHORT).show();
+
+                // Notify the adapter that the data has changed
+                notifyDataSetChanged();
+            } else {
+                // Show an error message
+                Toast.makeText(holder.productCheckbox.getContext(), "Errore: utente non trovato", Toast.LENGTH_SHORT).show();
+            }
+
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    // Stampa l'eccezione nel log
+                    Log.e("ProductAdapter", "Eccezione nel pulsante Conferma", e);
+                }
+
+            });
+        });
+
+        // Aggiungi un listener per quando il dialog viene cancellato
+        dialog.setOnCancelListener(dialogInterface -> {
+            // Deseleziona la checkbox
+            holder.productCheckbox.setChecked(false);
+        });
+
+        dialog.show();
+
+/*
         builder.setNegativeButton("Annulla", (dialog, which) -> {
             dialog.cancel();
             holder.productCheckbox.setChecked(false);
         });
 
         builder.show();
+
     }
+*/
+    }
+
 
     public void BoughtProduct(int idBought, Context context){
 

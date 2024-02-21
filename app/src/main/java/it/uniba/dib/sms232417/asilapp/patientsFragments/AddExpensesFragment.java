@@ -193,6 +193,19 @@ public class AddExpensesFragment extends Fragment {
                                     return;
                                 }
 
+                                // Convert the amount to a String
+                                String amountString = amountInput.getText().toString();
+
+                                // Check if the amount has more than two decimal places
+                                if (amountString.contains(".")) {
+                                    String[] parts = amountString.split("\\.");
+                                    if (parts[1].length() > 2) {
+                                        // Show an error message
+                                        amountLayout.setError("L'importo non può avere più di due cifre decimali");
+                                        return;
+                                    }
+                                }
+
                                 // Crea un oggetto SimpleDateFormat per il formato della data
                                 SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 

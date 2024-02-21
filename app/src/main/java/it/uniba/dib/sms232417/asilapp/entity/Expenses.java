@@ -28,6 +28,7 @@ public class Expenses {
         this.date = date;
     }
 
+
     // Getter per category
     public Category getCategory() {
         return category;
