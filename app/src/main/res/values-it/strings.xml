@@ -294,4 +294,6 @@
     <string name="wallet">Le tue spese sanitarie in app</string>
     <string name="wallet_descr">Tieni traccia dei farmaci acquistati e delle spese sostenute.</string>
 
+    <string name="treatment_deleted"> Terapia eliminata </string>
+
 </resources>

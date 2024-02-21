@@ -33,9 +33,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.transition.MaterialContainerTransform;
 import com.touchboarder.weekdaysbuttons.WeekdaysDataItem;
 
@@ -397,6 +399,15 @@ public class TreatmentFragment extends Fragment {
 
                                     // Remove the treatmentLayout from the parentLayout
                                     parentLayout.removeView(treatmentLayout);
+
+                                    BottomNavigationView bottomNavView = requireActivity().findViewById(R.id.nav_view);
+
+                                    View rootView = requireActivity().findViewById(android.R.id.content);
+                                    Snackbar snackbar = Snackbar.make(rootView, getResources().getString(R.string.treatment_deleted), Snackbar.LENGTH_LONG);
+                                    // Set the anchor view to bottom navigation view to show the snackbar above the bottom navigation view
+                                    snackbar.setAnchorView(bottomNavView);
+                                    snackbar.setBackgroundTint(getResources().getColor(R.color.pastel_red));
+                                    snackbar.show();
 
                                     // If there are no more treatments, show the noTreatmentLayout
                                     if (parentLayout.getChildCount() == 0) {
