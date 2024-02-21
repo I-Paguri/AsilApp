@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -163,44 +164,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkPermission() {
         try {
-            if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.CAMERA)) {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-                    builder.setTitle(R.string.attention);
-                    builder.setMessage(R.string.explain_permission_camera);
-                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            requestPermissions(new String[]{android.Manifest.permission.CAMERA}, 101);
-                        }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.show();
-
-                } else {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-                    builder.setTitle(R.string.attention);
-                    builder.setMessage(R.string.explain_permission_camera);
-                    builder.setPositiveButton("OK", null);
-                    builder.show();
-
-                }
-            } else {
+            if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 1);
+            }else {
                 selectedFragment = new MeasureFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @SuppressLint("MissingSuperCall")
@@ -209,11 +185,32 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "Permissions:"+String.valueOf(requestCode));
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        if(requestCode == 1) {
+            if(grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_DENIED) {
+             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+             builder.setTitle(R.string.attention);
+             builder.setMessage(R.string.explain_permission_camera);
+             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        checkPermission();
+                    }
+                });
+            }else {
+                selectedFragment = new MeasureFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        }
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
 
         if (fragment instanceof TreatmentFragment) {
             fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
     }
 
     /**
