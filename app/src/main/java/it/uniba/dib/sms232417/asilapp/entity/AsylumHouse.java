@@ -1,25 +1,24 @@
 package it.uniba.dib.sms232417.asilapp.entity;
-
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
-
+import com.google.firebase.firestore.GeoPoint;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class AsylumHouse implements Parcelable, Serializable {
     private String UUID;
     private String name;
-    private String coordinates;
+    private GeoPoint coordinates;
     private String address;
-    private String rules;
+    private ArrayList<String> rules;
     private int numberOfReviews;
     private float ratingAverage;
 
     public AsylumHouse() {
     }
 
-    public AsylumHouse(String UUID, String name, String coordinates, String address, String rules, int numberOfReviews, float ratingAverage) {
+    public AsylumHouse(String UUID, String name, GeoPoint coordinates, String address, ArrayList<String> rules, int numberOfReviews, float ratingAverage) {
         this.UUID = UUID;
         this.name = name;
         this.coordinates = coordinates;
@@ -29,12 +28,24 @@ public class AsylumHouse implements Parcelable, Serializable {
         this.ratingAverage = ratingAverage;
     }
 
+    public AsylumHouse(String UUID, String name, GeoPoint coordinates, String address) {
+        this.UUID = UUID;
+        this.name = name;
+        this.coordinates = coordinates;
+        this.address = address;
+        this.rules = new ArrayList<>();
+        this.numberOfReviews = 0;
+        this.ratingAverage = 0;
+    }
+
     protected AsylumHouse(Parcel in) {
         UUID = in.readString();
         name = in.readString();
-        coordinates = in.readString();
+        double lat = in.readDouble();
+        double lon = in.readDouble();
+        coordinates = new GeoPoint(lat, lon);
         address = in.readString();
-        rules = in.readString();
+        rules = in.createStringArrayList();
         numberOfReviews = in.readInt();
         ratingAverage = in.readFloat();
     }
@@ -60,9 +71,12 @@ public class AsylumHouse implements Parcelable, Serializable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(UUID);
         dest.writeString(name);
-        dest.writeString(coordinates);
+        double lat = coordinates.getLatitude();
+        double lon = coordinates.getLongitude();
+        dest.writeDouble(lat);
+        dest.writeDouble(lon);
         dest.writeString(address);
-        dest.writeString(rules);
+        dest.writeStringList(rules);
         dest.writeInt(numberOfReviews);
         dest.writeFloat(ratingAverage);
     }
@@ -83,11 +97,11 @@ public class AsylumHouse implements Parcelable, Serializable {
         this.name = name;
     }
 
-    public String getCoordinates() {
+    public GeoPoint getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(String coordinates) {
+    public void setCoordinates(GeoPoint coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -99,12 +113,20 @@ public class AsylumHouse implements Parcelable, Serializable {
         this.address = address;
     }
 
-    public String getRules() {
+    public ArrayList<String> getRules() {
         return rules;
     }
 
-    public void setRules(String rules) {
+    public void setRules(ArrayList<String> rules) {
         this.rules = rules;
+    }
+
+    public void addRule(String rule) {
+        this.rules.add(rule);
+    }
+
+    public void removeRule(String rule) {
+        this.rules.remove(rule);
     }
 
     public int getNumberOfReviews() {
