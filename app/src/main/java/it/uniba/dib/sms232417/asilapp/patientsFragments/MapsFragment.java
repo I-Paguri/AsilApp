@@ -479,7 +479,60 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void resultLocationCentriAsilo(GoogleMap mMap, TextView titleTextView, TextView descriptionTextView, TextView addressTextView) {
+        /*
+        DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
 
+        // Qui devi assegnare il nome del centro asilo ottenuto dal Marker
+        String name = "CEIS Società Cooperativa Sociale - Sede Centrale";
+        // Ottengo tutti i centri asilo
+        dbAdapterUser.getAsylumHouses(new OnAsylumHouseDataCallback() {
+            @Override
+            public void onCallback(List<AsylumHouse> asylumHouses) {
+                int i;
+                boolean asylumHouseFound;
+                AsylumHouse asylumHouse;
+
+                i = 0;
+                asylumHouseFound = false;
+                asylumHouse = null;
+                // Cerco il centro asilo con il nome ottenuto dal Marker
+                while (asylumHouseFound == false && i < asylumHouses.size()) {
+                    asylumHouse = asylumHouses.get(i);
+
+                    if (asylumHouse.getName().equals(name)) {
+                        asylumHouseFound = true;
+                    }
+                    i++;
+                }
+
+                if (asylumHouseFound) {
+                    // Se ho trovato un centro asilo con il nome ottenuto dal Marker, ricavo l'UUID
+                    String asylumHouseUUID = asylumHouse.getUUID();
+                    double rating = 2; // Cambia con il rating ottenuto dalle recensione
+
+                    // Aggiungo il rating al centro asilo con l'UUID ottenuto
+                    dbAdapterUser.addRating(asylumHouseUUID, rating, new OnAsylumHouseRatingCallback() {
+                        @Override
+                        public void onCallback(double rating) {
+                            Log.d("Rating", "New rating: " + rating);
+                        }
+
+                        @Override
+                        public void onCallbackFailed(Exception e) {
+                            Log.d("Rating", "Error adding rating", e);
+                        }
+                    });
+                } else {
+                    Log.d("AsylumHouse", "Asylum house not found");
+                }
+            }
+
+            @Override
+            public void onCallbackFailed(Exception e) {
+                Log.d("AsylumHouse", "Error getting asylum houses", e);
+            }
+        });
+         */
                   titleTextView.setText("Nome Centro Asilo");
             String regolamento = "Regolamento del Centro per Richiedenti Asilo:\n\n" +
                     "1. Orari di apertura: Il centro è aperto dalle 9:00 alle 17:00, dal lunedì al venerdì.\n" +
