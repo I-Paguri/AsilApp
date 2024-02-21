@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".patientsFragments.AnalysesExpensesFragment">
 
     <LinearLayout
@@ -122,7 +123,107 @@
         android:layout_marginBottom="24dp"
         />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewHeartRate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:clickable="false"
+                android:focusable="true"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.ekn.gruzer.gaugelibrary.ArcGauge
+                        android:id="@+id/arcGaugeMonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"/>
+
+                    <TextView
+                        style="@style/CardViewTitleText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="Mensili" />
+
+                    <TextView
+                        style="@style/RegularText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/text_margin"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="@dimen/text_margin"
+                        android:layout_marginBottom="@dimen/text_margin"
+                        android:text="@string/last_month_expenses" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewBloodPressure"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:checkable="true"
+                android:clickable="false"
+                android:focusable="true"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.ekn.gruzer.gaugelibrary.ArcGauge
+                        android:id="@+id/arcGaugeWeek"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"/>
+
+                    <TextView
+                        style="@style/CardViewTitleText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="Settimanali" />
+
+                    <TextView
+                        style="@style/RegularText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/text_margin"
+                        android:layout_marginBottom="@dimen/text_margin"
+                        android:text="@string/last_week_expenses" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
 
 </LinearLayout>

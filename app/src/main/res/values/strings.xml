@@ -25,6 +25,10 @@
     <string name="money_spent">Money spent</string>
     <string name="date_spent">Date spent</string>
     <string name="add_expense">Add expense</string>
+    <string name="total_expenses">Total expenses</string>
+    <string name="last_month_expenses">last month\'s expenses</string>
+    <string name="last_week_expenses">last week\'s expenses</string>
+
 
     <string name="history">History</string>
     <string name="treatment">Treatment</string>
@@ -482,7 +486,6 @@
     </plurals>
 
     <string name="select_how_to_take_first"> Select how to take medication first </string>
-    <string name="last_month_expenses">In the last month you spent:</string>
     <string name="required_field"> This field is required </string>
     <string name="select_weekdays"> Please select at least one weekday </string>
     <string name="end_date_before_start_date"> End date cannot be before start date </string>

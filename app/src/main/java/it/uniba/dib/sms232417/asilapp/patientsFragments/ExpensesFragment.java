@@ -1,7 +1,14 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,28 +17,24 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
-import it.uniba.dib.sms232417.asilapp.entity.Expenses;
-import it.uniba.dib.sms232417.asilapp.entity.Patient;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnTotalExpensesCallback;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
+import com.ekn.gruzer.gaugelibrary.ArcGauge;
+import com.ekn.gruzer.gaugelibrary.Range;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
+import it.uniba.dib.sms232417.asilapp.entity.Expenses;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
 
 
 public class ExpensesFragment extends Fragment {
@@ -155,9 +158,9 @@ public class ExpensesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Ottieni il riferimento a textViewBalance
         TextView textViewBalance = view.findViewById(R.id.textViewBalance);
-        textViewBalance.setText(" €");
+
+        textViewBalance.setText("");
 
 
         // Get the current logged-in user

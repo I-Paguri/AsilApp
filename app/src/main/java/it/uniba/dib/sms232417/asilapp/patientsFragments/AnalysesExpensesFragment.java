@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ekn.gruzer.gaugelibrary.ArcGauge;
+import com.ekn.gruzer.gaugelibrary.Range;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -30,7 +32,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mancj.slimchart.SlimChart;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
@@ -92,9 +98,13 @@ public class AnalysesExpensesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_analyses_expenses, container, false);
 
 
-        // Prendo i riferimenti alle textview e al grafico a torta
+            // Prendo i riferimenti alle textview e al grafico a torta
             PieChart pieChart = view.findViewById(R.id.pieChart);
-            TextView paragraph1 = view.findViewById(R.id.resocontoSpesaFarmaci);
+            // Prima di recuperare i dati, imposta un messaggio di caricamento personalizzato
+            pieChart.setNoDataText("Caricamento dati...");
+
+
+        TextView paragraph1 = view.findViewById(R.id.resocontoSpesaFarmaci);
             TextView paragraph2 = view.findViewById(R.id.resocontoSpesaTerapie);
             TextView paragraph3 = view.findViewById(R.id.resocontoSpesaTrattamenti);
             TextView paragraph4 = view.findViewById(R.id.resocontoSpesaEsami);
@@ -198,10 +208,60 @@ public class AnalysesExpensesFragment extends Fragment {
                         Log.d("Expenses", "La lista è vuota");
                         pieChart.setNoDataText("Non hai nessuna spesa");
 
-
                     }
 
+                    // Calcola le spese dell'ultimo mese
+                    double lastMonthExpenses = sumLastMonthExpenses(expensesList);
+                    Log.d("Expenses", "Last month expenses: " + lastMonthExpenses);
+                    // textViewBalanceMonth.setText(String.valueOf(lastMonthExpenses) + " €");
 
+                    //Calcola le spese dell'ultima settimana
+                    double lastWeekExpenses = sumLastWeekExpenses(expensesList);
+                    Log.d("Expenses", "Last week expenses: " + lastWeekExpenses);
+                    //  textViewBalanceWeek.setText(String.valueOf(lastWeekExpenses) + " €");
+
+                    ArcGauge arcGaugeMonth = view.findViewById(R.id.arcGaugeMonth);
+                    ArcGauge arcGaugeWeek = view.findViewById(R.id.arcGaugeWeek);
+
+                    // Crea i range di colori
+                    Range range = new Range();
+                    range.setColor(Color.parseColor("#ce0000"));
+                    range.setFrom(40.0);
+                    range.setTo(60.0);
+
+                    Range range2 = new Range();
+                    range2.setColor(Color.parseColor("#E3E500"));
+                    range2.setFrom(60.0);
+                    range2.setTo(100.0);
+
+                    Range range3 = new Range();
+                    range3.setColor(Color.parseColor("#00b20b"));
+                    range3.setFrom(100.0);
+                    range3.setTo(500.0);
+
+                    // Aggiungi i range di colori agli ArcGauge
+                    arcGaugeMonth.addRange(range);
+                    arcGaugeMonth.addRange(range2);
+                    arcGaugeMonth.addRange(range3);
+
+                    arcGaugeWeek.addRange(range);
+                    arcGaugeWeek.addRange(range2);
+                    arcGaugeWeek.addRange(range3);
+
+
+                    // Imposta il valore minimo e massimo dell'ArcGauge
+                    arcGaugeMonth.setMinValue(0);
+                    arcGaugeMonth.setMaxValue(500);
+
+                    // Imposta il valore corrente dell'ArcGauge
+                    arcGaugeMonth.setValue((float) lastMonthExpenses);
+
+                    // Imposta il valore minimo e massimo dell'ArcGauge
+                    arcGaugeWeek.setMinValue(0);
+                    arcGaugeWeek.setMaxValue(100);
+
+                    // Imposta il valore corrente dell'ArcGauge
+                    arcGaugeWeek.setValue((float) lastWeekExpenses);
 
 
 
@@ -327,6 +387,42 @@ public class AnalysesExpensesFragment extends Fragment {
         }
         return sum;
     }
+    public double sumLastMonthExpenses(List<Expenses> expensesList) {
+        // Get the current date
+        LocalDate now = LocalDate.now();
+        // Get the start date of the last month
+        LocalDate lastMonth = now.minusMonths(1);
+
+        // Convert LocalDate to Date
+        Date lastMonthDate = Date.from(lastMonth.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        // Filter the expenses of the last month and sum them
+        double totalExpenses = expensesList.stream()
+                .filter(expense -> expense.getDate().after(lastMonthDate))
+                .mapToDouble(Expenses::getAmount)
+                .sum();
+
+        return totalExpenses;
+    }
+
+    public double sumLastWeekExpenses(List<Expenses> expensesList) {
+        // Get the current date
+        LocalDate now = LocalDate.now();
+        // Get the start date of the last week
+        LocalDate lastWeek = now.minus(1, ChronoUnit.WEEKS);
+
+        // Convert LocalDate to Date
+        Date lastWeekDate = Date.from(lastWeek.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        // Filter the expenses of the last week and sum them
+        double totalExpenses = expensesList.stream()
+                .filter(expense -> expense.getDate().after(lastWeekDate))
+                .mapToDouble(Expenses::getAmount)
+                .sum();
+
+        return totalExpenses;
+    }
+
 }
 
 
