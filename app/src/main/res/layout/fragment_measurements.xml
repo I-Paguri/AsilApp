@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/linearLayoutHeartrateBloodPressure"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -85,11 +86,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <com.ekn.gruzer.gaugelibrary.ArcGauge
-                        android:id="@+id/arcGaugePressure"
+                    <com.ekn.gruzer.gaugelibrary.MultiGauge
+                        android:id="@+id/multiGaugePressure"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="16dp"
+                        />
 
                     <TextView
                         style="@style/CardViewTitleText2"
@@ -115,6 +117,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutHeartrateTemperatureGlycemia"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -202,7 +205,7 @@
                     android:orientation="vertical">
 
                     <com.ekn.gruzer.gaugelibrary.ArcGauge
-                        android:id="@+id/arcGaugeLight"
+                        android:id="@+id/arcGaugeGlycemia"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_marginTop="16dp"/>

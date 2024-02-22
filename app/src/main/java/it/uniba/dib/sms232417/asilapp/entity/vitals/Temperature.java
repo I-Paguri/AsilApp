@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.utilities.vitals;
+package it.uniba.dib.sms232417.asilapp.entity.vitals;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +10,10 @@ public class Temperature {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         this.date = sdf.format(new Date());
         this.value = value;
+
+    }
+
+    public Temperature() {
 
     }
 

@@ -82,10 +82,10 @@ public class MeasurementsTrendFragment extends Fragment {
         String formattedMeasurementType = "";
         if (!measureType.isEmpty()) {
             switch (measureType) {
-                case "heartRate":
+                case "heart_rate":
                     formattedMeasurementType = getResources().getString(R.string.heart_rate);
                     break;
-                case "bloodPressure":
+                case "blood_pressure":
                     formattedMeasurementType = getResources().getString(R.string.blood_pressure);
                     break;
                 case "temperature":
@@ -110,7 +110,7 @@ public class MeasurementsTrendFragment extends Fragment {
 
         numberOfMeasures = 8;
 
-        if (!measureType.equals("bloodPressure")) {
+        if (!measureType.equals("blood_pressure")) {
             // Single line chart for heart rate, temperature and glycemia
 
             // Generate random data

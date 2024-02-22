@@ -1,4 +1,4 @@
-package it.uniba.dib.sms232417.asilapp.utilities.vitals;
+package it.uniba.dib.sms232417.asilapp.entity.vitals;
 
 import java.text.SimpleDateFormat;
 
