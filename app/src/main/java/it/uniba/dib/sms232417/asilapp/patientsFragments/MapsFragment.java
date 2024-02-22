@@ -2,19 +2,14 @@ package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
 import static androidx.core.location.LocationManagerCompat.requestLocationUpdates;
 
-import static java.lang.Math.log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,20 +26,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import org.osmdroid.views.MapView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
 
 
-import com.amulyakhare.textdrawable.BuildConfig;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -52,11 +39,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import it.uniba.dib.sms232417.asilapp.utilities.review.DialogManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterUser;
+import it.uniba.dib.sms232417.asilapp.adapters.ProductAdapter;
+import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
+import it.uniba.dib.sms232417.asilapp.entity.Medication;
+import it.uniba.dib.sms232417.asilapp.entity.Treatment;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.review.MaterialRating;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.location.Location;
@@ -64,7 +60,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import android.Manifest;
@@ -432,29 +430,34 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     //metodo per aggiungere i marker dei centri predefiniti sulla mappa
     public void addMarker(GoogleMap mMap) {
-        LatLng posizione = new LatLng(41.9027835, 12.4963655); // sostituisci con le coordinate desiderate
-        mMap.addMarker(new MarkerOptions().position(posizione).title("Roma"));
 
-        // Aggiungi un marker a Milano
-        LatLng milano = new LatLng(45.4642, 9.1900);
-        mMap.addMarker(new MarkerOptions().position(milano).title("Milano"));
+        //connessione db e recupero dati per aggiungere i marker
 
-        // Aggiungi un marker a Brescia
-        LatLng brescia = new LatLng(45.5416, 10.2118);
-        mMap.addMarker(new MarkerOptions().position(brescia).title("Brescia"));
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
 
-        // Aggiungi un marker a Torino
-        LatLng torino = new LatLng(45.0703, 7.6869);
-        mMap.addMarker(new MarkerOptions().position(torino).title("Torino"));
+        if (currentUser != null) {
+            DatabaseAdapterUser adapter = new DatabaseAdapterUser(getContext());
+            adapter.getAsylumHouses(new OnAsylumHouseDataCallback() {
+                @Override
+                public void onCallback(List<AsylumHouse> asylumHouse) {
+                    for (AsylumHouse house : asylumHouse) {
+                        LatLng posizione = new LatLng(house.getCoordinates().getLatitude(), house.getCoordinates().getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(posizione).title(house.getName()));
+                    }
+                }
 
-        // Aggiungi un marker a Padova
-        LatLng padova = new LatLng(45.4064, 11.8768);
-        mMap.addMarker(new MarkerOptions().position(padova).title("Padova"));
 
-        // Aggiungi un marker a Napoli
-        LatLng napoli = new LatLng(40.8522, 14.2681);
-        mMap.addMarker(new MarkerOptions().position(napoli).title("Napoli"));
+                @Override
+                public void onCallbackFailed(Exception e) {
+
+                }
+
+
+            });
+        }
     }
+
 
     //metodo per salvare la risposta della recensione
 
