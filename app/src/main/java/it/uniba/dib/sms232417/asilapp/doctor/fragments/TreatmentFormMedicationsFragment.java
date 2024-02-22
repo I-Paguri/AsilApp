@@ -412,6 +412,8 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     bundle.putString("patientAge", patientAge);
                     bundle.putString("patientUUID", patientUUID);
 
+                    intakeCount = 1;
+
                     TreatmentFormMedicationsFragment treatmentFormMedicationsFragment = new TreatmentFormMedicationsFragment();
                     treatmentFormMedicationsFragment.setArguments(bundle);
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
