@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -48,6 +49,7 @@ import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
 import it.uniba.dib.sms232417.asilapp.entity.Medication;
 import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseRatingCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.review.MaterialRating;
 
 import androidx.fragment.app.FragmentManager;
@@ -66,6 +68,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import android.Manifest;
+import android.widget.Toast;
 //import it.uniba.dib.sms232417.asilapp.Manifest;
 import it.uniba.dib.sms232417.asilapp.R;
 
@@ -102,10 +105,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         TextView titleTextView = getView().findViewById(R.id.titleLocation);
         TextView addressTextView = getView().findViewById(R.id.addressLocation);
         TextView descriptionTextView = getView().findViewById(R.id.descriptionLocation);
+        TextView ratingTextView = getView().findViewById(R.id.rating);
+        ImageView ratingImage = getView().findViewById(R.id.ratingStar);
 
         titleTextView.setVisibility(View.GONE);
         addressTextView.setVisibility(View.GONE);
         descriptionTextView.setVisibility(View.GONE);
+        ratingTextView.setVisibility(View.GONE);
+        ratingImage.setVisibility(View.GONE);
 
 
         // Set the title of the fragment richiamando il metodo
@@ -123,8 +130,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
 
         //valuto la rimozione del bottone
-        FloatingActionButton star = view.findViewById(R.id.star);
-        star.setVisibility(View.GONE);
+
         my_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,50 +162,60 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     // If the permissions are granted, call the API to get the location
                     String query = autoCompleteTextView.getText().toString();
 
-                    if (!query.equals("Centri Asilo")) {
-                        mMap.clear();
-                        titleTextView.setVisibility(View.GONE);
-                        addressTextView.setVisibility(View.GONE);
-                        descriptionTextView.setVisibility(View.GONE);
 
-                        recensioneButton.setVisibility(View.GONE);
-                        callApi(query);
-
-                        resultLocationApi(mMap, titleTextView, addressTextView);
-
-                        //metodo per verficare se è cliccato un marker o la mappa
-                        MarkerClickResult(mMap, titleTextView, addressTextView);
-
+                    if (query.isEmpty()) {
+                        // Show a Toast message
+                        Toast.makeText(getContext(), "Please select an item", Toast.LENGTH_SHORT).show();
                     } else {
-                        mMap.clear();
-                        titleTextView.setVisibility(View.GONE);
-                        addressTextView.setVisibility(View.GONE);
-                        descriptionTextView.setVisibility(View.GONE);
+                        if (!query.equals("Centri Asilo")) {
+                            mMap.clear();
+                            titleTextView.setVisibility(View.GONE);
+                            addressTextView.setVisibility(View.GONE);
+                            descriptionTextView.setVisibility(View.GONE);
+                            ratingTextView.setVisibility(View.GONE);
+                            ratingImage.setVisibility(View.GONE);
 
-                        // Aggiungi un marker a una posizione specifica
-                        addMarker(mMap);
+                            recensioneButton.setVisibility(View.GONE);
+
+                            callApi(query);
+
+                            resultLocationApi(mMap, titleTextView, addressTextView);
+
+                            //metodo per verficare se è cliccato un marker o la mappa
+                            MarkerClickResult(mMap, titleTextView, addressTextView);
+
+                        } else {
+                            mMap.clear();
+                            titleTextView.setVisibility(View.GONE);
+                            addressTextView.setVisibility(View.GONE);
+                            descriptionTextView.setVisibility(View.GONE);
+                            ratingTextView.setVisibility(View.GONE);
+                            ratingImage.setVisibility(View.GONE);
+
+                            // Aggiungi un marker a una posizione specifica
+                            addMarker(mMap);
 
 
-                        mMap.setOnMarkerClickListener(marker -> {
-                           // imposto regolamento e bottone visibile
+                            mMap.setOnMarkerClickListener(marker -> {
+                                // imposto regolamento e bottone visibile
 
-                            markerTitle = marker.getTitle();
-                            resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView, markerTitle);
-                            recensioneButton.setVisibility(View.VISIBLE);
+                                markerTitle = marker.getTitle();
+                                resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView, markerTitle, ratingTextView, ratingImage);
+                                recensioneButton.setVisibility(View.VISIBLE);
 
-                            return false;
-                        });
+                                return false;
+                            });
 
-                        //metodo per verficare se è cliccato un marker o la mappa
-                        MarkerClick(mMap, recensioneButton, titleTextView, addressTextView, descriptionTextView);
+                            //metodo per verficare se è cliccato un marker o la mappa
+                            MarkerClick(mMap, recensioneButton, titleTextView, addressTextView, descriptionTextView, ratingTextView, ratingImage);
 
-                        //listener per il bottone recensione
-                        clickRecensioneButton(recensioneButton);
+                            //listener per il bottone recensione
+                            clickRecensioneButton(recensioneButton, ratingTextView);
 
+
+                        }
 
                     }
-
-
                 }
             }
         });
@@ -413,18 +429,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    //metodo per verificare se è cliccato un marker o la mappa
-    public void MarkerClick(GoogleMap map, Button recensioneButton, TextView titleTextView, TextView addressTextView, TextView descriptionTextView) {
+    //metodo per verificare se è cliccato un marker o la mappa nel caso dei Centri asilo
+    public void MarkerClick(GoogleMap map, Button recensioneButton, TextView titleTextView, TextView addressTextView, TextView descriptionTextView, TextView ratingTextView, ImageView ratingImage) {
         mMap.setOnMapClickListener(latLng -> {
             recensioneButton.setVisibility(View.GONE);
             titleTextView.setVisibility(View.GONE);
             addressTextView.setVisibility(View.GONE);
             descriptionTextView.setVisibility(View.GONE);
+            ratingTextView.setVisibility(View.GONE);
+            ratingImage.setVisibility(View.GONE);
+
 
         });
     }
 
-    //metodo per verificare se è cliccato un marker o la mappa
+    //metodo per verificare se è cliccato un marker o la mappa nel caso di ricerca API
     public void MarkerClickResult(GoogleMap mMap, TextView titleTextView, TextView addressTextView) {
         mMap.setOnMapClickListener(latLng -> {
             titleTextView.setVisibility(View.GONE);
@@ -490,12 +509,49 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    public void resultLocationCentriAsilo(GoogleMap mMap, TextView titleTextView, TextView descriptionTextView, TextView addressTextView, String markerTitle) {
-        /*
+    public void resultLocationCentriAsilo(GoogleMap mMap, TextView titleTextView, TextView descriptionTextView, TextView addressTextView, String markerTitle, TextView ratingTextView, ImageView ratingImage) {
+
+        for (AsylumHouse house : asylumHouseList) {
+            if (house.getName().equals(markerTitle)) {
+
+                titleTextView.setText(house.getName());
+                float rating = (float) house.getRatingAverage();
+                ratingTextView.setText(String.valueOf(rating));
+                house.getRules().forEach(rule -> {
+                    descriptionTextView.append(rule + "\n\n");
+                });
+
+                    addressTextView.setText(house.getAddress());
+
+                    titleTextView.setVisibility(View.VISIBLE);
+                    addressTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                    ratingTextView.setVisibility(View.VISIBLE);
+                    ratingImage.setVisibility(View.VISIBLE);
+            }
+
+                }
+            }
+
+    public void clickRecensioneButton(Button recensioneButton, TextView ratingTextView) {
+        //imposto un listener per gli eventi sul button
+        recensioneButton.setOnClickListener(view1 -> {
+            // Mostra il pop-up
+            FragmentManager fragmentManager = getParentFragmentManager();
+            MaterialRating feedBackDialog = new MaterialRating();
+            feedBackDialog.show(fragmentManager, "rating");
+
+            feedBackDialog.setOnRatingSentListener(rating -> {
+
+                // Gestisci il rating qui
+                Log.d("MapsFragment", "Rating ricevuto: " + rating);
+                Log.d("MapsFragment", "Centro Asilo: " + markerTitle);
+
+         //salvo il rating nel db
         DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
 
         // Qui devi assegnare il nome del centro asilo ottenuto dal Marker
-        String name = "CEIS Società Cooperativa Sociale - Sede Centrale";
+        String name = markerTitle;
         // Ottengo tutti i centri asilo
         dbAdapterUser.getAsylumHouses(new OnAsylumHouseDataCallback() {
             @Override
@@ -520,15 +576,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 if (asylumHouseFound) {
                     // Se ho trovato un centro asilo con il nome ottenuto dal Marker, ricavo l'UUID
                     String asylumHouseUUID = asylumHouse.getUUID();
-                    double rating = 2; // Cambia con il rating ottenuto dalle recensione
 
                     // Aggiungo il rating al centro asilo con l'UUID ottenuto
                     dbAdapterUser.addRating(asylumHouseUUID, rating, new OnAsylumHouseRatingCallback() {
                         @Override
                         public void onCallback(double rating) {
                             Log.d("Rating", "New rating: " + rating);
-                        }
+                            Toast.makeText(getContext(), "Recensito: "+markerTitle, Toast.LENGTH_SHORT).show();
+                            addMarker(mMap);
+                            updateTextViewRating(ratingTextView, markerTitle);
 
+                        }
                         @Override
                         public void onCallbackFailed(Exception e) {
                             Log.d("Rating", "Error adding rating", e);
@@ -544,63 +602,39 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 Log.d("AsylumHouse", "Error getting asylum houses", e);
             }
         });
-         */
 
-
-        for (AsylumHouse house : asylumHouseList) {
-            if (house.getName().equals(markerTitle)) {
-
-                titleTextView.setText(house.getName());
-                house.getRules().forEach(rule -> {
-                    descriptionTextView.append(rule + "\n\n");
-                });
-
-                    addressTextView.setText(house.getAddress());
-
-                    titleTextView.setVisibility(View.VISIBLE);
-                    addressTextView.setVisibility(View.VISIBLE);
-                    descriptionTextView.setVisibility(View.VISIBLE);
-
-            }
-
-                }
-
-                  /*titleTextView.setText("Nome Centro Asilo");
-            String regolamento = "Regolamento del Centro per Richiedenti Asilo:\n\n" +
-                    "1. Orari di apertura: Il centro è aperto dalle 9:00 alle 17:00, dal lunedì al venerdì.\n" +
-                    "2. Rispetto: Si prega di rispettare tutti gli ospiti e il personale del centro.\n" +
-                    "3. Pulizia: Mantenere pulite le proprie stanze e le aree comuni.\n" +
-                    "4. Divieti: È vietato fumare all'interno del centro e consumare alcolici.\n" +
-                    "5. Sicurezza: Non è consentito l'ingresso a persone non autorizzate.\n" +
-                    "6. Registrazione: Tutti i nuovi ospiti devono registrarsi presso l'ufficio di accoglienza.\n" +
-                    "7. Rispetto delle norme: È necessario rispettare le leggi e le normative del paese ospitante.\n" +
-                    "8. Comunicazioni: Seguire le indicazioni del personale e partecipare agli incontri e alle comunicazioni.\n" +
-                    "9. Emergenze: Segnalare immediatamente qualsiasi emergenza al personale.\n" +
-                    "10. Conformità: La violazione delle regole può comportare provvedimenti disciplinari.\n\n" +
-                    "Grazie per la vostra collaborazione.";
-
-            descriptionTextView.setText(regolamento);
-
-                   */
-
-
-
-    }
-
-    public void clickRecensioneButton(Button recensioneButton) {
-        //imposto un listener per gli eventi sul button
-        recensioneButton.setOnClickListener(view1 -> {
-            // Mostra il pop-up
-            FragmentManager fragmentManager = getParentFragmentManager();
-            MaterialRating feedBackDialog = new MaterialRating();
-            feedBackDialog.show(fragmentManager, "rating");
-
-            feedBackDialog.setOnRatingSentListener(rating -> {
-                // Gestisci il rating qui
-                Log.d("MapsFragment", "Rating ricevuto: " + rating);
-                Log.d("MapsFragment", "Centro Asilo: " + markerTitle);
             });
         });
+    }
+
+    public void updateTextViewRating(TextView ratingTextView, String markerTitle) {
+
+        //prendo valore da db
+        DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
+
+        // Ottengo tutti i centri asilo
+        dbAdapterUser.getAsylumHouses(new OnAsylumHouseDataCallback() {
+            @Override
+            public void onCallback(List<AsylumHouse> asylumHouses) {
+
+               for (AsylumHouse house : asylumHouses) {
+
+                    if (house.getName().equals(markerTitle)) {
+
+                        float rating = (float) house.getRatingAverage();
+                        ratingTextView.setText(String.valueOf(rating));
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCallbackFailed(Exception e) {
+                Log.d("AsylumHouse", "Error getting asylum houses", e);
+            }
+        });
+
+
     }
 
 

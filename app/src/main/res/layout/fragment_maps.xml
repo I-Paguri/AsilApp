@@ -136,14 +136,6 @@
                         android:visibility="gone"/>
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/star"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="10dp"
-                        app:srcCompat="@drawable/star" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/my_location_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -177,13 +169,38 @@
             android:layout_marginBottom="16dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/titleLocation"
-                style="@style/CardViewTitleText"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Titolo Luogo" />
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/titleLocation"
+                    style="@style/CardViewTitleText2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Titolo Luogo" />
+
+                <ImageView
+                    android:id="@+id/ratingStar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+
+                    android:src="@drawable/star_icon" />
+
+                <TextView
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="4.5" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/addressLocation"
@@ -197,8 +214,7 @@
                 android:id="@+id/descriptionLocation"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Descrizione Luogo" />
+                android:layout_height="wrap_content" />
 
 
 

@@ -79,6 +79,9 @@
     <string name="last_month_expenses">Spese ultimo mese</string>
     <string name="last_week_expenses">Spese ultima settimana</string>
 
+    <string name="rating_title">Valuta Centro</string>
+    <string name="rating_description">Dai una valutazione a questo centro</string>
+
     <string name="treatment_goal_empty">L\'obiettivo della terapia non può essere vuoto</string>
     <string name="insert_medication">Inserisci un farmaco</string>
     <string name="medication_name">Come si chiama il farmaco?</string>
