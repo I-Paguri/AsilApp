@@ -74,6 +74,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private ManageJson manageJson = new ManageJson();
     private GoogleMap mMap;
 
+    private List<AsylumHouse> asylumHouseList = new ArrayList<>();
+
     private String markerTitle;
 
     // HashMap per memorizzare i dati della risposta JSON
@@ -180,9 +182,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                         mMap.setOnMarkerClickListener(marker -> {
                            // imposto regolamento e bottone visibile
-                            resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView);
+
+                            markerTitle = marker.getTitle();
+                            resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView, markerTitle);
                             recensioneButton.setVisibility(View.VISIBLE);
-                            markerTitle = markerTitle = marker.getTitle();
+
                             return false;
                         });
 
@@ -441,6 +445,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             adapter.getAsylumHouses(new OnAsylumHouseDataCallback() {
                 @Override
                 public void onCallback(List<AsylumHouse> asylumHouse) {
+
+                    asylumHouseList = asylumHouse;
+
                     for (AsylumHouse house : asylumHouse) {
                         LatLng posizione = new LatLng(house.getCoordinates().getLatitude(), house.getCoordinates().getLongitude());
                         mMap.addMarker(new MarkerOptions().position(posizione).title(house.getName()));
@@ -483,7 +490,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    public void resultLocationCentriAsilo(GoogleMap mMap, TextView titleTextView, TextView descriptionTextView, TextView addressTextView) {
+    public void resultLocationCentriAsilo(GoogleMap mMap, TextView titleTextView, TextView descriptionTextView, TextView addressTextView, String markerTitle) {
         /*
         DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
 
@@ -538,7 +545,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
         });
          */
-                  titleTextView.setText("Nome Centro Asilo");
+
+
+        for (AsylumHouse house : asylumHouseList) {
+            if (house.getName().equals(markerTitle)) {
+
+                titleTextView.setText(house.getName());
+                house.getRules().forEach(rule -> {
+                    descriptionTextView.append(rule + "\n\n");
+                });
+
+                    addressTextView.setText(house.getAddress());
+
+                    titleTextView.setVisibility(View.VISIBLE);
+                    addressTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setVisibility(View.VISIBLE);
+
+            }
+
+                }
+
+                  /*titleTextView.setText("Nome Centro Asilo");
             String regolamento = "Regolamento del Centro per Richiedenti Asilo:\n\n" +
                     "1. Orari di apertura: Il centro è aperto dalle 9:00 alle 17:00, dal lunedì al venerdì.\n" +
                     "2. Rispetto: Si prega di rispettare tutti gli ospiti e il personale del centro.\n" +
@@ -554,9 +581,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
             descriptionTextView.setText(regolamento);
 
-            titleTextView.setVisibility(View.VISIBLE);
-           // addressTextView.setVisibility(View.VISIBLE);
-            descriptionTextView.setVisibility(View.VISIBLE);
+                   */
+
+
 
     }
 
@@ -575,5 +602,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             });
         });
     }
+
+
 
 }
