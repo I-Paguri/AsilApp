@@ -3,6 +3,8 @@ package it.uniba.dib.sms232417.asilapp.utilities;
 import java.util.HashMap;
 import java.util.Map;
 import android.content.Context;
+import android.util.Log;
+
 import it.uniba.dib.sms232417.asilapp.R;
 
 public class MappedValues {
@@ -78,6 +80,8 @@ public class MappedValues {
 
     public String getFormattedHowToTake(int howToTake, int quantity) {
         String formattedHowToTake;
+
+        Log.d("Quantity_getFormattedHowToTake", "HowToTake: " + howToTake + " Quantity: " + quantity);
 
         switch (howToTake) {
             case 0:

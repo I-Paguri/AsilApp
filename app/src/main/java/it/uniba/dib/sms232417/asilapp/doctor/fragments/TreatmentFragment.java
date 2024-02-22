@@ -490,12 +490,14 @@ public class TreatmentFragment extends Fragment {
             quantity = quantities.get(i);
             intakeTime = intakeTimes.get(i);
 
+
             if (quantity.equals("1/4") || quantity.equals("1/2") || quantity.equals("3/4")) {
                 quantityNumber = 1; // Not plural
             } else {
-                quantityNumber = 2; // Plural
+                quantityNumber = Integer.parseInt(quantity);
             }
 
+            Log.d("Quantity_treatmentFragment", quantity);
             intakesString = intakesString + quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(howToTake), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
 
             if (i != size - 1) {

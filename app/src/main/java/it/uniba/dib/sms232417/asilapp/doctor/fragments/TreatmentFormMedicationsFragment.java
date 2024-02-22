@@ -370,6 +370,7 @@ public class TreatmentFormMedicationsFragment extends Fragment implements Weekda
                     // Get the bundle
                     Bundle bundle = setBundle();
 
+                    intakeCount = 1;
                     bundle.putString("patientName", patientName);
                     bundle.putString("patientAge", patientAge);
                     bundle.putString("patientUUID", patientUUID);
