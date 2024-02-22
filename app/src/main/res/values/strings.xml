@@ -140,21 +140,149 @@
     </string-array>
 
     <string-array name="medicines_list">
-        <item>Paracetamol</item>
-        <item>Aspirin</item>
-        <item>Ibuprofen</item>
-
-        <!-- Medicines with different dosages -->
         <item>Oki 500mg</item>
         <item>Oki 1000mg</item>
-
-        <!-- More medicines with dosages -->
+        <item>Oki Task 40mg</item>
         <item>Amoxicillin 250mg</item>
         <item>Amoxicillin 500mg</item>
-
-        <!-- Another example -->
         <item>Codeine 10mg</item>
         <item>Codeine 20mg</item>
+        <item>Paracetamol 500mg</item>
+        <item>Paracetamol 1000mg</item>
+        <item>Ibuprofen 200mg</item>
+        <item>Ibuprofen 400mg</item>
+        <item>Aspirin 75mg</item>
+        <item>Aspirin 300mg</item>
+        <item>Metformin 500mg</item>
+        <item>Metformin 850mg</item>
+        <item>Simvastatin 10mg</item>
+        <item>Simvastatin 20mg</item>
+        <item>Simvastatin 40mg</item>
+        <item>Atorvastatin 10mg</item>
+        <item>Atorvastatin 20mg</item>
+        <item>Atorvastatin 40mg</item>
+        <item>Atorvastatin 80mg</item>
+        <item>Ramipril 1.25mg</item>
+        <item>Ramipril 2.5mg</item>
+        <item>Ramipril 5mg</item>
+        <item>Ramipril 10mg</item>
+        <item>Amlodipine 5mg</item>
+        <item>Amlodipine 10mg</item>
+        <item>Lisinopril 2.5mg</item>
+        <item>Lisinopril 5mg</item>
+        <item>Lisinopril 10mg</item>
+        <item>Lisinopril 20mg</item>
+        <item>Bisoprolol 1.25mg</item>
+        <item>Bisoprolol 2.5mg</item>
+        <item>Bisoprolol 3.75mg</item>
+        <item>Bisoprolol 5mg</item>
+        <item>Bisoprolol 7.5mg</item>
+        <item>Bisoprolol 10mg</item>
+        <item>Warfarin 1mg</item>
+        <item>Warfarin 3mg</item>
+        <item>Warfarin 5mg</item>
+        <item>Levothyroxine 25mcg</item>
+        <item>Levothyroxine 50mcg</item>
+        <item>Levothyroxine 100mcg</item>
+        <item>Propranolol 10mg</item>
+        <item>Propranolol 40mg</item>
+        <item>Propranolol 80mg</item>
+        <item>Propranolol 160mg</item>
+        <item>Losartan 25mg</item>
+        <item>Losartan 50mg</item>
+        <item>Losartan 100mg</item>
+        <item>Fluoxetine 20mg</item>
+        <item>Fluoxetine 40mg</item>
+        <item>Sertraline 50mg</item>
+        <item>Sertraline 100mg</item>
+        <item>Clonazepam 0.5mg</item>
+        <item>Clonazepam 1mg</item>
+        <item>Clonazepam 2mg</item>
+        <item>Alprazolam 0.25mg</item>
+        <item>Alprazolam 0.5mg</item>
+        <item>Alprazolam 1mg</item>
+        <item>Alprazolam 2mg</item>
+        <item>Diazepam 2mg</item>
+        <item>Diazepam 5mg</item>
+        <item>Diazepam 10mg</item>
+        <item>Lorazepam 0.5mg</item>
+        <item>Lorazepam 1mg</item>
+        <item>Lorazepam 2mg</item>
+        <item>Temazepam 10mg</item>
+        <item>Temazepam 20mg</item>
+        <item>Temazepam 30mg</item>
+        <item>Oxazepam 10mg</item>
+        <item>Oxazepam 15mg</item>
+        <item>Oxazepam 30mg</item>
+        <item>Nitrazepam 5mg</item>
+        <item>Nitrazepam 10mg</item>
+        <item>Flurazepam 15mg</item>
+        <item>Flurazepam 30mg</item>
+        <item>Chlordiazepoxide 5mg</item>
+        <item>Chlordiazepoxide 10mg</item>
+        <item>Chlordiazepoxide 25mg</item>
+        <item>Clorazepate 3.75mg</item>
+        <item>Clorazepate 7.5mg</item>
+        <item>Clorazepate 15mg</item>
+        <item>Estazolam 1mg</item>
+        <item>Estazolam 2mg</item>
+        <item>Quazepam 7.5mg</item>
+        <item>Quazepam 15mg</item>
+        <item>Midazolam 7.5mg</item>
+        <item>Midazolam 15mg</item>
+        <item>Triazolam 0.125mg</item>
+        <item>Triazolam 0.25mg</item>
+        <item>Flunitrazepam 1mg</item>
+        <item>Flunitrazepam 2mg</item>
+        <item>Halazepam 20mg</item>
+        <item>Halazepam 40mg</item>
+        <item>Prazepam 10mg</item>
+        <item>Prazepam 20mg</item>
+        <item>Lormetazepam 1mg</item>
+        <item>Lormetazepam 2mg</item>
+        <item>Clotiazepam 5mg</item>
+        <item>Clotiazepam 10mg</item>
+        <item>Clobazam 10mg</item>
+        <item>Clobazam 20mg</item>
+        <item>Voltaren 50mg</item>
+        <item>Voltaren 75mg</item>
+        <item>Voltaren 100mg</item>
+        <item>Enterogermina 5ml</item>
+        <item>Enterogermina 2g</item>
+        <item>Rinazina</item>
+        <item>Cardioaspirin 100mg</item>
+        <item>Euthyrox 25mcg</item>
+        <item>Euthyrox 50mcg</item>
+        <item>Euthyrox 75mcg</item>
+        <item>Euthyrox 100mcg</item>
+        <item>Altace 1.25mg</item>
+        <item>Altace 2.5mg</item>
+        <item>Altace 5mg</item>
+        <item>Lasix 25mg</item>
+        <item>Lasix 40mg</item>
+        <item>Lasix 100mg</item>
+        <item>Lasix 500mg</item>
+        <item>Lasix 20mg/2mlmg</item>
+        <item>Lasix 250mg/25ml</item>
+        <item>Norvasc 5mg</item>
+        <item>Norvasc 10mg</item>
+        <item>Omeprazole 10mg</item>
+        <item>Omeprazole 20mg</item>
+        <item>Augmentin 875mg/125mg</item>
+        <item>Augmentin bambini 400mg/57mg</item>
+        <item>Dibase 10.000 U.I./ml</item>
+        <item>Pantoprazole 20mg</item>
+        <item>Pantoprazole 40mg</item>
+        <item>Toradol 10mg</item>
+        <item>Toradol 20mg/ml</item>
+        <item>Toradol 30mg/ml</item>
+        <item>Xanax 0.25mg</item>
+        <item>Xanax 0.5mg</item>
+        <item>Xanax 0.75mg</item>
+        <item>Nebistar 5mg</item>
+        <item>Benactiv Gola 8.75mg</item>
+        <item>Benagol</item>
+        <item>Gola Act</item>
     </string-array>
 
     <string-array name="how_to_take_medicine_list">

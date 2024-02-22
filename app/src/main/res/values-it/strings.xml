@@ -45,7 +45,7 @@
     <string name="last_measure_explain" translatable="false">Qui verrano visualizzati i risultati delle ultime misurazioni</string>
     <string name="attention" translatable="false">Attenzione!</string>
     <string name="explain_permission_camera" translatable="false">Devi accettare i permessi per poter accedere a tali funzioni</string>
-    <string name= "explain_permission_gallery"> transalatable = "false" Devi accettare i permessi per poter accedere alla galleria </string>
+    <string name="explain_permission_gallery"> transalatable = "false" Devi accettare i permessi per poter accedere alla galleria </string>
     <string name="cancel" translatable="false">Annulla</string>
     <string name="confirm">Conferma</string>
     <string name="accept">Accetta</string>
@@ -103,21 +103,149 @@
     </string-array>
 
     <string-array name="medicines_list">
-        <item>Paracetamolo</item>
-        <item>Aspirina</item>
-        <item>Ibuprofene</item>
-
-        <!-- Medicines with different dosages -->
         <item>Oki 500mg</item>
         <item>Oki 1000mg</item>
-
-        <!-- More medicines with dosages -->
+        <item>Oki Task 40mg</item>
         <item>Amoxicillina 250mg</item>
         <item>Amoxicillina 500mg</item>
-
-        <!-- Another example -->
         <item>Codeina 10mg</item>
         <item>Codeina 20mg</item>
+        <item>Paracetamolo 500mg</item>
+        <item>Paracetamolo 1000mg</item>
+        <item>Ibuprofene 200mg</item>
+        <item>Ibuprofene 400mg</item>
+        <item>Aspirina 75mg</item>
+        <item>Aspirina 300mg</item>
+        <item>Metformina 500mg</item>
+        <item>Metformina 850mg</item>
+        <item>Simvastatina 10mg</item>
+        <item>Simvastatina 20mg</item>
+        <item>Simvastatina 40mg</item>
+        <item>Atorvastatina 10mg</item>
+        <item>Atorvastatina 20mg</item>
+        <item>Atorvastatina 40mg</item>
+        <item>Atorvastatina 80mg</item>
+        <item>Ramipril 1.25mg</item>
+        <item>Ramipril 2.5mg</item>
+        <item>Ramipril 5mg</item>
+        <item>Ramipril 10mg</item>
+        <item>Amlodipina 5mg</item>
+        <item>Amlodipina 10mg</item>
+        <item>Lisinopril 2.5mg</item>
+        <item>Lisinopril 5mg</item>
+        <item>Lisinopril 10mg</item>
+        <item>Lisinopril 20mg</item>
+        <item>Bisoprololo 1.25mg</item>
+        <item>Bisoprololo 2.5mg</item>
+        <item>Bisoprololo 3.75mg</item>
+        <item>Bisoprololo 5mg</item>
+        <item>Bisoprololo 7.5mg</item>
+        <item>Bisoprololo 10mg</item>
+        <item>Warfarin 1mg</item>
+        <item>Warfarin 3mg</item>
+        <item>Warfarin 5mg</item>
+        <item>Levotiroxina 25mcg</item>
+        <item>Levotiroxina 50mcg</item>
+        <item>Levotiroxina 100mcg</item>
+        <item>Propranololo 10mg</item>
+        <item>Propranololo 40mg</item>
+        <item>Propranololo 80mg</item>
+        <item>Propranololo 160mg</item>
+        <item>Losartan 25mg</item>
+        <item>Losartan 50mg</item>
+        <item>Losartan 100mg</item>
+        <item>Fluoxetina 20mg</item>
+        <item>Fluoxetina 40mg</item>
+        <item>Sertralina 50mg</item>
+        <item>Sertralina 100mg</item>
+        <item>Clonazepam 0.5mg</item>
+        <item>Clonazepam 1mg</item>
+        <item>Clonazepam 2mg</item>
+        <item>Alprazolam 0.25mg</item>
+        <item>Alprazolam 0.5mg</item>
+        <item>Alprazolam 1mg</item>
+        <item>Alprazolam 2mg</item>
+        <item>Diazepam 2mg</item>
+        <item>Diazepam 5mg</item>
+        <item>Diazepam 10mg</item>
+        <item>Lorazepam 0.5mg</item>
+        <item>Lorazepam 1mg</item>
+        <item>Lorazepam 2mg</item>
+        <item>Temazepam 10mg</item>
+        <item>Temazepam 20mg</item>
+        <item>Temazepam 30mg</item>
+        <item>Oxazepam 10mg</item>
+        <item>Oxazepam 15mg</item>
+        <item>Oxazepam 30mg</item>
+        <item>Nitrazepam 5mg</item>
+        <item>Nitrazepam 10mg</item>
+        <item>Flurazepam 15mg</item>
+        <item>Flurazepam 30mg</item>
+        <item>Clordiazepossido 5mg</item>
+        <item>Clordiazepossido 10mg</item>
+        <item>Clordiazepossido 25mg</item>
+        <item>Clorazepato 3.75mg</item>
+        <item>Clorazepato 7.5mg</item>
+        <item>Clorazepato 15mg</item>
+        <item>Estazolam 1mg</item>
+        <item>Estazolam 2mg</item>
+        <item>Quazepam 7.5mg</item>
+        <item>Quazepam 15mg</item>
+        <item>Midazolam 7.5mg</item>
+        <item>Midazolam 15mg</item>
+        <item>Triazolam 0.125mg</item>
+        <item>Triazolam 0.25mg</item>
+        <item>Flunitrazepam 1mg</item>
+        <item>Flunitrazepam 2mg</item>
+        <item>Halazepam 20mg</item>
+        <item>Halazepam 40mg</item>
+        <item>Prazepam 10mg</item>
+        <item>Prazepam 20mg</item>
+        <item>Lormetazepam 1mg</item>
+        <item>Lormetazepam 2mg</item>
+        <item>Clotiazepam 5mg</item>
+        <item>Clotiazepam 10mg</item>
+        <item>Clobazam 10mg</item>
+        <item>Clobazam 20mg</item>
+        <item>Voltaren 50mg</item>
+        <item>Voltaren 75mg</item>
+        <item>Voltaren 100mg</item>
+        <item>Enterogermina 5ml</item>
+        <item>Enterogermina 2g</item>
+        <item>Rinazina</item>
+        <item>Cardioaspirina 100mg</item>
+        <item>Eutirox 25mcg</item>
+        <item>Eutirox 50mcg</item>
+        <item>Eutirox 75mcg</item>
+        <item>Eutirox 100mcg</item>
+        <item>Triatec 1.25mg</item>
+        <item>Triatec 2.5mg</item>
+        <item>Triatec 5mg</item>
+        <item>Lasix 25mg</item>
+        <item>Lasix 40mg</item>
+        <item>Lasix 100mg</item>
+        <item>Lasix 500mg</item>
+        <item>Lasix 20mg/2mlmg</item>
+        <item>Lasix 250mg/25ml</item>
+        <item>Norvasc 5mg</item>
+        <item>Norvasc 10mg</item>
+        <item>Omeprazen 10mg</item>
+        <item>Omeprazen 20mg</item>
+        <item>Augmentin 875mg/125mg</item>
+        <item>Augmentin bambini 400mg/57mg</item>
+        <item>Dibase 10.000 U.I./ml</item>
+        <item>Pantorc 20mg</item>
+        <item>Pantorc 40mg</item>
+        <item>Toradol 10mg</item>
+        <item>Toradol 20mg/ml</item>
+        <item>Toradol 30mg/ml</item>
+        <item>Xanax 0.25mg</item>
+        <item>Xanax 0.5mg</item>
+        <item>Xanax 0.75mg</item>
+        <item>Nobistar 5mg</item>
+        <item>Benactiv Gola 8.75mg</item>
+        <item>Benagol</item>
+        <item>Gola Act</item>
     </string-array>
 
     <string-array name="how_to_take_medicine_list">
