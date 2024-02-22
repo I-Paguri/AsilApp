@@ -159,6 +159,8 @@ public class TreatmentFragment extends Fragment {
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            createAndSharePdf(treatments);
+                            /*
                             // Check if the application has the WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE permissions
                             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                                     && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -168,6 +170,7 @@ public class TreatmentFragment extends Fragment {
                                 // If the application does not have the permissions, request them from the user
                                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
                             }
+                            */
                         }
                     });
                 }
@@ -497,7 +500,6 @@ public class TreatmentFragment extends Fragment {
                 quantityNumber = Integer.parseInt(quantity);
             }
 
-            Log.d("Quantity_treatmentFragment", quantity);
             intakesString = intakesString + quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(howToTake), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
 
             if (i != size - 1) {
@@ -685,7 +687,7 @@ public class TreatmentFragment extends Fragment {
                     if (quantity.equals("1/4") || quantity.equals("1/2") || quantity.equals("3/4")) {
                         quantityNumber = 1; // Not plural
                     } else {
-                        quantityNumber = 2; // Plural
+                        quantityNumber = Integer.parseInt(quantity);
                     }
 
                     intakesString = quantity + " " + (mappedValues.getFormattedHowToTake(mappedValues.getHowToTakeKey(medication.toStringHowToTake(requireContext())), quantityNumber)).toLowerCase() + " " + requireContext().getResources().getString(R.string.at_time) + " " + intakeTime;
