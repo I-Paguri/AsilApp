@@ -20,6 +20,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -101,11 +102,17 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
         for (String uuid : patientUUID) {
             db.collection("patient")
                     .whereIn("uuid", Collections.singletonList(uuid))
-                    .orderBy("nome", Query.Direction.ASCENDING)
                     .get()
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             List<Patient> patients = queryDocumentSnapshots.toObjects(Patient.class);
+
+                            Collections.sort(patients, new Comparator<Patient>() {
+                                @Override
+                                public int compare(Patient p1, Patient p2) {
+                                    return p1.getNome().compareTo(p2.getNome());
+                                }
+                            });
 
                             callback.onCallback(patients);
                         } else {
@@ -244,7 +251,7 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
         db.collection("doctor")
                 .document(doctorUUID)
                 .get()
-                .addOnSuccessListener( documentSnapshot -> {
+                .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         Doctor doctor = documentSnapshot.toObject(Doctor.class);
                         callback.onCallback(doctor);
