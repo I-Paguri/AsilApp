@@ -3,6 +3,7 @@ package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +53,18 @@ public class PatientFragment extends Fragment {
         patientName = "Patient Name";
         patientAge = "Patient Age";
 
-        String patientUUID = getArguments().getString("patientUUID"); // Ottieni l'UUID del paziente
-        String patientName = getArguments().getString("patientName"); // Ottieni il nome del paziente
         // Inizializza dbAdapterPatient
         dbAdapterPatient = new DatabaseAdapterPatient(getContext());
+
+
+        TextView textName = view.findViewById(R.id.txtName_inputlayout);
+        if (this.getArguments() != null) {
+            patientUUID = this.getArguments().getString("patientUUID");
+            patientName = this.getArguments().getString("patientName");
+            patientAge = this.getArguments().getString("patientAge");
+            user = this.getArguments().getString("user");
+        }
+
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
@@ -64,11 +73,21 @@ public class PatientFragment extends Fragment {
         // Show home button
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Log.d("userPatientFragment", user);
         // Set home icon as back button
-        Drawable homeIcon = getResources().getDrawable(R.drawable.home, null);
-        // Set color filter
-        homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
+        if (user != null && user.equals("doctor")) {
+            Drawable backIcon = getResources().getDrawable(R.drawable.arrow_back, null);
+            // Set color filter
+            backIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
+            ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(backIcon);
+        } else {
+            if (user != null && user.equals("patient")) {
+                Drawable homeIcon = getResources().getDrawable(R.drawable.home, null);
+                // Set color filter
+                homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
+                ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
+            }
+        }
 
         // Set toolbar title
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getString(R.string.patient_diary, patientName));
@@ -79,23 +98,20 @@ public class PatientFragment extends Fragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Go back to previous fragment
-                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
+                if (user != null && user.equals("doctor")) {
+                    fragmentManager.popBackStack();
+                } else {
+                    if (user != null && user.equals("patient")) {
+                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }
             }
         });
-
-        TextView textName = view.findViewById(R.id.txtName_inputlayout);
-        if (this.getArguments() != null) {
-            patientUUID = this.getArguments().getString("patientUUID");
-            patientName = this.getArguments().getString("patientName");
-            patientAge = this.getArguments().getString("patientAge");
-            user = this.getArguments().getString("user");
-        }
 
         textName.setText(patientName);
 
