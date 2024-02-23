@@ -16,12 +16,24 @@
             style="@style/TitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="start"
             android:text="@string/medications_to_purchase"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/medicationSubtitle"
+            style="@style/SubtitleText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="start"
+            android:text="@string/check_desc"
             android:visibility="gone"/>
 
 

@@ -410,6 +410,7 @@
     <string name="expenses_others">Altre spese</string>
     <string name="expenses_examinations">Spese esami</string>
 
+    <string name="check_desc">Spunta un farmaco per segnarlo acquistato</string>
     <string name="entry_format">Le tue %1$s sono state: %2$.2f €</string>
     <string name="enter_valid_date">Per favore, inserisci una data valida</string>
     <string name="valid_amount">Per favore, inserisci un importo valido</string>

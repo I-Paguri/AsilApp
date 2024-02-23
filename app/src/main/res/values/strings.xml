@@ -156,6 +156,7 @@
 
     <string name="add_expense_dialog_title">Add this new expense?</string>
     <string name="add_expense_dialog_message">Confirm the adding of this new expense.</string>
+    <string name="check_desc">Check medication to set it bought</string>
 
     <string name="analysis_week">Week</string>
     <string name="analysis_month">Month</string>

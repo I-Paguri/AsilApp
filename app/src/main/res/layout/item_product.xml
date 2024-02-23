@@ -2,17 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
-    <View
+    <!--
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dividerTop"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/black" />
+        android:layout_height="wrap_content"
+        app:dividerInsetEnd="30dp"
+        app:dividerInsetStart="30dp"
+        android:layout_marginTop="16dp"/>
+    -->
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
@@ -25,10 +32,12 @@
 
             <TextView
                 android:id="@+id/description"
-                style="@style/CardViewSubtitleText2"
+                style="@style/SubtitleText3"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="16dp"
+                android:textAlignment="textStart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="Nome Farmaco"
                 />
 
@@ -38,10 +47,18 @@
             android:id="@+id/product_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:checked="false" />
 
     </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dividerBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerInsetEnd="40dp"
+        app:dividerInsetStart="30dp"
+        android:layout_marginTop="16dp"/>
 
 
 

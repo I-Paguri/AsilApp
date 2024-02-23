@@ -67,6 +67,7 @@ public class ProductFragment extends Fragment {
                     boolean hasUnboughtMedication = false;
                     if (!treatments.isEmpty()) {
                         for (Map.Entry<String, Treatment> entry : treatments.entrySet()) {
+
                             ArrayList<Medication> medications = entry.getValue().getMedications();
                             for (Medication medication : medications) {
                                 if (!medication.getIsBought()) {
@@ -79,6 +80,7 @@ public class ProductFragment extends Fragment {
 
                     LinearLayout parentLayout = requireView().findViewById(R.id.parentLayout);
                     TextView titleText = parentLayout.findViewById(R.id.medicationTitle);
+                    TextView subtitleText = parentLayout.findViewById(R.id.medicationSubtitle);
                     if (hasUnboughtMedication) {
                         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
@@ -86,6 +88,7 @@ public class ProductFragment extends Fragment {
                         recyclerView.setAdapter(productAdapter);
                         recyclerView.setVisibility(View.VISIBLE);
                         titleText.setVisibility(View.VISIBLE);
+                        subtitleText.setVisibility(View.VISIBLE);
                         //emptyListImage.setVisibility(View.GONE);
                         //emptyListText.setVisibility(View.GONE);
                     } else {

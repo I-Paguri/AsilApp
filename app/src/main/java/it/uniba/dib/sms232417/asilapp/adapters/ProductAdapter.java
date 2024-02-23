@@ -1,8 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
 
-
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -24,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.divider.MaterialDivider;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +68,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.productCheckbox.setOnCheckedChangeListener(null); // Imposta il listener a null per evitare comportamenti inaspettati
         holder.productCheckbox.setChecked(medication.getIsBought()); // Imposta lo stato della checkbox in base al prodotto
 
+        // Hide the divider if it's the last item
+        if (position == medications.size() - 1) {
+            holder.dividerBottom.setVisibility(View.GONE);
+        } else {
+            holder.dividerBottom.setVisibility(View.VISIBLE);
+        }
 
         // Aggiungi un listener alla checkbox
         holder.productCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -76,6 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return medications.size();
@@ -85,18 +92,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         TextView description;
         CheckBox productCheckbox;
+        MaterialDivider dividerBottom;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
 
             description = itemView.findViewById(R.id.description);
             productCheckbox = itemView.findViewById(R.id.product_checkbox);
+            dividerBottom = itemView.findViewById(R.id.dividerBottom);
         }
     }
 
 
     private void handleCheckboxChecked(ProductViewHolder holder, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(holder.productCheckbox.getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(holder.productCheckbox.getContext());
         Resources res = context.getResources();
         builder.setTitle(res.getString(R.string.insert_details));
 
@@ -107,7 +116,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         // Get references to the input fields
         final TextInputEditText amountInput = dialogView.findViewById(R.id.amount_autocomplete);
         final TextInputEditText dateInput = dialogView.findViewById(R.id.dateInput);
-
 
 
         // Set up the category AutoCompleteTextView with an ArrayAdapter
@@ -140,99 +148,97 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.productCheckbox.setChecked(false);
         });
 
-        AlertDialog dialog = builder.create();
+        androidx.appcompat.app.AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
-            Button button = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
+            Button button = ((androidx.appcompat.app.AlertDialog) dialogInterface).getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE);
+
             button.setOnClickListener(view -> {
 
                 try {
                     // Il tuo codice esistente va qui
-            String category = "FARMACI";
-            String amount = amountInput.getText().toString();
-            String date = dateInput.getText().toString();
+                    String category = "FARMACI";
+                    String amount = amountInput.getText().toString();
+                    String date = dateInput.getText().toString();
 
 
+                    // Get references to the TextInputLayouts
+                    TextInputLayout amountLayout = dialogView.findViewById(R.id.amount_layout);
+                    TextInputLayout dateLayout = dialogView.findViewById(R.id.date_layout);
 
-            // Get references to the TextInputLayouts
-            TextInputLayout amountLayout = dialogView.findViewById(R.id.amount_layout);
-            TextInputLayout dateLayout = dialogView.findViewById(R.id.date_layout);
+                    // Validate the amount field
+                    if (amount.isEmpty()) {
+                        // Show an error message
+                        amountLayout.setError(res.getString(R.string.field_required_error));
+                        return;
+                    } else {
+                        amountLayout.setError(null);
+                    }
 
-            // Validate the amount field
-            if (amount.isEmpty()) {
-                // Show an error message
-                amountLayout.setError(res.getString(R.string.field_required_error));
-                return;
-            } else {
-                amountLayout.setError(null);
-            }
-
-            // Validate the date field
-            if (date.isEmpty()) {
-                // Show an error message
-                dateLayout.setError(res.getString(R.string.field_required_error));
-                return;
-            } else {
-                dateLayout.setError(null);
-            }
-
+                    // Validate the date field
+                    if (date.isEmpty()) {
+                        // Show an error message
+                        dateLayout.setError(res.getString(R.string.field_required_error));
+                        return;
+                    } else {
+                        dateLayout.setError(null);
+                    }
 
 
+                    // Create an instance of DatabaseAdapterPatient
+                    DatabaseAdapterPatient adapter2 = new DatabaseAdapterPatient(holder.productCheckbox.getContext());
 
-            // Create an instance of DatabaseAdapterPatient
-            DatabaseAdapterPatient adapter2 = new DatabaseAdapterPatient(holder.productCheckbox.getContext());
+                    // Get the instance of FirebaseAuth
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
 
-            // Get the instance of FirebaseAuth
-            FirebaseAuth auth = FirebaseAuth.getInstance();
+                    // Get the currently logged in user
+                    FirebaseUser currentUser = auth.getCurrentUser();
 
-            // Get the currently logged in user
-            FirebaseUser currentUser = auth.getCurrentUser();
+                    if (currentUser != null) {
+                        // Get the UUID of the currently logged in user
+                        String patientUUID = currentUser.getUid();
 
-            if (currentUser != null) {
-                // Get the UUID of the currently logged in user
-                String patientUUID = currentUser.getUid();
+                        // Convert the amount to a double
+                        double amountDouble;
+                        try {
+                            amountDouble = Double.parseDouble(amount);
+                        } catch (NumberFormatException e) {
+                            // Show an error message
+                            Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.valid_amount), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                // Convert the amount to a double
-                double amountDouble;
-                try {
-                    amountDouble = Double.parseDouble(amount);
-                } catch (NumberFormatException e) {
-                    // Show an error message
-                    Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.valid_amount), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                        // Convert the date to a Date object
+                        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                        Date dateObject;
+                        try {
+                            dateObject = format.parse(date);
+                        } catch (ParseException e) {
+                            // Show an error message
 
-                // Convert the date to a Date object
-                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-                Date dateObject;
-                try {
-                    dateObject = format.parse(date);
-                } catch (ParseException e) {
-                    // Show an error message
+                            Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.enter_valid_date), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                    Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.enter_valid_date), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                        // Create an Expenses object
+                        Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
+                        Expenses expense = new Expenses(categoryEnum, amountDouble, dateObject);
 
-                // Create an Expenses object
-                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
-                Expenses expense = new Expenses(categoryEnum, amountDouble, dateObject);
+                        // Call the addExpense method
+                        adapter2.addExpense(patientUUID, expense);
+                        Log.d("Firestore", "Expense added successfully");
 
-                // Call the addExpense method
-                adapter2.addExpense(patientUUID, expense);
-                Log.d("Firestore", "Expense added successfully");
+                        // Remove the item from the product list
+                        BoughtProduct(medications.get(position).getId(), context);
+                        medications.remove(position);
 
-                // Remove the item from the product list
-                BoughtProduct(medications.get(position).getId(), context);
-                medications.remove(position);
+                        Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.medication_purchased_successfully), Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.medication_purchased_successfully), Toast.LENGTH_SHORT).show();
-
-                // Notify the adapter that the data has changed
-                notifyDataSetChanged();
-            } else {
-                // Show an error message
-                Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.error_user_not_found), Toast.LENGTH_SHORT).show();
-            }
+                        // Notify the adapter that the data has changed
+                        notifyDataSetChanged();
+                    } else {
+                        // Show an error message
+                        Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.error_user_not_found), Toast.LENGTH_SHORT).show();
+                    }
 
                     dialog.dismiss();
                 } catch (Exception e) {
@@ -264,7 +270,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
 
-    public void BoughtProduct(int idBought, Context context){
+    public void BoughtProduct(int idBought, Context context) {
 
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -299,38 +305,38 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                         for (Medication medication : medications) {
 
 
-                           if (medication.getId()==(idBought)){
+                            if (medication.getId() == (idBought)) {
 
-                               Log.d("BoughtProduct", "BoughtProduct: "+medication.getId());
+                                Log.d("BoughtProduct", "BoughtProduct: " + medication.getId());
 
                                 medication.setIsBought(true);
 
-                               FirebaseFirestore db = FirebaseFirestore.getInstance();
-                               db.collection("patient")
-                                       .document(patientUUID)
-                                       .collection("treatments")
-                                       .document(treatmentId)
-                                       .update("medications",medications)
-                                       .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                           @Override
-                                           public void onSuccess(Void aVoid) {
-                                               System.out.println("DocumentSnapshot successfully updated!");
-                                           }
-                                       })
-                                       .addOnFailureListener(new OnFailureListener() {
-                                           @Override
-                                           public void onFailure(@NonNull Exception e) {
-                                               System.out.println("Error updating document"+ e.getMessage());
-                                           }
-                                       });
-
-                           }
-
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("patient")
+                                        .document(patientUUID)
+                                        .collection("treatments")
+                                        .document(treatmentId)
+                                        .update("medications", medications)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                System.out.println("DocumentSnapshot successfully updated!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                System.out.println("Error updating document" + e.getMessage());
+                                            }
+                                        });
 
                             }
 
 
                         }
+
+
+                    }
                 }
 
                 @Override
