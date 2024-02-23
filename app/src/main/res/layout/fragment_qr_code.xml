@@ -24,7 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
-
         android:background="@drawable/rounded_relative_layout"
         tools:ignore="MissingConstraints"
         android:layout_below="@+id/txtSubtext"

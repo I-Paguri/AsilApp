@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,13 +33,11 @@ import java.util.ArrayList;
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasureFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.PatientFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
@@ -169,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 10);
             }else {
-                selectedFragment = new MeasureFragment();
+                selectedFragment = new QRCodeAuth();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
@@ -199,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }else if(requestCode == 10 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
-                selectedFragment = new MeasureFragment();
+                selectedFragment = new QRCodeAuth();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
@@ -232,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
         if (currentFragment instanceof HealthcareFragment || currentFragment instanceof MyPatientsFragment
-                || currentFragment instanceof MyAccountFragment || currentFragment instanceof MeasureFragment || (currentFragment instanceof PatientFragment && loggedPatient != null)) {
+                || currentFragment instanceof MyAccountFragment || currentFragment instanceof QRCodeAuth || (currentFragment instanceof PatientFragment && loggedPatient != null)) {
             // If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -262,13 +259,6 @@ public class MainActivity extends AppCompatActivity {
                         })
                         .create()
                         .show();
-            } else if (currentFragment instanceof QRCodeAuth) {
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, new MeasureFragment());
-                transaction.addToBackStack(null);
-                transaction.commit();
             } else {
                 if (currentFragment instanceof HomeFragment) {
                     if (doubleBackToExitPressedOnce) {
