@@ -11,7 +11,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -106,8 +109,26 @@ public class DatabaseAdapterUser {
 
                             treatments.put(treatmentId, treatment); // Add the treatmentId and Treatment object to the map
                         }
+
+                        // Convert the Map to a List of entries
+                        List<Map.Entry<String, Treatment>> list = new ArrayList<>(treatments.entrySet());
+
+                        // Sort the List using Collections.sort() and a custom comparator
+                        Collections.sort(list, new Comparator<Map.Entry<String, Treatment>>() {
+                            @Override
+                            public int compare(Map.Entry<String, Treatment> o1, Map.Entry<String, Treatment> o2) {
+                                return o2.getValue().getStartDate().compareTo(o1.getValue().getStartDate());
+                            }
+                        });
+
+                        // Convert the sorted List back to a LinkedHashMap
+                        Map<String, Treatment> sortedTreatments = new LinkedHashMap<>();
+                        for (Map.Entry<String, Treatment> entry : list) {
+                            sortedTreatments.put(entry.getKey(), entry.getValue());
+                        }
+
                         Log.d("Firestore", "Treatments: " + treatments.toString());
-                        callback.onCallback(treatments); // Pass the map to the callback
+                        callback.onCallback(sortedTreatments); // Pass the map to the callback
                     })
                     .addOnFailureListener(e -> {
                         Log.d("Firestore", "Error getting treatments", e);
