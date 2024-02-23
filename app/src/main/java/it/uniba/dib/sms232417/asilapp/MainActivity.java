@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         changeMenu(1);
         updateIconProfileImage();
+
     }
 
     public void checkPermission() {

@@ -2,21 +2,17 @@ package it.uniba.dib.sms232417.asilapp.entity.vitals;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class HeartRate {
     private int value;
-    private String date;
+    private Date date;
     public HeartRate(int value) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        this.date = sdf.format(new Date());
-        this.value = value;
+       this.date = new Date();
+       this.value = value;
 
     }
     //Per recupero dal DB
-    public HeartRate(int value, String date) {
-        this.value = value;
-        this.date = date;
-    }
 
     public HeartRate() {
     }
@@ -29,11 +25,11 @@ public class HeartRate {
         this.value = value;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -44,4 +40,9 @@ public class HeartRate {
                 ", date='" + date + '\'' +
                 '}';
     }
+    public String getStringDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        return dateFormat.format(this.date);
+    }
+
 }

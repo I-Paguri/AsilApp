@@ -1,14 +1,16 @@
 package it.uniba.dib.sms232417.asilapp.entity.vitals;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class BloodPressure {
     private int systolic;
     private int diastolic;
-    private String date;
+    private Date date;
     public BloodPressure(int systolic, int diastolic) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        this.date = sdf.format(new java.util.Date());
+        this.date = new Date();
         this.systolic = systolic;
         this.diastolic = diastolic;
     }
@@ -32,11 +34,16 @@ public class BloodPressure {
         this.diastolic = diastolic;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getStringDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        return dateFormat.format(this.date);
     }
 }

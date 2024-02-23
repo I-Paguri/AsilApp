@@ -2,18 +2,15 @@ package it.uniba.dib.sms232417.asilapp.entity.vitals;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Temperature {
     private double value;
-    private String date;
+    private Date date;
     public Temperature(double value) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        this.date = sdf.format(new Date());
+        this.date = new Date();
         this.value = value;
-
-    }
-
-    public Temperature() {
 
     }
 
@@ -26,11 +23,15 @@ public class Temperature {
         this.value = value;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
+    }
+    public String getStringDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        return dateFormat.format(this.date);
     }
 }
