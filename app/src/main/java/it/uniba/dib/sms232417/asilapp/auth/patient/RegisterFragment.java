@@ -145,48 +145,48 @@ public class RegisterFragment extends Fragment {
 
                 if (email.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_email)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (password.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_password)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (nome.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_nome)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (cognome.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_cognome)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (strDataNascita.toString().isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_data)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (regione.isEmpty()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_region)
                             .create();
                     builder.show();
                 } else if (!password.equals(confermaPassword)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.password_not_match)
                             .create();
                     builder.setPositiveButton("Ok", null);

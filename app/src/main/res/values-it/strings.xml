@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AsilApp</string>
-
+    <string name="doctor" translatable="false">Dottore</string>
+    <string name="patient" translatable="false">Paziente</string>
     <!-- Buttons strings -->
     <string name="btn_add">Misura</string>
     <string name="btn_healthcare">Healthcare</string>
@@ -23,6 +24,10 @@
     <string name="birth_date">Inserisci la tua data di nascita</string>
     <string name="confirm_password">Conferma la password</string>
     <string name="password_not_match">Le password non corrispondono</string>
+    <string name="save_password" translatable="false">Login Automatico</string>
+    <string name="save_password_explain" translatable="false">Vuoi salvare la password per effettuare il login automatico?</string>
+    <string name="yes" translatable="false">Si</string>
+    <string name="no" translatable="false">No</string>
 
     <string name="name" translatable="false">Nome</string>
     <string name="surname" translatable="false">Cognome</string>
@@ -45,7 +50,7 @@
     <string name="last_measure_explain" translatable="false">Qui verrano visualizzati i risultati delle ultime misurazioni</string>
     <string name="attention" translatable="false">Attenzione!</string>
     <string name="explain_permission_camera" translatable="false">Devi accettare i permessi per poter accedere a tali funzioni</string>
-    <string name="explain_permission_gallery"> transalatable = "false" Devi accettare i permessi per poter accedere alla galleria </string>
+    <string name="explain_permission_gallery" transalatable="false">Devi accettare i permessi per poter accedere alla galleria </string>
     <string name="cancel" translatable="false">Annulla</string>
     <string name="confirm">Conferma</string>
     <string name="accept">Accetta</string>
@@ -454,4 +459,19 @@
     <string name="no_vitals_found_descr">Connettiti al container per registrare parametri vitali</string>
     <string name="connect_to_container">Connessione al Contenitore</string>
     <string name="patient_diary">Il Diario di %s</string>
+
+    <string name="login_doctor_lbl" translatable="false">Qui puoi accedere al tuo account!</string>
+    <string name="qr_code_authentication" translatable="false">Accedi utilizzando il tuo badge</string>
+    <string name="qr_code_authentication_explain" translatable="false">Scansiona il QR Code del tuo Badge</string>
+    <string name="decision_account" translatable="false">Chi sei?</string>
+    <string name="select_your_country">Inserisci la tua nazionalità</string>
+
+    <string name="empty_fields_email" translatable="false">Compilare il campo e-mail</string>.
+    <string name="empty_fields_password" translatable="false">Compilare il campo password</string>.
+    <string name="empty_fields_nome" translatable="false">Compilare il campo nome</string>.
+    <string name="empty_fields_cognome" translatable="false">Compilare il campo del cognome</string>.
+    <string name="empty_fields_data" translatable="false">Compilare il campo della data di nascita</string>.
+    <string name="empty_fields_region" translatable="false">Compilare il campo della regione</string>.
+    <string name="empty_fields_registration_number" translatable="false">Compilare il campo del numero di registrazione</string>.
+    <string name="empty_fields_specialization" translatable="false">Compilare il campo specializzazione</string>.
 </resources>

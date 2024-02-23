@@ -46,7 +46,7 @@
     <string name="create_account">You don\'t have an account? Create Now!</string>
     <string name="login">Did you have an account? Log in!</string>
     <string name="login_doctor" translatable="false">Are you a doctor? Log in!</string>
-    <string name="login_doctor_lbl" translatable="false">Welcome Doctor!</string>
+    <string name="login_doctor_lbl" translatable="false">Here you can access to your account!</string>
     <string name="login_qr_code_doctor_explain" translatable="false">You can access by scanning the QRcode of your badge</string>
     <string name="btn_qr_code_doctor" translatable="false">SCAN NOW</string>
     <string name="btn_login_patient" translatable="false">Aren\'t you a doctor? Log in as a patient!</string>
@@ -103,7 +103,7 @@
     <string name="medication_name">What is the medication name?</string>
     <string name="how_regularly">How regularly?</string>
     <string name="select">Select</string>
-    <string name="save_password" translatable="false">Save password</string>
+    <string name="save_password" translatable="false">Automatic Login</string>
     <string name="save_password_explain" translatable="false">Save password to login automatically?</string>
     <string name="yes" translatable="false">Yes</string>
     <string name="no" translatable="false">No</string>
@@ -634,6 +634,7 @@
     <string name="error_login_section_patient" translatable="false">You\'re a Patient, sign in using your dedicated area</string>
     <string name="error_login_section_doctor" translatable="false">You\'re a Doctor, sign in using your dedicated area</string>
     <string name="qr_code_authentication" translatable="false">Sign in using your badge</string>
+    <string name="qr_code_authentication_explain" translatable="false">Scan the QR Code of your Badge</string>
     <string name="misuration_continue">You can move to your container and measure your vitals</string>
     <string name="misuration_continue_explain">If you want to stop the measurement click cancel</string>
     <string name="cancel_misuration">Cancel</string>
@@ -770,4 +771,7 @@
     <string name="no_vitals_found_descr">Register vitals by connecting to the container.</string>
     <string name="connect_to_container">Connect to the container</string>
     <string name="patient_diary">%s\'s Diary</string>
+    <string name="select_your_country">Select your Country</string>
+
+
 </resources>

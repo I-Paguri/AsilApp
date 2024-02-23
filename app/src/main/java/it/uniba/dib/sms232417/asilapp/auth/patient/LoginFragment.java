@@ -94,14 +94,14 @@ public class LoginFragment extends Fragment {
                 }
                 if (email.toString().isEmpty()) {
                     new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
-                            .setTitle("Error")
+                            .setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_email)
                             .setPositiveButton("Ok", null)
                             .create()
                             .show();
                 } else if (password.toString().isEmpty()) {
                     new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
-                            .setTitle("Error")
+                            .setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_password)
                             .setPositiveButton("Ok", null)
                             .create()

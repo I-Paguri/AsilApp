@@ -72,14 +72,14 @@ public class LoginDoctorCredentialFragment extends Fragment {
 
                 if (email.isEmpty()) {
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_email)
                             .create();
                     builder.setPositiveButton("Ok", null);
                     builder.show();
                 } else if (password.isEmpty()) {
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                    builder.setTitle("Error")
+                    builder.setTitle(R.string.error)
                             .setMessage(R.string.empty_fields_password)
                             .create();
                     builder.setPositiveButton("Ok", null);
@@ -94,7 +94,7 @@ public class LoginDoctorCredentialFragment extends Fragment {
         btnLoginQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((EntryActivity) getActivity()).checkPermission();
+                ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorQrCodeFragment());
             }
         });
 
