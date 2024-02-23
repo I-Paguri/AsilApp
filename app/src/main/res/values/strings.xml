@@ -103,7 +103,7 @@
     <string name="medication_name">What is the medication name?</string>
     <string name="how_regularly">How regularly?</string>
     <string name="select">Select</string>
-    <string name="save_password" translatable="false">Automatic Login</string>
+    <string name="save_password" translatable="false">Automatic login</string>
     <string name="save_password_explain" translatable="false">Save password to login automatically?</string>
     <string name="yes" translatable="false">Yes</string>
     <string name="no" translatable="false">No</string>

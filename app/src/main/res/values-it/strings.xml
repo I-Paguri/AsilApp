@@ -24,7 +24,7 @@
     <string name="birth_date">Inserisci la tua data di nascita</string>
     <string name="confirm_password">Conferma la password</string>
     <string name="password_not_match">Le password non corrispondono</string>
-    <string name="save_password" translatable="false">Login Automatico</string>
+    <string name="save_password" translatable="false">Login automatico</string>
     <string name="save_password_explain" translatable="false">Vuoi salvare la password per effettuare il login automatico?</string>
     <string name="yes" translatable="false">Si</string>
     <string name="no" translatable="false">No</string>

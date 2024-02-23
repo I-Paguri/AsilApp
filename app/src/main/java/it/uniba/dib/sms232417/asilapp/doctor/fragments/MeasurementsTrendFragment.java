@@ -272,53 +272,42 @@ public class MeasurementsTrendFragment extends Fragment {
 
         // Format x-axis to display specific days
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance();
-
-        /*
-        // Create a list of 10 days
-        days = new ArrayList<>();
-        for (i = 0; i < numberOfMeasures; i++) {
-            days.add(calendar.getTime());
-            calendar.add(Calendar.DAY_OF_YEAR, 1);
-        }*/
 
 
+        // Convert days to string
+        String[] daysString = new String[days.size()];
 
-            // Convert days to string
-            String[] daysString = new String[days.size()];
-
-            for (i = 0; i < days.size(); i++) {
-                daysString[i] = sdf.format(days.get(i));
-            }
-
-            ValueFormatter formatter = new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    int index = (int) value;
-                    if (index < 0 || index >= daysString.length) {
-                        return ""; // return default value
-                    }
-                    return daysString[index];
-                }
-            };
-
-            XAxis xAxis = lineChart.getXAxis();
-            xAxis.setTypeface(ember_regular);
-            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-            xAxis.setLabelRotationAngle(-45);
-            xAxis.setValueFormatter(formatter);
-            xAxis.setDrawGridLines(false);
-
-            YAxis leftAxis = lineChart.getAxisLeft();
-            leftAxis.setTypeface(ember_regular);
-            YAxis rightAxis = lineChart.getAxisRight();
-            leftAxis.setDrawGridLines(false); // Hide grid lines on the left Y-axis
-            rightAxis.setDrawGridLines(false); // Hide grid lines on the right Y-axis
-            rightAxis.setEnabled(false); // Disable the right Y-axis
-
-            lineChart.invalidate(); // refresh
-
-
+        for (i = 0; i < days.size(); i++) {
+            daysString[i] = sdf.format(days.get(i));
         }
-    }
 
+        ValueFormatter formatter = new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int index = (int) value;
+                if (index < 0 || index >= daysString.length) {
+                    return ""; // return default value
+                }
+                return daysString[index];
+            }
+        };
+
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setTypeface(ember_regular);
+        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+        xAxis.setLabelRotationAngle(-45);
+        xAxis.setValueFormatter(formatter);
+        xAxis.setDrawGridLines(false);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setTypeface(ember_regular);
+        YAxis rightAxis = lineChart.getAxisRight();
+        leftAxis.setDrawGridLines(false); // Hide grid lines on the left Y-axis
+        rightAxis.setDrawGridLines(false); // Hide grid lines on the right Y-axis
+        rightAxis.setEnabled(false); // Disable the right Y-axis
+
+        lineChart.invalidate(); // refresh
+
+
+    }
+}
