@@ -161,23 +161,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void checkPermission() {
-        try {
-            if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 10);
-            }else {
-                selectedFragment = new QRCodeAuth();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -192,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
              builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        checkPermission();
+                        onRequestPermissionsResult(1, permissions, grantResults);
                     }
                 });
             }else if(requestCode == 10 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
@@ -436,7 +419,8 @@ public class MainActivity extends AppCompatActivity {
 
                                     } else {
                                         if (itemId == R.id.navigation_measure) {
-                                            checkPermission();
+                                            selectedFragment = new QRCodeAuth();
+
                                         }
                                     }
                                 }
