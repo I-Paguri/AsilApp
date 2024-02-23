@@ -154,6 +154,11 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
@@ -284,6 +289,11 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
@@ -363,6 +373,11 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
@@ -444,6 +459,12 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
+
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
