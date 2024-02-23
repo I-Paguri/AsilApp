@@ -121,6 +121,11 @@ public class TreatmentFragment extends Fragment {
                     // Add the inflated layout to the parent layout
                     LinearLayout parentLayout = view.findViewById(R.id.linearLayoutCardView);
                     parentLayout.addView(noTreatmentLayout);
+
+                    TextView noTreatmentFoundSubtitle = view.findViewById(R.id.noTreatmentFoundSubtitle);
+                    if (user != null && user.equals("patient")) {
+                        noTreatmentFoundSubtitle.setVisibility(View.GONE);
+                    }
                 } else {
                     Iterator<Map.Entry<String, Treatment>> iterator = treatments.entrySet().iterator();
                     int i;

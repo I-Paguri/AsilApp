@@ -1,10 +1,15 @@
 package it.uniba.dib.sms232417.asilapp.entity.vitals;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class HeartRate {
+public class HeartRate implements Parcelable {
     private int value;
     private Date date;
     public HeartRate(int value) {
@@ -45,4 +50,14 @@ public class HeartRate {
         return dateFormat.format(this.date);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(value);
+        dest.writeLong(date.getTime());
+    }
 }

@@ -16,19 +16,19 @@
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginTop="16dp"
         android:contentDescription="@string/treatment"
-        android:src="@drawable/doctors_illustration" />
+        android:src="@drawable/measure_illustration" />
 
     <TextView
         android:id="@+id/noPatientsFoundTitle"
-        style="@style/TitleText"
+        style="@style/TitleText3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginTop="16dp"
-        android:text="@string/no_treatment_found"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:textAlignment="center"
+        android:text="@string/no_vitals_found"
         android:textColor="@color/colorPrimary" />
 
     <TextView
@@ -37,11 +37,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="8dp"
-        android:text="@string/add_one_if_needed"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:textAlignment="center"
+        android:layout_marginTop="8dp"
+        android:text="@string/no_vitals_found_descr"
         android:textColor="@color/colorPrimary" />
 
 </LinearLayout>
