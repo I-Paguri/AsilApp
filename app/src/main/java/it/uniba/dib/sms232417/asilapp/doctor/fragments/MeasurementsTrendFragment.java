@@ -1,11 +1,17 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Parcelable;
 import android.util.Log;
@@ -60,6 +66,7 @@ public class MeasurementsTrendFragment extends Fragment {
     private List<Date> days;
     private List<Entry> entries;
     private List<Entry> entriesMin, entriesMax;
+    private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,11 +105,18 @@ public class MeasurementsTrendFragment extends Fragment {
         }
 
         TextView txtMeasurementType = view.findViewById(R.id.txtMeasurementType);
+        TextView txtDescriptionTitle = view.findViewById(R.id.descriptionTitle);
+        TextView txtDescription = view.findViewById(R.id.description);
+
         String formattedMeasurementType = "";
+        String formattedDescriptionTitle = "";
+        String formattedDescription = "";
         if (!measureType.isEmpty()) {
             switch (measureType) {
                 case "heart_rate":
                     formattedMeasurementType = getResources().getString(R.string.heart_rate);
+                    formattedDescriptionTitle = getResources().getString(R.string.why_measure_regularly_heart_rate);
+                    formattedDescription = getResources().getString(R.string.heart_rate_desc2);
                     heartRates = this.getArguments().getParcelableArrayList("heartRates");
                     numberOfMeasures = heartRates.size();
 
@@ -118,6 +132,8 @@ public class MeasurementsTrendFragment extends Fragment {
                     break;
                 case "blood_pressure":
                     formattedMeasurementType = getResources().getString(R.string.blood_pressure);
+                    formattedDescriptionTitle = getResources().getString(R.string.why_measure_regularly_blood_pressure);
+                    formattedDescription = getResources().getString(R.string.blood_pressure_desc2);
                     bloodPressures = this.getArguments().getParcelableArrayList("bloodPressures");
                     numberOfMeasures = bloodPressures.size();
 
@@ -140,6 +156,8 @@ public class MeasurementsTrendFragment extends Fragment {
                     break;
                 case "temperature":
                     formattedMeasurementType = getResources().getString(R.string.temperature);
+                    formattedDescriptionTitle = getResources().getString(R.string.why_measure_regularly_temperature);
+                    formattedDescription = getResources().getString(R.string.temperature_desc2);
                     temperatures = this.getArguments().getParcelableArrayList("temperatures");
                     numberOfMeasures = temperatures.size();
 
@@ -155,6 +173,8 @@ public class MeasurementsTrendFragment extends Fragment {
                     break;
                 case "glycemia":
                     formattedMeasurementType = getResources().getString(R.string.glycemia);
+                    formattedDescriptionTitle = getResources().getString(R.string.why_measure_regularly_glycemia);
+                    formattedDescription = getResources().getString(R.string.glycemia_desc2);
                     glycemias = this.getArguments().getParcelableArrayList("glycemias");
                     numberOfMeasures = glycemias.size();
 
@@ -173,6 +193,36 @@ public class MeasurementsTrendFragment extends Fragment {
                     break;
             }
         }
+
+        txtDescriptionTitle.setText(formattedDescriptionTitle);
+        txtDescription.setText(formattedDescription);
+        // TOOLBAR
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+
+
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        // Show home button
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Set home icon as back button
+        Drawable backIcon = getResources().getDrawable(R.drawable.arrow_back, null);
+        // Set color filter
+        backIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(backIcon);
+
+        // Set toolbar title
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(patientName);
+        // Change toolbar title text color
+        toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
+
+        // Set navigation click listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                fragmentManager.popBackStack();
+            }
+        });
 
         txtMeasurementType.setText(formattedMeasurementType);
 

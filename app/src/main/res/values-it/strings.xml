@@ -455,6 +455,8 @@
 
     <string name="on_date">Il</string>
 
+    <string name="value_ranges">Intervalli di valori</string>
+
     <string name="no_vitals_found">Nessuna misurazione trovata</string>
     <string name="no_vitals_found_descr">Connettiti al container per registrare parametri vitali</string>
     <string name="connect_to_container">Connessione al Contenitore</string>
@@ -474,4 +476,30 @@
     <string name="empty_fields_region" translatable="false">Compilare il campo della regione</string>.
     <string name="empty_fields_registration_number" translatable="false">Compilare il campo del numero di registrazione</string>.
     <string name="empty_fields_specialization" translatable="false">Compilare il campo specializzazione</string>.
+
+    <string name="misuration_continue">Usa l\'app contenitore per misurare i tuoi parametri vitali</string>
+    <string name="misuration_continue_explain">Se vuoi interrompere la misurazione clicca "Annulla"</string>
+    <string name="cancel_misuration">Annulla</string>
+
+    <string name="heart_rate_desc2">
+        Misurare regolarmente il battito cardiaco permette di valutare la salute cardiovascolare, rilevare potenziali problemi, e adottare tempestive misure preventive.
+    </string>
+
+    <string name="blood_pressure_desc2">
+        Monitorare regolarmente la pressione sanguigna è cruciale per prevenire malattie cardiovascolari. La rilevazione precoce di variazioni aiuta a gestire la salute cardiovascolare e prevenire complicazioni gravi.
+    </string>
+
+    <string name="temperature_desc2">
+        Misurare regolarmente la temperatura corporea è essenziale per monitorare la salute. Rilevare variazioni può indicare infezioni precoci o problemi, consentendo interventi tempestivi e prevenendo complicazioni gravi.
+    </string>
+
+    <string name="glycemia_desc2">
+        Misurare regolarmente la glicemia è cruciale per controllare il livello di zucchero nel sangue, prevenire complicazioni come il diabete, adattare la terapia, e mantenere uno stile di vita sano.
+    </string>
+
+    <string name="why_measure_regularly_heart_rate">Perché misurare regolarmente il battito cardiaco?</string>
+    <string name="why_measure_regularly_blood_pressure">Perché misurare regolarmente la pressione sanguigna?</string>
+    <string name="why_measure_regularly_temperature">Perché misurare regolarmente la temperatura corporea?</string>
+    <string name="why_measure_regularly_glycemia">Perché misurare regolarmente la glicemia?</string>
+
 </resources>

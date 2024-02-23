@@ -73,7 +73,6 @@ public class PatientFragment extends Fragment {
         // Show home button
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Log.d("userPatientFragment", user);
         // Set home icon as back button
         if (user != null && user.equals("doctor")) {
             Drawable backIcon = getResources().getDrawable(R.drawable.arrow_back, null);
@@ -90,7 +89,7 @@ public class PatientFragment extends Fragment {
         }
 
         // Set toolbar title
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getString(R.string.patient_diary, patientName));
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(patientName);
         // Change toolbar title text color
         toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 

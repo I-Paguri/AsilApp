@@ -771,7 +771,31 @@
     <string name="no_vitals_found_descr">Register vitals by connecting to the container.</string>
     <string name="connect_to_container">Connect to the container</string>
     <string name="patient_diary">%s\'s Diary</string>
+
     <string name="select_your_country">Select your Country</string>
 
+
+    <string name="value_ranges">Value ranges</string>
+
+    <string name="heart_rate_desc2">
+        Regularly measuring your heart rate allows you to assess cardiovascular health, detect potential issues, and take timely preventive measures.
+    </string>
+
+    <string name="blood_pressure_desc2">
+        Monitoring blood pressure regularly is crucial for preventing cardiovascular diseases. Early detection of variations helps manage cardiovascular health and prevent serious complications.
+    </string>
+
+    <string name="temperature_desc2">
+        Regularly measuring body temperature is essential for monitoring health. Detecting variations can indicate early infections or issues, enabling timely interventions and preventing serious complications.
+    </string>
+
+    <string name="glycemia_desc2">
+        Regularly measuring glycemia is crucial for controlling blood sugar levels, preventing complications like diabetes, adjusting therapy, and maintaining a healthy lifestyle.
+    </string>
+
+    <string name="why_measure_regularly_heart_rate">Why measure heart rate regularly?</string>
+    <string name="why_measure_regularly_blood_pressure">Why measure blood pressure regularly?</string>
+    <string name="why_measure_regularly_temperature">Why measure temperature regularly?</string>
+    <string name="why_measure_regularly_glycemia">Why measure glycemia regularly?</string>
 
 </resources>

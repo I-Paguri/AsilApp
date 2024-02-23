@@ -239,7 +239,7 @@ public class MeasurementsFragment extends Fragment {
                     // Minimum pressure
                     Range greenRangeMin = new Range();
                     greenRangeMin.setColor(Color.parseColor("#00B20B"));
-                    greenRangeMin.setFrom(50);
+                    greenRangeMin.setFrom(60);
                     greenRangeMin.setTo(80);
 
                     Range yellowRangeMin = new Range();
