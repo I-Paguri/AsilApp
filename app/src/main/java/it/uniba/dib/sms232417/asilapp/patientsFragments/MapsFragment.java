@@ -12,12 +12,15 @@ import androidx.fragment.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,15 +137,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         my_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestLocationUpdates();
-                enableMyLocation();
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                         && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                    Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (lastKnownLocation != null) {
-                        LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                    boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                    if (!isGPSEnabled) {
+                        // GPS is not enabled, show a dialog to the user
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(getResources().getString(R.string.gps_not_enabled))
+                                .setPositiveButton(getResources().getString(R.string.setting), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                        startActivity(intent);
+                                    }
+                                })
+                                .setNegativeButton(getResources().getString(R.string.cancel), null)
+                                .show();
+                    } else {
+                        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (lastKnownLocation != null) {
+                            LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                        }
                     }
                 }
             }

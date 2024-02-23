@@ -750,6 +750,8 @@
     <string name="insert_details">Insert details</string>
     <string name="medication_purchased_successfully">Product purchased successfully</string>
 
+    <string name="gps_not_enabled">GPS is not enabled,do you want to go to settings menu?</string>
+    <string name="setting">Setting</string>
 
 
 

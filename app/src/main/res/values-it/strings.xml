@@ -529,6 +529,9 @@
     <string name="misuration_continue_explain">Se vuoi interrompere la misurazione clicca "Annulla"</string>
     <string name="cancel_misuration">Annulla</string>
 
+    <string name="gps_not_enabled">Il GPS non è abilitato, vuoi andare al menu impostazioni?</string>
+    <string name="setting">Impostazioni</string>
+
     <string name="heart_rate_desc2">
         Misurare regolarmente il battito cardiaco permette di valutare la salute cardiovascolare, rilevare potenziali problemi, e adottare tempestive misure preventive.
     </string>
