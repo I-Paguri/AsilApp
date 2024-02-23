@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,10 @@ import java.util.Random;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterUser;
 import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
+import it.uniba.dib.sms232417.asilapp.entity.vitals.BloodPressure;
+import it.uniba.dib.sms232417.asilapp.entity.vitals.Glycemia;
+import it.uniba.dib.sms232417.asilapp.entity.vitals.HeartRate;
+import it.uniba.dib.sms232417.asilapp.entity.vitals.Temperature;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseRatingCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
@@ -48,6 +53,10 @@ public class MeasurementsTrendFragment extends Fragment {
     private String measureType;
     private String user; // Type of user: "patient" or "doctor"
     private int numberOfMeasures;
+    private ArrayList<HeartRate> heartRates;
+    private ArrayList<BloodPressure> bloodPressures;
+    private ArrayList<Temperature> temperatures;
+    private ArrayList<Glycemia> glycemias;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +76,11 @@ public class MeasurementsTrendFragment extends Fragment {
         user = ""; // Type of user: "patient" or "doctor"
         measureType = ""; // Type of measure: "heartRate", "bloodPressure", "temperature", "glycemia"
 
+        bloodPressures = null;
+        heartRates = null;
+        temperatures = null;
+        glycemias = null;
+
         if (this.getArguments() != null) {
             patientUUID = this.getArguments().getString("patientUUID");
             patientName = this.getArguments().getString("patientName");
@@ -84,15 +98,19 @@ public class MeasurementsTrendFragment extends Fragment {
             switch (measureType) {
                 case "heart_rate":
                     formattedMeasurementType = getResources().getString(R.string.heart_rate);
+                    heartRates = this.getArguments().getParcelableArrayList("heartRates");
                     break;
                 case "blood_pressure":
                     formattedMeasurementType = getResources().getString(R.string.blood_pressure);
+                    bloodPressures = this.getArguments().getParcelableArrayList("bloodPressures");
                     break;
                 case "temperature":
                     formattedMeasurementType = getResources().getString(R.string.temperature);
+                    temperatures = this.getArguments().getParcelableArrayList("temperatures");
                     break;
                 case "glycemia":
                     formattedMeasurementType = getResources().getString(R.string.glycemia);
+                    glycemias = this.getArguments().getParcelableArrayList("glycemias");
                     break;
                 default:
                     txtMeasurementType.setText("");

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +46,10 @@ public class MeasurementsFragment extends Fragment {
     private MultiGauge pressureMultiGauge;
     float density;
     private MaterialCardView cardViewHeartRate, cardViewBloodPressure, cardViewTemperature, cardViewGlycemia;
+    private ArrayList<HeartRate> heartRates;
+    private ArrayList<BloodPressure> bloodPressures;
+    private ArrayList<Temperature> temperatures;
+    private ArrayList<Glycemia> glycemias;
     private boolean noVitals;
 
     @Override
@@ -59,6 +64,10 @@ public class MeasurementsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         noVitals = true;
+        bloodPressures = null;
+        heartRates = null;
+        temperatures = null;
+        glycemias = null;
 
         density = getResources().getDisplayMetrics().density;
 
@@ -90,7 +99,7 @@ public class MeasurementsFragment extends Fragment {
         dbAdapterUser.getVitals(patientUUID, "heart_rate", new OnGetValueFromDBInterface() {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
-                ArrayList<HeartRate> heartRates = (ArrayList<HeartRate>) listOfValue;
+                heartRates = (ArrayList<HeartRate>) listOfValue;
                 TextView heartRateDesc = view.findViewById(R.id.heartRateDesc);
                 TextView heartRateDate = view.findViewById(R.id.heartRateDate);
                 heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
@@ -161,7 +170,7 @@ public class MeasurementsFragment extends Fragment {
         dbAdapterUser.getVitals(patientUUID, "blood_pressure", new OnGetValueFromDBInterface() {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
-                ArrayList<BloodPressure> bloodPressures = (ArrayList<BloodPressure>) listOfValue;
+                bloodPressures = (ArrayList<BloodPressure>) listOfValue;
                 TextView bloodPressureDesc = view.findViewById(R.id.bloodPressureDesc);
                 TextView bloodPressureDate = view.findViewById(R.id.bloodPressureDate);
 
@@ -280,7 +289,7 @@ public class MeasurementsFragment extends Fragment {
         dbAdapterUser.getVitals(patientUUID, "temperature", new OnGetValueFromDBInterface() {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
-                ArrayList<Temperature> temperatures = (ArrayList<Temperature>) listOfValue;
+                temperatures = (ArrayList<Temperature>) listOfValue;
                 TextView temperatureDesc = view.findViewById(R.id.temperatureDesc);
                 TextView temperatureDate = view.findViewById(R.id.temperatureDate);
                 if (temperatures.size() > 0) {
@@ -349,7 +358,7 @@ public class MeasurementsFragment extends Fragment {
         dbAdapterUser.getVitals(patientUUID, "glycemia", new OnGetValueFromDBInterface() {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
-                ArrayList<Glycemia> glycemias = (ArrayList<Glycemia>) listOfValue;
+                glycemias = (ArrayList<Glycemia>) listOfValue;
                 TextView glycemiaDesc = view.findViewById(R.id.glycemiaDesc);
                 TextView glycemiaDate = view.findViewById(R.id.glycemiaDate);
                 if (glycemias.size() > 0) {
@@ -434,6 +443,7 @@ public class MeasurementsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 bundle.putString("measureType", "heart_rate");
+                bundle.putParcelableArrayList("heartRates", heartRates);
 
                 MeasurementsTrendFragment measurementsTrendFragment = new MeasurementsTrendFragment();
                 measurementsTrendFragment.setArguments(bundle);
@@ -450,6 +460,8 @@ public class MeasurementsFragment extends Fragment {
             public void onClick(View v) {
                 bundle.putString("measureType", "temperature");
 
+                bundle.putParcelableArrayList("temperatures", temperatures);
+
                 MeasurementsTrendFragment measurementsTrendFragment = new MeasurementsTrendFragment();
                 measurementsTrendFragment.setArguments(bundle);
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
@@ -465,6 +477,8 @@ public class MeasurementsFragment extends Fragment {
             public void onClick(View v) {
                 bundle.putString("measureType", "blood_pressure");
 
+                bundle.putParcelableArrayList("bloodPressures", bloodPressures);
+
                 MeasurementsTrendFragment measurementsTrendFragment = new MeasurementsTrendFragment();
                 measurementsTrendFragment.setArguments(bundle);
                 FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
@@ -479,6 +493,8 @@ public class MeasurementsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 bundle.putString("measureType", "glycemia");
+
+                bundle.putParcelableArrayList("glycemias", glycemias);
 
                 MeasurementsTrendFragment measurementsTrendFragment = new MeasurementsTrendFragment();
                 measurementsTrendFragment.setArguments(bundle);
