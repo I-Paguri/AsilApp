@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
@@ -40,7 +42,8 @@ public class MeasurementsFragment extends Fragment {
     private String user; // Type of user: "patient" or "doctor"
     private ArcGauge heartRateArchGauge, glycemiaArchGauge;
     private MultiGauge pressureMultiGauge;
-    private MaterialCardView cardViewHeartRate, cardViewPressure, cardViewTemperature, cardViewGlycemia;
+    float density;
+    private MaterialCardView cardViewHeartRate, cardViewBloodPressure, cardViewTemperature, cardViewGlycemia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +55,8 @@ public class MeasurementsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        density = getResources().getDisplayMetrics().density;
 
         patientUUID = "";
         patientName = "";
@@ -68,6 +73,11 @@ public class MeasurementsFragment extends Fragment {
             }
         }
 
+        cardViewHeartRate = view.findViewById(R.id.cardViewHeartRate);
+        cardViewBloodPressure = view.findViewById(R.id.cardViewBloodPressure);
+        cardViewTemperature = view.findViewById(R.id.cardViewTemperature);
+        cardViewGlycemia = view.findViewById(R.id.cardViewGlycemia);
+
 
         // Getting vitals
         DatabaseAdapterUser dbAdapterUser = new DatabaseAdapterUser(requireContext());
@@ -79,10 +89,11 @@ public class MeasurementsFragment extends Fragment {
                 ArrayList<HeartRate> heartRates = (ArrayList<HeartRate>) listOfValue;
                 TextView heartRateDesc = view.findViewById(R.id.heartRateDesc);
                 TextView heartRateDate = view.findViewById(R.id.heartRateDate);
+                heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
                 if (heartRates.size() > 0) {
                     HeartRate lastHeartRate = heartRates.get(heartRates.size() - 1);
 
-                    heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
+
                     heartRateArchGauge.setValueColor(Color.parseColor("#FFFFFF"));
 
                     Range rangeRed1 = new Range();
@@ -116,7 +127,49 @@ public class MeasurementsFragment extends Fragment {
                     heartRateArchGauge.setValue(lastHeartRate.getValue());
 
                     heartRateDesc.setText(lastHeartRate.getValue() + " bpm");
-                    heartRateDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastHeartRate.getDate());
+                    heartRateDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastHeartRate.getStringDate());
+                } else {
+                    cardViewHeartRate.setVisibility(View.GONE);
+                    // Create a new LinearLayout.LayoutParams object
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    );
+
+
+                    int dp8 = (int) (8*density + 0.5f);
+                    int dp20 = (int) (20*density + 0.5f);
+
+                    params.setMargins(dp20, 0, dp20, dp8);
+
+                    cardViewBloodPressure.setLayoutParams(params);
+
+                    /*
+                    heartRateArchGauge.setVisibility(View.GONE);
+
+                    // Create a new LinearLayout.LayoutParams object
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+
+                    int dp40 = (int) (40*density + 0.5f);
+                    int dp16 = (int) (20*density + 0.5f);
+                    int dp4 = (int) (4*density + 0.5f);
+
+
+                    // Set the margins (all values are in pixels)
+                    params.setMargins(dp16, dp40, dp16, dp4);
+                    params.gravity = Gravity.CENTER_HORIZONTAL;
+
+                    // Apply the layout parameters to the TextView
+                    heartRateDesc.setLayoutParams(params);
+
+                    heartRateDesc.setText("no data");
+                    heartRateDate.setText("");
+
+                     */
+
                 }
             }
 
@@ -133,17 +186,17 @@ public class MeasurementsFragment extends Fragment {
                 ArrayList<BloodPressure> bloodPressures = (ArrayList<BloodPressure>) listOfValue;
                 TextView bloodPressureDesc = view.findViewById(R.id.bloodPressureDesc);
                 TextView bloodPressureDate = view.findViewById(R.id.bloodPressureDate);
+
                 if (bloodPressures.size() > 0) {
-                    BloodPressure lastBloodPressure = bloodPressures.get(bloodPressures.size() - 1);
-
-                    pressureMultiGauge = view.findViewById(R.id.multiGaugePressure);
-
                     /*
                     Green: < 80, < 120
                     Yellow: < 90 < 140
                     Orange: < 120, < 180
                     Red: >= 120, >= 180
                      */
+                    BloodPressure lastBloodPressure = bloodPressures.get(bloodPressures.size() - 1);
+
+                    pressureMultiGauge = view.findViewById(R.id.multiGaugePressure);
 
                     // Maximum pressure
                     Range greenRangeMax = new Range();
@@ -207,7 +260,7 @@ public class MeasurementsFragment extends Fragment {
 
 
                     bloodPressureDesc.setText(lastBloodPressure.getSystolic() + "/" + lastBloodPressure.getDiastolic() + " mmHg");
-                    bloodPressureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastBloodPressure.getDate());
+                    bloodPressureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastBloodPressure.getStringDate());
 
                     // Third range does not matter, it is just to fill the gauge
                     Range rangeWhite = new Range();
@@ -219,6 +272,22 @@ public class MeasurementsFragment extends Fragment {
                     pressureMultiGauge.setThirdMinValue(1);
                     pressureMultiGauge.setThirdMaxValue(100);
                     pressureMultiGauge.setThirdValue(100);
+
+                } else {
+                    cardViewBloodPressure.setVisibility(View.GONE);
+                    // Create a new LinearLayout.LayoutParams object
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    );
+
+
+                    int dp8 = (int) (8*density + 0.5f);
+                    int dp20 = (int) (20*density + 0.5f);
+
+                    params.setMargins(dp20, 0, dp20, dp8);
+
+                    cardViewHeartRate.setLayoutParams(params);
                 }
             }
 
@@ -271,7 +340,22 @@ public class MeasurementsFragment extends Fragment {
 
                     thermometer.setProgressPercentage(progressPercentage, true);
 
-                    temperatureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastTemperature.getDate());
+                    temperatureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastTemperature.getStringDate());
+                } else {
+                    cardViewTemperature.setVisibility(View.GONE);
+                    // Create a new LinearLayout.LayoutParams object
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    );
+
+
+                    int dp8 = (int) (8*density + 0.5f);
+                    int dp20 = (int) (20*density + 0.5f);
+
+                    params.setMargins(dp20, 0, dp20, dp8);
+
+                    cardViewGlycemia.setLayoutParams(params);
                 }
             }
 
@@ -325,7 +409,22 @@ public class MeasurementsFragment extends Fragment {
                     glycemiaArchGauge.setValue(lastGlycemia.getGlycemia());
 
                     glycemiaDesc.setText(lastGlycemia.getGlycemia() + " mg/dL");
-                    glycemiaDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastGlycemia.getDate());
+                    glycemiaDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastGlycemia.getStringDate());
+                } else {
+                    cardViewGlycemia.setVisibility(View.GONE);
+                    // Create a new LinearLayout.LayoutParams object
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    );
+
+
+                    int dp8 = (int) (8*density + 0.5f);
+                    int dp20 = (int) (20*density + 0.5f);
+
+                    params.setMargins(dp20, 0, dp20, dp8);
+
+                    cardViewTemperature.setLayoutParams(params);
                 }
             }
 
@@ -371,8 +470,8 @@ public class MeasurementsFragment extends Fragment {
             }
         });
 
-        cardViewPressure = view.findViewById(R.id.cardViewBloodPressure);
-        cardViewPressure.setOnClickListener(new View.OnClickListener() {
+        cardViewBloodPressure = view.findViewById(R.id.cardViewBloodPressure);
+        cardViewBloodPressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bundle.putString("measureType", "blood_pressure");

@@ -14,6 +14,9 @@ public class Temperature {
 
     }
 
+    public Temperature() {
+    }
+
 
     public double getValue() {
         return value;
