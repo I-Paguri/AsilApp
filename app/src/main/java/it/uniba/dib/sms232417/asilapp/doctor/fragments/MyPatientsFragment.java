@@ -112,7 +112,7 @@ public class MyPatientsFragment extends Fragment {
                         bundle.putString("patientUUID", clickedItem.getUUID());
                         bundle.putString("patientName", clickedItem.getTitle()); // assuming getTitle() gets the patient's name
                         bundle.putString("patientAge", clickedItem.getDescription());// assuming getSubtitle() gets the patient's age
-
+                        bundle.putString("user", "doctor");
 
                         patientFragment.setArguments(bundle);
 

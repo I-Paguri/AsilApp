@@ -107,6 +107,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView heartRateDate = view.findViewById(R.id.heartRateDate);
                 heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
                 if (heartRates.size() > 0) {
+                    cardViewHeartRate.setVisibility(View.VISIBLE);
 
                     HeartRate lastHeartRate = heartRates.get(heartRates.size() - 1);
 
@@ -153,6 +154,11 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
@@ -189,6 +195,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView bloodPressureDate = view.findViewById(R.id.bloodPressureDate);
 
                 if (bloodPressures.size() > 0) {
+                    cardViewBloodPressure.setVisibility(View.VISIBLE);
                     /*
                     Green: < 80, < 120
                     Yellow: < 90 < 140
@@ -282,6 +289,11 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
@@ -317,7 +329,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView temperatureDesc = view.findViewById(R.id.temperatureDesc);
                 TextView temperatureDate = view.findViewById(R.id.temperatureDate);
                 if (temperatures.size() > 0) {
-
+                    cardViewTemperature.setVisibility(View.VISIBLE);
 
                     Temperature lastTemperature = temperatures.get(temperatures.size() - 1);
 
@@ -361,6 +373,11 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);
@@ -396,7 +413,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView glycemiaDesc = view.findViewById(R.id.glycemiaDesc);
                 TextView glycemiaDate = view.findViewById(R.id.glycemiaDate);
                 if (glycemias.size() > 0) {
-
+                    cardViewGlycemia.setVisibility(View.VISIBLE);
 
                     Glycemia lastGlycemia = glycemias.get(glycemias.size() - 1);
 
@@ -442,6 +459,12 @@ public class MeasurementsFragment extends Fragment {
                     if (noVitals == numberOfVitals) {
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        TextView noVitalsFoundSubtitle = noTreatmentLayout.findViewById(R.id.noVitalsFoundSubtitle);
+
+                        if (user != null && user.equals("doctor")) {
+                            noVitalsFoundSubtitle.setVisibility(View.GONE);
+                        }
+
                         // Add the inflated layout to the parent layout
                         LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
                         parentLayout.addView(noTreatmentLayout);

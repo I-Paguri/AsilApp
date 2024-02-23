@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                                     selectedFragment = new PatientFragment();
                                     Bundle bundle = new Bundle();
                                     bundle.putString("patientUUID", loggedPatient.getUUID());
-                                    bundle.putString("patientName", loggedPatient.getNome());
+                                    bundle.putString("patientName", loggedPatient.getNome() + " " + loggedPatient.getCognome());
                                     bundle.putString("patientAge", loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age,
                                             loggedPatient.getAge(), loggedPatient.getAge()));
                                     bundle.putString("user", "patient");
@@ -439,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
                                     Bundle bundle = new Bundle();
 
                                     bundle.putString("patientUUID", loggedPatient.getUUID());
-                                    bundle.putString("patientName", loggedPatient.getNome());
+                                    bundle.putString("patientName", loggedPatient.getNome() + " " + loggedPatient.getCognome());
                                     bundle.putString("patientAge", loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age,
                                             loggedPatient.getAge(), loggedPatient.getAge()));
                                     bundle.putString("user", "patient");
