@@ -426,15 +426,8 @@ public class MyAccountFragment extends Fragment {
                                 .start();
                         break;
                     case 1:
-                        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            // Permission is not granted, request for permission
-                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
-                        }else {
-                            ImagePicker.with(MyAccountFragment.this)
-                                    .galleryOnly()
-                                    .cropSquare()
-                                    .start();
-                        }
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(intent, 101);
                         break;
                 }
             }
