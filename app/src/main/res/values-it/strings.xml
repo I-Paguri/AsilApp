@@ -98,6 +98,9 @@
     <string name="healthy_food_tips">Cibo salutare</string>
     <string name="add">Aggiungi</string>
 
+    <string name="scan_qr_code_container">Scansiona il QR che appare sul Contenitore per collegarti!</string>
+    <string name="make_measurements">Esegui le tue misurazioni</string>
+
     <string-array name="categories">
         <item>Esami</item>
         <item>Farmaci</item>

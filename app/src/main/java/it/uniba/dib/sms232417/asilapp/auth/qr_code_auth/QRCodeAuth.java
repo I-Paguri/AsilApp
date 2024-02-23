@@ -51,6 +51,8 @@ import java.util.concurrent.Executors;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnValueChangeInterface;
+import it.uniba.dib.sms232417.asilapp.thread_connection.FirebaseMonitor;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 public class QRCodeAuth extends Fragment {
@@ -207,24 +209,33 @@ public class QRCodeAuth extends Fragment {
                             isBarcodeRead = true;
                             isConnect = true;
                             dbAdapterPatient = new DatabaseAdapterPatient(getContext());
-                            dbAdapterPatient.connectToContainer(token,loggedPatient.getUUID(),isConnect);
+                            dbAdapterPatient.connectToContainer(token, loggedPatient.getUUID(), isConnect);
                             LayoutInflater inflater = getLayoutInflater();
                             View dialogView = inflater.inflate(R.layout.dialog_progress, null);
 
-                                // Crea il dialogo utilizzando il layout personalizzato
-                                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                                builder.setView(dialogView)
-                                        .setNegativeButton(R.string.cancel_misuration, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                isConnect = false;
-                                                isBarcodeRead = false;
-                                                dbAdapterPatient.setFlagContainer(isConnect, token);
-                                            }
-                                        });
-                                // Mostra il dialogo
+
+                            // Crea il dialogo utilizzando il layout personalizzato
+                            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+                            builder.setView(dialogView)
+                                    .setNegativeButton(R.string.cancel_misuration, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            isConnect = false;
+                                            isBarcodeRead = false;
+                                            dbAdapterPatient.setFlagContainer(isConnect, token);
+                                        }
+                                    });
+                            // Mostra il dialogo
                             AlertDialog dialog = builder.create();
                             dialog.show();
-                            }
+                            FirebaseMonitor firebaseMonitor = new FirebaseMonitor(token, getContext(), dialog, new OnValueChangeInterface() {
+                                @Override
+                                public void onValueChange(boolean value) {
+                                    isBarcodeRead = false;
+                                }
+                            });
+                            firebaseMonitor.start();
+
+                        }
                 }
             }
         }

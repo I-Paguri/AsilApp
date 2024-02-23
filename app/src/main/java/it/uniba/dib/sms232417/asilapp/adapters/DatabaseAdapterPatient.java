@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,14 +32,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.entity.Expenses;
-import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnCountCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnTotalExpensesCallback;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnTreatmentsCallback;
 
 public class DatabaseAdapterPatient extends DatabaseAdapterUser {
 
@@ -154,11 +150,30 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 })
                 .addOnFailureListener(e -> {
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-                    builder.setTitle("Errore");
+                    builder.setTitle(R.string.error);
                     builder.setMessage(e.getMessage());
                     builder.setPositiveButton("OK", null);
                 });
     }
+    public interface OnIsConnectedCallback {
+        void onCallback(boolean isConnected);
+    }
+    public void checkIsConnectedToContainer(String token, OnIsConnectedCallback callback) {
+        AtomicBoolean isConnected = new AtomicBoolean(true);
+        db = FirebaseFirestore.getInstance();
+        db.collection("qr_code_container")
+                .document(token)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        callback.onCallback((boolean) documentSnapshot.get("isConnect"));
+                        Log.d("DB: isConnect", String.valueOf(documentSnapshot.get("isConnect")));
+                    } else {
+                        callback.onCallback(false);
+                    }
+                });
+    }
+
 
     public void setFlagContainer(boolean flag, String token) {
         db.collection("qr_code_container")

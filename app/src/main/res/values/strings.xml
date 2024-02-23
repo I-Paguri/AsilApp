@@ -122,8 +122,8 @@
     <string name="mental_health_tips">Mental health</string>
     <string name="healthy_food_tips">Healthy food</string>
 
-    <string name="scan_qr_code_container">Please Scan the QR Code on yout container to connect!</string>
-
+    <string name="scan_qr_code_container">Scan the QR that appears on the Container to connect!</string>
+    <string name="make_measurements">Make your measurements</string>
 
     <string-array name="searchOnMaps_array">
         <item>Ambulatorio</item>
