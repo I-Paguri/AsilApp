@@ -167,7 +167,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                         // Show a Toast message
                         Toast.makeText(getContext(), "Please select an item", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (!query.equals("Centri Asilo")) {
+                        if (!query.equals("Centri Asilo") && !query.equals("Asylum House")) {
                             mMap.clear();
                             titleTextView.setVisibility(View.GONE);
                             addressTextView.setVisibility(View.GONE);
@@ -516,7 +516,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                 titleTextView.setText(house.getName());
                 float rating = (float) house.getRatingAverage();
-                ratingTextView.setText(String.valueOf(rating));
+                String formattedRating = String.format("%.2f", rating);
+                ratingTextView.setText(formattedRating);
                 house.getRules().forEach(rule -> {
                     descriptionTextView.append(rule + "\n\n");
                 });
@@ -622,7 +623,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     if (house.getName().equals(markerTitle)) {
 
                         float rating = (float) house.getRatingAverage();
-                        ratingTextView.setText(String.valueOf(rating));
+                        String formattedRating = String.format("%.2f", rating);
+                        ratingTextView.setText(formattedRating);
                     }
 
                 }

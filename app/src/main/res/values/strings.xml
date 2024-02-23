@@ -126,13 +126,13 @@
     <string name="make_measurements">Make your measurements</string>
 
     <string-array name="searchOnMaps_array">
-        <item>Ambulatorio</item>
-        <item>Farmacia</item>
-        <item>Posta</item>
-        <item>Scuola di Italiano</item>
-        <item>Chiesa</item>
-        <item>Comune</item>
-        <item>Centri Asilo</item>
+        <item>Clinic</item>
+        <item>Pharmacy</item>
+        <item>Post</item>
+        <item>Italian School</item>
+        <item>Church</item>
+        <item>Municipality</item>
+        <item>Asylum House</item>
     </string-array>
 
     <string-array name="categories">

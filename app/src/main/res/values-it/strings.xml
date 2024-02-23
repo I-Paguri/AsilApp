@@ -278,6 +278,16 @@
         <item> Inalazione </item>
     </string-array>
 
+    <string-array name="searchOnMaps_array">
+        <item>Ambulatorio</item>
+        <item>Farmacia</item>
+        <item>Posta</item>
+        <item>Scuola di Italiano</item>
+        <item>Chiesa</item>
+        <item>Comune</item>
+        <item>Centri Asilo</item>
+    </string-array>
+
     <string-array name="how_regularly_list">
         <item>Ogni giorno</item>
         <item>Intervallo</item>
