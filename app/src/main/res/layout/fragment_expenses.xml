@@ -106,7 +106,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
-                    android:text="Aggiungi Spesa" />
+                    android:text="@string/add_expense" />
 
                 <TextView
                     style="@style/RegularText"
@@ -116,7 +116,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
-                    android:text="Inserisci ciò che hai speso" />
+                    android:text="@string/enter_expenses" />
 
 
             </LinearLayout>
@@ -151,7 +151,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
-                    android:text="Farmaci da acquistare" />
+                    android:text="@string/medications_to_purchase"/>
 
                 <TextView
                     style="@style/RegularText"
@@ -161,7 +161,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
-                    android:text="Visualizza i farmaci che devi comprare" />
+                    android:text="@string/medication_buy" />
 
 
             </LinearLayout>
@@ -194,7 +194,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
-                    android:text="Analisi Spese" />
+                    android:text="@string/expense_analysis" />
 
                 <TextView
                     style="@style/RegularText"
@@ -204,7 +204,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginRight="@dimen/text_margin"
                     android:layout_marginBottom="@dimen/text_margin"
-                    android:text="Visualizza l'analisi delle tue spese" />
+                    android:text="@string/expense_analysis_explain" />
 
 
             </LinearLayout>

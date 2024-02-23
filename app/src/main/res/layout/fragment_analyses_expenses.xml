@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textAlignment="center"
-            android:text="Analisi spese"
+            android:text="@string/expense_analysis"
             android:layout_marginBottom="10dp"
             android:textSize="30sp"
             android:padding="10dp" />
@@ -47,7 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:text="Farmaci"/>
+        android:text="@string/medications"/>
 
     <TextView
         android:id="@+id/resocontoSpesaFarmaci"
@@ -69,7 +69,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:text="Terapie"/>
+        android:text="@string/treatments"/>
 
     <TextView
         android:id="@+id/resocontoSpesaTerapie"
@@ -89,7 +89,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:text="Altro"/>
+        android:text="@string/other"/>
 
     <TextView
         android:id="@+id/resocontoSpesaTrattamenti"
@@ -110,7 +110,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:text="Esami"/>
+        android:text="@string/exams"/>
 
     <TextView
         android:id="@+id/resocontoSpesaEsami"
@@ -123,11 +123,24 @@
         android:layout_marginBottom="24dp"
         />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/temporal_analysis"
+            style="@style/CardViewTitleText4"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginTop="24dp">
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewHeartRate"
@@ -161,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="Mensili" />
+                        android:text="@string/analysis_month" />
 
                     <TextView
                         style="@style/RegularText"
@@ -208,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="Settimanali" />
+                        android:text="@string/analysis_week"/>
 
                     <TextView
                         style="@style/RegularText"

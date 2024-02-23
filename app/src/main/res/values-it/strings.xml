@@ -377,6 +377,36 @@
         <item quantity="other">anni</item>
     </plurals>
 
+    <string name ="medications_to_purchase">Farmaci da acquistare</string>
+    <string name="enter_expenses">Inserisci le tue spese</string>
+    <string name="medication_buy">Visualizza i farmaci che devi comprare</string>
+    <string name="expense_analysis">Analisi spese</string>
+    <string name="expense_analysis_explain">Qui puoi vedere l\'analisi delle tue spese</string>
+    <string name="no_medication">Non ci sono medicinali da acquistare</string>
+    <string name="temporal_analysis">Analisi temporale</string>
+
+    <string name="analysis_month">Mese</string>
+    <string name="analysis_week">Settimana</string>
+
+    <string name="expenses_medicines">Spese Farmaci</string>
+    <string name="expenses_therapies">Spese Terapie</string>
+    <string name="expenses_others">Altre spese</string>
+    <string name="expenses_examinations">Spese Esami</string>
+
+    <string name="entry_format">Le tue %1$s sono state: %2$.2f €</string>
+    <string name="enter_valid_date">Per favore, inserisci una data valida</string>
+    <string name="valid_amount">Per favore, inserisci un importo valido</string>
+    <string name="decimals_error">L\'importo non può avere più di due cifre decimali</string>
+    <string name="added_successfully">Spesa aggiunta con successo</string>
+    <string name="field_required_error">Questo campo è obbligatorio</string>
+    <string name="error_user_not_found">Errore: utente non trovato</string>
+    <string name="confirmation_message">Sei sicuro ?</string>
+
+
+    <string name="other">Altro</string>
+    <string name="exams">Esami</string>
+
+
     <string name="payments">Spese</string>
     <string name="diary">Diario</string>
 

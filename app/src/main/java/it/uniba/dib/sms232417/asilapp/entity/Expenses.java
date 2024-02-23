@@ -14,9 +14,28 @@ public class Expenses {
         FARMACI,
         TERAPIE,
         ALTRO,
-        ESAMI
-    }
+        ESAMI;
 
+        public static Category fromString(String category) {
+            switch (category.toLowerCase()) {
+                case "exam":
+                case "esami": // Italian for "exam"
+                    return ESAMI;
+                case "medication":
+                case "farmaci": // Italian for "medication"
+                    return FARMACI;
+                case "treatment":
+                case "terapie": // Italian for "treatment"
+                    return TERAPIE;
+                case "other":
+                case "altro": // Italian for "other"
+                    return ALTRO;
+                default:
+                    throw new IllegalArgumentException("Unknown category: " + category);
+            }
+        }
+
+    }
     private Category category;
     private double amount;
     private Date date;

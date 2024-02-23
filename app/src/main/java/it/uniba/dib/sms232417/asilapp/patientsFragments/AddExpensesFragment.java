@@ -147,7 +147,7 @@ public class AddExpensesFragment extends Fragment {
                 // Controlla se i campi di input sono vuoti
                 if (category.isEmpty()) {
                     // Mostra un messaggio di errore
-                    categoryLayout.setError("Questo campo è obbligatorio");
+                    categoryLayout.setError(getString(R.string.field_required_error));
                     return;
                 } else {
                     categoryLayout.setError(null);
@@ -155,7 +155,7 @@ public class AddExpensesFragment extends Fragment {
 
                 if (amountString.isEmpty()) {
                     // Mostra un messaggio di errore
-                    amountLayout.setError("Questo campo è obbligatorio");
+                    amountLayout.setError(getString(R.string.field_required_error));
                     return;
                 } else {
                     amountLayout.setError(null);
@@ -163,7 +163,7 @@ public class AddExpensesFragment extends Fragment {
 
                 if (dateString.isEmpty()) {
                     // Mostra un messaggio di errore
-                    dateLayout.setError("Questo campo è obbligatorio");
+                    dateLayout.setError(getString(R.string.field_required_error));
                     return;
                 } else {
                     dateLayout.setError(null);
@@ -189,7 +189,7 @@ public class AddExpensesFragment extends Fragment {
                                     amount = Double.parseDouble(amountString);
                                 } catch (NumberFormatException e) {
                                     // Mostra un messaggio di errore
-                                    Toast.makeText(getActivity(), "Per favore, inserisci un importo valido", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.valid_amount), Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -201,7 +201,7 @@ public class AddExpensesFragment extends Fragment {
                                     String[] parts = amountString.split("\\.");
                                     if (parts[1].length() > 2) {
                                         // Show an error message
-                                        amountLayout.setError("L'importo non può avere più di due cifre decimali");
+                                        amountLayout.setError(getResources().getString(R.string.decimals_error));
                                         return;
                                     }
                                 }
@@ -215,10 +215,10 @@ public class AddExpensesFragment extends Fragment {
                                     date = format.parse(dateString);
                                 } catch (ParseException e) {
                                     // Mostra un messaggio di errore
-                                    Toast.makeText(getActivity(), "Per favore, inserisci una data valida", Toast.LENGTH_SHORT).show();
-                                    return;
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.enter_valid_date), Toast.LENGTH_SHORT).show();                                    return;
                                 }
-                                Expenses.Category categoryEnum = Expenses.Category.valueOf(category.toUpperCase());
+
+                                Expenses.Category categoryEnum = Expenses.Category.fromString(category);
 
                                 // Stampa le informazioni nel log
                                 Log.d("Info", "Categoria: " + categoryEnum + ", Spesa: " + amount + ", Data: " + date);
@@ -247,11 +247,11 @@ public class AddExpensesFragment extends Fragment {
 
                                 } else {
                                     // Show an error message
-                                    Toast.makeText(getActivity(), "Errore: utente non trovato", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.error_user_not_found), Toast.LENGTH_SHORT).show();
                                 }
 
                                 //Mostro un messaggio di successo
-                                Toast.makeText(getActivity(), "Spesa aggiunta con successo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
 
                                 // Svuota i campi di input
                                 categoryInput.setText("");

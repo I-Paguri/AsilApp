@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Farmaci da acquistare"
+        android:text="@string/medications_to_purchase"
         style="@style/CardViewTitleText2"
         android:textSize="30sp"
         android:gravity="center"
@@ -35,7 +35,7 @@
             style="@style/CardViewSubtitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Non ci sono medicinali da acquistare"
+            android:text="@string/no_medication"
             android:textSize="16sp"
             android:paddingTop="10dp" />
 

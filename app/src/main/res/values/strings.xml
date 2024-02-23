@@ -137,10 +137,39 @@
 
     <string-array name="categories">
         <item>Exam</item>
-        <item>Pharmacy</item>
+        <item>Medication</item>
         <item>Treatment</item>
         <item>Other</item>
     </string-array>
+
+    <string name ="medications_to_purchase">Medications to purchase</string>
+    <string name="enter_expenses">Enter your expenses</string>
+    <string name="medication_buy">View the medications you need to buy</string>
+    <string name="expense_analysis">Expense analysis</string>
+    <string name="expense_analysis_explain">Here you can see the analysis of your expenses</string>ù
+    <string name="other">Other</string>
+    <string name="exams">Exams</string>
+    <string name="no_medication">There are no medications to buy</string>
+    <string name="temporal_analysis">Temporal analysis</string>
+
+    <string name="analysis_week">Week</string>
+    <string name="analysis_month">Month</string>
+
+    <string name="expenses_medicines">Medication Expenses</string>
+    <string name="expenses_therapies">Therapy Expenses</string>
+    <string name="expenses_others">Other Expenses</string>
+    <string name="expenses_examinations">Examination Expenses</string>
+
+    <string name="entry_format">Your %1$s were: %2$.2f €</string>
+
+    <string name="enter_valid_date">Please, enter a valid date</string>
+    <string name="valid_amount">Please enter a valid amount</string>
+    <string name="decimals_error">The amount cannot have more than two decimal places</string>
+    <string name="added_successfully">Expense added successfully</string>
+    <string name="field_required_error">This field is required</string>
+    <string name="error_user_not_found">Error: user not found</string>
+    <string name="confirmation_message">Are you sure?</string>
+
 
     <string-array name="medicines_list">
         <item>Oki 500mg</item>
