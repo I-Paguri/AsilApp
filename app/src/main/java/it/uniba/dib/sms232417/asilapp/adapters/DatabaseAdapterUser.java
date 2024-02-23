@@ -172,13 +172,36 @@ public class DatabaseAdapterUser {
     }
 
 
-    public void getVitals(String patientUUID, String measureType, OnGetValueFromDBInterface callback){
+    public void getVitals(String patientUUID, String measureType, OnGetValueFromDBInterface callback) {
         db = FirebaseFirestore.getInstance();
 
         db.collection("patient")
                 .document(patientUUID)
                 .collection(measureType)
-                .get()
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        ArrayList<Object> vitals = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if (measureType.equals("heart_rate")) {
+                                HeartRate hr = document.toObject(HeartRate.class);
+                                vitals.add(hr);
+                            } else if (measureType.equals("temperature")) {
+                                Temperature t = document.toObject(Temperature.class);
+                                vitals.add(t);
+                            } else if (measureType.equals("blood_pressure")) {
+                                BloodPressure bp = document.toObject(BloodPressure.class);
+                                vitals.add(bp);
+                            } else if (measureType.equals("glycemia")) {
+                                Glycemia g = document.toObject(Glycemia.class);
+                                vitals.add(g);
+                            }
+                        }
+                        callback.onCallback(vitals);
+                    } else {
+                        callback.onCallbackError(new Exception("No data found"), "No data found");
+                    }
+                });
+                /*
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
                     if(measureType.equals("heart_rate")) {
@@ -210,11 +233,15 @@ public class DatabaseAdapterUser {
                             glycemias.add(g);
                             callback.onCallback(glycemias);
                         }
+                    } else {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            callback.onCallbackError(new Exception("No data found"), "No data found");
+                        }
                     }
 
                 })
                 .addOnFailureListener(e -> {
                     callback.onCallbackError(e, "Error while getting data from database");
-                });
+                });*/
     }
 }
