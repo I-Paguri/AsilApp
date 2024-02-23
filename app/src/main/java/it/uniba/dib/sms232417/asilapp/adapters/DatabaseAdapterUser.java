@@ -201,47 +201,5 @@ public class DatabaseAdapterUser {
                         callback.onCallbackError(new Exception("No data found"), "No data found");
                     }
                 });
-                /*
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-
-                    if(measureType.equals("heart_rate")) {
-                        ArrayList<HeartRate> heartRates = new ArrayList<>();
-                        for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                            HeartRate hr = queryDocumentSnapshots.getDocuments().get(i).toObject(HeartRate.class);
-                            heartRates.add(hr);
-                            callback.onCallback(heartRates);
-                        }
-                    }else if(measureType.equals("temperature")) {
-                        ArrayList<Temperature> temperatures = new ArrayList<>();
-                        for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                            Temperature t = queryDocumentSnapshots.getDocuments().get(i).toObject(Temperature.class);
-                            temperatures.add(t);
-                            callback.onCallback(temperatures);
-
-                        }
-                    }else if(measureType.equals("blood_pressure")) {
-                        ArrayList<BloodPressure> bloodPressures = new ArrayList<>();
-                        for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                            BloodPressure bp = queryDocumentSnapshots.getDocuments().get(i).toObject(BloodPressure.class);
-                            bloodPressures.add(bp);
-                            callback.onCallback(bloodPressures);
-                        }
-                    }else if(measureType.equals("glycemia")) {
-                        ArrayList<Glycemia> glycemias = new ArrayList<>();
-                        for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                            Glycemia g = queryDocumentSnapshots.getDocuments().get(i).toObject(Glycemia.class);
-                            glycemias.add(g);
-                            callback.onCallback(glycemias);
-                        }
-                    } else {
-                        if (queryDocumentSnapshots.isEmpty()) {
-                            callback.onCallbackError(new Exception("No data found"), "No data found");
-                        }
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-                    callback.onCallbackError(e, "Error while getting data from database");
-                });*/
     }
 }
