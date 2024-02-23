@@ -447,4 +447,7 @@
 
     <string name="on_date">Il</string>
 
+    <string name="no_vitals_found">Nessuna misurazione trovata</string>
+    <string name="no_vitals_found_descr">Connettiti al container per registrare parametri vitali</string>
+
 </resources>

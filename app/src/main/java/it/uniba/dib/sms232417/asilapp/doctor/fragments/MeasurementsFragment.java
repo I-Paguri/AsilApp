@@ -1,5 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.doctor.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -44,6 +45,7 @@ public class MeasurementsFragment extends Fragment {
     private MultiGauge pressureMultiGauge;
     float density;
     private MaterialCardView cardViewHeartRate, cardViewBloodPressure, cardViewTemperature, cardViewGlycemia;
+    private boolean noVitals;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +57,8 @@ public class MeasurementsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        noVitals = true;
 
         density = getResources().getDisplayMetrics().density;
 
@@ -91,6 +95,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView heartRateDate = view.findViewById(R.id.heartRateDate);
                 heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
                 if (heartRates.size() > 0) {
+                    noVitals = false;
                     HeartRate lastHeartRate = heartRates.get(heartRates.size() - 1);
 
 
@@ -143,33 +148,6 @@ public class MeasurementsFragment extends Fragment {
                     params.setMargins(dp20, 0, dp20, dp8);
 
                     cardViewBloodPressure.setLayoutParams(params);
-
-                    /*
-                    heartRateArchGauge.setVisibility(View.GONE);
-
-                    // Create a new LinearLayout.LayoutParams object
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-
-                    int dp40 = (int) (40*density + 0.5f);
-                    int dp16 = (int) (20*density + 0.5f);
-                    int dp4 = (int) (4*density + 0.5f);
-
-
-                    // Set the margins (all values are in pixels)
-                    params.setMargins(dp16, dp40, dp16, dp4);
-                    params.gravity = Gravity.CENTER_HORIZONTAL;
-
-                    // Apply the layout parameters to the TextView
-                    heartRateDesc.setLayoutParams(params);
-
-                    heartRateDesc.setText("no data");
-                    heartRateDate.setText("");
-
-                     */
-
                 }
             }
 
@@ -188,6 +166,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView bloodPressureDate = view.findViewById(R.id.bloodPressureDate);
 
                 if (bloodPressures.size() > 0) {
+                    noVitals = false;
                     /*
                     Green: < 80, < 120
                     Yellow: < 90 < 140
@@ -305,6 +284,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView temperatureDesc = view.findViewById(R.id.temperatureDesc);
                 TextView temperatureDate = view.findViewById(R.id.temperatureDate);
                 if (temperatures.size() > 0) {
+                    noVitals = false;
                     Temperature lastTemperature = temperatures.get(temperatures.size() - 1);
 
                     RoundedProgressBar thermometer = view.findViewById(R.id.thermometer);
@@ -373,6 +353,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView glycemiaDesc = view.findViewById(R.id.glycemiaDesc);
                 TextView glycemiaDate = view.findViewById(R.id.glycemiaDate);
                 if (glycemias.size() > 0) {
+                    noVitals = false;
                     Glycemia lastGlycemia = glycemias.get(glycemias.size() - 1);
 
                     glycemiaArchGauge = view.findViewById(R.id.arcGaugeGlycemia);
@@ -433,6 +414,14 @@ public class MeasurementsFragment extends Fragment {
 
             }
         });
+
+        if (noVitals) {
+            LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+            // Add the inflated layout to the parent layout
+            LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
+            parentLayout.addView(noTreatmentLayout);
+        }
 
         Bundle bundle = new Bundle();
         bundle.putString("patientUUID", patientUUID);

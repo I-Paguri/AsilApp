@@ -766,4 +766,7 @@
 
     <string name="on_date">On</string>
 
+    <string name="no_vitals_found">No vitals found</string>
+    <string name="no_vitals_found_descr">Register vitals by connecting to the container.</string>
+
 </resources>

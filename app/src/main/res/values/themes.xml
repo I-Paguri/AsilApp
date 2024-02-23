@@ -62,6 +62,12 @@
         <item name="android:textColor">@color/seed</item>
     </style>
 
+    <style name="TitleText3">
+        <item name="android:fontFamily">@font/ember_display_light</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/seed</item>
+    </style>
+
     <!-- Style for subtitle text -->
     <style name="SubtitleText">
         <item name="android:fontFamily">@font/ember_bold</item>
