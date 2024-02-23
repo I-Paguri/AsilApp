@@ -78,7 +78,7 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                                             @Override
                                             public void onCallback(String imageUrl) {
                                                 // Crea un nuovo oggetto Patient con l'URL dell'immagine del profilo
-                                                resultPatient = new Patient(utente.getUid(), datiUtente.getString("nome"),
+                                                resultPatient = new Patient(utente.getUid(), datiUtente.getString("myDoctor"), datiUtente.getString("nome"),
                                                         datiUtente.getString("cognome"),
                                                         datiUtente.getString("email"),
                                                         datiUtente.getString("dataNascita"),
@@ -120,7 +120,7 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                         Log.d("REGISTER", "Registrazione effettuata con successo");
 
 
-                        patient = new Patient(utente.getUid(), nome, cognome, email, dataNascita, regione, profileImageUrl);
+                        patient = new Patient(utente.getUid(), "", nome, cognome, email, dataNascita, regione, profileImageUrl);
 
                         db.collection("patient")
                                 .document(utente.getUid())
@@ -258,7 +258,7 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        Patient patient = new Patient(documentSnapshot.getString("UUID"),
+                        Patient patient = new Patient(documentSnapshot.getString("UUID"), documentSnapshot.getString("myDoctor"),
                                 documentSnapshot.getString("nome"),
                                 documentSnapshot.getString("cognome"),
                                 documentSnapshot.getString("email"),

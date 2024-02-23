@@ -20,6 +20,7 @@ import java.util.Calendar;
 
 public class Patient implements Parcelable, Serializable {
     private String UUID;
+    private String myDoctor;
     private String nome;
     private String cognome;
     private String email;
@@ -36,7 +37,7 @@ public class Patient implements Parcelable, Serializable {
     public Patient() {
     }
 
-    public Patient(String UUID, String nome, String cognome, String email, String dataNascita, String regione, String profileImageUrl) {
+    public Patient(String UUID, String myDoctor, String nome, String cognome, String email, String dataNascita, String regione, String profileImageUrl) {
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -44,6 +45,7 @@ public class Patient implements Parcelable, Serializable {
         this.regione = regione;
         this.profileImageUrl = profileImageUrl;
         this.UUID = UUID;
+        this.myDoctor = myDoctor;
         this.expenses = new ArrayList<>();
 
 
@@ -51,6 +53,7 @@ public class Patient implements Parcelable, Serializable {
 
     protected Patient(Parcel in) {
         UUID = in.readString();
+        myDoctor = in.readString();
         nome = in.readString();
         cognome = in.readString();
         email = in.readString();
@@ -180,6 +183,7 @@ public class Patient implements Parcelable, Serializable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(UUID);
+        dest.writeString(myDoctor);
         dest.writeString(nome);
         dest.writeString(cognome);
         dest.writeString(email);
@@ -227,6 +231,14 @@ public class Patient implements Parcelable, Serializable {
         }
 
         return totalExpenses;
+    }
+
+    public String getMyDoctor() {
+        return myDoctor;
+    }
+
+    public void setMyDoctor(String myDoctor) {
+        this.myDoctor = myDoctor;
     }
 
 

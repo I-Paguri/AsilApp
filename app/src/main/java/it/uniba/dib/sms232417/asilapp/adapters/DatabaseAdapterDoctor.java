@@ -64,7 +64,7 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                             .addOnSuccessListener(datiUtente -> {
                                 if (datiUtente.exists()) {
                                     Log.d("Login", "Login in corso");
-                                    doctor = new Doctor(datiUtente.getString("nome"),
+                                    doctor = new Doctor(datiUtente.getString("uuid"), datiUtente.getString("nome"),
                                             datiUtente.getString("cognome"),
                                             datiUtente.getString("email"),
                                             datiUtente.getString("dataNascita"),
@@ -144,7 +144,7 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                             .addOnSuccessListener(datiUtente -> {
                                 if (datiUtente.exists()) {
                                     Log.d("Login", "Login in corso");
-                                    doctor = new Doctor(datiUtente.getString("nome"),
+                                    doctor = new Doctor(datiUtente.getString("uuid"), datiUtente.getString("nome"),
                                             datiUtente.getString("cognome"),
                                             datiUtente.getString("email"),
                                             datiUtente.getString("dataNascita"),
@@ -240,4 +240,19 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
         });
     }
 
+    public void getDoctor(String doctorUUID, OnDoctorDataCallback callback) {
+        db.collection("doctor")
+                .document(doctorUUID)
+                .get()
+                .addOnSuccessListener( documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Doctor doctor = documentSnapshot.toObject(Doctor.class);
+                        callback.onCallback(doctor);
+                    } else {
+                        callback.onCallbackError(new Exception("No doctor found with this UUID."), "No doctor found with this UUID.");
+                    }
+                }).addOnFailureListener(e -> {
+                    callback.onCallbackError(e, e.toString());
+                });
+    }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class Doctor implements Parcelable, Serializable {
+    private String uuid;
     private String nome;
     private String cognome;
     private String email;
@@ -28,7 +29,8 @@ public class Doctor implements Parcelable, Serializable {
     public Doctor() {
     }
 
-    public Doctor(String nome, String cognome, String email, String dataNascita, String regione, String specializzazione, String numeroDiRegistrazioneMedica) {
+    public Doctor(String uuid, String nome, String cognome, String email, String dataNascita, String regione, String specializzazione, String numeroDiRegistrazioneMedica) {
+        this.uuid = uuid;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
@@ -40,6 +42,7 @@ public class Doctor implements Parcelable, Serializable {
     }
 
     protected Doctor(Parcel in) {
+        uuid = in.readString();
         nome = in.readString();
         cognome = in.readString();
         email = in.readString();
@@ -136,6 +139,15 @@ public class Doctor implements Parcelable, Serializable {
         return numeroDiRegistrazioneMedica;
     }
 
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -143,6 +155,7 @@ public class Doctor implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(uuid);
         dest.writeString(nome);
         dest.writeString(cognome);
         dest.writeString(email);

@@ -57,6 +57,7 @@ import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
@@ -173,6 +174,26 @@ public class MyAccountFragment extends Fragment {
         });
 
         if (loggedPatient != null) {
+
+            if (loggedPatient.getMyDoctor() != null && !loggedPatient.getMyDoctor().isEmpty()) {
+                dbAdapterDoctor.getDoctor(loggedPatient.getMyDoctor(), new OnDoctorDataCallback() {
+                    @Override
+                    public void onCallback(Doctor doctor) {
+                        TextView txtDoctorTitle = requireView().findViewById(R.id.myDoctorTitle);
+                        txtDoctorTitle.setVisibility(View.VISIBLE);
+
+                        TextView txtDoctorName = requireView().findViewById(R.id.myDoctorName);
+                        txtDoctorName.setVisibility(View.VISIBLE);
+                        txtDoctorName.setText(doctor.getNome() + " " + doctor.getCognome());
+                    }
+
+                    @Override
+                    public void onCallbackError(Exception exception, String message) {
+                        Log.d("PAZIENTE", "Errore");
+                    }
+                });
+            }
+
             TextView txtName = getView().findViewById(R.id.txt_name);
             TextView txtSurname = getView().findViewById(R.id.txt_surname);
             TextView txtRegion = getView().findViewById(R.id.txt_region);
@@ -210,6 +231,7 @@ public class MyAccountFragment extends Fragment {
             dbAdapterPatient.getProfileImage(loggedPatient.getUUID(), new OnProfileImageCallback() {
                 @Override
                 public void onCallback(String imageUrl) {
+
                     // Check if the profile image URL exists and is not empty before loading it
                     if (imageUrl != null && !imageUrl.isEmpty()) {
                         Glide.with(getContext())
@@ -426,8 +448,8 @@ public class MyAccountFragment extends Fragment {
                                 .start();
                         break;
                     case 1:
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(intent, 101);
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(intent, 101);
                         break;
                 }
             }
