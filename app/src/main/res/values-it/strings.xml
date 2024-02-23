@@ -411,6 +411,11 @@
     <string name="field_required_error">Questo campo è obbligatorio</string>
     <string name="error_user_not_found">Errore: utente non trovato</string>
     <string name="confirmation_message">Sei sicuro ?</string>
+    <string name="select_nearby">Perfavore seleziona un servizio</string>
+    <string name="you_reviewed">Hai recensito:</string>
+    <string name="review">Recensisci</string>
+    <string name="lib_material_send">Invia</string>
+    <string name="lib_material_cancel">Cancella</string>
 
 
     <string name="other">Altro</string>

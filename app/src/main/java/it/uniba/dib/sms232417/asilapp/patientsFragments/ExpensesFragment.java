@@ -131,7 +131,7 @@ public class ExpensesFragment extends Fragment {
 
 
         // Set toolbar title
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Spese");
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.expenses));
         // Change toolbar title text color
         toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 

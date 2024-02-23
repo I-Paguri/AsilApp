@@ -169,6 +169,11 @@
     <string name="field_required_error">This field is required</string>
     <string name="error_user_not_found">Error: user not found</string>
     <string name="confirmation_message">Are you sure?</string>
+    <string name="select_nearby">Please select a nearby</string>
+    <string name="you_reviewed">You reviewed:</string>
+
+
+
 
 
     <string-array name="medicines_list">
@@ -669,6 +674,11 @@
     <string name="cancel_misuration">Cancel</string>
     <string name="at_time">at</string>
     <string name="and">and</string>
+    <string name="review">Review</string>
+
+
+
+
 
     <plurals name="tablet">
         <item quantity="one">Tablet</item>

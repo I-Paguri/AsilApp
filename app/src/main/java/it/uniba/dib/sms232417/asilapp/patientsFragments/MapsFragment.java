@@ -165,7 +165,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                     if (query.isEmpty()) {
                         // Show a Toast message
-                        Toast.makeText(getContext(), "Please select an item", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getResources().getString(R.string.select_nearby), Toast.LENGTH_SHORT).show();
                     } else {
                         if (!query.equals("Centri Asilo") && !query.equals("Asylum House")) {
                             mMap.clear();
@@ -416,7 +416,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
 
         // Set toolbar title
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("Servizi Vicini");
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.nearby_facilities));
 
     }
 
@@ -583,7 +583,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                         @Override
                         public void onCallback(double rating) {
                             Log.d("Rating", "New rating: " + rating);
-                            Toast.makeText(getContext(), "Recensito: "+markerTitle, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getResources().getString(R.string.you_reviewed)+markerTitle, Toast.LENGTH_SHORT).show();
                             addMarker(mMap);
                             updateTextViewRating(ratingTextView, markerTitle);
 

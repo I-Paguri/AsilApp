@@ -116,7 +116,7 @@
                     android:layout_gravity="center_horizontal|bottom"
                     android:visibility="gone"
                     android:layout_marginBottom="30dp"
-                    android:text="Recensisci"/>
+                    android:text="@string/review"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
