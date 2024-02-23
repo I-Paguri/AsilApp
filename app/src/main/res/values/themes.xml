@@ -104,6 +104,13 @@
         <item name="android:textColor">@color/seed</item>
     </style>
 
+    <style name="CardViewTitleText3">
+        <item name="android:fontFamily">@font/ember_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/seed</item>
+    </style>
+
+
     <style name="CardViewSubtitleText">
         <item name="android:fontFamily">@font/ember_bold</item>
         <item name="android:textSize">18sp</item>

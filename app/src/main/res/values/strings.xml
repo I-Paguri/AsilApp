@@ -763,4 +763,7 @@
     <string name="wallet_descr">Keep track of purchased medications and incurred expenses.</string>
 
     <string name="treatment_deleted"> Treatment deleted </string>
+
+    <string name="on_date">On</string>
+
 </resources>

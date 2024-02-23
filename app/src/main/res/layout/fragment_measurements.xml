@@ -39,29 +39,57 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        style="@style/CardViewTitleText3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/heart_rate"
+                        />
+
                     <com.ekn.gruzer.gaugelibrary.ArcGauge
                         android:id="@+id/arcGaugeHeartRate"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="-12dp"/>
 
+                    <TextView
+                        android:id="@+id/heartRateDesc"
+                        style="@style/RegularText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/text_margin"
+                        android:layout_marginBottom="4dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/heartRateDate"
+                        style="@style/CardViewDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/text_margin"
+                        android:layout_marginBottom="@dimen/text_margin"
+                        android:layout_gravity="center_horizontal"
+                        android:text="" />
+                    <!--
                     <TextView
                         style="@style/CardViewTitleText2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:text="@string/heart_rate" />
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/heart_rate"
+                        />
+                    -->
 
-                    <TextView
-                        style="@style/RegularText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_margin"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="@dimen/text_margin"
-                        android:layout_marginBottom="@dimen/text_margin"
-                        android:text="@string/heart_rate_desc" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -86,30 +114,48 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <com.ekn.gruzer.gaugelibrary.MultiGauge
-                        android:id="@+id/multiGaugePressure"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="16dp"
-                        />
-
                     <TextView
-                        style="@style/CardViewTitleText2"
+                        style="@style/CardViewTitleText3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="-4dp"
                         android:text="@string/blood_pressure" />
 
+                    <com.ekn.gruzer.gaugelibrary.MultiGauge
+                        android:id="@+id/multiGaugePressure"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="16dp"
+                        />
+
                     <TextView
+                        android:id="@+id/bloodPressureDesc"
                         style="@style/RegularText"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/text_margin"
+                        android:layout_marginBottom="4dp"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/bloodPressureDate"
+                        style="@style/CardViewDates"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="@string/blood_pressure_desc" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="" />
+
+
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -144,12 +190,22 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        style="@style/CardViewTitleText3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/temperature" />
+
                     <com.mackhartley.roundedprogressbar.RoundedProgressBar
                         android:id="@+id/thermometer"
                         android:layout_width="match_parent"
                         android:layout_height="24dp"
-                        android:layout_marginTop="58dp"
-                        android:layout_marginBottom="60dp"
+                        android:layout_marginTop="34dp"
+                        android:layout_marginBottom="46dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         app:rpbBackgroundColor="@color/grey_font"
@@ -164,22 +220,27 @@
                         app:rpbTextPadding="12dp"/>
 
                     <TextView
-                        style="@style/CardViewTitleText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:text="@string/temperature" />
-
-                    <TextView
+                        android:id="@+id/temperatureDesc"
                         style="@style/RegularText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/text_margin"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="@dimen/text_margin"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/text_margin"
+                        android:layout_marginBottom="4dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="" />
+
+                    <TextView
+                        android:id="@+id/temperatureDate"
+                        style="@style/CardViewDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
+                        android:layout_marginEnd="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="@string/temperature_desc" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="" />
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -204,30 +265,45 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        style="@style/CardViewTitleText3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="@string/glycemia"
+                        android:layout_marginBottom="12dp"/>
+
                     <com.ekn.gruzer.gaugelibrary.ArcGauge
                         android:id="@+id/arcGaugeGlycemia"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="0dp"
+                        android:layout_marginBottom="-12dp"/>
+
 
                     <TextView
-                        style="@style/CardViewTitleText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:text="@string/glycemia" />
-
-                    <TextView
+                        android:id="@+id/glycemiaDesc"
                         style="@style/RegularText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/text_margin"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/text_margin"
+                        android:layout_marginBottom="4dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="test" />
+
+                    <TextView
+                        android:id="@+id/glycemiaDate"
+                        style="@style/CardViewDates"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/text_margin"
                         android:layout_marginEnd="@dimen/text_margin"
                         android:layout_marginBottom="@dimen/text_margin"
-                        android:text="@string/blood_glucose_desc" />
+                        android:layout_gravity="center_horizontal"
+                        android:text="" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

@@ -445,4 +445,6 @@
 
     <string name="treatment_deleted"> Terapia eliminata </string>
 
+    <string name="on_date">Il</string>
+
 </resources>

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.widget.TextView;
 
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.MultiGauge;
@@ -76,41 +77,46 @@ public class MeasurementsFragment extends Fragment {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
                 ArrayList<HeartRate> heartRates = (ArrayList<HeartRate>) listOfValue;
+                TextView heartRateDesc = view.findViewById(R.id.heartRateDesc);
+                TextView heartRateDate = view.findViewById(R.id.heartRateDate);
                 if (heartRates.size() > 0) {
                     HeartRate lastHeartRate = heartRates.get(heartRates.size() - 1);
 
                     heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
+                    heartRateArchGauge.setValueColor(Color.parseColor("#FFFFFF"));
 
-                    Range range = new Range();
-                    range.setColor(Color.parseColor("#9c4146"));
-                    range.setFrom(40.0);
-                    range.setTo(60.0);
+                    Range rangeRed1 = new Range();
+                    rangeRed1.setColor(Color.parseColor("#9c4146"));
+                    rangeRed1.setFrom(40.0);
+                    rangeRed1.setTo(60.0);
 
-                    Range range2 = new Range();
-                    range2.setColor(Color.parseColor("#00B20B"));
-                    range2.setFrom(60.0);
-                    range2.setTo(100.0);
+                    Range rangeGreen = new Range();
+                    rangeGreen.setColor(Color.parseColor("#00B20B"));
+                    rangeGreen.setFrom(60.0);
+                    rangeGreen.setTo(100.0);
 
-                    Range range3 = new Range();
-                    range3.setColor(Color.parseColor("#E3E500"));
-                    range3.setFrom(100.0);
-                    range3.setTo(140.0);
+                    Range rangeYellow = new Range();
+                    rangeYellow.setColor(Color.parseColor("#E3E500"));
+                    rangeYellow.setFrom(100.0);
+                    rangeYellow.setTo(140.0);
 
-                    Range range4 = new Range();
-                    range4.setColor(Color.parseColor("#9c4146"));
-                    range4.setFrom(140.0);
-                    range4.setTo(200.0);
+                    Range rangeRed2 = new Range();
+                    rangeRed2.setColor(Color.parseColor("#9c4146"));
+                    rangeRed2.setFrom(140.0);
+                    rangeRed2.setTo(200.0);
+
+                    //add color ranges to gauge
+                    heartRateArchGauge.addRange(rangeRed1);
+                    heartRateArchGauge.addRange(rangeGreen);
+                    heartRateArchGauge.addRange(rangeYellow);
+                    heartRateArchGauge.addRange(rangeRed2);
 
                     heartRateArchGauge.setMinValue(40.0);
                     heartRateArchGauge.setMaxValue(200.0);
                     heartRateArchGauge.setValue(lastHeartRate.getValue());
 
-
-                    //add color ranges to gauge
-                    heartRateArchGauge.addRange(range);
-                    heartRateArchGauge.addRange(range2);
-                    heartRateArchGauge.addRange(range3);
-                    heartRateArchGauge.addRange(range4);
+                    heartRateDesc.setText(lastHeartRate.getValue() + " bpm");
+                    heartRateDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastHeartRate.getDate());
                 }
             }
 
@@ -125,32 +131,83 @@ public class MeasurementsFragment extends Fragment {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
                 ArrayList<BloodPressure> bloodPressures = (ArrayList<BloodPressure>) listOfValue;
+                TextView bloodPressureDesc = view.findViewById(R.id.bloodPressureDesc);
+                TextView bloodPressureDate = view.findViewById(R.id.bloodPressureDate);
                 if (bloodPressures.size() > 0) {
                     BloodPressure lastBloodPressure = bloodPressures.get(bloodPressures.size() - 1);
 
                     pressureMultiGauge = view.findViewById(R.id.multiGaugePressure);
 
-                    // Minimum pressure
-                    Range minRange = new Range();
-                    minRange.setColor(Color.parseColor("#006781"));
-                    minRange.setFrom(40);
-                    minRange.setTo(90);
-
-                    pressureMultiGauge.setMinValue(40);
-                    pressureMultiGauge.setMaxValue(90);
-                    pressureMultiGauge.addRange(minRange);
-                    pressureMultiGauge.setValue(bloodPressures.get(bloodPressures.size() - 1).getDiastolic());
+                    /*
+                    Green: < 80, < 120
+                    Yellow: < 90 < 140
+                    Orange: < 120, < 180
+                    Red: >= 120, >= 180
+                     */
 
                     // Maximum pressure
-                    Range maxRange = new Range();
-                    maxRange.setColor(Color.parseColor("#9c4146"));
-                    maxRange.setFrom(90);
-                    maxRange.setTo(140);
-                    pressureMultiGauge.addSecondRange(maxRange);
-                    pressureMultiGauge.setSecondMinValue(70);
-                    pressureMultiGauge.setSecondMaxValue(180);
-                    pressureMultiGauge.setSecondValue(bloodPressures.get(bloodPressures.size() - 1).getSystolic());
+                    Range greenRangeMax = new Range();
+                    greenRangeMax.setColor(Color.parseColor("#00B20B"));
+                    greenRangeMax.setFrom(70);
+                    greenRangeMax.setTo(120);
 
+                    Range yellowRangeMax = new Range();
+                    yellowRangeMax.setColor(Color.parseColor("#E3E500"));
+                    yellowRangeMax.setFrom(121);
+                    yellowRangeMax.setTo(140);
+
+                    Range orangeRangeMax = new Range();
+                    orangeRangeMax.setColor(Color.parseColor("#FFA500"));
+                    orangeRangeMax.setFrom(141);
+                    orangeRangeMax.setTo(180);
+
+                    Range redRangeMax = new Range();
+                    redRangeMax.setColor(Color.parseColor("#9c4146"));
+                    redRangeMax.setFrom(181);
+                    redRangeMax.setTo(200);
+
+                    pressureMultiGauge.addRange(greenRangeMax);
+                    pressureMultiGauge.addRange(yellowRangeMax);
+                    pressureMultiGauge.addRange(orangeRangeMax);
+                    pressureMultiGauge.addRange(redRangeMax);
+
+                    pressureMultiGauge.setMinValue(70);
+                    pressureMultiGauge.setMaxValue(190);
+                    pressureMultiGauge.setValue(bloodPressures.get(bloodPressures.size() - 1).getSystolic());
+
+                    // Minimum pressure
+                    Range greenRangeMin = new Range();
+                    greenRangeMin.setColor(Color.parseColor("#00B20B"));
+                    greenRangeMin.setFrom(50);
+                    greenRangeMin.setTo(80);
+
+                    Range yellowRangeMin = new Range();
+                    yellowRangeMin.setColor(Color.parseColor("#E3E500"));
+                    yellowRangeMin.setFrom(81);
+                    yellowRangeMin.setTo(90);
+
+                    Range orangeRangeMin = new Range();
+                    orangeRangeMin.setColor(Color.parseColor("#FFA500"));
+                    orangeRangeMin.setFrom(91);
+                    orangeRangeMin.setTo(120);
+
+                    Range redRangeMin = new Range();
+                    redRangeMin.setColor(Color.parseColor("#9c4146"));
+                    redRangeMin.setFrom(121);
+                    redRangeMin.setTo(130);
+
+                    pressureMultiGauge.addSecondRange(greenRangeMin);
+                    pressureMultiGauge.addSecondRange(yellowRangeMin);
+                    pressureMultiGauge.addSecondRange(orangeRangeMin);
+                    pressureMultiGauge.addSecondRange(redRangeMin);
+
+                    pressureMultiGauge.setSecondMinValue(50);
+                    pressureMultiGauge.setSecondMaxValue(130);
+                    pressureMultiGauge.setSecondValue(bloodPressures.get(bloodPressures.size() - 1).getDiastolic());
+
+
+                    bloodPressureDesc.setText(lastBloodPressure.getSystolic() + "/" + lastBloodPressure.getDiastolic() + " mmHg");
+                    bloodPressureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastBloodPressure.getDate());
 
                     // Third range does not matter, it is just to fill the gauge
                     Range rangeWhite = new Range();
@@ -176,6 +233,8 @@ public class MeasurementsFragment extends Fragment {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
                 ArrayList<Temperature> temperatures = (ArrayList<Temperature>) listOfValue;
+                TextView temperatureDesc = view.findViewById(R.id.temperatureDesc);
+                TextView temperatureDate = view.findViewById(R.id.temperatureDate);
                 if (temperatures.size() > 0) {
                     Temperature lastTemperature = temperatures.get(temperatures.size() - 1);
 
@@ -211,6 +270,8 @@ public class MeasurementsFragment extends Fragment {
                     progressPercentage = Math.max(0, Math.min(100, progressPercentage));
 
                     thermometer.setProgressPercentage(progressPercentage, true);
+
+                    temperatureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastTemperature.getDate());
                 }
             }
 
@@ -225,10 +286,14 @@ public class MeasurementsFragment extends Fragment {
             @Override
             public void onCallback(ArrayList<?> listOfValue) {
                 ArrayList<Glycemia> glycemias = (ArrayList<Glycemia>) listOfValue;
+                TextView glycemiaDesc = view.findViewById(R.id.glycemiaDesc);
+                TextView glycemiaDate = view.findViewById(R.id.glycemiaDate);
                 if (glycemias.size() > 0) {
                     Glycemia lastGlycemia = glycemias.get(glycemias.size() - 1);
 
                     glycemiaArchGauge = view.findViewById(R.id.arcGaugeGlycemia);
+
+                    glycemiaArchGauge.setValueColor(Color.parseColor("#FFFFFF"));
 
                     Range rangeGreen = new Range();
                     rangeGreen.setColor(Color.parseColor("#00B20B"));
@@ -258,6 +323,9 @@ public class MeasurementsFragment extends Fragment {
                     glycemiaArchGauge.setMinValue(50.0);
                     glycemiaArchGauge.setMaxValue(220.0);
                     glycemiaArchGauge.setValue(lastGlycemia.getGlycemia());
+
+                    glycemiaDesc.setText(lastGlycemia.getGlycemia() + " mg/dL");
+                    glycemiaDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastGlycemia.getDate());
                 }
             }
 
