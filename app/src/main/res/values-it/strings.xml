@@ -79,7 +79,10 @@
     <string name="category">Categoria</string>
     <string name="money_spent">Soldi spesi</string>
     <string name="date_spent">Data spesa</string>
-    <string name="add_expense">Aggiungi spesa</string>
+    <string name="add_expense">Aggiungi nuova spesa</string>
+
+    <string name="add_expense2">Aggiungi spesa</string>
+    <string name="add_expense_desc">Aggiungi una nuova spesa specificando la categoria, l\'importo e la data di acquisto.</string>
     <string name="total_expenses">Spese totali</string>
     <string name="last_month_expenses">Spese ultimo mese</string>
     <string name="last_week_expenses">Spese ultima settimana</string>

@@ -24,7 +24,9 @@
     <string name="category">Category</string>
     <string name="money_spent">Money spent</string>
     <string name="date_spent">Date spent</string>
-    <string name="add_expense">Add expense</string>
+    <string name="add_expense">Add new expense</string>
+    <string name="add_expense2">Add expense</string>
+    <string name="add_expense_desc">Add new expense by specifying category, money spent and purchase date.</string>
     <string name="total_expenses">Total expenses</string>
     <string name="last_month_expenses">last month\'s expenses</string>
     <string name="last_week_expenses">last week\'s expenses</string>
