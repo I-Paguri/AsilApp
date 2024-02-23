@@ -30,6 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
@@ -40,6 +42,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragm
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
@@ -72,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private TreatmentFormMedicationsFragment treatmentFormMedicationsFragment;
 
 
-    public static Context getContext() {
-        return getContext();
+    public Context getContext() {
+        return this;
     }
 
     @Override
@@ -135,6 +138,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            DatabaseAdapterPatient dbAdapter = new DatabaseAdapterPatient(getContext());
+            dbAdapter.getProfileImage(loggedPatient.getUUID(), new OnProfileImageCallback() {
+                @Override
+                public void onCallback(String url) {
+                    if (url != null) {
+                        saveImageToInternalStorage(url);
+                    }
+                }
+
+                @Override
+                public void onCallbackError(Exception e) {
+                    BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+                    bottomNavigationView.getMenu().findItem(R.id.navigation_my_account).setIcon(R.drawable.my_account);
+                }
+            });
         }
 
         if (loggedDoctor != null) {
@@ -555,4 +573,40 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public void saveImageToInternalStorage(String filename) {
+        Glide.with(getContext())
+                .asBitmap()
+                .load(filename)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        try {
+                            // Creare un file in una directory specifica
+                            File file = new File(StringUtils.IMAGE_ICON);
+                            if (file.exists()) {
+                                file.delete();
+                            }
+                            file.createNewFile();
+
+                            // Creare un FileOutputStream con il file
+                            FileOutputStream out = new FileOutputStream(file);
+
+                            // Comprimere il bitmap in un formato specifico e scrivere sul FileOutputStream
+                            resource.compress(Bitmap.CompressFormat.JPEG, 100, out);
+
+                            // Chiudere il FileOutputStream
+                            out.close();
+                            Log.d("MyAccountFragment", "Profile image saved to file: " + file.getAbsolutePath());
+                            updateIconProfileImage();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        // Questo metodo viene chiamato quando l'immagine non è più necessaria
+                    }
+                });
+    }
 }

@@ -216,7 +216,8 @@ public class MyAccountFragment extends Fragment {
                                 .load(imageUrl)
                                 .circleCrop()
                                 .into((ImageView) getView().findViewById(R.id.my_account));
-                        saveImageToInternalStorage(imageUrl);
+                        ((MainActivity) requireActivity()).saveImageToInternalStorage(imageUrl);
+                        //saveImageToInternalStorage(imageUrl);
                     } else {
                         // If the profile image URL does not exist or is empty, load the default profile image
                         Glide.with(getContext())
@@ -277,7 +278,7 @@ public class MyAccountFragment extends Fragment {
                                 .load(imageUrl)
                                 .circleCrop()
                                 .into((ImageView) getView().findViewById(R.id.my_account));
-                        saveImageToInternalStorage(imageUrl);
+                        ((MainActivity) requireActivity()).saveImageToInternalStorage(imageUrl);
                     } else {
                         // If the profile image URL does not exist or is empty, load the default profile image
                         Glide.with(getContext())
@@ -425,12 +426,10 @@ public class MyAccountFragment extends Fragment {
                                 .start();
                         break;
                     case 1:
-                        // Handle click on "Choose from Gallery"
                         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                             // Permission is not granted, request for permission
                             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
-                        } else {
-                            // Permission has already been granted
+                        }else {
                             ImagePicker.with(MyAccountFragment.this)
                                     .galleryOnly()
                                     .cropSquare()
