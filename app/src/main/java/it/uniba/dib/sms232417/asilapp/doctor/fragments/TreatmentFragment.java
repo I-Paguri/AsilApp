@@ -760,6 +760,7 @@ public class TreatmentFragment extends Fragment {
         startActivity(Intent.createChooser(shareIntent, "Share via"));
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -777,4 +778,6 @@ public class TreatmentFragment extends Fragment {
             }
         }
     }
+
+     */
 }

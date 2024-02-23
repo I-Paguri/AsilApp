@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }else if(requestCode == 20 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
                 selectedFragment = new MapsFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -212,13 +213,10 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
             }
         }
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
 
-        if (fragment instanceof TreatmentFragment) {
-            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
 
 
     }
