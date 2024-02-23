@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
@@ -171,7 +172,21 @@ public class MainActivity extends AppCompatActivity {
                     // Do whatever you want to do when the onboarding is finished
                 }
             });
+            DatabaseAdapterDoctor dbAdapter = new DatabaseAdapterDoctor(getContext());
+            dbAdapter.getProfileImage(loggedDoctor.getEmail(), new OnProfileImageCallback() {
+                @Override
+                public void onCallback(String url) {
+                    if (url != null) {
+                        saveImageToInternalStorage(url);
+                    }
+                }
 
+                @Override
+                public void onCallbackError(Exception e) {
+                    BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+                    bottomNavigationView.getMenu().findItem(R.id.navigation_my_account).setIcon(R.drawable.my_account);
+                }
+            });
         }
 
         changeMenu(1);

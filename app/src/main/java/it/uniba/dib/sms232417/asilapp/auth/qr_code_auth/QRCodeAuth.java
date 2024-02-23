@@ -3,7 +3,9 @@ package it.uniba.dib.sms232417.asilapp.auth.qr_code_auth;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
@@ -25,11 +30,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.database.annotations.NotNull;
@@ -52,6 +59,7 @@ import java.util.concurrent.Executors;
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnValueChangeInterface;
 import it.uniba.dib.sms232417.asilapp.thread_connection.FirebaseMonitor;
@@ -69,7 +77,8 @@ public class QRCodeAuth extends Fragment {
     private Patient loggedPatient;
     private boolean isBarcodeRead = false;
     private boolean isConnect = false;
-    int i = 0;
+    BottomNavigationView bottomNavigationView;
+    Toolbar toolbar;
 
     @Nullable
     @Override
@@ -79,6 +88,41 @@ public class QRCodeAuth extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
+
+        toolbar = requireActivity().findViewById(R.id.toolbar);
+
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        // Show home button
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Set home icon as back button
+        Drawable homeIcon = getResources().getDrawable(R.drawable.home, null);
+        // Set color filter
+        homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
+
+        // Set toolbar title
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.connect_to_container));
+        // Change toolbar title text color
+        toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
+
+        // Set navigation click listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Navigate to HomeFragment
+                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
         super.onViewCreated(view, savedInstanceState);
 
         if(ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != requireActivity().getPackageManager().PERMISSION_GRANTED) {

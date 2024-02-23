@@ -768,5 +768,6 @@
 
     <string name="no_vitals_found">No vitals found</string>
     <string name="no_vitals_found_descr">Register vitals by connecting to the container.</string>
-
+    <string name="connect_to_container">Connect to the container</string>
+    <string name="patient_diary">%s\'s Diary</string>
 </resources>

@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -52,10 +53,10 @@ public class PatientFragment extends Fragment {
         patientAge = "Patient Age";
 
         String patientUUID = getArguments().getString("patientUUID"); // Ottieni l'UUID del paziente
-
+        String patientName = getArguments().getString("patientName"); // Ottieni il nome del paziente
         // Inizializza dbAdapterPatient
         dbAdapterPatient = new DatabaseAdapterPatient(getContext());
-
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
 
@@ -64,13 +65,13 @@ public class PatientFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set home icon as back button
-        Drawable homeIcon = getResources().getDrawable(R.drawable.arrow_back, null);
+        Drawable homeIcon = getResources().getDrawable(R.drawable.home, null);
         // Set color filter
         homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
 
         // Set toolbar title
-        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.my_patients));
+        ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(getString(R.string.patient_diary, patientName));
         // Change toolbar title text color
         toolbar.setTitleTextColor(getResources().getColor(R.color.md_theme_light_surface));
 
@@ -79,8 +80,12 @@ public class PatientFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Go back to previous fragment
+                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 

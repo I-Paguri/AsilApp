@@ -452,5 +452,6 @@
 
     <string name="no_vitals_found">Nessuna misurazione trovata</string>
     <string name="no_vitals_found_descr">Connettiti al container per registrare parametri vitali</string>
-
+    <string name="connect_to_container">Connessione al Contenitore</string>
+    <string name="patient_diary">Il Diario di %s</string>
 </resources>

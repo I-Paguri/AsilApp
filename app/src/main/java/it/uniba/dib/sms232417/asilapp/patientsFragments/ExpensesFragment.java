@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.Range;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Expenses;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
@@ -97,7 +99,7 @@ public class ExpensesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_expenses, container, false);
-
+        BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
         toolbar = requireActivity().findViewById(R.id.toolbar);
 
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
@@ -105,7 +107,7 @@ public class ExpensesFragment extends Fragment {
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set home icon as back button
-        Drawable homeIcon = getResources().getDrawable(R.drawable.arrow_back, null);
+        Drawable homeIcon = getResources().getDrawable(R.drawable.home, null);
         // Set color filter
         homeIcon.setColorFilter(getResources().getColor(R.color.md_theme_light_surface), PorterDuff.Mode.SRC_ATOP);
         ((AppCompatActivity) requireActivity()).getSupportActionBar().setHomeAsUpIndicator(homeIcon);
@@ -115,8 +117,12 @@ public class ExpensesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Go back to previous fragment
+                bottomNavigationView.setSelectedItemId(R.id.navigation_home);
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, new HomeFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 

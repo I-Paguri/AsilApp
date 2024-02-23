@@ -1,6 +1,6 @@
 package it.uniba.dib.sms232417.asilapp.adapters;
 
-import static it.uniba.dib.sms232417.asilapp.MainActivity.getContext;
+
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
