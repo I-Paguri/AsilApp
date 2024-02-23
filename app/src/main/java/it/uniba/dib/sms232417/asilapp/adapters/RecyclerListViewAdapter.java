@@ -50,26 +50,29 @@ public class RecyclerListViewAdapter extends RecyclerView.Adapter<RecyclerListVi
         listItem item = data.get(position);
         holder.title.setText(item.getTitle());
         holder.description.setText(item.getDescription());
-        // Load the image from the URL into the ImageView using Glide
-        Log.d("URL", item.getImageUrl());
 
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(item.getImageUrl());
+        if (item.getImageUrl() != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(item.getImageUrl());
+            // Call the getDownloadUrl() method on the StorageReference to get a Task<Uri>
+            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    // Get the download URL when the task completes
+                    String downloadUrl = uri.toString();
 
-        // Call the getDownloadUrl() method on the StorageReference to get a Task<Uri>
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Get the download URL when the task completes
-                String downloadUrl = uri.toString();
+                    // Use Glide to load the image from the download URL into the ImageView
+                    Glide.with(holder.icon.getContext())
+                            .load(downloadUrl)
+                            .circleCrop()
+                            .into(holder.icon);
+                }
+            });
+        } else {
+            holder.icon.setImageResource(R.drawable.my_account);
+        }
 
-                // Use Glide to load the image from the download URL into the ImageView
-                Glide.with(holder.icon.getContext())
-                        .load(downloadUrl)
-                        .circleCrop()
-                        .into(holder.icon);
-            }
-        });
+
 
     }
 
