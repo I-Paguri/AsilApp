@@ -398,10 +398,10 @@
     <string name="analysis_month">Mese</string>
     <string name="analysis_week">Settimana</string>
 
-    <string name="expenses_medicines">Spese Farmaci</string>
-    <string name="expenses_therapies">Spese Terapie</string>
+    <string name="expenses_medicines">Spese farmaci</string>
+    <string name="expenses_therapies">Spese terapie</string>
     <string name="expenses_others">Altre spese</string>
-    <string name="expenses_examinations">Spese Esami</string>
+    <string name="expenses_examinations">Spese esami</string>
 
     <string name="entry_format">Le tue %1$s sono state: %2$.2f €</string>
     <string name="enter_valid_date">Per favore, inserisci una data valida</string>

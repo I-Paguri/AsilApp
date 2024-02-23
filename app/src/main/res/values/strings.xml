@@ -155,10 +155,10 @@
     <string name="analysis_week">Week</string>
     <string name="analysis_month">Month</string>
 
-    <string name="expenses_medicines">Medication Expenses</string>
-    <string name="expenses_therapies">Therapy Expenses</string>
-    <string name="expenses_others">Other Expenses</string>
-    <string name="expenses_examinations">Examination Expenses</string>
+    <string name="expenses_medicines">Medication expenses</string>
+    <string name="expenses_therapies">Therapy expenses</string>
+    <string name="expenses_others">Other expenses</string>
+    <string name="expenses_examinations">Examination expenses</string>
 
     <string name="entry_format">Your %1$s were: %2$.2f €</string>
 
