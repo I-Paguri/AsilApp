@@ -5,6 +5,7 @@ package it.uniba.dib.sms232417.asilapp.adapters;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -96,7 +97,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private void handleCheckboxChecked(ProductViewHolder holder, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(holder.productCheckbox.getContext());
-        builder.setTitle("Inserisci i dettagli");
+        Resources res = context.getResources();
+        builder.setTitle(res.getString(R.string.insert_details));
 
         // Inflate the custom layout
         LayoutInflater inflater = (LayoutInflater) holder.productCheckbox.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -132,8 +134,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         builder.setView(dialogView);
 
 // Set up the buttons
-        builder.setPositiveButton("Conferma", null);
-        builder.setNegativeButton("Annulla", (dialog, which) -> {
+        builder.setPositiveButton(res.getString(R.string.confirm), null);
+        builder.setNegativeButton(res.getString(R.string.cancel), (dialog, which) -> {
             dialog.cancel();
             holder.productCheckbox.setChecked(false);
         });
@@ -158,7 +160,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             // Validate the amount field
             if (amount.isEmpty()) {
                 // Show an error message
-                amountLayout.setError("Questo campo è obbligatorio");
+                amountLayout.setError(res.getString(R.string.field_required_error));
                 return;
             } else {
                 amountLayout.setError(null);
@@ -167,7 +169,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             // Validate the date field
             if (date.isEmpty()) {
                 // Show an error message
-                dateLayout.setError("Questo campo è obbligatorio");
+                dateLayout.setError(res.getString(R.string.field_required_error));
                 return;
             } else {
                 dateLayout.setError(null);
@@ -195,7 +197,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     amountDouble = Double.parseDouble(amount);
                 } catch (NumberFormatException e) {
                     // Show an error message
-                    Toast.makeText(holder.productCheckbox.getContext(), "Per favore, inserisci un importo valido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.valid_amount), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -206,7 +208,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     dateObject = format.parse(date);
                 } catch (ParseException e) {
                     // Show an error message
-                    Toast.makeText(holder.productCheckbox.getContext(), "Per favore, inserisci una data valida", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.enter_valid_date), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -222,13 +225,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 BoughtProduct(medications.get(position).getId(), context);
                 medications.remove(position);
 
-                Toast.makeText(holder.productCheckbox.getContext(), "Prodotto acquistato con successo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.medication_purchased_successfully), Toast.LENGTH_SHORT).show();
 
                 // Notify the adapter that the data has changed
                 notifyDataSetChanged();
             } else {
                 // Show an error message
-                Toast.makeText(holder.productCheckbox.getContext(), "Errore: utente non trovato", Toast.LENGTH_SHORT).show();
+                Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.error_user_not_found), Toast.LENGTH_SHORT).show();
             }
 
                     dialog.dismiss();

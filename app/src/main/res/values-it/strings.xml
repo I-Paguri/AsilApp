@@ -512,6 +512,9 @@
     <string name="qr_code_authentication_explain" translatable="false">Scansiona il QR Code del tuo Badge</string>
     <string name="decision_account" translatable="false">Chi sei?</string>
     <string name="select_your_country">Inserisci la tua nazionalità</string>
+    <string name="insert_details">Inserisci dettagli</string>
+    <string name="medication_purchased_successfully">Farmaco acquistato con successo</string>
+
 
     <string name="empty_fields_email" translatable="false">Compilare il campo e-mail</string>.
     <string name="empty_fields_password" translatable="false">Compilare il campo password</string>.

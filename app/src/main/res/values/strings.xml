@@ -747,6 +747,13 @@
     <string name="videos_descr">Watch the recommended health and wellness videos.</string>
     <string name="nearby_facilities">Nearby facilities</string>
     <string name="nearby_facilities_descr">Find the facilities around you, such as clinics and pharmacies.</string>
+    <string name="insert_details">Insert details</string>
+    <string name="medication_purchased_successfully">Product purchased successfully</string>
+
+
+
+
+
 
     <string name="good_afternoon">Good afternoon</string>
     <string name="good_evening">Good evening</string>

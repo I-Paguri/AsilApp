@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:hint="Soldi spesi">
+        android:hint="@string/money_spent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/amount_autocomplete"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        android:hint="Data spesa">
+        android:hint="@string/date_spent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dateInput"
