@@ -50,8 +50,7 @@ public class MeasurementsFragment extends Fragment {
     private ArrayList<BloodPressure> bloodPressures;
     private ArrayList<Temperature> temperatures;
     private ArrayList<Glycemia> glycemias;
-    private boolean noVitals;
-
+    private int noVitals;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,7 +62,11 @@ public class MeasurementsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        noVitals = true;
+        int i;
+        int numberOfVitals = 4;
+
+        noVitals = 0;
+
         bloodPressures = null;
         heartRates = null;
         temperatures = null;
@@ -104,7 +107,7 @@ public class MeasurementsFragment extends Fragment {
                 TextView heartRateDate = view.findViewById(R.id.heartRateDate);
                 heartRateArchGauge = view.findViewById(R.id.arcGaugeHeartRate);
                 if (heartRates.size() > 0) {
-                    noVitals = false;
+
                     HeartRate lastHeartRate = heartRates.get(heartRates.size() - 1);
 
 
@@ -143,20 +146,31 @@ public class MeasurementsFragment extends Fragment {
                     heartRateDesc.setText(lastHeartRate.getValue() + " bpm");
                     heartRateDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastHeartRate.getStringDate());
                 } else {
+                    noVitals++;
+
                     cardViewHeartRate.setVisibility(View.GONE);
-                    // Create a new LinearLayout.LayoutParams object
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    );
+
+                    if (noVitals == numberOfVitals) {
+                        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        // Add the inflated layout to the parent layout
+                        LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
+                        parentLayout.addView(noTreatmentLayout);
+                    } else {
+                        // Create a new LinearLayout.LayoutParams object
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                        );
 
 
-                    int dp8 = (int) (8*density + 0.5f);
-                    int dp20 = (int) (20*density + 0.5f);
+                        int dp8 = (int) (8 * density + 0.5f);
+                        int dp20 = (int) (20 * density + 0.5f);
 
-                    params.setMargins(dp20, 0, dp20, dp8);
+                        params.setMargins(dp20, 0, dp20, dp8);
 
-                    cardViewBloodPressure.setLayoutParams(params);
+                        cardViewBloodPressure.setLayoutParams(params);
+                    }
                 }
             }
 
@@ -175,7 +189,6 @@ public class MeasurementsFragment extends Fragment {
                 TextView bloodPressureDate = view.findViewById(R.id.bloodPressureDate);
 
                 if (bloodPressures.size() > 0) {
-                    noVitals = false;
                     /*
                     Green: < 80, < 120
                     Yellow: < 90 < 140
@@ -262,20 +275,31 @@ public class MeasurementsFragment extends Fragment {
                     pressureMultiGauge.setThirdValue(100);
 
                 } else {
+                    noVitals++;
+
                     cardViewBloodPressure.setVisibility(View.GONE);
-                    // Create a new LinearLayout.LayoutParams object
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    );
+
+                    if (noVitals == numberOfVitals) {
+                        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        // Add the inflated layout to the parent layout
+                        LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
+                        parentLayout.addView(noTreatmentLayout);
+                    } else {
+                        // Create a new LinearLayout.LayoutParams object
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                        );
 
 
-                    int dp8 = (int) (8*density + 0.5f);
-                    int dp20 = (int) (20*density + 0.5f);
+                        int dp8 = (int) (8 * density + 0.5f);
+                        int dp20 = (int) (20 * density + 0.5f);
 
-                    params.setMargins(dp20, 0, dp20, dp8);
+                        params.setMargins(dp20, 0, dp20, dp8);
 
-                    cardViewHeartRate.setLayoutParams(params);
+                        cardViewHeartRate.setLayoutParams(params);
+                    }
                 }
             }
 
@@ -293,7 +317,8 @@ public class MeasurementsFragment extends Fragment {
                 TextView temperatureDesc = view.findViewById(R.id.temperatureDesc);
                 TextView temperatureDate = view.findViewById(R.id.temperatureDate);
                 if (temperatures.size() > 0) {
-                    noVitals = false;
+
+
                     Temperature lastTemperature = temperatures.get(temperatures.size() - 1);
 
                     RoundedProgressBar thermometer = view.findViewById(R.id.thermometer);
@@ -331,20 +356,29 @@ public class MeasurementsFragment extends Fragment {
 
                     temperatureDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastTemperature.getStringDate());
                 } else {
+                    noVitals++;
                     cardViewTemperature.setVisibility(View.GONE);
-                    // Create a new LinearLayout.LayoutParams object
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    );
+                    if (noVitals == numberOfVitals) {
+                        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        // Add the inflated layout to the parent layout
+                        LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
+                        parentLayout.addView(noTreatmentLayout);
+                    } else {
+                        // Create a new LinearLayout.LayoutParams object
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                        );
 
 
-                    int dp8 = (int) (8*density + 0.5f);
-                    int dp20 = (int) (20*density + 0.5f);
+                        int dp8 = (int) (8 * density + 0.5f);
+                        int dp20 = (int) (20 * density + 0.5f);
 
-                    params.setMargins(dp20, 0, dp20, dp8);
+                        params.setMargins(dp20, 0, dp20, dp8);
 
-                    cardViewGlycemia.setLayoutParams(params);
+                        cardViewGlycemia.setLayoutParams(params);
+                    }
                 }
             }
 
@@ -362,7 +396,8 @@ public class MeasurementsFragment extends Fragment {
                 TextView glycemiaDesc = view.findViewById(R.id.glycemiaDesc);
                 TextView glycemiaDate = view.findViewById(R.id.glycemiaDate);
                 if (glycemias.size() > 0) {
-                    noVitals = false;
+
+
                     Glycemia lastGlycemia = glycemias.get(glycemias.size() - 1);
 
                     glycemiaArchGauge = view.findViewById(R.id.arcGaugeGlycemia);
@@ -401,20 +436,30 @@ public class MeasurementsFragment extends Fragment {
                     glycemiaDesc.setText(lastGlycemia.getGlycemia() + " mg/dL");
                     glycemiaDate.setText(getResources().getString(R.string.on_date).toLowerCase() + " " + lastGlycemia.getStringDate());
                 } else {
+                    noVitals++;
                     cardViewGlycemia.setVisibility(View.GONE);
-                    // Create a new LinearLayout.LayoutParams object
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    );
+
+                    if (noVitals == numberOfVitals) {
+                        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
+                        // Add the inflated layout to the parent layout
+                        LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
+                        parentLayout.addView(noTreatmentLayout);
+                    } else {
+                        // Create a new LinearLayout.LayoutParams object
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT
+                        );
 
 
-                    int dp8 = (int) (8*density + 0.5f);
-                    int dp20 = (int) (20*density + 0.5f);
+                        int dp8 = (int) (8*density + 0.5f);
+                        int dp20 = (int) (20*density + 0.5f);
 
-                    params.setMargins(dp20, 0, dp20, dp8);
+                        params.setMargins(dp20, 0, dp20, dp8);
 
-                    cardViewTemperature.setLayoutParams(params);
+                        cardViewTemperature.setLayoutParams(params);
+                    }
                 }
             }
 
@@ -424,13 +469,6 @@ public class MeasurementsFragment extends Fragment {
             }
         });
 
-        if (noVitals) {
-            LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View noTreatmentLayout = inflater.inflate(R.layout.no_vitals_found, null);
-            // Add the inflated layout to the parent layout
-            LinearLayout parentLayout = view.findViewById(R.id.linearLayoutMeasurements);
-            parentLayout.addView(noTreatmentLayout);
-        }
 
         Bundle bundle = new Bundle();
         bundle.putString("patientUUID", patientUUID);
