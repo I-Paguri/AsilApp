@@ -44,6 +44,7 @@ import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
+import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
 import it.uniba.dib.sms232417.asilapp.thread_connection.NoConnectionFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkPermission() {
         try {
             if(ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != getPackageManager().PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 1);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 10);
             }else {
                 selectedFragment = new MeasureFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -197,8 +198,15 @@ public class MainActivity extends AppCompatActivity {
                         checkPermission();
                     }
                 });
-            }else {
+            }else if(requestCode == 10 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
                 selectedFragment = new MeasureFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }else if(requestCode == 20 && grantResults.length > 0 && grantResults[0] == getPackageManager().PERMISSION_GRANTED) {
+                selectedFragment = new MapsFragment();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
@@ -211,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
         if (fragment instanceof TreatmentFragment) {
             fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
 
     }
 
