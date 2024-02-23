@@ -395,8 +395,12 @@
     <string name="medication_buy">Visualizza i farmaci che devi comprare</string>
     <string name="expense_analysis">Analisi spese</string>
     <string name="expense_analysis_explain">Qui puoi vedere l\'analisi delle tue spese</string>
-    <string name="no_medication">Non ci sono medicinali da acquistare</string>
+    <string name="no_medication">Nessun farmaco da acquistare</string>
     <string name="temporal_analysis">Analisi temporale</string>
+
+
+    <string name="add_expense_dialog_title">Vuoi aggiungere questa spesa?</string>
+    <string name="add_expense_dialog_message">Conferma l\'aggiunta di questa spesa.</string>
 
     <string name="analysis_month">Mese</string>
     <string name="analysis_week">Settimana</string>

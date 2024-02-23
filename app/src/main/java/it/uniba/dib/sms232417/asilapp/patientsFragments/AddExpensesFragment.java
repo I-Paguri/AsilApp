@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -170,16 +172,17 @@ public class AddExpensesFragment extends Fragment {
                 }
 
                 // Crea un AlertDialog con un layout personalizzato
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
                 LayoutInflater inflater = getActivity().getLayoutInflater();
 
                 View view = inflater.inflate(R.layout.dialog_layout, null);
 
                 TextView title = view.findViewById(R.id.dialog_title);
                 TextView message = view.findViewById(R.id.dialog_message);
+                builder.setTitle(getResources().getString(R.string.add_expense_dialog_title));
+                builder.setMessage(getResources().getString(R.string.add_expense_dialog_message));
 
-                builder.setView(view)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // L'utente ha confermato, quindi aggiungi la spesa
 

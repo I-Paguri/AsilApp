@@ -10,6 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +46,12 @@ public class ProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
-        ImageView emptyListImage = view.findViewById(R.id.emptyMedicationImage);
-        emptyListImage.setVisibility(View.GONE);
-        TextView emptyListText = view.findViewById(R.id.emptyMedicationText);
-        emptyListText.setVisibility(View.GONE);
+        //ImageView emptyListImage = view.findViewById(R.id.emptyMedicationImage);
+        //emptyListImage.setVisibility(View.GONE);
+        //TextView emptyListText = view.findViewById(R.id.emptyMedicationText);
+        //emptyListText.setVisibility(View.GONE);
+
+
 
         ArrayList<Medication> productItem = new ArrayList<>();
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -71,16 +76,41 @@ public class ProductFragment extends Fragment {
                             }
                         }
                     }
+
+                    LinearLayout parentLayout = requireView().findViewById(R.id.parentLayout);
+                    TextView titleText = parentLayout.findViewById(R.id.medicationTitle);
                     if (hasUnboughtMedication) {
                         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
                         ProductAdapter productAdapter = new ProductAdapter(productItem, getContext());
                         recyclerView.setAdapter(productAdapter);
-                        emptyListImage.setVisibility(View.GONE);
-                        emptyListText.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        titleText.setVisibility(View.VISIBLE);
+                        //emptyListImage.setVisibility(View.GONE);
+                        //emptyListText.setVisibility(View.GONE);
                     } else {
-                        emptyListImage.setVisibility(View.VISIBLE);
-                        emptyListText.setVisibility(View.VISIBLE);
+
+                        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+                        recyclerView.setVisibility(View.GONE);
+
+                        // Set margins of parentLayout
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        float density = getResources().getDisplayMetrics().density;
+                        int dp100 = (int) (100 * density);
+                        layoutParams.setMargins(0, dp100, 0, 0);
+                        parentLayout.setLayoutParams(layoutParams);
+
+                        titleText = parentLayout.findViewById(R.id.medicationTitle);
+                        titleText.setVisibility(View.GONE);
+                        LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View noTreatmentLayout = inflater.inflate(R.layout.no_medications_layout, null);
+                        // Add the inflated layout to the parent layout
+                        parentLayout.addView(noTreatmentLayout);
+
+                        //emptyListImage.setVisibility(View.VISIBLE);
+                        //emptyListText.setVisibility(View.VISIBLE);
+
+
                     }
                 }
 
