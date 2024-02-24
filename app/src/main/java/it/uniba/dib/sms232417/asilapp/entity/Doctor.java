@@ -23,7 +23,7 @@ public class Doctor implements Parcelable, Serializable {
     private String regione;
     private String specializzazione;
     private String numeroDiRegistrazioneMedica;
-    private List<String> myPatientsUUID;
+    private List<String> myPatients;
     private String profileImageUrl;
 
     public Doctor() {
@@ -38,7 +38,7 @@ public class Doctor implements Parcelable, Serializable {
         this.regione = regione;
         this.specializzazione = specializzazione;
         this.numeroDiRegistrazioneMedica = numeroDiRegistrazioneMedica;
-        this.myPatientsUUID = new ArrayList<>();
+        this.myPatients = new ArrayList<>();
     }
 
     protected Doctor(Parcel in) {
@@ -50,7 +50,7 @@ public class Doctor implements Parcelable, Serializable {
         regione = in.readString();
         specializzazione = in.readString();
         numeroDiRegistrazioneMedica = in.readString();
-        myPatientsUUID = in.createStringArrayList();
+        myPatients = in.createStringArrayList();
     }
 
     public static final Creator<Doctor> CREATOR = new Creator<Doctor>() {
@@ -65,12 +65,12 @@ public class Doctor implements Parcelable, Serializable {
         }
     };
 
-    public List<String> getMyPatientsUUID() {
-        return myPatientsUUID;
+    public List<String> getMyPatients() {
+        return myPatients;
     }
 
-    public void setMyPatientsUUID(List<String> myPatients) {
-        this.myPatientsUUID = myPatients;
+    public void setMyPatients(List<String> myPatients) {
+        this.myPatients = myPatients;
     }
 
     public String getProfileImageUrl() {
@@ -163,7 +163,22 @@ public class Doctor implements Parcelable, Serializable {
         dest.writeString(regione);
         dest.writeString(specializzazione);
         dest.writeString(numeroDiRegistrazioneMedica);
-        dest.writeStringList(myPatientsUUID);
+        dest.writeStringList(myPatients);
     }
 
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "uuid='" + uuid + '\'' +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", email='" + email + '\'' +
+                ", dataNascita='" + dataNascita + '\'' +
+                ", regione='" + regione + '\'' +
+                ", specializzazione='" + specializzazione + '\'' +
+                ", numeroDiRegistrazioneMedica='" + numeroDiRegistrazioneMedica + '\'' +
+                ", myPatientsUUID=" + myPatients +
+                ", profileImageUrl='" + profileImageUrl + '\'' +
+                '}';
+    }
 }

@@ -31,7 +31,9 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Expenses;
+import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnExpensesListCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -208,7 +210,6 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-
                         String profileImageUrl = documentSnapshot.getString("profileImageUrl");
                         Log.d("MyAccountFragment", "Profile image URL: " + profileImageUrl);
                         callback.onCallback(profileImageUrl);
@@ -361,4 +362,19 @@ public class DatabaseAdapterPatient extends DatabaseAdapterUser {
                 });
     }
 
+    public void getPatientDefault(String patientUUID, OnPatientDataCallback callback) {
+        db.collection("patient")
+                .document(patientUUID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Patient patient = documentSnapshot.toObject(Patient.class);
+                        callback.onCallback(patient);
+                    } else {
+                        callback.onCallbackError(new Exception("No patient found with this UUID."), "No patient found with this UUID.");
+                    }
+                }).addOnFailureListener(e -> {
+                    callback.onCallbackError(e, e.toString());
+                });
+    }
 }

@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +30,6 @@ import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.adapters.RecyclerListViewAdapter;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
-import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientListDataCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.listItem;
 
@@ -72,14 +69,14 @@ public class MyPatientsFragment extends Fragment {
 
         dbAdapterDoctor = new DatabaseAdapterDoctor(getContext());
 
-        if (doctor.getMyPatientsUUID() == null || doctor.getMyPatientsUUID().isEmpty()) {
+        if (doctor.getMyPatients() == null || doctor.getMyPatients().isEmpty()) {
             LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View noTreatmentLayout = inflater.inflate(R.layout.no_patients_layout, null);
             // Add the inflated layout to the parent layout
             LinearLayout parentLayout = view.findViewById(R.id.linearLayoutPatientsList);
             parentLayout.addView(noTreatmentLayout);
         } else {
-            dbAdapterDoctor.getDoctorPatients(doctor.getMyPatientsUUID(), new OnPatientListDataCallback() {
+            dbAdapterDoctor.getDoctorPatients(doctor.getMyPatients(), new OnPatientListDataCallback() {
                 @Override
                 public void onCallback(List<Patient> patientList) {
                     myPatientsList = patientList;

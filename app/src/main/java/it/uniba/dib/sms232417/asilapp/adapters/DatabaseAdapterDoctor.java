@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,7 +12,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -24,11 +22,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
-import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientListDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
@@ -74,7 +69,7 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                                             datiUtente.getString("numeroDiRegistrazioneMedica"));
 
                                     List<String> myPatients = (List<String>) datiUtente.get("myPatients");
-                                    doctor.setMyPatientsUUID(myPatients);
+                                    doctor.setMyPatients(myPatients);
                                     if (myPatients == null || myPatients.isEmpty())
                                         Log.d("MyPatients", "Non ce");
                                     if (myPatients != null && !myPatients.isEmpty())
@@ -160,7 +155,7 @@ public class DatabaseAdapterDoctor extends DatabaseAdapterUser {
                                             datiUtente.getString("numeroDiRegistrazioneMedica"));
 
                                     List<String> myPatients = (List<String>) datiUtente.get("myPatients");
-                                    doctor.setMyPatientsUUID(myPatients);
+                                    doctor.setMyPatients(myPatients);
                                     if (myPatients == null || myPatients.isEmpty())
                                         Log.d("MyPatients", "Non ce");
                                     if (myPatients != null && !myPatients.isEmpty())

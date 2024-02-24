@@ -25,18 +25,18 @@
             android:id="@+id/lblsubText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/decision_account"
+            android:text="@string/users"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/lblTextText"/>
         <LinearLayout
-            android:id="@+id/decision_standard_login_layout"
+            android:id="@+id/default_activity_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_below="@+id/lblsubText"
             android:layout_centerHorizontal="true">
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLoginPatient"
+                android:id="@+id/btnLoginPatient_default"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_centerHorizontal="true"
@@ -46,7 +46,7 @@
                 android:text="@string/patient"
                 app:icon="@drawable/person_patient"/>
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLoginDoctor"
+                android:id="@+id/btnLoginDoctor_default"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_centerHorizontal="true"
@@ -56,15 +56,5 @@
                 android:text="@string/doctor"
                 app:icon="@drawable/stethoscope"/>
         </LinearLayout>
-        <TextView
-            android:id="@+id/default_users"
-            style="@style/RegularText"
-            android:layout_marginTop="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/decision_standard_login_layout"
-            android:text="@string/click_default_user"
-            android:layout_centerHorizontal="true">
-        </TextView>
     </RelativeLayout>
 </RelativeLayout>

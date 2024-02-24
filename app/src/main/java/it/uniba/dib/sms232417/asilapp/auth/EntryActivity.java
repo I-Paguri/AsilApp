@@ -36,6 +36,7 @@ import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.auth.default_login.DefaultLoginFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorQrCodeFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
@@ -280,7 +281,7 @@ public class EntryActivity extends AppCompatActivity {
             replaceFragment(new LoginDecisionFragment());
         }else if(currentFragment instanceof RegisterFragment) {
             replaceFragment(new LoginFragment());
-        }else if(currentFragment instanceof LoginDoctorCredentialFragment){
+        }else if(currentFragment instanceof LoginDoctorCredentialFragment || currentFragment instanceof DefaultLoginFragment){
             replaceFragment(new LoginDecisionFragment());
         }else if (currentFragment instanceof LoginDecisionFragment) {
             if (doubleBackToExitPressedOnce) {

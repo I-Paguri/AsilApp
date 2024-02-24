@@ -1,7 +1,9 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">AsilApp</string>
     <string name="doctor" translatable="false">Dottore</string>
-    <string name="patient" translatable="false">Paziente</string>
+    <string name="patient" translatable="false">Richiedente Asilo</string>
+    <string name="users">Utenti Default</string>
+    <string name="click_default_user">Clicca qui se vuoi entrare come utente di default</string>
     <!-- Buttons strings -->
     <string name="btn_add">Misura</string>
     <string name="btn_healthcare">Healthcare</string>
@@ -566,4 +568,6 @@
     <string name="my_doctor">Il mio dottore</string>
     <string name="error_occured_login">Qualcosa è andato storto, controlla le tue credenziali</string>
     <string name="error_occured_registrazione">Qualcosa è andato storto</string>
+
+
 </resources>

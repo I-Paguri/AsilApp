@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.button.MaterialButton;
 
 import it.uniba.dib.sms232417.asilapp.R;
+import it.uniba.dib.sms232417.asilapp.auth.default_login.DefaultLoginFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.RegisterFragment;
@@ -36,6 +38,7 @@ public class LoginDecisionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         MaterialButton btnPatient = getView().findViewById(R.id.btnLoginPatient);
         MaterialButton btnDoctor = getView().findViewById(R.id.btnLoginDoctor);
+        TextView txtRegister = getView().findViewById(R.id.default_users);
 
         btnPatient.setOnClickListener(v -> {
             ((EntryActivity) getActivity()).replaceFragment(new LoginFragment());
@@ -44,6 +47,11 @@ public class LoginDecisionFragment extends Fragment {
         btnDoctor.setOnClickListener(v -> {
             ((EntryActivity) getActivity()).replaceFragment(new LoginDoctorCredentialFragment());
         });
+
+        txtRegister.setOnClickListener(v -> {
+            ((EntryActivity) getActivity()).replaceFragment(new DefaultLoginFragment());
+        });
+
     }
 
 
