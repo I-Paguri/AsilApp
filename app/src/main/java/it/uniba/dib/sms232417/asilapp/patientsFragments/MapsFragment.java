@@ -97,7 +97,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // Ottieni i riferimenti ai TextView
         TextView titleTextView = getView().findViewById(R.id.titleLocation);
         TextView addressTextView = getView().findViewById(R.id.addressLocation);
@@ -136,6 +135,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     // Se i permessi non sono stati concessi, vengono richiesti
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
                 } else {
+                    requestLocationUpdates();
+                    enableMyLocation();
                     LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                     boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                     if (!isGPSEnabled) {
@@ -319,6 +320,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     //metodo che serve a richiamare il metodo in ManageJson per gestire la risposta json
     private void callApi(String query) {
+
+        String translatedQuery = translateQuery(query);
+
+        LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (!isGPSEnabled) {
+            Toast.makeText(requireContext(), getResources().getString(R.string.accuracy), Toast.LENGTH_SHORT).show();
+
+        }
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         float latitude = sharedPreferences.getFloat("latitude", 0);
         float longitude = sharedPreferences.getFloat("longitude", 0);
@@ -335,10 +347,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         //modofico in modo da non consumare troppe richieste
         //parameters.put("engine", "google_maps");
         parameters.put("engine", "google_maps");
-        parameters.put("q", query);
+        parameters.put("q", translatedQuery);
         parameters.put("ll", "@" + latitude + "," + longitude + ",14z");
         parameters.put("type", "search");
-        parameters.put("api_key", "97f69511113f9b69bdba905e6f9c3315e9c6eec0e678136469e2c057d793cd9c");
+        parameters.put("api_key", "3a6110547633c0044effcf96447f540b4c7cf859546c836c206e28d04f1710c8");
         parameters.put("hl", "it");
 
         CompletableFuture<JSONObject> future = manageJson.performMapsQuery(parameters);
@@ -644,7 +656,25 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
+    private String translateQuery(String query) {
+        Map<String, String> translations = new HashMap<>();
+        translations.put("Asylum House", "Centri Asilo");
+        translations.put("Clinic", "Ambulatorio");
+        translations.put("Pharmacy", "Farmacia");
+        translations.put("Post office", "Posta");
+        translations.put("Italian school", "Scuola di italiano");
+        translations.put("Municipality", "Comune");
+        translations.put("Church", "Chiesa");
 
+
+        String translatedQuery = translations.get(query);
+        if (translatedQuery != null) {
+            return translatedQuery;
+        } else {
+            // Se non esiste una traduzione, restituisci la query originale
+            return query;
+        }
+    }
 
 
 }

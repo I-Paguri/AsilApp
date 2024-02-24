@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ManageJson {
-        private static final String API_KEY = "97f69511113f9b69bdba905e6f9c3315e9c6eec0e678136469e2c057d793cd9c";
+        private static final String API_KEY = "3a6110547633c0044effcf96447f540b4c7cf859546c836c206e28d04f1710c8";
 
         public CompletableFuture<JSONObject> performMapsQuery(Map<String, String> parameters) {
                 return CompletableFuture.supplyAsync(() -> {

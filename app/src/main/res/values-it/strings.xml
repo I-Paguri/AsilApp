@@ -297,6 +297,8 @@
         <item>Giorni della settimana</item>
     </string-array>
 
+    <string name ="accuracy">La geolocalizzazione non è attiva, i risultati potrebbero essere poco accurati</string>
+
     <string name="what_days_of_week">In quali giorni della settimana?</string>
     <string name="what_interval">Con quale intervallo si deve assumere il farmaco?</string>
     <string name="what_interval_message">Seleziona quanto tempo deve passare tra un\'assunzione e l\'altra</string>

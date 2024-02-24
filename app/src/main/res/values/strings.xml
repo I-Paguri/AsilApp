@@ -130,7 +130,7 @@
     <string-array name="searchOnMaps_array">
         <item>Clinic</item>
         <item>Pharmacy</item>
-        <item>Post</item>
+        <item>Post office</item>
         <item>Italian School</item>
         <item>Church</item>
         <item>Municipality</item>
@@ -143,6 +143,8 @@
         <item>Treatment</item>
         <item>Other</item>
     </string-array>
+
+    <string name ="accuracy">Geolocation is not active, results may be inaccurate</string>
 
     <string name ="medications_to_purchase">Medications to purchase</string>
     <string name="enter_expenses">Enter your expenses</string>
