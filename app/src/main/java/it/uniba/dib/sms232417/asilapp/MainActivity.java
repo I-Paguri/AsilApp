@@ -328,6 +328,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeMenu(int status) {
+
+        updateIconProfileImage();
+
         if (status == 0) {
             if (!menuNoConnection) {
                 Log.d("Passaggio a menu no connection", "Passaggio a menu no connection");
