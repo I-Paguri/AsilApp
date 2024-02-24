@@ -29,32 +29,38 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/lblTextText"/>
         <LinearLayout
-            android:id="@+id/default_activity_layout"
-            android:layout_width="wrap_content"
+            android:id="@+id/decision_standard_login_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_below="@+id/lblsubText"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLoginPatient_default"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="70dp"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/lblsubText"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
                 android:text="@string/patient"
-                app:icon="@drawable/person_patient"/>
+                android:layout_marginBottom="16dp"
+                app:icon="@drawable/person_patient" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLoginDoctor_default"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="70dp"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/lblsubText"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1"
                 android:text="@string/doctor"
-                app:icon="@drawable/stethoscope"/>
+                android:layout_gravity="center_vertical"
+                app:icon="@drawable/stethoscope" />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

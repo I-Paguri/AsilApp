@@ -139,6 +139,8 @@
         <item>Asylum House</item>
     </string-array>
 
+    <string name="total">Total</string>
+
     <string-array name="categories">
         <item>Exam</item>
         <item>Medication</item>
@@ -172,6 +174,7 @@
 
     <string name="entry_format">Your %1$s were: %2$.2f €</string>
 
+    <string name="no_doctor_assigned">No doctor assigned yet.</string>
     <string name="enter_valid_date">Please, enter a valid date</string>
     <string name="valid_amount">Please enter a valid amount</string>
     <string name="decimals_error">The amount cannot have more than two decimal places</string>

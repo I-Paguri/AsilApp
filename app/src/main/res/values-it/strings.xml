@@ -293,6 +293,8 @@
         <item>Centri Asilo</item>
     </string-array>
 
+    <string name="total">Totale</string>
+
     <string-array name="how_regularly_list">
         <item>Ogni giorno</item>
         <item>Intervallo</item>
@@ -413,6 +415,8 @@
     <string name="expenses_therapies">Spese terapie</string>
     <string name="expenses_others">Altre spese</string>
     <string name="expenses_examinations">Spese esami</string>
+
+    <string name="no_doctor_assigned">Nessun dottore ancora assegnato.</string>
 
     <string name="check_desc">Spunta un farmaco per segnarlo acquistato</string>
     <string name="entry_format">Le tue %1$s sono state: %2$.2f €</string>
