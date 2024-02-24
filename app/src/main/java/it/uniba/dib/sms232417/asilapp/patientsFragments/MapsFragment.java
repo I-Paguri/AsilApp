@@ -237,7 +237,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         });
 
         //chiedo i permessi appena si apre il fragment
-        PermessiRichiesti();
+      // PermessiRichiesti();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);

@@ -44,14 +44,12 @@ public class ProductFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product, container, false);
+        return inflater.inflate(R.layout.fragment_product, container, false);
+    }
 
-        //ImageView emptyListImage = view.findViewById(R.id.emptyMedicationImage);
-        //emptyListImage.setVisibility(View.GONE);
-        //TextView emptyListText = view.findViewById(R.id.emptyMedicationText);
-        //emptyListText.setVisibility(View.GONE);
-
-
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         ArrayList<Medication> productItem = new ArrayList<>();
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -89,14 +87,11 @@ public class ProductFragment extends Fragment {
                         recyclerView.setVisibility(View.VISIBLE);
                         titleText.setVisibility(View.VISIBLE);
                         subtitleText.setVisibility(View.VISIBLE);
-                        //emptyListImage.setVisibility(View.GONE);
-                        //emptyListText.setVisibility(View.GONE);
                     } else {
 
                         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
                         recyclerView.setVisibility(View.GONE);
 
-                        // Set margins of parentLayout
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         float density = getResources().getDisplayMetrics().density;
                         int dp100 = (int) (100 * density);
@@ -107,13 +102,7 @@ public class ProductFragment extends Fragment {
                         titleText.setVisibility(View.GONE);
                         LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         View noTreatmentLayout = inflater.inflate(R.layout.no_medications_layout, null);
-                        // Add the inflated layout to the parent layout
                         parentLayout.addView(noTreatmentLayout);
-
-                        //emptyListImage.setVisibility(View.VISIBLE);
-                        //emptyListText.setVisibility(View.VISIBLE);
-
-
                     }
                 }
 
@@ -123,6 +112,5 @@ public class ProductFragment extends Fragment {
                 }
             });
         }
-        return view;
     }
 }
