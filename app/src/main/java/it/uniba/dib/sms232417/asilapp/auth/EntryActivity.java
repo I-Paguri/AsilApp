@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.Fragment;
@@ -34,20 +33,19 @@ import java.util.Map;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterDoctor;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.default_login.DefaultLoginFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
 import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorQrCodeFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
 import it.uniba.dib.sms232417.asilapp.auth.patient.RegisterFragment;
-import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
+import it.uniba.dib.sms232417.asilapp.utilities.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
 
 import javax.crypto.SecretKey;

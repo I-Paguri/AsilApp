@@ -78,24 +78,11 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/txtForgetPass"
-        style="@style/RegularText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/loginButtons"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="@dimen/text_margin"
-        android:layout_marginTop="@dimen/text_margin"
-        android:layout_marginEnd="@dimen/text_margin"
-        android:layout_marginBottom="@dimen/text_margin"
-        android:text="@string/forgett_pass" />
-
-    <TextView
         android:id="@+id/txtRegister"
         style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtForgetPass"
+        android:layout_below="@id/loginButtons"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="@dimen/text_margin"
         android:layout_marginTop="@dimen/text_margin"

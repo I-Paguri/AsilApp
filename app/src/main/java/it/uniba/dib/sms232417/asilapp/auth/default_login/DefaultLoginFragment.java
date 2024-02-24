@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,11 +17,8 @@ import com.google.android.material.button.MaterialButton;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
-import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
-import it.uniba.dib.sms232417.asilapp.auth.doctor.LoginDoctorCredentialFragment;
-import it.uniba.dib.sms232417.asilapp.auth.patient.LoginFragment;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterDoctor;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;

@@ -27,8 +27,8 @@ import javax.crypto.SecretKey;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
-import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterDoctor;
+import it.uniba.dib.sms232417.asilapp.utilities.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;

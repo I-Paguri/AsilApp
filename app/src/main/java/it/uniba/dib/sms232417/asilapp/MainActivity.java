@@ -30,21 +30,21 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterDoctor;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterDoctor;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.HealthcareFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyPatientsFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.MyAccountFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.PatientFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormGeneralFragment;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFormMedicationsFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.HomeFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.VideosFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.doctor.MyPatientsFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.MyAccountFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.PatientFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.doctor.TreatmentFormGeneralFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.doctor.TreatmentFormMedicationsFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnProfileImageCallback;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.ExpensesFragment;
-import it.uniba.dib.sms232417.asilapp.patientsFragments.MapsFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.patient.ExpensesFragment;
+import it.uniba.dib.sms232417.asilapp.fragments.patient.MapsFragment;
 import it.uniba.dib.sms232417.asilapp.thread_connection.InternetCheckThread;
 import it.uniba.dib.sms232417.asilapp.thread_connection.NoConnectionFragment;
 import it.uniba.dib.sms232417.asilapp.utilities.StringUtils;
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
 
-        if (currentFragment instanceof HealthcareFragment || currentFragment instanceof MyPatientsFragment
+        if (currentFragment instanceof VideosFragment || currentFragment instanceof MyPatientsFragment
                 || currentFragment instanceof MyAccountFragment || currentFragment instanceof QRCodeAuth || (currentFragment instanceof PatientFragment && loggedPatient != null)) {
             // If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment
             FragmentManager fragmentManager = getSupportFragmentManager();

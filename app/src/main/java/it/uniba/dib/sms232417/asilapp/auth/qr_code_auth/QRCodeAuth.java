@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 
 import androidx.annotation.NonNull;
@@ -57,10 +56,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
-import it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.fragments.HomeFragment;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnValueChangeInterface;
 import it.uniba.dib.sms232417.asilapp.thread_connection.FirebaseMonitor;

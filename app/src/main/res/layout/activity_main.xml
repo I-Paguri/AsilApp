@@ -55,7 +55,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_activity_main"
-        android:name="it.uniba.dib.sms232417.asilapp.doctor.fragments.HomeFragment"
+        android:name="it.uniba.dib.sms232417.asilapp.fragments.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"

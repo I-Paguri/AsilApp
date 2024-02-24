@@ -3,20 +3,9 @@ package it.uniba.dib.sms232417.asilapp.thread_connection;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.fragment.app.FragmentManager;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import java.io.File;
-import java.io.FileOutputStream;
-
-import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
-import it.uniba.dib.sms232417.asilapp.auth.qr_code_auth.QRCodeAuth;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnValueChangeInterface;
 
 

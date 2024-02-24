@@ -1,6 +1,5 @@
 package it.uniba.dib.sms232417.asilapp.auth.patient;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,8 +29,8 @@ import javax.crypto.SecretKey;
 
 import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
-import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterPatient;
-import it.uniba.dib.sms232417.asilapp.auth.CryptoUtil;
+import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.utilities.CryptoUtil;
 import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
@@ -55,7 +54,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView forgetPass = (TextView) getView().findViewById(R.id.txtForgetPass);
+
         TextView register = (TextView) getView().findViewById(R.id.txtRegister);
         Button login = (Button) getView().findViewById(R.id.btnLogin);
         ImageView imageView = (ImageView) getView().findViewById(R.id.backArrow);
@@ -68,13 +67,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        forgetPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onForgettPass(v);
-            }
-
-        });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,11 +165,6 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void onForgettPass(View V) {
-        Toast.makeText(getContext(),
-                "Hai Dimenticato la Password",
-                Toast.LENGTH_SHORT).show();
-    }
 
     private void onRegister(View V) {
         ((EntryActivity) getActivity()).replaceFragment(new RegisterFragment());
