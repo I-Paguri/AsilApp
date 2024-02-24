@@ -192,6 +192,13 @@ public class MyAccountFragment extends Fragment {
                         Log.d("PAZIENTE", "Errore");
                     }
                 });
+            } else {
+                TextView txtDoctorTitle = requireView().findViewById(R.id.myDoctorTitle);
+                txtDoctorTitle.setVisibility(View.VISIBLE);
+
+                TextView txtDoctorName = requireView().findViewById(R.id.myDoctorName);
+                txtDoctorName.setVisibility(View.VISIBLE);
+                txtDoctorName.setText("da assegnare");
             }
 
             TextView txtName = getView().findViewById(R.id.txt_name);
