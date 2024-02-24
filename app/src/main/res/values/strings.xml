@@ -139,6 +139,8 @@
         <item>Asylum House</item>
     </string-array>
 
+    <string name="total">Total</string>
+
     <string-array name="categories">
         <item>Exam</item>
         <item>Medication</item>

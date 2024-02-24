@@ -164,7 +164,7 @@ public class AnalysesExpensesFragment extends Fragment {
                         //convert totalSum to string
                         String totalSumString = String.valueOf(totalSum);
 
-                        pieChart.setCenterText("Totale: " + totalSumString);
+                        pieChart.setCenterText(getResources().getString(R.string.total)+": " + totalSumString);
 
 
 
@@ -198,7 +198,7 @@ public class AnalysesExpensesFragment extends Fragment {
 
                             @Override
                             public void onNothingSelected() {
-                                pieChart.setCenterText("Totale: " + totalSum);
+                                pieChart.setCenterText(getResources().getString(R.string.total)+": " + totalSum);
                             }
 
                         });
