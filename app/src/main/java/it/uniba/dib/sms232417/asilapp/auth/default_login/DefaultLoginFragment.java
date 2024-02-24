@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,20 +48,20 @@ public class DefaultLoginFragment extends Fragment {
 
         btnPatient.setOnClickListener(v -> {
             //Paziente Marco Rubino
-            dbAdapterPatient.getPatientDefault("kbHym7ohbDb80dhv94pzrtFevPX2", new OnPatientDataCallback() {
-                @Override
-                public void onCallback(Patient patient) {
-                    Log.d("DefaultLoginFragment", "onCallback: " + patient.toString());
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.putExtra("loggedPatient", (Parcelable) patient);
-                    startActivity(intent);
-                }
+           dbAdapterPatient.onLogin("vitomarcorubino.universita@gmail.com","Asilapp!", new OnPatientDataCallback() {
+               @Override
+               public void onCallback(Patient patient) {
+                   Intent intent = new Intent(getContext(), MainActivity.class);
+                   intent.putExtra("loggedPatient", (Parcelable) patient);
+                   startActivity(intent);
+               }
 
-                @Override
-                public void onCallbackError(Exception exception, String message) {
+               @Override
+               public void onCallbackError(Exception exception, String message) {
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+               }
+           });
 
-                }
-            });
 
         });
 
