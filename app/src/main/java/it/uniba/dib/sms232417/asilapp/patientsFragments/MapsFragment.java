@@ -1,6 +1,5 @@
 package it.uniba.dib.sms232417.asilapp.patientsFragments;
 
-import static androidx.core.location.LocationManagerCompat.requestLocationUpdates;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.ProgressDialog;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,22 +40,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import it.uniba.dib.sms232417.asilapp.adapters.DatabaseAdapterUser;
-import it.uniba.dib.sms232417.asilapp.adapters.ProductAdapter;
 import it.uniba.dib.sms232417.asilapp.entity.AsylumHouse;
-import it.uniba.dib.sms232417.asilapp.entity.Medication;
-import it.uniba.dib.sms232417.asilapp.entity.Treatment;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseDataCallback;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnAsylumHouseRatingCallback;
 import it.uniba.dib.sms232417.asilapp.utilities.review.MaterialRating;
 
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 import android.location.Location;
@@ -146,7 +140,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                     if (!isGPSEnabled) {
                         // GPS is not enabled, show a dialog to the user
-                        new AlertDialog.Builder(getContext())
+                        new MaterialAlertDialogBuilder(getContext())
                                 .setMessage(getResources().getString(R.string.gps_not_enabled))
                                 .setPositiveButton(getResources().getString(R.string.setting), new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -244,7 +238,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(getContext())
+                new MaterialAlertDialogBuilder(getContext())
                         .setTitle("Informazioni")
                         .setMessage("Se rifiuti 2 volte i permessi non sarà possibile mostrarti i punti di interesse." +
                                 "\n\nSe non vedi i punti di interesse, controlla di aver attivato la localizzazione sul tuo dispositivo." +
