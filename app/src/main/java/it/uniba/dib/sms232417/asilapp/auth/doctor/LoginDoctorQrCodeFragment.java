@@ -215,7 +215,7 @@ public class LoginDoctorQrCodeFragment extends Fragment {
                                 @Override
                                 public void onCallbackError(Exception e, String message) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setTitle(R.string.error).setMessage(message);
+                                    builder.setTitle(R.string.error).setMessage(R.string.error_occured_login);
                                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             // User clicked Yes button

@@ -853,5 +853,6 @@
     <string name="why_measure_regularly_glycemia">Why measure glycemia regularly?</string>
 
     <string name="my_doctor">My doctor</string>
-
+    <string name="error_occured_login">Something went wrong, check your credentials</string>
+    <string name="error_occured_registrazione">Something went wrong</string>
 </resources>

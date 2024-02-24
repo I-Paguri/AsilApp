@@ -159,7 +159,7 @@ public class LoginFragment extends Fragment {
                         public void onCallbackError(Exception exception, String message) {
                             new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
                                     .setTitle(R.string.error)
-                                    .setMessage(message)
+                                    .setMessage(R.string.error_occured_login)
                                     .setPositiveButton(R.string.yes, null)
                                     .create()
                                     .show();

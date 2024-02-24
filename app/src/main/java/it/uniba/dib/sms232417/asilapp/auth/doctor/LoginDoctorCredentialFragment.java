@@ -152,7 +152,7 @@ public class LoginDoctorCredentialFragment extends Fragment {
             @Override
             public void onCallbackError(Exception e, String message) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                builder.setTitle(R.string.error).setMessage(message);
+                builder.setTitle(R.string.error).setMessage(R.string.error_occured_login);
                 builder.setPositiveButton(R.string.yes, null);
                 builder.show();
 

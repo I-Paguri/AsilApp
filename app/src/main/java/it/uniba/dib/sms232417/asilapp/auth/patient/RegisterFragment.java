@@ -256,7 +256,7 @@ public class RegisterFragment extends Fragment {
             public void onCallbackError(Exception e, String message) {
                 new MaterialAlertDialogBuilder(requireContext(), R.style.CustomMaterialDialog)
                         .setTitle(R.string.error)
-                        .setMessage(message)
+                        .setMessage(R.string.error_occured_registrazione)
                         .setPositiveButton(R.string.yes, null)
                         .create()
                         .show();

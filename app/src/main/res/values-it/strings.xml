@@ -562,5 +562,6 @@
     <string name="why_measure_regularly_glycemia">Perché misurare regolarmente la glicemia?</string>
 
     <string name="my_doctor">Il mio dottore</string>
-
+    <string name="error_occured_login">Qualcosa è andato storto, controlla le tue credenziali</string>
+    <string name="error_occured_registrazione">Qualcosa è andato storto</string>
 </resources>
