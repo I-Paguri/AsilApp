@@ -32,6 +32,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class PatientFragment extends Fragment {
     private Toolbar toolbar;
+    private boolean noConnection;
     private String patientUUID, patientName, patientAge, user;
     private ViewPagerAdapter adapter;
 
@@ -58,11 +59,16 @@ public class PatientFragment extends Fragment {
 
 
         TextView textName = view.findViewById(R.id.txtName_inputlayout);
-        if (this.getArguments() != null) {
+        if(this.getArguments() != null) {
             patientUUID = this.getArguments().getString("patientUUID");
             patientName = this.getArguments().getString("patientName");
             patientAge = this.getArguments().getString("patientAge");
             user = this.getArguments().getString("user");
+            if(this.getArguments().containsKey("noConnection")) {
+                noConnection = this.getArguments().getBoolean("noConnection");
+            }else{
+                noConnection = false;
+            }
         }
 
         BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
@@ -128,6 +134,7 @@ public class PatientFragment extends Fragment {
         bundle.putString("patientUUID", patientUUID);
         bundle.putString("patientName", patientName);
         bundle.putString("patientAge", patientAge);
+        bundle.putBoolean("noConnection", noConnection);
         bundle.putString("user", user);
 
         // Create an adapter that knows which fragment should be shown on each page
@@ -183,34 +190,42 @@ public class PatientFragment extends Fragment {
         }
 
         // Ottieni l'URL dell'immagine del profilo dal database
-        dbAdapterPatient.getProfileImage(patientUUID, new OnProfileImageCallback() {
-            @Override
-            public void onCallback(String imageUrl) {
-                // Check if the profile image URL exists and is not empty before loading it
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    Glide.with(getContext())
-                            .load(imageUrl)
-                            .circleCrop()
-                            .into((ImageView) getView().findViewById(R.id.imgProfile));
-                } else {
-                    // If the profile image URL does not exist or is empty, load the default profile image
+
+        if(noConnection) {
+            Glide.with(getContext())
+                    .load(R.drawable.my_account)
+                    .circleCrop()
+                    .into((ImageView) getView().findViewById(R.id.imgProfile));
+        }else{
+            dbAdapterPatient.getProfileImage(patientUUID, new OnProfileImageCallback() {
+                @Override
+                public void onCallback(String imageUrl) {
+                    // Check if the profile image URL exists and is not empty before loading it
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Glide.with(getContext())
+                                .load(imageUrl)
+                                .circleCrop()
+                                .into((ImageView) getView().findViewById(R.id.imgProfile));
+                    } else {
+                        // If the profile image URL does not exist or is empty, load the default profile image
+                        Glide.with(getContext())
+                                .load(R.drawable.default_profile_image)
+                                .circleCrop()
+                                .into((ImageView) getView().findViewById(R.id.imgProfile));
+                    }
+                }
+
+
+                @Override
+                public void onCallbackError(Exception e) {
+                    // If there is an error getting the profile image URL, load the default profile image
                     Glide.with(getContext())
                             .load(R.drawable.default_profile_image)
                             .circleCrop()
                             .into((ImageView) getView().findViewById(R.id.imgProfile));
                 }
-            }
-
-            @Override
-            public void onCallbackError(Exception e) {
-                // If there is an error getting the profile image URL, load the default profile image
-                Glide.with(getContext())
-                        .load(R.drawable.default_profile_image)
-                        .circleCrop()
-                        .into((ImageView) getView().findViewById(R.id.imgProfile));
-            }
-        });
-
+            });
+        }
     }
 
     @Override

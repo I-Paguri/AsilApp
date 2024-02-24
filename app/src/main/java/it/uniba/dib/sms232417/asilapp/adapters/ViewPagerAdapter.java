@@ -10,6 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasurementsFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.MeasurementsTrendFragment;
 import it.uniba.dib.sms232417.asilapp.doctor.fragments.TreatmentFragment;
+import it.uniba.dib.sms232417.asilapp.thread_connection.NoConnectionFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
     private Bundle bundle;
@@ -24,9 +25,16 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                MeasurementsFragment measurementsFragment = new MeasurementsFragment();
-                measurementsFragment.setArguments(bundle);
-                return measurementsFragment;
+                Fragment selectedFragment;
+                boolean noConnection = bundle.getBoolean("noConnection");
+                if(noConnection){
+                    selectedFragment = new NoConnectionFragment();
+                }else {
+                    selectedFragment = new MeasurementsFragment();
+                    selectedFragment.setArguments(bundle);
+                }
+
+                return selectedFragment;
             case 1:
                 TreatmentFragment treatmentFragment = new TreatmentFragment();
                 treatmentFragment.setArguments(bundle);

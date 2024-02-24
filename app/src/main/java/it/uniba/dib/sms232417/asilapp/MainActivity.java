@@ -346,12 +346,12 @@ public class MainActivity extends AppCompatActivity {
                                 if (itemId == R.id.navigation_diary) {
                                     selectedFragment = new PatientFragment();
                                     Bundle bundle = new Bundle();
+                                    bundle.putBoolean("noConnection", true);
                                     bundle.putString("patientUUID", loggedPatient.getUUID());
                                     bundle.putString("patientName", loggedPatient.getNome() + " " + loggedPatient.getCognome());
                                     bundle.putString("patientAge", loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age,
                                             loggedPatient.getAge(), loggedPatient.getAge()));
                                     bundle.putString("user", "patient");
-
                                     selectedFragment.setArguments(bundle);
                                 } else {
                                     if (itemId == R.id.navigation_my_account) {
@@ -435,7 +435,6 @@ public class MainActivity extends AppCompatActivity {
                                 if (itemId == R.id.navigation_diary) {
                                     selectedFragment = new PatientFragment();
                                     Bundle bundle = new Bundle();
-
                                     bundle.putString("patientUUID", loggedPatient.getUUID());
                                     bundle.putString("patientName", loggedPatient.getNome() + " " + loggedPatient.getCognome());
                                     bundle.putString("patientAge", loggedPatient.getAge() + " " + getResources().getQuantityString(R.plurals.age,
