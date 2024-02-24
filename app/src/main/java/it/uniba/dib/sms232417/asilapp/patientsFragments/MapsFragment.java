@@ -137,8 +137,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         my_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // Se i permessi non sono stati concessi, vengono richiesti
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                } else {
                     LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                     boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                     if (!isGPSEnabled) {
@@ -169,21 +172,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // If the permissions are not granted, request them
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                String query = autoCompleteTextView.getText().toString();
+
+                if (query.isEmpty()) {
+                    // Mostra un messaggio Toast
+                    Toast.makeText(getContext(), getResources().getString(R.string.select_nearby), Toast.LENGTH_SHORT).show();
                 } else {
-
-                    // If the permissions are granted, call the API to get the location
-                    String query = autoCompleteTextView.getText().toString();
-
-
-                    if (query.isEmpty()) {
-                        // Show a Toast message
-                        Toast.makeText(getContext(), getResources().getString(R.string.select_nearby), Toast.LENGTH_SHORT).show();
-                    } else {
-                        if (!query.equals("Centri Asilo") && !query.equals("Asylum House")) {
+                    if (!query.equals("Centri Asilo") && !query.equals("Asylum House")) {
+                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // Se i permessi non sono stati concessi, vengono richiesti
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                        } else {
+                            // Se i permessi sono stati concessi, chiama l'API per ottenere la posizione
                             mMap.clear();
                             titleTextView.setVisibility(View.GONE);
                             addressTextView.setVisibility(View.GONE);
@@ -199,38 +200,33 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
                             //metodo per verficare se è cliccato un marker o la mappa
                             MarkerClickResult(mMap, titleTextView, addressTextView);
-
-                        } else {
-                            mMap.clear();
-                            titleTextView.setVisibility(View.GONE);
-                            addressTextView.setVisibility(View.GONE);
-                            descriptionTextView.setVisibility(View.GONE);
-                            ratingTextView.setVisibility(View.GONE);
-                            ratingImage.setVisibility(View.GONE);
-
-                            // Aggiungi un marker a una posizione specifica
-                            addMarker(mMap);
-
-
-                            mMap.setOnMarkerClickListener(marker -> {
-                                // imposto regolamento e bottone visibile
-
-                                markerTitle = marker.getTitle();
-                                resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView, markerTitle, ratingTextView, ratingImage);
-                                recensioneButton.setVisibility(View.VISIBLE);
-
-                                return false;
-                            });
-
-                            //metodo per verficare se è cliccato un marker o la mappa
-                            MarkerClick(mMap, recensioneButton, titleTextView, addressTextView, descriptionTextView, ratingTextView, ratingImage);
-
-                            //listener per il bottone recensione
-                            clickRecensioneButton(recensioneButton, ratingTextView);
-
-
                         }
+                    } else {
+                        mMap.clear();
+                        titleTextView.setVisibility(View.GONE);
+                        addressTextView.setVisibility(View.GONE);
+                        descriptionTextView.setVisibility(View.GONE);
+                        ratingTextView.setVisibility(View.GONE);
+                        ratingImage.setVisibility(View.GONE);
 
+                        // Aggiungi un marker a una posizione specifica
+                        addMarker(mMap);
+
+                        mMap.setOnMarkerClickListener(marker -> {
+                            // imposto regolamento e bottone visibile
+
+                            markerTitle = marker.getTitle();
+                            resultLocationCentriAsilo(mMap, titleTextView, descriptionTextView, addressTextView, markerTitle, ratingTextView, ratingImage);
+                            recensioneButton.setVisibility(View.VISIBLE);
+
+                            return false;
+                        });
+
+                        //metodo per verficare se è cliccato un marker o la mappa
+                        MarkerClick(mMap, recensioneButton, titleTextView, addressTextView, descriptionTextView, ratingTextView, ratingImage);
+
+                        //listener per il bottone recensione
+                        clickRecensioneButton(recensioneButton, ratingTextView);
                     }
                 }
             }
