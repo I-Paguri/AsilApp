@@ -354,6 +354,11 @@ public class MyAccountFragment extends Fragment {
             dbAdapterDoctor.onLogout();
         }
 
+        File image = new File(StringUtils.IMAGE_ICON);
+        if (image.exists()) {
+            image.delete();
+        }
+
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.getInternetCheckThread().stopRunning();
         Intent esci = new Intent(getContext(), EntryActivity.class);

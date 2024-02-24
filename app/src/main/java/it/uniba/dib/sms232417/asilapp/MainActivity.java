@@ -182,8 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onCallbackError(Exception e) {
-                    BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-                    bottomNavigationView.getMenu().findItem(R.id.navigation_my_account).setIcon(R.drawable.my_account);
+
                 }
             });
         }

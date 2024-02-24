@@ -27,7 +27,7 @@
 
     <item
         android:id="@+id/navigation_my_account"
-        android:icon="@drawable/my_account"
+        android:icon="@drawable/my_profile_nav"
         android:title="@string/btn_my_account" />
 
 </menu>
