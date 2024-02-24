@@ -127,9 +127,34 @@ public class TreatmentFragment extends Fragment {
                         noTreatmentFoundSubtitle.setVisibility(View.GONE);
                     }
                 } else {
+                    int numberOfTreatmentOnFile=0;
+                    File fileNumber = new File(requireContext().getFilesDir().getPath() + "/treatmentCount");
+                    if (fileNumber.exists()) {
+                        try {
+                            FileInputStream fis = requireActivity().openFileInput(StringUtils.TREATMENT_COUNT);
+                            ObjectInputStream ois = new ObjectInputStream(fis);
+                            numberOfTreatmentOnFile = (int) ois.readObject();
+                            Log.d("TreatmentFragment_FILE", "Count: " + numberOfTreatmentOnFile);
+                            ois.close();
+                            fis.close();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        while(numberOfTreatmentOnFile>=1){
+                            File treatmentFile = new File(requireContext().getFilesDir() + "/treatment" + numberOfTreatmentOnFile);
+                            if(treatmentFile.exists()){
+                                treatmentFile.delete();
+                                Log.d("TreatmentFragment_FILE", "File deleted: " + numberOfTreatmentOnFile);
+                            }
+                            numberOfTreatmentOnFile--;
+                        }
+                    }
+
+
                     Iterator<Map.Entry<String, Treatment>> iterator = treatments.entrySet().iterator();
-                    int i;
-                    i = 0;
+                    Log.d("TreatmentFragment", "Treatments: " + treatments.toString());
+                    int i=0;
+
                     while (iterator.hasNext()) {
                         Map.Entry<String, Treatment> entry = iterator.next();
                         String treatmentId = entry.getKey();
@@ -141,6 +166,7 @@ public class TreatmentFragment extends Fragment {
                                 FileOutputStream fos = requireActivity().openFileOutput(StringUtils.TREATMENT + (i + 1), Context.MODE_APPEND);
                                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                                 oos.writeObject(treatment);
+                                Log.d("ProvaSalvataggio", "Salvato: " + treatment.toString());
 
                                 // Write the number of treatment to a file with the name "treatmentCount"
                                 FileOutputStream fosCount = requireActivity().openFileOutput(StringUtils.TREATMENT_COUNT, Context.MODE_PRIVATE);
@@ -191,7 +217,7 @@ public class TreatmentFragment extends Fragment {
                         FileInputStream fis = requireActivity().openFileInput(StringUtils.TREATMENT_COUNT);
                         ObjectInputStream ois = new ObjectInputStream(fis);
                         count = (int) ois.readObject();
-                        //Log.d("TreatmentFragment_FILE", "Count: " + count);
+                        Log.d("TreatmentFragment_FILE", "Count: " + count);
 
                         int i;
                         for (i = 1; i <= count; i++) {
