@@ -20,8 +20,8 @@ public class SerpHandler {
     public CompletableFuture<JSONObject> performSerpQuery(String key) {
         return CompletableFuture.supplyAsync(() -> {
             //String api_key = "25605ae1d2f3ffe0a57320cd67406cabfcfb5f5b7a4ba4e4efc37c2e9bc0b27d"; Simone
-            //String api_key = "3a6110547633c0044effcf96447f540b4c7cf859546c836c206e28d04f1710c8"; //Sergio
-            String api_key = "";
+            String api_key = "3a6110547633c0044effcf96447f540b4c7cf859546c836c206e28d04f1710c8"; //Sergio
+            //String api_key = "";
             String url = "https://serpapi.com/search?engine=youtube&api_key=" + api_key + "&search_query=" + key;
             StringBuilder response = new StringBuilder();
             try {
