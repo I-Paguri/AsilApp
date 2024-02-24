@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 
 import androidx.annotation.NonNull;
@@ -89,6 +90,8 @@ public class QRCodeAuth extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        super.onViewCreated(view, savedInstanceState);
+
         bottomNavigationView = requireActivity().findViewById(R.id.nav_view);
 
         toolbar = requireActivity().findViewById(R.id.toolbar);
@@ -123,7 +126,7 @@ public class QRCodeAuth extends Fragment {
             }
         });
 
-        super.onViewCreated(view, savedInstanceState);
+
 
         if(ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != requireActivity().getPackageManager().PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.CAMERA}, 10);
@@ -151,8 +154,6 @@ public class QRCodeAuth extends Fragment {
         params.height = 1300;
         previewView.setLayoutParams(params);
 
-        //this.getWindow().setFlags(1024, 1024);
-        this.getActivity().getWindow().setFlags(1024, 1024);
         //Initialize the cameraExecutor
         cameraExecutor = Executors.newSingleThreadExecutor();
         //Initialize the cameraProviderFuture
