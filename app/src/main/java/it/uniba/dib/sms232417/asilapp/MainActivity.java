@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
         bottomNavigationView = findViewById(R.id.nav_view);
 
-        if (currentFragment instanceof VideosFragment || currentFragment instanceof MyPatientsFragment
+        if (currentFragment instanceof VideosFragment || currentFragment instanceof MyPatientsFragment || currentFragment instanceof ExpensesFragment
                 || currentFragment instanceof MyAccountFragment || currentFragment instanceof QRCodeAuth || (currentFragment instanceof PatientFragment && loggedPatient != null)) {
             // If the current fragment is HealthcareFragment, MyPatientsFragment, or MyAccountFragment, navigate to HomeFragment
             FragmentManager fragmentManager = getSupportFragmentManager();
