@@ -3,6 +3,8 @@ package it.uniba.dib.sms232417.asilapp.fragments.patient;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -89,19 +91,23 @@ public class AnalysesExpensesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_analyses_expenses, container, false);
+        return inflater.inflate(R.layout.fragment_analyses_expenses, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-            // Prendo i riferimenti alle textview e al grafico a torta
-            PieChart pieChart = view.findViewById(R.id.pieChart);
-            // Prima di recuperare i dati, imposta un messaggio di caricamento personalizzato
-            pieChart.setNoDataText("Caricamento dati...");
+        // Prendo i riferimenti alle textview e al grafico a torta
+        PieChart pieChart = view.findViewById(R.id.pieChart);
+        // Prima di recuperare i dati, imposta un messaggio di caricamento personalizzato
+        pieChart.setNoDataText("Caricamento dati...");
 
 
         TextView paragraph1 = view.findViewById(R.id.resocontoSpesaFarmaci);
-            TextView paragraph2 = view.findViewById(R.id.resocontoSpesaTerapie);
-            TextView paragraph3 = view.findViewById(R.id.resocontoSpesaTrattamenti);
-            TextView paragraph4 = view.findViewById(R.id.resocontoSpesaEsami);
+        TextView paragraph2 = view.findViewById(R.id.resocontoSpesaTerapie);
+        TextView paragraph3 = view.findViewById(R.id.resocontoSpesaTrattamenti);
+        TextView paragraph4 = view.findViewById(R.id.resocontoSpesaEsami);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -223,36 +229,51 @@ public class AnalysesExpensesFragment extends Fragment {
                     range.setFrom(40.0);
                     range.setTo(60.0);
 
+                    Range range_1 = new Range();
+                    range_1.setColor(Color.parseColor("#ce0000"));
+                    range_1.setFrom(200.0);
+                    range_1.setTo(400.0);
+
                     Range range2 = new Range();
                     range2.setColor(Color.parseColor("#E3E500"));
                     range2.setFrom(60.0);
                     range2.setTo(100.0);
 
+                    Range range2_1 = new Range();
+                    range2_1.setColor(Color.parseColor("#E3E500"));
+                    range2_1.setFrom(100.0);
+                    range2_1.setTo(150.0);
+
                     Range range3 = new Range();
                     range3.setColor(Color.parseColor("#00b20b"));
-                    range3.setFrom(100.0);
-                    range3.setTo(500.0);
+                    range3.setFrom(150.0);
+                    range3.setTo(200.0);
+
+                    Range range4 = new Range();
+                    range4.setColor(Color.parseColor("#00b20b"));
+                    range4.setFrom(0.0);
+                    range4.setTo(100.0);
 
                     // Aggiungi i range di colori agli ArcGauge
-                    arcGaugeMonth.addRange(range);
-                    arcGaugeMonth.addRange(range2);
                     arcGaugeMonth.addRange(range3);
+                    arcGaugeMonth.addRange(range2);
+                    arcGaugeMonth.addRange(range);
 
-                    arcGaugeWeek.addRange(range);
-                    arcGaugeWeek.addRange(range2);
-                    arcGaugeWeek.addRange(range3);
+                    arcGaugeWeek.addRange(range4);
+                    arcGaugeWeek.addRange(range2_1);
+                    arcGaugeWeek.addRange(range_1);
 
 
                     // Imposta il valore minimo e massimo dell'ArcGauge
                     arcGaugeMonth.setMinValue(0);
-                    arcGaugeMonth.setMaxValue(500);
+                    arcGaugeMonth.setMaxValue(400);
 
                     // Imposta il valore corrente dell'ArcGauge
                     arcGaugeMonth.setValue(lastMonthExpenses);
 
                     // Imposta il valore minimo e massimo dell'ArcGauge
                     arcGaugeWeek.setMinValue(0);
-                    arcGaugeWeek.setMaxValue(100);
+                    arcGaugeWeek.setMaxValue(200);
 
                     // Imposta il valore corrente dell'ArcGauge
                     arcGaugeWeek.setValue(lastWeekExpenses);
@@ -290,9 +311,7 @@ public class AnalysesExpensesFragment extends Fragment {
         pieChart.getDescription().setEnabled(false);
         pieChart.invalidate(); // refresh
 
-        return view;
     }
-
 
     private String formatEntry(PieEntry entry) {
         return String.format(getString(R.string.entry_format), entry.getLabel(), entry.getValue());
