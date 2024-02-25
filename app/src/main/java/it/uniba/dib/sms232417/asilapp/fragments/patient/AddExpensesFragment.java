@@ -5,6 +5,8 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -37,58 +39,26 @@ import it.uniba.dib.sms232417.asilapp.entity.Expenses;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnPatientDataCallback;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddExpensesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AddExpensesFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AddExpensesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddExpensesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddExpensesFragment newInstance(String param1, String param2) {
-        AddExpensesFragment fragment = new AddExpensesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_expenses, container, false);
+
+        return inflater.inflate(R.layout.fragment_add_expenses, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         Button button = view.findViewById(R.id.add_button);
 
@@ -244,17 +214,15 @@ public class AddExpensesFragment extends Fragment {
                                     adapter.addExpense(patientUUID, expense);
                                     Log.d("Firestore", "Expense added successfully");
 
-                                    // With this code
-                                    adapter.addExpense(patientUUID, expense);
-                                    Log.d("Firestore", "Expense added successfully");
+                                    //Mostro un messaggio di successo
+                                    Toast.makeText(getActivity(), getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
+
 
                                 } else {
                                     // Show an error message
                                     Toast.makeText(getActivity(), getResources().getString(R.string.error_user_not_found), Toast.LENGTH_SHORT).show();
                                 }
 
-                                //Mostro un messaggio di successo
-                                Toast.makeText(getActivity(), getResources().getString(R.string.added_successfully), Toast.LENGTH_SHORT).show();
 
                                 // Svuota i campi di input
                                 categoryInput.setText("");
@@ -267,9 +235,6 @@ public class AddExpensesFragment extends Fragment {
                 builder.create().show();
             }
         });
-
-
-        return view;
     }
 }
 
