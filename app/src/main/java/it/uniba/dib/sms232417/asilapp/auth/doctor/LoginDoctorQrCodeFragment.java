@@ -86,12 +86,14 @@ public class LoginDoctorQrCodeFragment extends Fragment {
         });
 
         previewView = getView().findViewById(R.id.previewCamera);
+
         ViewGroup.LayoutParams params = previewView.getLayoutParams();
-        params.width = 950;
-        params.height = 950;
+        params.width = 1300;
+        params.height = 1300;
         previewView.setLayoutParams(params);
+
         //this.getWindow().setFlags(1024, 1024);
-        this.getActivity().getWindow().setFlags(1024, 1024);
+        //this.getActivity().getWindow().setFlags(1024, 1024);
         //Initialize the cameraExecutor
         cameraExecutor = Executors.newSingleThreadExecutor();
         //Initialize the cameraProviderFuture

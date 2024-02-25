@@ -52,7 +52,6 @@ public class LoginDoctorCredentialFragment extends Fragment {
         TextInputEditText email = view.findViewById(R.id.txtEmail);
         TextInputEditText password = view.findViewById(R.id.txtPassword);
         MaterialButton btnLoginQr = view.findViewById(R.id.btnLoginDoctorQrCode);
-        TextView txtForgotPassword = view.findViewById(R.id.txtForgetPass);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
