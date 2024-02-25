@@ -19,6 +19,7 @@ import it.uniba.dib.sms232417.asilapp.MainActivity;
 import it.uniba.dib.sms232417.asilapp.R;
 import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterDoctor;
 import it.uniba.dib.sms232417.asilapp.adapters.databaseAdapter.DatabaseAdapterPatient;
+import it.uniba.dib.sms232417.asilapp.auth.EntryActivity;
 import it.uniba.dib.sms232417.asilapp.entity.Doctor;
 import it.uniba.dib.sms232417.asilapp.entity.Patient;
 import it.uniba.dib.sms232417.asilapp.interfaces.OnDoctorDataCallback;
@@ -47,9 +48,10 @@ public class DefaultLoginFragment extends Fragment {
            dbAdapterPatient.onLogin("vitomarcorubino.universita@gmail.com","Asilapp!", new OnPatientDataCallback() {
                @Override
                public void onCallback(Patient patient) {
-                   Intent intent = new Intent(getContext(), MainActivity.class);
+                   Intent intent = new Intent(requireActivity(), MainActivity.class);
                    intent.putExtra("loggedPatient", (Parcelable) patient);
                    startActivity(intent);
+                   requireActivity().finish();
                }
 
                @Override
@@ -71,6 +73,7 @@ public class DefaultLoginFragment extends Fragment {
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.putExtra("loggedDoctor", (Parcelable) doctor);
                     startActivity(intent);
+                    requireActivity().finish();
                 }
 
                 @Override

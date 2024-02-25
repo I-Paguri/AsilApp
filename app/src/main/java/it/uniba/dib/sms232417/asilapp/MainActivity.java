@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,8 +26,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
@@ -56,6 +59,7 @@ import android.graphics.drawable.Drawable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.firestore.bundle.BundleElement;
 import com.xcode.onboarding.MaterialOnBoarding;
 import com.xcode.onboarding.OnBoardingPage;
 import com.xcode.onboarding.OnFinishLastPage;
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     Doctor loggedDoctor;
     private boolean doubleBackToExitPressedOnce = false;
     private TreatmentFormMedicationsFragment treatmentFormMedicationsFragment;
-
+    BottomNavigationView bottomNavigationView;
 
     public Context getContext() {
         return this;
@@ -95,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                         menuNormal = false;
                     }
                     changeMenu(0);
-
                 } else if (msg.what == 1) {
                     changeMenu(1);
                     isDialogShow = false;
@@ -114,11 +117,26 @@ public class MainActivity extends AppCompatActivity {
         loggedPatient = intent.getParcelableExtra("loggedPatient");
         loggedDoctor = intent.getParcelableExtra("loggedDoctor");
 
+        if(loggedPatient != null){
+            Log.d("MainActivity", "Patient logged: " + loggedPatient.toString());
+            bottomNavigationView = findViewById(R.id.nav_view);
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
+        } else if(loggedDoctor != null) {
+            Log.d("MainActivity", "Doctor logged: " + loggedDoctor.toString());
+            bottomNavigationView = findViewById(R.id.nav_view);
+            bottomNavigationView.getMenu().clear();
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
+
+        }
+
+
         ArrayList<OnBoardingPage> pages = new ArrayList<>();
 
 
         // Onboarding
         if (loggedPatient != null) {
+
             pages.add(new OnBoardingPage(R.drawable.measure_illustration,getResources().getString(R.string.streamlined_healthcare), getResources().getString(R.string.streamlined_healthcare_descr)));
             pages.add(new OnBoardingPage(R.drawable.diary_illustration,getResources().getString(R.string.your_digital_health_diary), getResources().getString(R.string.your_digital_health_diary_descr)));
             pages.add(new OnBoardingPage(R.drawable.maps3_illustration,getResources().getString(R.string.whats_nearby), getResources().getString(R.string.whats_nearby_descr)));
@@ -185,12 +203,12 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-        }
 
-        changeMenu(1);
+        }
         updateIconProfileImage();
 
     }
+
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -240,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView = findViewById(R.id.nav_view);
 
         if (currentFragment instanceof VideosFragment || currentFragment instanceof MyPatientsFragment
                 || currentFragment instanceof MyAccountFragment || currentFragment instanceof QRCodeAuth || (currentFragment instanceof PatientFragment && loggedPatient != null)) {
@@ -329,22 +347,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeMenu(int status) {
 
-        updateIconProfileImage();
-
         if (status == 0) {
             if (!menuNoConnection) {
                 Log.d("Passaggio a menu no connection", "Passaggio a menu no connection");
-                BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-                bottomNavigationView.getMenu().clear();
+                bottomNavigationView = findViewById(R.id.nav_view);
+
                 if (loggedPatient != null) {
-                    bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
+
+                    //bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
                     bottomNavigationView.setOnItemSelectedListener(item -> {
                         int itemId = item.getItemId();
                         if (itemId == R.id.navigation_home) {
                             selectedFragment = new NoConnectionFragment();
+                            Bundle bundleNoConnection = new Bundle();
+                            bundleNoConnection.putString("toolbar", getResources().getString(R.string.home));
+                            selectedFragment.setArguments(bundleNoConnection);
+
                         } else {
                             if (itemId == R.id.navigation_payments) {
                                 selectedFragment = new NoConnectionFragment();
+                                Bundle bundleNoConnection = new Bundle();
+                                bundleNoConnection.putString("toolbar", getResources().getString(R.string.payments));
+                                selectedFragment.setArguments(bundleNoConnection);
+
                             } else {
                                 if (itemId == R.id.navigation_diary) {
                                     selectedFragment = new PatientFragment();
@@ -359,9 +384,16 @@ public class MainActivity extends AppCompatActivity {
                                 } else {
                                     if (itemId == R.id.navigation_my_account) {
                                         selectedFragment = new NoConnectionFragment();
+                                        Bundle bundleNoConnection = new Bundle();
+                                        bundleNoConnection.putString("toolbar", getResources().getString(R.string.my_account));
+                                        selectedFragment.setArguments(bundleNoConnection);
                                     } else {
                                         if (itemId == R.id.navigation_measure) {
                                             selectedFragment = new NoConnectionFragment();
+                                            Bundle bundleNoConnection = new Bundle();
+                                            bundleNoConnection.putString("toolbar", getResources().getString(R.string.measure));
+                                            selectedFragment.setArguments(bundleNoConnection);
+
                                         }
                                     }
                                 }
@@ -376,17 +408,27 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                 } else if (loggedDoctor != null) {
-                    bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
+                    //bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
                     bottomNavigationView.setOnItemSelectedListener(item -> {
                         int itemId = item.getItemId();
                         if (itemId == R.id.navigation_home) {
                             selectedFragment = new NoConnectionFragment();
+                            Bundle bundleNoConnection = new Bundle();
+                            bundleNoConnection.putString("toolbar", getResources().getString(R.string.home));
+                            selectedFragment.setArguments(bundleNoConnection);
                         } else {
                             if (itemId == R.id.navigation_my_patients) {
                                 selectedFragment = new NoConnectionFragment();
+                                Bundle bundleNoConnection = new Bundle();
+                                bundleNoConnection.putString("toolbar", getResources().getString(R.string.my_patients));
+                                selectedFragment.setArguments(bundleNoConnection);
                             } else {
                                 if (itemId == R.id.navigation_my_account) {
                                     selectedFragment = new NoConnectionFragment();
+                                    Bundle bundleNoConnection = new Bundle();
+                                    bundleNoConnection.putString("toolbar", getResources().getString(R.string.my_account));
+                                    selectedFragment.setArguments(bundleNoConnection);
+
                                 }
                             }
                         }
@@ -395,18 +437,16 @@ public class MainActivity extends AppCompatActivity {
                         transaction.replace(R.id.nav_host_fragment_activity_main, selectedFragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
-
                         return true;
                     });
 
                 }
                 menuNoConnection = true;
             }
-        } else {
+        } else if(status == 1){
             if (!menuNormal) {
                 deleteMsgError();
-                BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
-                bottomNavigationView.getMenu().clear();
+                bottomNavigationView = findViewById(R.id.nav_view);
                 Log.d("Passaggio a menu normale", "Passaggio a menu normale");
                 if (loggedPatient != null) {
                     try {
@@ -417,8 +457,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-
-                    bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_patient);
 
                     bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -486,7 +524,6 @@ public class MainActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
 
-                    bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_doctor);
                     bottomNavigationView.setOnItemSelectedListener(item -> {
 
 
@@ -553,7 +590,12 @@ public class MainActivity extends AppCompatActivity {
                     .into(new CustomTarget<Drawable>() {
                         @Override
                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                            bottomNavigationView.getMenu().findItem(R.id.navigation_my_account).setIcon(resource);
+                            MenuItem menuItem = bottomNavigationView.getMenu().findItem(R.id.navigation_my_account);
+                            if (menuItem != null) {
+                                menuItem.setIcon(resource);
+                            }
+
+                            //bottomNavigationView.getMenu().findItem(R.id.navigation_my_account).setIcon(resource);
                         }
 
                         @Override
