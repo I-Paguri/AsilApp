@@ -12,7 +12,7 @@
     <string name="btn_my_account">Account</string>
 
     <string name="home"> Home </string>
-    <string name="healthcare">Healthcare</string>
+    <string name="healthcare"> Benessere </string>
     <string name="my_patients"> I miei pazienti </string>
     <string name="my_account"> Il mio account </string>
     <string name="press_back_again"> Premi di nuovo indietro per uscire </string>
@@ -105,7 +105,7 @@
     <string name="select_time">Seleziona l\'orario</string>
 
     <string name="mental_health_tips">Benessere mentale</string>
-    <string name="healthy_food_tips">Cibo salutare</string>
+    <string name="healthy_food_tips">Mangiare sano</string>
     <string name="add">Aggiungi</string>
 
     <string name="scan_qr_code_container">Scansiona il QR che appare sul Contenitore per collegarti!</string>
