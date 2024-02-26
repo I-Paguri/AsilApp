@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +46,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private ArrayList<Medication> medications;
     private Context context;
+    private LinearLayout parentLayout;
 
-    public ProductAdapter(ArrayList<Medication> medications, Context context) {
+
+    public ProductAdapter(ArrayList<Medication> medications, Context context, LinearLayout parentLayout) {
         this.medications = medications;
         this.context = context;
+        this.parentLayout = parentLayout;
     }
 
     @NonNull
@@ -61,6 +65,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+
+
         Medication medication = medications.get(position);
         holder.description.setText(medication.getMedicationName());
         holder.productCheckbox.setOnCheckedChangeListener(null); // Imposta il listener a null per evitare comportamenti inaspettati
@@ -228,7 +234,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                         // Remove the item from the product list
                         BoughtProduct(medications.get(position).getId(), context);
                         medications.remove(position);
-
+                        if (medications.isEmpty()) {
+                            RecyclerView recyclerView = (RecyclerView) parentLayout.findViewById(R.id.recyclerView);
+                            recyclerView.setVisibility(View.GONE);
+                            LayoutInflater inflater1 = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            View noTreatmentLayout = inflater1.inflate(R.layout.no_medications_layout, null);
+                            parentLayout.addView(noTreatmentLayout);
+                        }
                         Toast.makeText(holder.productCheckbox.getContext(), res.getString(R.string.medication_purchased_successfully), Toast.LENGTH_SHORT).show();
 
                         // Notify the adapter that the data has changed

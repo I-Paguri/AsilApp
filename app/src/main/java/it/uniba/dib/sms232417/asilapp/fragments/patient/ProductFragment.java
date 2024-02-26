@@ -105,7 +105,7 @@ public class ProductFragment extends Fragment {
                     if (hasUnboughtMedication) {
                         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
                         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                        ProductAdapter productAdapter = new ProductAdapter(productItem, getContext());
+                        ProductAdapter productAdapter = new ProductAdapter(productItem, getContext(), parentLayout);
                         recyclerView.setAdapter(productAdapter);
                         recyclerView.setVisibility(View.VISIBLE);
                         titleText.setVisibility(View.VISIBLE);
