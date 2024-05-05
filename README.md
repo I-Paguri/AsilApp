@@ -16,6 +16,19 @@ This is the main app that allows doctors to monitor their patients' vital parame
 * [AsilApp Container](https://drive.google.com/file/d/1ACltCHvIQL8nNSTZSxJAvQY0_llUMlZO/view?usp=sharing) <br>
 This app let you record vital parameters.
 
+## 📸 Preview
+* Vital parameters dashboard and trend <br>
+  <img src="https://github.com/I-Paguri/AsilApp/assets/98357718/12e80854-8b69-4742-8d69-60cb97db0fd0" height="300" />
+* Adding new treatment to a patient <br>
+  <img src="https://github.com/I-Paguri/AsilApp/assets/98357718/829dcc99-72a3-4c03-b589-6f1a71d1ed57" height="300" />
+* View added treatments, medical expenses and personalized healtcare videos <br>
+  <img src="https://github.com/I-Paguri/AsilApp/assets/98357718/5d021e13-77ff-4691-84ab-b932670bb1cc" height="300" />
+* Search nearby facilities <br>
+  <img src="https://github.com/I-Paguri/AsilApp/assets/98357718/91cc9473-f09d-4fcb-bdb3-758417dc060c" height="300" />
+* App onboarding <br>
+  <img src="https://github.com/I-Paguri/AsilApp/assets/98357718/ed767b1f-5a5f-4e53-a943-54767e42cadc" height="300" />
+
+
 ## 🌐 Contributors
 * Pinto Sergio <br>
 [![Github](https://img.shields.io/badge/GitHub-100000?logo=github&logoColor=white)](https://github.com/SergioPinto2501) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sergio-pinto-aba677199/) 
