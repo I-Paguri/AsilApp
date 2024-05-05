@@ -3,7 +3,7 @@ AsilApp is an Android app that allows doctors to monitor their patients' vital p
 Patients will be able to access their <b>treatments</b>, view the <b>trends</b> of their vital parameters, record <b>medical expenses</b>, and search for <b>nearby healthcare facilities</b>.
 
 ## 🗒️Documentation, user manual and presentation
-* [Documentation](https://docs.google.com/spreadsheets/d/1sUV3b7r_KZMjV7OaEgQO0Q5MveolsZyusIBerdMK5ks/edit?usp=drive_link) <br>
+* [Documentation](https://drive.google.com/file/d/1jet_MFMWENDjjMoY2hYR720VJy90et_5/view?usp=sharing) <br>
 Contains details about the app architecture, design choices and used libraries.
 * [User manual](https://drive.google.com/file/d/1LW58RK_WGK3LYbUoczHYTIxEkiQvw-Ho/view?usp=sharing) <br>
 Includes installation requirements and how to use features step by step.
